@@ -1,4 +1,16 @@
-This is a curated list of books that have R resources for fisheries-related analyses. You may submit additions or corrections by using the links at the bottom of the sidebar menu to the right.
+---
+date: last-modified
+---
+
+:::{.callout-note appearance="minimal"}
+This is a curated list of books that have R resources for fisheries-related analyses. This was last updated on {{< meta date >}}.
+:::
+
+:::{.callout-tip appearance="minimal"}
+You may submit additions or corrections by using the links at the bottom of the sidebar menu to the right. **Thank you** for your contribution to this resource.
+:::
+
+&nbsp;
 
 # Age and Growth of Fish: Principles and Techniques
 

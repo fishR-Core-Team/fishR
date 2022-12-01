@@ -1,4 +1,14 @@
-The following list is a comprehensive(?) list of fisheries related datasets found in packages that exist on CRAN. Datasets from packages not controlled by the fishR Core Team (i.e., `FSA` and `FSAdata`) are entered manually, so please submit a GitHub Issue (see link at bottom of right sidebar menu) with any corrections or additions. This list was last updated on `r format(Sys.Date(),format="%B %d, %Y")`.
+---
+date: last-modified
+---
+
+:::{.callout-note appearance="minimal"}
+The following list is a comprehensive(?) list of fisheries related datasets found in packages that exist on CRAN. This was last updated on {{< meta date >}}.
+:::
+
+:::{.callout-tip appearance="minimal"}
+Datasets from packages not controlled by the fishR Core Team (i.e., `FSA` and `FSAdata`) are entered manually, so please submit a GitHub Issue (see link at bottom of right sidebar menu) with any corrections or additions.
+:::
 
 &nbsp;
 

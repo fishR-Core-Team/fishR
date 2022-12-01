@@ -1,4 +1,10 @@
-The following datasets are from packages controlled by the fishR Core Team (i.e., from `FSA` and `FSAdata`). This list was last updated on `r format(Sys.Date(),format="%B %d, %Y")`.
+---
+date: last-modified
+---
+
+:::{.callout-note appearance="minimal"}
+The following datasets are from packages controlled by the fishR Core Team (i.e., from `FSA` and `FSAdata`). This was last updated on {{< meta date >}}. 
+:::
 
 &nbsp;
 

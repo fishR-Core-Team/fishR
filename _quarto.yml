@@ -4,6 +4,7 @@ project:
 
 website:
   title: "fishR"
+  favicon: /img/fishRlogo_Tight_Dark_trans.png
   navbar:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
@@ -38,3 +39,5 @@ format:
     theme: flatly
     css: styles.css
     toc: true
+execute: 
+  freeze: auto

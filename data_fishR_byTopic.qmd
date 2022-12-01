@@ -1,4 +1,10 @@
-The following datasets from packages controlled by the fishR Core Team (i.e., from `FSA` and `FSAdata`) are arranged by major fisheries topic. This list was last updated on `r format(Sys.Date(),format="%B %d, %Y")`.
+---
+date: last-modified
+---
+
+:::{.callout-note appearance="minimal"}
+The following datasets from packages controlled by the fishR Core Team (i.e., from `FSA` and `FSAdata`) are arranged by major fisheries topic as shown on the sidebar menu to the right. This was last updated on {{< meta date >}}.
+:::
 
 &nbsp;
 
