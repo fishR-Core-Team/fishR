@@ -5,11 +5,13 @@ project:
 website:
   title: "fishR"
   favicon: /img/fishRlogo_Tight_Dark_trans.png
+  site-url: https://derekogle.com/qwebtest/
   navbar:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
     left:
       - text: Examples
+        href: blog/index.qmd
       - text: Books
         href: books.qmd
       - text: Packages

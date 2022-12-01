@@ -1,0 +1,27 @@
+# options apply to all posts in this folder
+
+# freeze computational output
+freeze: true
+
+# set the creative commons license
+license: "CC BY"
+
+# set the citation use
+citation: true
+google-scholar: true
+
+# set some default knitr options
+execute: 
+  echo: true
+  message: false
+  warning: false
+  
+# set some other default knitr options
+knitr: 
+  opts_chunk: 
+    dev: "png"
+    fig.width: 3.5
+    fig.height: 3.5
+    fig.align: center
+    r.options:
+      show.signif.stars: false

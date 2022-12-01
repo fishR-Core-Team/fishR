@@ -1,0 +1,8 @@
+---
+listing:
+  type: table
+  fields: [image,date,title,author,reading-time]
+  contents: posts
+  sort: "date desc"
+  categories: true
+---
