@@ -1,11 +1,7 @@
----
-title: "qwebtest"
----
+The **fishR** website provides resources for fisheries-related analyses performed in [R](https://www.r-project.org/). It is our hope that these resources will help you to either use or expand your knowledge of [R](https://www.r-project.org/) for fisheries-related analyses. Use the menu above to take a look around!!
 
-This is a Quarto website.
+R is an environment for statistical analyses and graphics that is rapidly gaining popularity with fisheries scientists. See [Inside-R](http://www.inside-r.org/what-is-r) and [R-project](https://www.r-project.org/about.html) for two descriptions of R.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+<div style="width=auto; max-width:450px; margin-left:auto; margin-right:auto; text-align:center">
+  <img src="img/fishRlogo_Tight_Dark_trans.png" alt="fishR logo" width="100%">
+</div>

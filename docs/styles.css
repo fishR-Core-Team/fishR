@@ -1,1 +1,9 @@
 /* css styles */
+
+/* #### DHO added the following #### */
+
+/* Makes the logo in the navbar larger */
+.navbar-logo {
+  max-height: 40px;
+}
+

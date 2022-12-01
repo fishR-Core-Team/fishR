@@ -1,0 +1,35 @@
+This is a curated list of books that have R resources for fisheries-related analyses. You may submit additions or corrections by using the links at the bottom of the sidebar menu to the right.
+
+# Age and Growth of Fish: Principles and Techniques
+
+* **Editors**: Michael Quist and Daniel Isermann
+* **Year**: 2017
+* [**Book Webpage**](https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/) 
+* [**R Resources**](https://derekogle.com/AGF/)
+
+&nbsp;
+
+# Analysis and Interpretation of Freshwater Fisheries Data I
+
+* **Editors**: Christopher Guy and Michael Brown
+* **Year**: 2007
+* [**Book Webpage**](https://fisheries.org/bookstore/all-titles/professional-and-trade/55049c/) 
+* [**R Resources**](http://derekogle.com/aiffd2007/)
+
+&nbsp;
+
+# Introductory Fisheries Analyses with R
+
+* **Author**: Derek H. Ogle
+* **Year**: 2015
+* [**Book Webpage**](http://derekogle.com/IFAR/book/) 
+* **R Resources**: [Chapter Scripts](http://derekogle.com/IFAR/scripts/), [Supplements](http://derekogle.com/IFAR/supplements/), [related package](https://fishr-core-team.github.io/FSA/)
+
+&nbsp;
+
+# Using R for Modelling and Quantitative Methods in Fisheries
+
+* **Author**: Malcolm Haddon
+* **Year**: 2020
+* [**Book Webpage**](https://haddonm.github.io/URMQMF/) 
+* **R Resources**: within book link and [related package](https://github.com/haddonm/MQMF)

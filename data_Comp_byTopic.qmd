@@ -1,0 +1,20 @@
+The following list is a comprehensive(?) list of fisheries related datasets found in packages that exist on CRAN. Datasets from packages not controlled by the fishR Core Team (i.e., `FSA` and `FSAdata`) are entered manually, so please submit a GitHub Issue (see link at bottom of right sidebar menu) with any corrections or additions. This list was last updated on `r format(Sys.Date(),format="%B %d, %Y")`.
+
+&nbsp;
+
+```{r}
+#| include=FALSE
+source("helpers/data_helpers.R")
+```
+
+```{r}
+#| results='asis'
+## Datasets from other packages are manually entered into
+##   DataFromOtherPackages.xlsx.
+tmp <- readxl::read_excel("helpers/DataFromOtherPackages.xlsx") %>%
+  select(-starts_with("Entered"))
+## Database of datasets in FSA and FSAdata, with other packages appended
+fish_db <- rbind(prepare_db("FSA"),prepare_db("FSAdata"),tmp)
+
+maketable(fish_db,topics)
+```

@@ -1,0 +1,16 @@
+The following datasets from packages controlled by the fishR Core Team (i.e., from `FSA` and `FSAdata`) are arranged by major fisheries topic. This list was last updated on `r format(Sys.Date(),format="%B %d, %Y")`.
+
+&nbsp;
+
+```{r}
+#| include=FALSE
+source("helpers/data_helpers.R")
+```
+
+```{r}
+#| results='asis'
+## Database of datasets JUST in FSA and FSAdata
+fish_db <- rbind(prepare_db("FSA"),prepare_db("FSAdata"))
+
+maketable(fish_db,tops=topics,showPkg=FALSE)
+```
