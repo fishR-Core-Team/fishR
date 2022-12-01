@@ -1,5 +1,5 @@
 ---
-title: "Length Frequency Histograms"
+title: "Length Frequency Histograms in ggplot2"
 description: "How to construct length frequency histograms using ggplot2"
 author: "Derek H. Ogle"
 date: "12/28/2019"

@@ -23,5 +23,6 @@ knitr:
     fig.width: 3.5
     fig.height: 3.5
     fig.align: center
+    comment: "#R>"
     r.options:
       show.signif.stars: false

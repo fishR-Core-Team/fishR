@@ -31,7 +31,7 @@ website:
     left: 
       - text: "fishR Core Team"
         href: https://github.com/fishR-Core-Team
-    background: dark
+    background: primary
   repo-url: https://github.com/droglenc/qwebtest
   repo-actions: [edit, issue]
   open-graph: true
