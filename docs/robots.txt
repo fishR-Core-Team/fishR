@@ -1,1 +1,1 @@
-Sitemap: https://derekogle.com/qwebtest/sitemap.xml
+Sitemap: https://fishr-core-team.github.io/fishR/sitemap.xml
