@@ -5,7 +5,7 @@ project:
 website:
   title: "fishR"
   favicon: /img/fishRlogo_Tight_Dark_trans.png
-  site-url: https://derekogle.com/qwebtest/
+  site-url: https://fishr-core-team.github.io/fishR/
   navbar:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
@@ -32,7 +32,7 @@ website:
       - text: "fishR Core Team"
         href: https://github.com/fishR-Core-Team
     background: primary
-  repo-url: https://github.com/droglenc/qwebtest
+  repo-url: https://fishr-core-team.github.io/fishR
   repo-actions: [edit, issue]
   open-graph: true
   reader-mode: true
