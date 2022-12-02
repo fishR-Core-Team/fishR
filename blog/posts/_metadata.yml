@@ -37,7 +37,7 @@ format:
     comments:
       giscus:
         repo: fishR-Core-Team/fishR
-        category: "Comments"
+        category: "Announcements"
         mapping: "pathname"
         reactions-enabled: true
         loading: lazy
