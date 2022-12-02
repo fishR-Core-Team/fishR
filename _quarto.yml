@@ -6,6 +6,8 @@ website:
   title: "fishR"
   favicon: /img/fishRlogo_Tight_Dark_trans.png
   site-url: https://fishr-core-team.github.io/fishR/
+  repo-url: https://fishr-core-team.github.io/fishR
+  repo-actions: [edit, issue]
   navbar:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
@@ -32,8 +34,9 @@ website:
       - text: "fishR Core Team"
         href: https://github.com/fishR-Core-Team
     background: primary
-  repo-url: https://fishr-core-team.github.io/fishR
-  repo-actions: [edit, issue]
+  comments:
+    giscus:
+      repo: fishR-Core-Team/fishR
   open-graph: true
   reader-mode: true
 format:
@@ -44,14 +47,6 @@ format:
     link-external-icon: true
     link-external-newwindow: true
     smooth-scroll: true
-    comments:
-      giscus:
-        repo: fishR-Core-Team/fishR
-        category: "Announcements"
-        mapping: "pathname"
-        reactions-enabled: true
-        loading: lazy
-        input-position: "bottom"
-        theme: "light"
+date-format: medium
 execute: 
   freeze: auto

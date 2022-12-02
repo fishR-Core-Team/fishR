@@ -1,10 +1,10 @@
 ---
 listing:
   type: table
-  fields: [image,date,title,author,reading-time]
+  fields: [image,file-modified,title,author,reading-time,date]
   contents: posts
-  sort: "date desc"
-  sort-ui: [date, file-modified]
+  sort: "file-modified desc"
+  sort-ui: [file-modified,date]
   categories: true
 comments: false
 ---
