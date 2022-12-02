@@ -2,9 +2,9 @@
   {
     "objectID": "blog/index.html",
     "href": "blog/index.html",
-    "title": "fishR",
+    "title": "R for fisheries analyses and tasks",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Modified - Oldest\n        \n         \n          Modified - Newest\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nModified\n\n\nTitle\n\n\nAuthor\n\n\nReading Time\n\n\nDate\n\n\n\n\n\n\n\n\n\nDec 2, 2022\n\n\nLength Frequency Histograms in ggplot2\n\n\nDerek H. Ogle\n\n\n5 min\n\n\nDec 28, 2019\n\n\n\n\n\n\n\nDec 2, 2022\n\n\nCollapsing Categories or Values\n\n\nDerek H. Ogle\n\n\n7 min\n\n\nMar 30, 2018\n\n\n\n\n\n\n\nDec 1, 2022\n\n\nAge Bias Plots in ggplot2\n\n\nMichael Lant\n\n\n8 min\n\n\nMar 15, 2021\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Modified - Oldest\n        \n         \n          Modified - Newest\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nTitle\n\n\nReading Time\n\n\nDate\n\n\nModified\n\n\n\n\n\n\n\n\n\nLength Frequency Histograms in ggplot2\n\n\n5 min\n\n\nDec 28, 2019\n\n\nDec 2, 2022\n\n\n\n\n\n\n\nCollapsing Categories or Values\n\n\n7 min\n\n\nMar 30, 2018\n\n\nDec 2, 2022\n\n\n\n\n\n\n\nAge Bias Plots in ggplot2\n\n\n8 min\n\n\nMar 15, 2021\n\n\nDec 1, 2022\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "blog/posts/2018-3-30_Collapsing_Categories_or_Values/index.html",
@@ -30,9 +30,9 @@
   {
     "objectID": "books.html",
     "href": "books.html",
-    "title": "fishR",
+    "title": "Fisheries-Related R Books",
     "section": "",
-    "text": "You may submit additions or corrections by using the links at the bottom of the sidebar menu to the right. Thank you for your contribution to this resource.\n\n\n\n \n\nAge and Growth of Fish: Principles and Techniques\n\nEditors: Michael Quist and Daniel Isermann\nYear: 2017\nBook Webpage\nR Resources\n\n \n\n\nAnalysis and Interpretation of Freshwater Fisheries Data I\n\nEditors: Christopher Guy and Michael Brown\nYear: 2007\nBook Webpage\nR Resources\n\n \n\n\nIntroductory Fisheries Analyses with R\n\nAuthor: Derek H. Ogle\nYear: 2015\nBook Webpage\nR Resources: Chapter Scripts, Supplements, related package\n\n \n\n\nUsing R for Modelling and Quantitative Methods in Fisheries\n\nAuthor: Malcolm Haddon\nYear: 2020\nBook Webpage\nR Resources: within book link and related package"
+    "text": "Age and Growth of Fish: Principles and Techniques\n\nEditors: Michael Quist and Daniel Isermann\nYear: 2017\nBook Webpage\nR Resources\n\n \n\n\nAnalysis and Interpretation of Freshwater Fisheries Data I\n\nEditors: Christopher Guy and Michael Brown\nYear: 2007\nBook Webpage\nR Resources\n\n \n\n\nIntroductory Fisheries Analyses with R\n\nAuthor: Derek H. Ogle\nYear: 2015\nBook Webpage\nR Resources: Chapter Scripts, Supplements, related package\n\n \n\n\nUsing R for Modelling and Quantitative Methods in Fisheries\n\nAuthor: Malcolm Haddon\nYear: 2020\nBook Webpage\nR Resources: within book link and related package"
   },
   {
     "objectID": "data_Comp_byPackage.html",
@@ -72,28 +72,28 @@
   {
     "objectID": "packages.html",
     "href": "packages.html",
-    "title": "fishR",
+    "title": "Fisheries-Related R Packages",
     "section": "",
-    "text": "This is a curated list of R packages related to fisheries and fisheries-related data and analyses. Access packages by type using the sidebar menu to the right. This was last updated on Dec 2, 2022."
+    "text": "You may submit additions or corrections to the list of packages by using the links at the bottom of the sidebar menu to the right. Before creating an issue or pull request …\n\nassure that your package/resource is not already in the list,\nyou include a short name, a link, and a short description for the package/resource,\n[if editing the page] your package/resource is placed alphabetically within the relevant topic section, and\nthe information you supply is complete and correct.\n\nThank you for your contribution to this resource."
   },
   {
     "objectID": "packages.html#general-or-traditional",
     "href": "packages.html#general-or-traditional",
-    "title": "fishR",
+    "title": "Fisheries-Related R Packages",
     "section": "General or Traditional",
     "text": "General or Traditional\n\nmarked\nmra\nmrds\nRcapture\nRMark\nunmarked"
   },
   {
     "objectID": "packages.html#spatially-explicit",
     "href": "packages.html#spatially-explicit",
-    "title": "fishR",
+    "title": "Fisheries-Related R Packages",
     "section": "Spatially Explicit",
     "text": "Spatially Explicit\n\nascr\nsecr\nsecrdesign\nsecrlinear"
   },
   {
     "objectID": "packages.html#other",
     "href": "packages.html#other",
-    "title": "fishR",
+    "title": "Fisheries-Related R Packages",
     "section": "Other",
     "text": "Other\n\ndga\nSCRbayes"
   }

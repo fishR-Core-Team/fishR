@@ -1,10 +1,14 @@
 ---
+title: "R for fisheries analyses and tasks"
 listing:
+  contents: .
   type: table
-  fields: [image,file-modified,title,author,reading-time,date]
-  contents: posts
+  fields: [image,title,reading-time,date,file-modified]
   sort: "file-modified desc"
   sort-ui: [file-modified,date]
   categories: true
 comments: false
+page-layout: full
+title-block-banner: true
+date-modified: ""
 ---

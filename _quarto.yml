@@ -12,7 +12,7 @@ website:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
     left:
-      - text: Examples
+      - text: Blog
         href: blog/index.qmd
       - text: Books
         href: books.qmd
@@ -37,6 +37,8 @@ website:
   comments:
     giscus:
       repo: fishR-Core-Team/fishR
+      loading: lazy
+      theme: "light"
   open-graph: true
   reader-mode: true
 format:
