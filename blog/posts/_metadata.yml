@@ -34,12 +34,3 @@ format:
   html:
     code-link: true
     link-external-icon: false
-    comments:
-      giscus:
-        repo: fishR-Core-Team/fishR
-        category: "Announcements"
-        mapping: "pathname"
-        reactions-enabled: true
-        loading: lazy
-        input-position: "bottom"
-        theme: "light"

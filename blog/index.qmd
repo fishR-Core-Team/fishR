@@ -6,4 +6,5 @@ listing:
   sort: "date desc"
   sort-ui: [date, file-modified]
   categories: true
+comments: false
 ---
