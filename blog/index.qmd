@@ -4,5 +4,6 @@ listing:
   fields: [image,date,title,author,reading-time]
   contents: posts
   sort: "date desc"
+  sort-ui: [date, file-modified]
   categories: true
 ---

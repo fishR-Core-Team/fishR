@@ -1,5 +1,8 @@
 # options apply to all posts in this folder
 
+# 
+date-modified: last-modified
+
 # freeze computational output
 freeze: true
 
