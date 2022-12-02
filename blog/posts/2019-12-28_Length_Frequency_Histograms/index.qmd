@@ -37,7 +37,7 @@ WE <- dplyr::filter(WalleyeErie2,year==2014)
 &nbsp;
 
 # Basic Length Frequency
-Making the histogram (@fig-hist1) begins by identifying the data frame to use in `data=` and the `tl` variable to use for the `x`-axis as an `aes()`thetic in `ggplot()`. The histogram is then constructed with `geom_hist()`, which I customize as follows:
+Making the histogram (@fig-hist1) begins by identifying the data frame to use in `data=` and the `tl` variable to use for the `x`-axis as an `aes()`thetic in `ggplot()`. The histogram is then constructed with `geom_histogram()`, which I customize as follows:
 
 * Set the width of the length bins with `binwidth=`.
 * By default the bins are *centered* on breaks created from `binwidth=`. The bins can be changed to *begin* on these breaks by using `boundary=` set to the desired value of a first break, regardless of whether that break is in the data or not. I use `boundary=0` so that bins will start on breaks that make sense relative to `binwidth=` (e.g., 0, 25, 50, 75, etc.).

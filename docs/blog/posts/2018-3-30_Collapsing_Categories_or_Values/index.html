@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.1.189">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Derek H. Ogle">
 <meta name="dcterms.date" content="2018-03-30">
 <meta name="description" content="How to collapse categories or values into other categories">
-
 <title>fishR - Collapsing Categories or Values</title>
 <style>
 code{white-space: pre-wrap;}
@@ -88,7 +85,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -104,8 +100,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -123,10 +118,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-<style>html{ scroll-behavior: smooth; }</style>
-
-
+}</script><style>html{ scroll-behavior: smooth; }</style>
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="fishR - Collapsing Categories or Values">
 <meta property="og:description" content="How to collapse categories or values into other categories">
@@ -143,24 +135,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2018-3-30_Collapsing_Categories_or_Values">
 <meta name="citation_language" content="en">
 </head>
-
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
-    </a>
+    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo"></a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html">Examples</a>
   </li>  
   <li class="nav-item">
@@ -171,8 +159,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
-        <li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">
+<li>
     <a class="dropdown-item" href="../../../data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
@@ -189,9 +177,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
-  </li>
+</li>
 </ul>
-              <div class="quarto-toggle-container">
+<div class="quarto-toggle-container">
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -201,30 +189,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#sample-data" id="toc-sample-data" class="nav-link" data-scroll-target="#sample-data">Sample Data</a></li>
   <li><a href="#recode-categories" id="toc-recode-categories" class="nav-link" data-scroll-target="#recode-categories">Recode Categories</a></li>
   <li><a href="#collapse-categories" id="toc-collapse-categories" class="nav-link" data-scroll-target="#collapse-categories">Collapse Categories</a></li>
   <li><a href="#collapse-values-into-categories" id="toc-collapse-values-into-categories" class="nav-link" data-scroll-target="#collapse-values-into-categories">Collapse Values into Categories</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2018-3-30_Collapsing_Categories_or_Values/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2018-3-30_Collapsing_Categories_or_Values/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">Collapsing Categories or Values</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Data Wrangling</div>
@@ -257,9 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header>
-
-<p>&nbsp;</p>
+</header><p>&nbsp;</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -274,25 +252,22 @@ Note
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)   <span class="co"># for mutate(), case_when()</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats) <span class="co"># for fct_recode(), fct_collapse()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>   <span class="co"># for mutate(), case_when()</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/">forcats</a></span><span class="op">)</span> <span class="co"># for fct_recode(), fct_collapse()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
+<section id="introduction" class="level1"><h1>Introduction</h1>
 <p>I have received a few queries recently that can be categorized as “How do I collapse a list of categories or values into a shorter list of categories or values?” For example, one user wanted to collapse species of fish into their respective families. Another user wanted to collapse years into decades. Data wrangling such as this is common in fisheries and is briefly described below.</p>
 <p>&nbsp;</p>
-</section>
-<section id="sample-data" class="level1">
-<h1>Sample Data</h1>
+</section><section id="sample-data" class="level1"><h1>Sample Data</h1>
 <p>The following creates a very simple sample of 250 individuals on which the species (as a short abbreviation) and year of capture were recorded. Because I am creating random example data below, I set the random number seed to make the results reproducible.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">678394</span>)  <span class="co"># for reproducibility of random data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">250</span>          <span class="co"># to allow easily changing sample size</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">species=</span><span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"BLG"</span>,<span class="st">"LMB"</span>,<span class="st">"PKS"</span>,<span class="st">"WAE"</span>,<span class="st">"YEP"</span>,<span class="st">"CRP"</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                 n,<span class="at">replace=</span><span class="cn">TRUE</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">year=</span><span class="fu">sample</span>(<span class="dv">1980</span><span class="sc">:</span><span class="dv">2017</span>,n,<span class="at">replace=</span><span class="cn">TRUE</span>))</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">678394</span><span class="op">)</span>  <span class="co"># for reproducibility of random data</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">250</span>          <span class="co"># to allow easily changing sample size</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>species<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLG"</span>,<span class="st">"LMB"</span>,<span class="st">"PKS"</span>,<span class="st">"WAE"</span>,<span class="st">"YEP"</span>,<span class="st">"CRP"</span><span class="op">)</span>,</span>
+<span>                                 <span class="va">n</span>,replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                  year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1980</span><span class="op">:</span><span class="fl">2017</span>,<span class="va">n</span>,replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year
 #R&gt; 1     YEP 1996
@@ -304,27 +279,25 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-</section>
-<section id="recode-categories" class="level1">
-<h1>Recode Categories</h1>
+</section><section id="recode-categories" class="level1"><h1>Recode Categories</h1>
 <p>This example demonstrates how to change the codes in one variable (e.g., species abbreviations) to new codes in another variable (e.g., long species names).</p>
-<p>Before recoding I find it easier to create a vector that contains the original codes to convert from. For example, <code>unique()</code> extracts the vector of species abbreviations found in the <code>species</code> variable of the example data, which I then saved in <code>short</code> and alphabetized to make the next steps easier.</p>
+<p>Before recoding I find it easier to create a vector that contains the original codes to convert from. For example, <code><a href="https://rdrr.io/r/base/unique.html">unique()</a></code> extracts the vector of species abbreviations found in the <code>species</code> variable of the example data, which I then saved in <code>short</code> and alphabetized to make the next steps easier.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>short <span class="ot">&lt;-</span> <span class="fu">unique</span>(dat<span class="sc">$</span>species) <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>()</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>short</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">short</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">short</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt; [1] "BLG" "CRP" "LMB" "PKS" "WAE" "YEP"</code></pre>
 </div>
 </div>
 <p>In addition, I also create a vector of codes that these codes will be converted to. For example, the <code>long</code> vector below contains the long-form names for each species (in the same order as the abbreviations in <code>short</code>)</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>long <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Bluegill"</span>,<span class="st">"Carp"</span>,<span class="st">"Largemouth Bass"</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Pumpkinseed"</span>,<span class="st">"Walleye"</span>,<span class="st">"Yellow Perch"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Bluegill"</span>,<span class="st">"Carp"</span>,<span class="st">"Largemouth Bass"</span>,</span>
+<span>          <span class="st">"Pumpkinseed"</span>,<span class="st">"Walleye"</span>,<span class="st">"Yellow Perch"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You should “column-bind” these two vectors together to ensure that the codes align.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(short,long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">short</span>,<span class="va">long</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;      short long             
 #R&gt; [1,] "BLG" "Bluegill"       
@@ -335,11 +308,11 @@ Note
 #R&gt; [6,] "YEP" "Yellow Perch"</code></pre>
 </div>
 </div>
-<p>The <code>mapvalues()</code> function (from <code>plyr</code>) may be used to efficiently recode character (or factor) values. Because <code>mapvalues()</code> operates on a vector, it should be used within <code>mutate()</code> (from <code>dplyr</code>) to add a new variable with the recoded values to a data frame. Within <code>mutate()</code> the first argument to <code>mapvalues()</code> is the variable that contains the original data to be recoded. A vector of categories to code from is given in <code>from=</code> and a vector of <strong>new</strong> categories to code to is given in <code>to=</code>. For examle, the combined use of <code>mutate()</code> and <code>mapvalues()</code> below demonstrates creating a new variable in the data frame with the long species names.</p>
+<p>The <code>mapvalues()</code> function (from <code>plyr</code>) may be used to efficiently recode character (or factor) values. Because <code>mapvalues()</code> operates on a vector, it should be used within <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> (from <code>dplyr</code>) to add a new variable with the recoded values to a data frame. Within <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> the first argument to <code>mapvalues()</code> is the variable that contains the original data to be recoded. A vector of categories to code from is given in <code>from=</code> and a vector of <strong>new</strong> categories to code to is given in <code>to=</code>. For examle, the combined use of <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> and <code>mapvalues()</code> below demonstrates creating a new variable in the data frame with the long species names.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesL=</span>plyr<span class="sc">::</span><span class="fu">mapvalues</span>(species,<span class="at">from=</span>short,<span class="at">to=</span>long))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>speciesL<span class="op">=</span><span class="fu">plyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plyr/man/mapvalues.html">mapvalues</a></span><span class="op">(</span><span class="va">species</span>,from<span class="op">=</span><span class="va">short</span>,to<span class="op">=</span><span class="va">long</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year     speciesL
 #R&gt; 1     YEP 1996 Yellow Perch
@@ -374,21 +347,21 @@ Information
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This use of <code>mapvalues()</code> and <code>mutate()</code> is described in Section 2.2.7 of my book <a href="http://derekogle.com/IFAR/">Introductory Fisheries Analyses with R</a>.</p>
+<p>This use of <code>mapvalues()</code> and <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> is described in Section 2.2.7 of my book <a href="http://derekogle.com/IFAR/">Introductory Fisheries Analyses with R</a>.</p>
 </div>
 </div>
 <p>&nbsp;</p>
-<p>The <code>fct_recode()</code> function (from <code>forcats</code>) can also be used to recode categories. Within <code>mutate()</code> the first argument to <code>fct_recode()</code> is the original factor variable. Subsequent arguments are of the form new level name equal to old level name.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For example, the same recoding to long species name is shown below.</p>
+<p>The <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code> function (from <code>forcats</code>) can also be used to recode categories. Within <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> the first argument to <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code> is the original factor variable. Subsequent arguments are of the form new level name equal to old level name.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For example, the same recoding to long species name is shown below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesL2=</span><span class="fu">fct_recode</span>(species,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Bluegill"</span> <span class="ot">=</span> <span class="st">"BLG"</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Carp"</span> <span class="ot">=</span> <span class="st">"CRP"</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Largemouth Bass"</span> <span class="ot">=</span> <span class="st">"LMB"</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Pumpkinseed"</span> <span class="ot">=</span> <span class="st">"PKS"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Walleye"</span> <span class="ot">=</span> <span class="st">"WAE"</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Yellow Perch"</span> <span class="ot">=</span> <span class="st">"YEP"</span>))</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>speciesL2<span class="op">=</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode</a></span><span class="op">(</span><span class="va">species</span>,</span>
+<span>                              <span class="st">"Bluegill"</span> <span class="op">=</span> <span class="st">"BLG"</span>,</span>
+<span>                              <span class="st">"Carp"</span> <span class="op">=</span> <span class="st">"CRP"</span>,</span>
+<span>                              <span class="st">"Largemouth Bass"</span> <span class="op">=</span> <span class="st">"LMB"</span>,</span>
+<span>                              <span class="st">"Pumpkinseed"</span> <span class="op">=</span> <span class="st">"PKS"</span>,</span>
+<span>                              <span class="st">"Walleye"</span> <span class="op">=</span> <span class="st">"WAE"</span>,</span>
+<span>                              <span class="st">"Yellow Perch"</span> <span class="op">=</span> <span class="st">"YEP"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year     speciesL    speciesL2
 #R&gt; 1     YEP 1996 Yellow Perch Yellow Perch
@@ -400,14 +373,12 @@ Information
 </div>
 </div>
 <p>&nbsp;</p>
-</section>
-<section id="collapse-categories" class="level1">
-<h1>Collapse Categories</h1>
-<p>In some instances, one may want to collapse some categories into a single category (e.g., species into a family). This is easily accomplished with <code>mapvalues()</code> or <code>fct_recode()</code> by simply repeating some of the “to” categories. For example, <code>family</code> contains family names that correspond to the species names in the data frame. Note how multiple species have the same family name category.</p>
+</section><section id="collapse-categories" class="level1"><h1>Collapse Categories</h1>
+<p>In some instances, one may want to collapse some categories into a single category (e.g., species into a family). This is easily accomplished with <code>mapvalues()</code> or <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code> by simply repeating some of the “to” categories. For example, <code>family</code> contains family names that correspond to the species names in the data frame. Note how multiple species have the same family name category.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fam <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Centrarchidae"</span>,<span class="st">"Cyprinidae"</span>,<span class="st">"Centrarchidae"</span>,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Centrarchidae"</span>,<span class="st">"Percidae"</span>,<span class="st">"Percidae"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(short,long,fam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Centrarchidae"</span>,<span class="st">"Cyprinidae"</span>,<span class="st">"Centrarchidae"</span>,</span>
+<span>         <span class="st">"Centrarchidae"</span>,<span class="st">"Percidae"</span>,<span class="st">"Percidae"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">short</span>,<span class="va">long</span>,<span class="va">fam</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;      short long              fam            
 #R&gt; [1,] "BLG" "Bluegill"        "Centrarchidae"
@@ -418,12 +389,12 @@ Information
 #R&gt; [6,] "YEP" "Yellow Perch"    "Percidae"</code></pre>
 </div>
 </div>
-<p>The example below shows how to convert the species name abbreviations to family names. In addition, the last use of <code>mapvalues()</code> shows how to change the long-form names to family names. This last example is, of course, repetitive, but it is used here to demonstrate how <code>mutate()</code> allows a variable that was “just created” to be immediately used.</p>
+<p>The example below shows how to convert the species name abbreviations to family names. In addition, the last use of <code>mapvalues()</code> shows how to change the long-form names to family names. This last example is, of course, repetitive, but it is used here to demonstrate how <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> allows a variable that was “just created” to be immediately used.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">family=</span>plyr<span class="sc">::</span><span class="fu">mapvalues</span>(species,<span class="at">from=</span>short,<span class="at">to=</span>fam),</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">family2=</span>plyr<span class="sc">::</span><span class="fu">mapvalues</span>(speciesL,<span class="at">from=</span>long,<span class="at">to=</span>fam))</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>family<span class="op">=</span><span class="fu">plyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plyr/man/mapvalues.html">mapvalues</a></span><span class="op">(</span><span class="va">species</span>,from<span class="op">=</span><span class="va">short</span>,to<span class="op">=</span><span class="va">fam</span><span class="op">)</span>,</span>
+<span>         family2<span class="op">=</span><span class="fu">plyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plyr/man/mapvalues.html">mapvalues</a></span><span class="op">(</span><span class="va">speciesL</span>,from<span class="op">=</span><span class="va">long</span>,to<span class="op">=</span><span class="va">fam</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
 #R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
@@ -434,14 +405,14 @@ Information
 #R&gt; 6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae</code></pre>
 </div>
 </div>
-<p>The “collapsing” of multiple levels into one level can also be accomplished with <code>fct_collapse()</code> (from <code>forcats</code>). The first argument to this function is again the variable containing the “old” levels. Subsequent arguments are formed by setting a new level name equal to a vector containing old level names to collapse.</p>
+<p>The “collapsing” of multiple levels into one level can also be accomplished with <code><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse()</a></code> (from <code>forcats</code>). The first argument to this function is again the variable containing the “old” levels. Subsequent arguments are formed by setting a new level name equal to a vector containing old level names to collapse.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">family3=</span><span class="fu">fct_collapse</span>(species,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Centarchidae"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"BLG"</span>,<span class="st">"PKS"</span>,<span class="st">"LMB"</span>),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Percidae"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"WAE"</span>,<span class="st">"YEP"</span>),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Cyprinidae"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"CRP"</span>)))</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>family3<span class="op">=</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span><span class="op">(</span><span class="va">species</span>,</span>
+<span>                              <span class="st">"Centarchidae"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BLG"</span>,<span class="st">"PKS"</span>,<span class="st">"LMB"</span><span class="op">)</span>,</span>
+<span>                              <span class="st">"Percidae"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"WAE"</span>,<span class="st">"YEP"</span><span class="op">)</span>,</span>
+<span>                              <span class="st">"Cyprinidae"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
 #R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
@@ -460,20 +431,18 @@ Information
 </div>
 </div>
 <p>&nbsp;</p>
-</section>
-<section id="collapse-values-into-categories" class="level1">
-<h1>Collapse Values into Categories</h1>
+</section><section id="collapse-values-into-categories" class="level1"><h1>Collapse Values into Categories</h1>
 <p>It is also common to categorize a numeric variable. For example, a “decade” variable is derived from the year variable in this example.</p>
-<p>The <code>case_when()</code> function (from <code>dplyr</code>) may be used to efficiently collapse discrete values into categories. This function also operates on vectors and, thus, must be used with <code>mutate()</code> to add a variable to a data frame. The arguments to <code>case_when()</code> are a series of two-sided formulae where the left-side is a conditioning statement based on the original data and the right-side is the value that should appear in the new variable when that condition is <code>TRUE</code>. For example, the first line in <code>case_when()</code> below asks “if the year variable is in the values from 1980 to 1989 then the new category should be ‘1980s’.”<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> For example, the code below creates a new variable called <code>decade</code> that identifies the decade that corresponds to the year-of-capture variable.</p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> function (from <code>dplyr</code>) may be used to efficiently collapse discrete values into categories. This function also operates on vectors and, thus, must be used with <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> to add a variable to a data frame. The arguments to <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> are a series of two-sided formulae where the left-side is a conditioning statement based on the original data and the right-side is the value that should appear in the new variable when that condition is <code>TRUE</code>. For example, the first line in <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> below asks “if the year variable is in the values from 1980 to 1989 then the new category should be ‘1980s’.”<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> For example, the code below creates a new variable called <code>decade</code> that identifies the decade that corresponds to the year-of-capture variable.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">decade=</span><span class="fu">case_when</span>(</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">%in%</span> <span class="dv">1980</span><span class="sc">:</span><span class="dv">1989</span> <span class="sc">~</span> <span class="st">"1980s"</span>,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">%in%</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">1999</span> <span class="sc">~</span> <span class="st">"1990s"</span>,</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span> <span class="sc">~</span> <span class="st">"2000s"</span>,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">%in%</span> <span class="dv">2010</span><span class="sc">:</span><span class="dv">2019</span> <span class="sc">~</span> <span class="st">"2010s"</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>decade<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1980</span><span class="op">:</span><span class="fl">1989</span> <span class="op">~</span> <span class="st">"1980s"</span>,</span>
+<span>    <span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1990</span><span class="op">:</span><span class="fl">1999</span> <span class="op">~</span> <span class="st">"1990s"</span>,</span>
+<span>    <span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2009</span> <span class="op">~</span> <span class="st">"2000s"</span>,</span>
+<span>    <span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">2010</span><span class="op">:</span><span class="fl">2019</span> <span class="op">~</span> <span class="st">"2010s"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
 #R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
@@ -491,16 +460,16 @@ Information
 #R&gt; 6 Centarchidae  2000s</code></pre>
 </div>
 </div>
-<p>The lines in <code>case_when()</code> operate sequentially (like a series of “if” statements) such that the above operation can be more succinctly coded as below. Also note in this example that the resulting variable is numeric rather than categorical (simply as an example).</p>
+<p>The lines in <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> operate sequentially (like a series of “if” statements) such that the above operation can be more succinctly coded as below. Also note in this example that the resulting variable is numeric rather than categorical (simply as an example).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">decade2=</span><span class="fu">case_when</span>(</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">1989</span> <span class="sc">~</span> <span class="dv">1980</span>,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">1999</span> <span class="sc">~</span> <span class="dv">1990</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">2009</span> <span class="sc">~</span> <span class="dv">2000</span>,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">2019</span> <span class="sc">~</span> <span class="dv">2010</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>decade2<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">year</span> <span class="op">&lt;=</span> <span class="fl">1989</span> <span class="op">~</span> <span class="fl">1980</span>,</span>
+<span>    <span class="va">year</span> <span class="op">&lt;=</span> <span class="fl">1999</span> <span class="op">~</span> <span class="fl">1990</span>,</span>
+<span>    <span class="va">year</span> <span class="op">&lt;=</span> <span class="fl">2009</span> <span class="op">~</span> <span class="fl">2000</span>,</span>
+<span>    <span class="va">year</span> <span class="op">&lt;=</span> <span class="fl">2019</span> <span class="op">~</span> <span class="fl">2010</span>,</span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
 #R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
@@ -517,7 +486,7 @@ Information
 #R&gt; 5   Cyprinidae  2010s    2010
 #R&gt; 6 Centarchidae  2000s    2000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R&gt; 'data.frame':   250 obs. of  9 variables:
 #R&gt;  $ species  : chr  "YEP" "PKS" "PKS" "YEP" ...
@@ -542,24 +511,19 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You may be motivated from this example to use <code>case_when()</code> to develop a length category variable from measure lengths. While this is possible it is not efficient as you would have several conditions within <code>case_when()</code> (to span all measured lengths) and you would need to make sure that your conditions covered the range of measured lengths. I urge you to examine <code>lencat()</code> in <code>FSA</code> for the purpose of creating length categories (<a href="https://fishr-core-team.github.io/FSA/reference/lencat.html">see examples here</a>).</p>
+<p>You may be motivated from this example to use <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> to develop a length category variable from measure lengths. While this is possible it is not efficient as you would have several conditions within <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when()</a></code> (to span all measured lengths) and you would need to make sure that your conditions covered the range of measured lengths. I urge you to examine <code>lencat()</code> in <code>FSA</code> for the purpose of creating length categories (<a href="https://fishr-core-team.github.io/FSA/reference/lencat.html">see examples here</a>).</p>
 </div>
 </div>
 <p>&nbsp;</p>
 
 
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
+</section><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 <ol>
 <li id="fn1"><p>This may not be a concern with recent versions of <code>plyr</code> and <code>dplyr</code>. However, I have been bitten by enough problems when I have both of these packages loaded that I prefer to use the cautionary approach that I take in this post.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>To avoid potential conflicts with <code>dplyr</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Any levels not listed in <code>fct_recode()</code> will be retained with their original names.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Any levels not listed in <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code> will be retained with their original names.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The colon operator creates a sequence of all integers between the two numbers separated by the colon. The <code>%in%</code> is used on conditional statements to determine if a value is contained within a vector, returning <code>TRUE</code> if it is and <code>FALSE</code> if it is not.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2018,
+</ol></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2018,
   author = {Derek H. Ogle},
   editor = {},
   title = {Collapsing {Categories} or {Values}},
@@ -570,8 +534,7 @@ Warning
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2018" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
 Derek H. Ogle. 2018. <span>“Collapsing Categories or Values.”</span>
 March 30, 2018. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2018-3-30_Collapsing_Categories_or_Values">https://fishr-core-team.github.io/fishR//blog/posts/2018-3-30_Collapsing_Categories_or_Values</a>.
-</div></div></section></div></main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</div></div></section></div></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -682,20 +645,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
 });
+</script><script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="Comments" data-category-id="" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="transparent_dark" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
-    <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
   </li>  
 </ul>
-    </div>   
+</div>   
   </div>
 </footer>
-
 
 
 <script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
