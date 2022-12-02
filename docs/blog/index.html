@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,7 +70,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-image','listing-title','listing-reading-time','listing-date','listing-file-modified',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-date-sort'] }],
+      valueNames: ['listing-image','listing-title','listing-reading-time','listing-date','listing-file-modified','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-date-sort'] }],
       
       searchColumns: ["listing-date","listing-title","listing-author"],
     };
@@ -118,16 +118,21 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" aria-current="page">Blog</a>
+    <a class="nav-link active" href="../blog/index.html" aria-current="page">
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../books.html">Books</a>
+    <a class="nav-link" href="../books.html">
+ <span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../packages.html">Packages</a>
+    <a class="nav-link" href="../packages.html">
+ <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
     <a class="dropdown-item" href="../data_fishR_alpha.html">
@@ -172,6 +177,7 @@ ul.task-list li input[type="checkbox"] {
   <div class="quarto-title-meta">
 
       
+    
       
     </div>
     
@@ -206,10 +212,13 @@ ul.task-list li input[type="checkbox"] {
           Modified - Newest
         </option>
          <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
+          Published - Oldest
         </option>
          <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
+          Published - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
         </option>
      </select>
   </div>
@@ -219,7 +228,7 @@ ul.task-list li input[type="checkbox"] {
     </div>
 </div>
 
-<table class="quarto-listing-table table">
+<table class="quarto-listing-table table table-hover">
 <thead>
 <tr>
 <th>
@@ -228,18 +237,22 @@ ul.task-list li input[type="checkbox"] {
 Title
 </th>
 <th>
-Reading Time
+Time
 </th>
 <th>
-<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
+<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Published</a>
 </th>
 <th>
 <a class="sort" data-sort="listing-file-modified-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Modified</a>
 </th>
+<th>
+<a class="sort" data-sort="listing-author" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Author</a>
+</th>
 </tr>
 </thead>
 <tbody class="list">
-<tr data-index="0" data-categories="Length Frequency,Size,Histogram,ggplot2" data-listing-date-sort="1577512800000" data-listing-file-modified-sort="1670013702380" data-listing-reading-time-sort="5.085" data-listing-title-sort="Length Frequency Histograms in ggplot2" data-listing-filename-sort="index.qmd">
+<tr data-index="0" data-categories="Length Frequency,Size,Histogram,ggplot2" data-listing-date-sort="1577512800000" data-listing-file-modified-sort="1670013702380" data-listing-reading-time-sort="5.085" data-listing-title-sort="Length Frequency Histograms in ggplot2" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
 <td class="listing-image">
 <img src="../blog/posts/2019-12-28_Length_Frequency_Histograms/preview.png" style="height: 40px;">
 </td>
@@ -255,8 +268,12 @@ Dec 28, 2019
 <td class="listing-file-modified">
 Dec 2, 2022
 </td>
+<td class="listing-author">
+Derek H. Ogle
+</td>
 </tr>
-<tr data-index="1" data-categories="Data Wrangling" data-listing-date-sort="1522386000000" data-listing-file-modified-sort="1669997226950" data-listing-reading-time-sort="7.64" data-listing-title-sort="Collapsing Categories or Values" data-listing-filename-sort="index.qmd">
+<tr data-index="1" data-categories="Data Wrangling" data-listing-date-sort="1522386000000" data-listing-file-modified-sort="1669997226950" data-listing-reading-time-sort="7.64" data-listing-title-sort="Collapsing Categories or Values" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
 <td class="listing-image">
 <img src="../blog/posts/2018-3-30_Collapsing_Categories_or_Values/preview.png" style="height: 40px;">
 </td>
@@ -272,8 +289,12 @@ Mar 30, 2018
 <td class="listing-file-modified">
 Dec 2, 2022
 </td>
+<td class="listing-author">
+Derek H. Ogle
+</td>
 </tr>
-<tr data-index="2" data-categories="Age,ggplot2" data-listing-date-sort="1615784400000" data-listing-file-modified-sort="1669932671646" data-listing-reading-time-sort="8.215" data-listing-title-sort="Age Bias Plots in ggplot2" data-listing-filename-sort="index.qmd">
+<tr data-index="2" data-categories="Age,ggplot2" data-listing-date-sort="1615784400000" data-listing-file-modified-sort="1669932671646" data-listing-reading-time-sort="8.215" data-listing-title-sort="Age Bias Plots in ggplot2" data-listing-filename-sort="index.qmd" onclick="href = this.querySelector('a').getAttribute('href');
+ if (href) { window.location=href ; return false; }">
 <td class="listing-image">
 <img src="../blog/posts/2021-3-15-AgeBiasPlots/preview.png" style="height: 40px;">
 </td>
@@ -288,6 +309,9 @@ Mar 15, 2021
 </td>
 <td class="listing-file-modified">
 Dec 1, 2022
+</td>
+<td class="listing-author">
+Michael Lant
 </td>
 </tr>
 </tbody>
@@ -338,7 +362,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -374,24 +415,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
@@ -399,7 +458,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
-    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external)');
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
