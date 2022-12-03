@@ -1,0 +1,39 @@
+---
+title: 
+description: 
+author: 
+date: "3/15/2021"
+image: "preview.png"
+categories:
+  - Age
+  - ggplot2
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)
+library(dplyr)
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+# Introduction
+
+
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1024,height=550,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE
+dev.off()
+```

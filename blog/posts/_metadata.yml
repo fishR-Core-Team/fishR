@@ -9,6 +9,9 @@ freeze: true
 # set the creative commons license
 license: "CC BY"
 
+# set the preview image
+image: preview.png
+
 # set the citation use
 citation: true
 google-scholar: true
@@ -25,12 +28,13 @@ execute:
   
 # set some other default knitr options
 knitr: 
-  opts_chunk: 
+  opts_chunk:
     dev: "png"
     fig.width: 3.5
     fig.height: 3.5
     fig.align: center
-    comment: "#R>"
+    comment: "#R| "
+    background: yellow
     r.options:
       show.signif.stars: false
 
@@ -38,3 +42,4 @@ format:
   html:
     code-link: true
     link-external-icon: false
+    
