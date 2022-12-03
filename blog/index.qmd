@@ -2,8 +2,8 @@
 title: R for fisheries analyses and tasks
 listing:
   contents: .
-  type: table
-  fields: [image,title,reading-time,date,file-modified,author]
+  type: grid
+  fields: [image,title,description,reading-time,date,file-modified,author]
   sort: file-modified desc
   sort-ui: [file-modified,date,author]
   categories: true

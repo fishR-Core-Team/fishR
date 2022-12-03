@@ -12,10 +12,8 @@ knitr:
     fig.height: 4
 ---
 
-&nbsp;
-
 :::{.callout-note}
-The following packages are loaded for use below. The `plyr` package is also used but it is not loaded because  I am only going to use one specific function from `plyr` (i.e., `mapvalues()`) and I have found that `plyr` and `dplyr` don't always "play well" together.^[This may not be a concern with recent versions of `plyr` and `dplyr`. However, I have been bitten by enough problems when I have both of these packages loaded that I prefer to use the cautionary approach that I take in this post.]
+The following packages are loaded for use below. The `plyr` package is also used but it is not loaded because  I am only going to use one specific function from `plyr` (i.e., `mapvalues()`).]
 :::
 
 ```{r packages}
@@ -68,7 +66,7 @@ You should "column-bind" these two vectors together to ensure that the codes ali
 cbind(short,long)
 ```
 
-The `mapvalues()` function (from `plyr`) may be used to efficiently recode character (or factor) values. Because `mapvalues()` operates on a vector, it should be used within `mutate()` (from `dplyr`) to add a new variable with the recoded values to a data frame. Within `mutate()` the first argument to `mapvalues()` is the variable that contains the original data to be recoded. A vector of categories to code from is given in `from=` and a vector of **new** categories to code to is given in `to=`. For examle, the combined use of `mutate()` and `mapvalues()` below demonstrates creating a new variable in the data frame with the long species names.
+The `mapvalues()` function (from `plyr`) may be used to efficiently recode character (or factor) values.^[The use of `plyr::` in front of `mapvalues()` ensures that `mapvalues()` from `plyr` and not another package will be used and allows for not loading the entire `plyr` package.] Because `mapvalues()` operates on a vector, it should be used within `mutate()` (from `dplyr`) to add a new variable with the recoded values to a data frame. Within `mutate()` the first argument to `mapvalues()` is the variable that contains the original data to be recoded. A vector of categories to code from is given in `from=` and a vector of **new** categories to code to is given in `to=`. For example, the combined use of `mutate()` and `mapvalues()` below demonstrates creating a new variable in the data frame with the long species names.
 
 ```{r}
 dat <- dat |>
@@ -77,10 +75,6 @@ head(dat)
 ```
 
 &nbsp;
-
-:::{.callout-note}
-The use of `plyr::` in front of `mapvalues()` ensures that `mapvalues()` from `plyr` will be used and allows for not loading the entire `plyr` package.^[To avoid potential conflicts with `dplyr`.]
-:::
 
 :::{.callout-information}
 This use of `mapvalues()` and `mutate()` is described in Section 2.2.7 of my book [Introductory Fisheries Analyses with R](http://derekogle.com/IFAR/).

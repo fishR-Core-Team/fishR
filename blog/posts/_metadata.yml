@@ -13,6 +13,10 @@ license: "CC BY"
 citation: true
 google-scholar: true
 
+# have footnotes and figure captions appear in the margin
+reference-location: margin
+cap-location: margin
+
 # set some default knitr options
 execute: 
   echo: true

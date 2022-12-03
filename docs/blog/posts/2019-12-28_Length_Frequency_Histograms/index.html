@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="How to construct length frequency histograms using ggplot2">
+<meta name="description" content="Flexibly construct length frequency histograms using ggplot2">
 <title>fishR - Length Frequency Histograms in ggplot2</title>
 <style>
 code{white-space: pre-wrap;}
@@ -120,11 +120,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 }</script><style>html{ scroll-behavior: smooth; }</style>
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="fishR - Length Frequency Histograms in ggplot2">
-<meta property="og:description" content="How to construct length frequency histograms using ggplot2">
+<meta property="og:description" content="Flexibly construct length frequency histograms using ggplot2">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2019-12-28_Length_Frequency_Histograms\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="1049">
-<meta property="og:image:width" content="1050">
+<meta property="og:image:height" content="550">
+<meta property="og:image:width" content="1024">
 <meta name="citation_title" content="Length Frequency Histograms in ggplot2">
 <meta name="citation_author" content="Derek H. Ogle">
 <meta name="citation_publication_date" content="2019-12-28">
@@ -198,7 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <h1 class="title">Length Frequency Histograms in ggplot2</h1>
                   <div>
         <div class="description">
-          How to construct length frequency histograms using ggplot2
+          Flexibly construct length frequency histograms using ggplot2
         </div>
       </div>
                           <div class="quarto-categories">
@@ -230,7 +230,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 2, 2022</p>
+        <p class="date-modified">Dec 3, 2022</p>
       </div>
     </div>
       
@@ -251,8 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul><div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2019-12-28_Length_Frequency_Histograms/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content"><p>&nbsp;</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content"><div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -270,15 +269,15 @@ Note
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-<section id="introduction" class="level1"><h1>Introduction</h1>
+<section id="introduction" class="level1 page-columns page-full"><h1>Introduction</h1>
 <p>A common graphic produced by many fisheries scientists is a length frequency histogram. As it turns out there are a few “tricks” to make a length frequency histogram appear as I expect most fisheries folks would want it to appear – primarily, left-inclusive (i.e., 100 would be in the 100-110 bin and not the 90-100 bin). In this post, I show how to construct a length frequency histograms with <code>ggplot2</code> using my preferences.</p>
-<p>The data are lengths of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> My primary interest is in the <code>tl</code> (total length in mm), <code>sex</code>, and <code>loc</code> variables<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and I will focus on 2014 (as an example).</p>
+<div class="page-columns page-full"><p>The data are lengths of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> My primary interest is in the <code>tl</code> (total length in mm), <code>sex</code>, and <code>loc</code> variables<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and I will focus on 2014 (as an example).</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;These data are available in the <a href="https://fishr-core-team.github.io/FSAdata/index.html"><code>FSAdata</code> package</a> and formed many of the examples in Chapter 12 of the <a href="https://derekogle.com/AGF/"><strong>Age and Growth of Fishes: Principles and Techniques book</strong></a>.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">See here for more details</a></p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">WalleyeErie2</span>,package<span class="op">=</span><span class="st">"FSAdata"</span><span class="op">)</span></span>
 <span><span class="va">WE</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">WalleyeErie2</span>,<span class="va">year</span><span class="op">==</span><span class="fl">2014</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-</section><section id="basic-length-frequency" class="level1"><h1>Basic Length Frequency</h1>
+</section><section id="basic-length-frequency" class="level1 page-columns page-full"><h1>Basic Length Frequency</h1>
 <p>Making the histogram (<a href="#fig-hist1">Figure&nbsp;1</a>) begins by identifying the data frame to use in <code>data=</code> and the <code>tl</code> variable to use for the <code>x</code>-axis as an <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>thetic in <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>. The histogram is then constructed with <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code>, which I customize as follows:</p>
 <ul>
 <li>Set the width of the length bins with <code>binwidth=</code>.</li>
@@ -287,27 +286,27 @@ Note
 <li>The fill color of the bins is set with <code>fill=</code> (I prefer a slight gray).</li>
 <li>The outline color of the bins is set with <code>color=</code> (defaults to the same as <code>fill=</code>; I prefer a dark boundary to make the bins obvious).</li>
 </ul>
-<p>The <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous()</a></code> are primarily used to provide labels (i.e., <code>name</code>s) for the y- and x-axes, respectively. By default, the bins of the histogram will “hover” slightly above the x-axis, which I find annoying. The <code>expand=</code> in <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous()</a></code> is used to expand the lower limit of the y-axis by a <code>mult</code>iple of 0 (thus, not expand the lower-limit) and expand the upper limit of the y-axis by a <code>mult</code>iple of 0.05 (thus, the upper-limit will by 5% higher than the tallest bin so that the top frame of the plot will not touch the tallest bin).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="cell" data-layout-align="center">
+<div class="page-columns page-full"><p>The <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous()</a></code> are primarily used to provide labels (i.e., <code>name</code>s) for the y- and x-axes, respectively. By default, the bins of the histogram will “hover” slightly above the x-axis, which I find annoying. The <code>expand=</code> in <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous()</a></code> is used to expand the lower limit of the y-axis by a <code>mult</code>iple of 0 (thus, not expand the lower-limit) and expand the upper limit of the y-axis by a <code>mult</code>iple of 0.05 (thus, the upper-limit will by 5% higher than the tallest bin so that the top frame of the plot will not touch the tallest bin).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;The resultant plot was assigned to an object so that name must be typed and run to see the plot.</p></li></div></div>
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lenfreq1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">WE</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">tl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>binwidth<span class="op">=</span><span class="fl">25</span>,boundary<span class="op">=</span><span class="fl">0</span>,closed<span class="op">=</span><span class="st">"left"</span>,</span>
 <span>                 fill<span class="op">=</span><span class="st">"gray80"</span>,color<span class="op">=</span><span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"Number of Fish"</span>,expand<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html">expansion</a></span><span class="op">(</span>mult<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"Total Length (mm)"</span><span class="op">)</span></span>
 <span><span class="va">lenfreq1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-hist1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-hist1-1.png" class="img-fluid figure-img" alt="Length frequency of histogram of Lake Erie Walleye, 2014." width="336"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Length frequency of histogram of Lake Erie Walleye, 2014.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-hist1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-hist1-1.png" class="img-fluid figure-img" alt="Length frequency of histogram of Lake Erie Walleye, 2014." width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: Length frequency of histogram of Lake Erie Walleye, 2014.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This base object/plot can be modified by adding (using <code>+</code>) to it as demonstrated later.</p>
 <p>&nbsp;</p>
-</section><section id="stacked-by-other-variable" class="level1"><h1>Stacked by Other Variable</h1>
-<p>It may be useful to see the distribution of categories of fish (e.g., sex) within the length frequency bins (<a href="#fig-hist2">Figure&nbsp;2</a>). To do this, add <code>fill=</code> in the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>thetic in <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> and set it equal to the variable that identifies the separation within each bin (e.g., <code>sex</code>). The bins will be stacked by this variable if <code>position="stack"</code> in <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The fill colors for each group can be set in a number of ways, but they are set manually below with <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual()</a></code>.</p>
-<div class="cell" data-layout-align="center">
+</section><section id="stacked-by-other-variable" class="level1 page-columns page-full"><h1>Stacked by Other Variable</h1>
+<div class="page-columns page-full"><p>It may be useful to see the distribution of categories of fish (e.g., sex) within the length frequency bins (<a href="#fig-hist2">Figure&nbsp;2</a>). To do this, add <code>fill=</code> in the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>thetic in <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> and set it equal to the variable that identifies the separation within each bin (e.g., <code>sex</code>). The bins will be stacked by this variable if <code>position="stack"</code> in <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The fill colors for each group can be set in a number of ways, but they are set manually below with <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual()</a></code>.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;This is the default and would not need to be explicitly set below).</p></li></div></div>
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lenfreq2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">WE</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">tl</span>,fill<span class="op">=</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>binwidth<span class="op">=</span><span class="fl">25</span>,boundary<span class="op">=</span><span class="fl">0</span>,closed<span class="op">=</span><span class="st">"left"</span>,</span>
 <span>                 color<span class="op">=</span><span class="st">"black"</span>,position<span class="op">=</span><span class="st">"stack"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -315,62 +314,59 @@ Note
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"Number of Fish"</span>,expand<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html">expansion</a></span><span class="op">(</span>mult<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"Total Length (mm)"</span><span class="op">)</span></span>
 <span><span class="va">lenfreq2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-hist2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-hist2-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 stacked by sex." width="432"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: Length frequency histogram of Lake Erie Walleye 2014 stacked by sex.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-hist2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-hist2-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 stacked by sex." width="432"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;2: Length frequency histogram of Lake Erie Walleye 2014 stacked by sex.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Stacked histograms are difficult to interpret in my opinion. In a future post, I will show how to use empirical density functions to examine distributions among categories. For the time being, see below.</p>
 <p>&nbsp;</p>
-</section><section id="separated-by-other-variables" class="level1"><h1>Separated by Other Variable(s)</h1>
+</section><section id="separated-by-other-variables" class="level1 page-columns page-full"><h1>Separated by Other Variable(s)</h1>
 <p>A strength of <code>ggplot2</code> is that it can easily make the same plot for several different levels of another variable; e.g., separate length frequency histograms by sex (<a href="#fig-hist3a">Figure&nbsp;3</a>). The plot (e.g., <code>lenfreq</code> from above) can be separated into different “facets” with <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code>, which takes the variable to separate by within <code><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars()</a></code> as the first argument.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lenfreq1</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-hist3a" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-hist3a-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 separated by sex." width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Length frequency histogram of Lake Erie Walleye 2014 separated by sex.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-hist3a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-hist3a-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 separated by sex." width="672"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;3: Length frequency histogram of Lake Erie Walleye 2014 separated by sex.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>If the faceted groups have very different sample sizes then it may be useful to use a potentially different y-axis scale for each facet by including <code>scales="free_y"</code> in <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code> (<a href="#fig-hist3b">Figure&nbsp;4</a>). Similarly, a potentially different scale can be used for each x-axis with <code>scales="free_x"</code> or for both axes with <code>scales="free"</code>.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lenfreq1</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,scales<span class="op">=</span><span class="st">"free_y"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-hist3b" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-hist3b-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 separated by sex with different frequency scales." width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4: Length frequency histogram of Lake Erie Walleye 2014 separated by sex with different frequency scales.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-hist3b" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-hist3b-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 separated by sex with different frequency scales." width="672"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;4: Length frequency histogram of Lake Erie Walleye 2014 separated by sex with different frequency scales.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Plots may be faceted over multiple variables with <code><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid()</a></code> (<a href="#fig-hist4">Figure&nbsp;5</a>), where the variables that identify the rows and variables for a grid of facets are included (within <code><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars()</a></code>) in <code>rows=</code> and <code>cols=</code>, respectively. Both scales can <strong>not</strong> be “free” with <code><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid()</a></code>, the scale can only be “free” within a row or column.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lenfreq1</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span>rows<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">loc</span><span class="op">)</span>,cols<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,scales<span class="op">=</span><span class="st">"free_y"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-hist4" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-hist4-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 separated by sex and location of capture with different frequency scales." width="768"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;5: Length frequency histogram of Lake Erie Walleye 2014 separated by sex and location of capture with different frequency scales.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-hist4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-hist4-1.png" class="img-fluid figure-img" alt="Length frequency histogram of Lake Erie Walleye 2014 separated by sex and location of capture with different frequency scales." width="768"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;5: Length frequency histogram of Lake Erie Walleye 2014 separated by sex and location of capture with different frequency scales.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-
+<div class="cell-output cell-output-stdout">
+<pre><code>#R&gt; png 
+#R&gt;   2</code></pre>
+</div>
 </div>
 
 
-</section><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-<ol>
-<li id="fn1"><p>These data are available in the <a href="https://fishr-core-team.github.io/FSAdata/index.html"><code>FSAdata</code> package</a> and formed many of the examples in Chapter 12 of the <a href="https://derekogle.com/AGF/"><strong>Age and Growth of Fishes: Principles and Techniques book</strong></a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">See here for more details</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>The resultant plot was assigned to an object so that name must be typed and run to see the plot.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>This is the default and would not need to be explicitly set below).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2019,
+</section><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2019,
   author = {Derek H. Ogle},
   title = {Length {Frequency} {Histograms} in Ggplot2},
   date = {2019-12-28},

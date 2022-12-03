@@ -1,6 +1,6 @@
 ---
 title: "Length Frequency Histograms in ggplot2"
-description: "How to construct length frequency histograms using ggplot2"
+description: "Flexibly construct length frequency histograms using ggplot2"
 author: "Derek H. Ogle"
 date: "12/28/2019"
 image: "preview.png"
@@ -10,8 +10,6 @@ categories:
   - Histogram
   - ggplot2
 ---
-
-&nbsp;
 
 :::{.callout-note}
 The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
@@ -123,6 +121,9 @@ lenfreq1 + facet_grid(rows=vars(loc),cols=vars(sex),scales="free_y")
 #| echo: false
 # This is used as a work-around for creating a preview image. See the
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-ggsave("preview.png",lenfreq1)
+png("preview.png",width=1024,height=550,units="px",
+    bg="transparent",res=216)
+lenfreq1 + theme(aspect.ratio=1)
+dev.off()
 ```
 

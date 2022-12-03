@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Michael Lant">
-<meta name="description" content="How to construct age bias and age difference plots using ggplot2">
+<meta name="description" content="Flexibly construct age bias and age difference plots using ggplot2">
 <title>fishR - Age Bias Plots in ggplot2</title>
 <style>
 code{white-space: pre-wrap;}
@@ -120,11 +120,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 }</script><style>html{ scroll-behavior: smooth; }</style>
 <link rel="stylesheet" href="../../../styles.css">
 <meta property="og:title" content="fishR - Age Bias Plots in ggplot2">
-<meta property="og:description" content="How to construct age bias and age difference plots using ggplot2">
+<meta property="og:description" content="Flexibly construct age bias and age difference plots using ggplot2">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2021-3-15-AgeBiasPlots\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="1200">
-<meta property="og:image:width" content="1199">
+<meta property="og:image:height" content="550">
+<meta property="og:image:width" content="1024">
 <meta name="citation_title" content="Age Bias Plots in ggplot2">
 <meta name="citation_author" content="Michael Lant">
 <meta name="citation_publication_date" content="2021-03-15">
@@ -198,7 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <h1 class="title">Age Bias Plots in ggplot2</h1>
                   <div>
         <div class="description">
-          How to construct age bias and age difference plots using ggplot2
+          Flexibly construct age bias and age difference plots using ggplot2
         </div>
       </div>
                           <div class="quarto-categories">
@@ -228,7 +228,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 1, 2022</p>
+        <p class="date-modified">Dec 3, 2022</p>
       </div>
     </div>
       
@@ -250,8 +250,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul><div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2021-3-15-AgeBiasPlots/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content"><p>&nbsp;</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content"><div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -274,8 +273,8 @@ Note
 <section id="introduction" class="level1"><h1>Introduction</h1>
 <p>Age-bias and difference plots can be constructed with <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> and <code><a href="https://rdrr.io/pkg/FSA/man/plotAB.html">plotAB()</a></code> in the <code>FSA</code> package. However, these types of plots can be more flexibly constructed using <code>ggplot2</code>. Below I will use <code>ggplot2</code> to recreate many of the plots shown in the documentation for <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html#examples"><code>plot()</code></a> and <a href="https://fishr-core-team.github.io/FSA/reference/plotAB.html#examples"><code>plotAB()</code></a>.</p>
 <p>&nbsp;</p>
-</section><section id="data" class="level1"><h1>Data</h1>
-<p>The <code>WhitefishLC</code> data frame from <code>FSA</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> contains age readings made by two readers on scales, fin rays, and otoliths, along with consensus readings for each structure.</p>
+</section><section id="data" class="level1 page-columns page-full"><h1>Data</h1>
+<div class="page-columns page-full"><p>The <code>WhitefishLC</code> data frame from <code>FSA</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> contains age readings made by two readers on scales, fin rays, and otoliths, along with consensus readings for each structure.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;These data are loaded automatically with <code><a href="https://github.com/fishR-Core-Team/FSA">library(FSA)</a></code>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">WhitefishLC</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -295,12 +294,12 @@ Note
 #R&gt; 6        6</code></pre>
 </div>
 </div>
-<p>Intermediate and summary statistics for the comparison of paired ages (e.g., between consensus scale and otolith ages) can be extracted from the objected returned by <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> from <code>FSA</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="page-columns page-full"><p>Intermediate and summary statistics for the comparison of paired ages (e.g., between consensus scale and otolith ages) can be extracted from the objected returned by <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> from <code>FSA</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;As described in <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html">the documentation</a>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias</a></span><span class="op">(</span><span class="va">scaleC</span><span class="op">~</span><span class="va">otolithC</span>,data<span class="op">=</span><span class="va">WhitefishLC</span>,</span>
 <span>               ref.lab<span class="op">=</span><span class="st">"Otolith Age"</span>,nref.lab<span class="op">=</span><span class="st">"Scale Age"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For example, the <code>$data</code> object of <code>ab1</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> contains the original paired age estimates, the differences between those two estimates, and the mean of those two estimates.</p>
+<div class="page-columns page-full"><p>For example, the <code>$data</code> object of <code>ab1</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> contains the original paired age estimates, the differences between those two estimates, and the mean of those two estimates.</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;<code>ab1</code> because that was the name assigned to the results from <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> in <strong>this</strong> example.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ab1</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -313,7 +312,7 @@ Note
 #R&gt; 6      4        6   -2  5.0</code></pre>
 </div>
 </div>
-<p>In addition, the <code>$bias</code> object of <code>ab1</code> contains summary statistics of ages for the first structure given in the <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> formula by each age of the second structure given in that formula. For example, the first row below gives the number, minimum, maximum, mean, and standard error of the scale ages that were paired with an otolith age of 1. Additionally there is a t-test, adjusted p-value, and a significance statement for testing whether the mean scale age is different from the otolith age. Finally, confidence intervals (defaults to 95%) for the mean scale age at an otolith age of 1 is given, with a statement about whether a confidence interval could be calculated.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="page-columns page-full"><p>In addition, the <code>$bias</code> object of <code>ab1</code> contains summary statistics of ages for the first structure given in the <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> formula by each age of the second structure given in that formula. For example, the first row below gives the number, minimum, maximum, mean, and standard error of the scale ages that were paired with an otolith age of 1. Additionally there is a t-test, adjusted p-value, and a significance statement for testing whether the mean scale age is different from the otolith age. Finally, confidence intervals (defaults to 95%) for the mean scale age at an otolith age of 1 is given, with a statement about whether a confidence interval could be calculated.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html">the documentation</a> for <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> for the criterion used to decide if the confidence interval can be calculated.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ab1</span><span class="op">$</span><span class="va">bias</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -368,21 +367,21 @@ Important
 </div>
 </div>
 <p>&nbsp;</p>
-</section><section id="basic-age-bias-plot" class="level1"><h1>Basic Age-Bias Plot</h1>
+</section><section id="basic-age-bias-plot" class="level1 page-columns page-full"><h1>Basic Age-Bias Plot</h1>
 <p><a href="#fig-plotAB">Figure&nbsp;1</a> is the age-bias plot created by default by <code><a href="https://rdrr.io/pkg/FSA/man/plotAB.html">plotAB()</a></code> from <code>FSA</code>.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">FSA</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FSA/man/plotAB.html">plotAB</a></span><span class="op">(</span><span class="va">ab1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-plotAB" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-plotAB-1.png" class="img-fluid figure-img" alt="Default age-bias plot from plotAB()" width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Default age-bias plot from <code><a href="https://rdrr.io/pkg/FSA/man/plotAB.html">plotAB()</a></code></figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-plotAB" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-plotAB-1.png" class="img-fluid figure-img" alt="Default age-bias plot from plotAB() in FSA." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: Default age-bias plot from <code><a href="https://rdrr.io/pkg/FSA/man/plotAB.html">plotAB()</a></code> in <code>FSA</code>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
 <p><a href="#fig-plotAB">Figure&nbsp;1</a> is largely recreated (<a href="#fig-plotAB2">Figure&nbsp;2</a>) with the following <code>ggplot2</code> code.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">bias</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>,intercept<span class="op">=</span><span class="fl">0</span>,linetype<span class="op">=</span><span class="st">"dashed"</span>,color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,ymin<span class="op">=</span><span class="va">LCI</span>,ymax<span class="op">=</span><span class="va">UCI</span>,color<span class="op">=</span><span class="va">sig</span><span class="op">)</span>,width<span class="op">=</span><span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
@@ -391,10 +390,10 @@ Important
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FALSE"</span><span class="op">=</span><span class="st">"black"</span>,<span class="st">"TRUE"</span><span class="op">=</span><span class="st">"red3"</span><span class="op">)</span>,guide<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">nref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-plotAB2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-plotAB2-1.png" class="img-fluid figure-img" alt="Recreation of the default age-bias plot using ggplot2" width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: Recreation of the default age-bias plot using <code>ggplot2</code></figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-plotAB2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-plotAB2-1.png" class="img-fluid figure-img" alt="Recreation of the default age-bias plot using ggplot2." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;2: Recreation of the default age-bias plot using <code>ggplot2</code>.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -412,9 +411,9 @@ Important
 </ul>
 <p>The gridlines and the size of the fonts could be adjusted by modifying theme theme, which I did not do here for simplicity.</p>
 <p>&nbsp;</p>
-</section><section id="more-examples" class="level1"><h1>More Examples</h1>
+</section><section id="more-examples" class="level1 page-columns page-full"><h1>More Examples</h1>
 <p>Below are more examples of how <code>ggplot2</code> can be used to recreate graphs from <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> in <code>FSA</code>. For example, <a href="#fig-ABplot1">Figure&nbsp;3</a> is similar to <a href="#fig-plotAB2">Figure&nbsp;2</a>, but uses <code>$bias.diff</code> from <code>ab1</code> to plot mean differences between scale and otolith ages against otolith ages. The reference for differences is a horizontal line at 0 so <code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline()</a></code> from above was replaced with <code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline()</a></code> here.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">bias.diff</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">0</span>,linetype<span class="op">=</span><span class="st">"dashed"</span>,color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,ymin<span class="op">=</span><span class="va">LCI</span>,ymax<span class="op">=</span><span class="va">UCI</span>,color<span class="op">=</span><span class="va">sig</span><span class="op">)</span>,width<span class="op">=</span><span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
@@ -423,17 +422,17 @@ Important
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FALSE"</span><span class="op">=</span><span class="st">"black"</span>,<span class="st">"TRUE"</span><span class="op">=</span><span class="st">"red3"</span><span class="op">)</span>,guide<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">ab1</span><span class="op">$</span><span class="va">nref.lab</span>,<span class="st">"-"</span>,<span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span><span class="op">)</span>,breaks<span class="op">=</span><span class="op">-</span><span class="fl">15</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-ABplot1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-ABplot1-1.png" class="img-fluid figure-img" alt="Age difference plot." width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Age difference plot.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-ABplot1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-ABplot1-1.png" class="img-fluid figure-img" alt="Age difference plot using ggplot2." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;3: Age difference plot using <code>ggplot2</code>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
 <p><a href="#fig-ABplot2">Figure&nbsp;4</a> is similar but it includes the raw data points from <code>$data</code> and colors the mean (and confidence intervals) for the differences based on the significance as in <a href="#fig-plotAB2">Figure&nbsp;2</a>. Because data were drawn from different data frames (i.e., <code>ab1$data</code> and <code>ab1$bias.diff</code>) the <code>data=</code> and <code>aes=</code> arguments had to be moved into the specific <code>geom_</code>s. Also note that the raw data were made semi-transparent (with <code>alpha=0.1</code>) to emphasize the over-plotting of the discrete ages.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">0</span>,linetype<span class="op">=</span><span class="st">"dashed"</span>,color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">data</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,y<span class="op">=</span><span class="va">diff</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">0.1</span>,size<span class="op">=</span><span class="fl">1.75</span><span class="op">)</span> <span class="op">+</span></span>
@@ -445,17 +444,17 @@ Important
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FALSE"</span><span class="op">=</span><span class="st">"black"</span>,<span class="st">"TRUE"</span><span class="op">=</span><span class="st">"red3"</span><span class="op">)</span>,guide<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span>,breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">25</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">ab1</span><span class="op">$</span><span class="va">nref.lab</span>,<span class="st">"-"</span>,<span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span><span class="op">)</span>,breaks<span class="op">=</span><span class="op">-</span><span class="fl">15</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-ABplot2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-ABplot2-1.png" class="img-fluid figure-img" alt="Age difference plot including points for individual observations." width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4: Age difference plot including points for individual observations.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-ABplot2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-ABplot2-1.png" class="img-fluid figure-img" alt="Age difference plot using `ggplot2` including points for individual observations." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;4: Age difference plot using <code>ggplot2</code> including points for individual observations.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
 <p><a href="#fig-ABplot3">Figure&nbsp;5</a> is the same as <a href="#fig-ABplot2">Figure&nbsp;4</a> except that a loess smoother has been added with <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> to emphasize the trend in the differences in ages. The smoother should be fit to the raw data so be sure to use <code>ab1$data</code> in <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code>. The smoother defaults to blue (as shown here) but I decreased the width of the line slightly with <code>linewidth=0.65</code>.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">0</span>,linetype<span class="op">=</span><span class="st">"dashed"</span>,color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">data</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,y<span class="op">=</span><span class="va">diff</span><span class="op">)</span>,alpha<span class="op">=</span><span class="fl">0.1</span>,size<span class="op">=</span><span class="fl">1.75</span><span class="op">)</span> <span class="op">+</span></span>
@@ -468,16 +467,16 @@ Important
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span>,breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">25</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">ab1</span><span class="op">$</span><span class="va">nref.lab</span>,<span class="st">"-"</span>,<span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span><span class="op">)</span>,breaks<span class="op">=</span><span class="op">-</span><span class="fl">15</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">data</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,y<span class="op">=</span><span class="va">diff</span><span class="op">)</span>,linewidth<span class="op">=</span><span class="fl">0.65</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-ABplot3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-ABplot3-1.png" class="img-fluid figure-img" alt="Age difference plot including points for individual observations and a loess smoother." width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;5: Age difference plot including points for individual observations and a loess smoother.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-ABplot3" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-ABplot3-1.png" class="img-fluid figure-img" alt="Age difference plot using ggplot2 including points for individual observations and a loess smoother." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;5: Age difference plot using <code>ggplot2</code> including points for individual observations and a loess smoother.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
-</section><section id="what-prompted-this" class="level1"><h1>What Prompted This</h1>
+</section><section id="what-prompted-this" class="level1 page-columns page-full"><h1>What Prompted This</h1>
 <p>Graphics made in <code>ggplot2</code> are more flexible than the ones produced in <code>FSA</code>. For example, a user recently asked if it was possible to make an “age-bias plot” that used “error bars” based on the standard deviation rather than the standard error. While it is questionable whether this is what should be plotted, it is nevertheless up to the user and their use case. Because this cannot be done using the plots in <code>FSA</code> we turned to <code>ggplot</code> to make such a graph.</p>
 <p>Standard deviations are not returned in any of the <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> results (saved in <code>ab1</code>). However, the standard error and sample size are returned in the <code>$bias</code> data frame. The standard deviation can be “back-calculated” from these two values using <code>SD=SE*sqrt(n)</code>. Two new variables called <code>LSD</code> and <code>USD</code> that are the means minus and plus two standard deviations can then be created. All three of these variables are added to the <code>$bias</code> data frame using <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> from <code>dplyr</code>.</p>
 <div class="cell" data-layout-align="center">
@@ -487,23 +486,23 @@ Important
 <span>         USD<span class="op">=</span><span class="va">mean</span><span class="op">+</span><span class="fl">2</span><span class="op">*</span><span class="va">SD</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A plot (<a href="#fig-ABplot4">Figure&nbsp;6</a>) like the very first plot above but using two standard deviations for the error bars is then created by mapping <code>ymin=</code> and <code>ymax=</code> to <code>LSD</code> and <code>USD</code>, respectively, in <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar()</a></code>. Note that I removed the color related to the significance test as those don’t pertain to the results when using standard deviations to represent “error bars.”</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ab1</span><span class="op">$</span><span class="va">bias</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>,intercept<span class="op">=</span><span class="fl">0</span>,linetype<span class="op">=</span><span class="st">"dashed"</span>,color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,ymin<span class="op">=</span><span class="va">LSD</span>,ymax<span class="op">=</span><span class="va">USD</span><span class="op">)</span>,width<span class="op">=</span><span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,y<span class="op">=</span><span class="va">mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name <span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">nref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-ABplot4" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-ABplot4-1.png" class="img-fluid figure-img" alt="Mean scale age for each otolith age with error bars represented by two standard deviations." width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;6: Mean scale age for each otolith age with error bars represented by two standard deviations.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-ABplot4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-ABplot4-1.png" class="img-fluid figure-img" alt="Mean scale age for each otolith age with error bars represented by two standard deviations." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;6: Mean scale age for each otolith age with error bars represented by two standard deviations.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Finally, to demonstrate the flexibility of using <code>ggplot</code> with these type of data, I used a violin plot to show the distribution of scale ages for each otolith age while also highlighting the mean scale age for each otolith age (<a href="#fig-ABplot5">Figure&nbsp;7</a>). The violin plots are created with <code><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin()</a></code> using the raw data stored in <code>$data</code>. The <code>group=</code> must be set to the x-axis variable (i.e., otolith age) so that a separate violin will be constructed for each age on the x-axis. I <code>fill</code>ed the violins with <code>grey</code> to make them stand out more.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>,intercept<span class="op">=</span><span class="fl">0</span>,linetype<span class="op">=</span><span class="st">"dashed"</span>,color<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">WhitefishLC</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,y<span class="op">=</span><span class="va">scaleC</span>,group<span class="op">=</span><span class="va">otolithC</span><span class="op">)</span>,</span>
@@ -511,10 +510,10 @@ Important
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">bias</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">otolithC</span>,y<span class="op">=</span><span class="va">mean</span><span class="op">)</span>,size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">ref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>name<span class="op">=</span><span class="va">ab1</span><span class="op">$</span><span class="va">nref.lab</span>,breaks<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-ABplot5" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="index_files/figure-html/fig-ABplot5-1.png" class="img-fluid figure-img" alt="Violin plots and mean scale age at each otolith age." width="384"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;7: Violin plots and mean scale age at each otolith age.</figcaption><p></p>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-ABplot5" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full"><p><img src="index_files/figure-html/fig-ABplot5-1.png" class="img-fluid figure-img" alt="Violin plots and mean scale age at each otolith age." width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;7: Violin plots and mean scale age at each otolith age.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -524,13 +523,7 @@ Important
 </div>
 
 
-</section><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-<ol>
-<li id="fn1"><p>These data are loaded automatically with <code><a href="https://github.com/fishR-Core-Team/FSA">library(FSA)</a></code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>As described in <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html">the documentation</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p><code>ab1</code> because that was the name assigned to the results from <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> in <strong>this</strong> example.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>See <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html">the documentation</a> for <code><a href="https://rdrr.io/pkg/FSA/man/ageBias.html">ageBias()</a></code> for the criterion used to decide if the confidence interval can be calculated.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lant2021,
+</section><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lant2021,
   author = {Michael Lant},
   title = {Age {Bias} {Plots} in Ggplot2},
   date = {2021-03-15},
