@@ -1,6 +1,5 @@
 ---
 title: Fisheries-Related R Packages
-title-block-banner: true
 comments: false
 ---
 

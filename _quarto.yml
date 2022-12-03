@@ -49,6 +49,7 @@ format:
     link-external-icon: true
     link-external-newwindow: true
     smooth-scroll: true
+    title-block-banner: true
 date-format: medium
 execute: 
   freeze: auto

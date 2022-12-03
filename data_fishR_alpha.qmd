@@ -1,13 +1,7 @@
 ---
-date: last-modified
+title: Datasets from `FSA` and `FSAdata`
 comments: false
 ---
-
-:::{.callout-note appearance="minimal"}
-The following datasets are from packages controlled by the fishR Core Team (i.e., from `FSA` and `FSAdata`). This was last updated on {{< meta date >}}. 
-:::
-
-&nbsp;
 
 ```{r}
 #| include=FALSE

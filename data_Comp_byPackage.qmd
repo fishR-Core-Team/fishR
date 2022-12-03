@@ -1,11 +1,7 @@
 ---
-date: last-modified
+title: Fisheries-related datasets in CRAN packages
 comments: false
 ---
-
-:::{.callout-note appearance="minimal"}
-The following list is a comprehensive(?) list of fisheries related datasets found in packages that exist on CRAN. This was last updated on {{< meta date >}}.
-:::
 
 :::{.callout-tip appearance="minimal"}
 Datasets from packages not controlled by the fishR Core Team (i.e., `FSA` and `FSAdata`) are entered manually, so please submit a GitHub Issue (see link at bottom of right sidebar menu) with any corrections or additions.
