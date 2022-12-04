@@ -2,8 +2,8 @@
 title: 
 description: 
 author: 
-date: "3/15/2021"
-image: "preview.png"
+date: x/x/20
+image: preview.png
 categories:
   - Age
   - ggplot2

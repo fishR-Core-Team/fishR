@@ -1,0 +1,441 @@
+---
+title: Mean Weights at Ages From Lengths
+description: Demonstrates concerns and corrections with estimating mean weight from observed lengths and a weight-length relationship.
+author: Derek H. Ogle
+date: 8/9/2017
+image: preview.png
+categories:
+  - Weight-Length
+  - Biomasss
+knitr: 
+  opts_chunk:
+    cache: true
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background) and set the random number seed for reproducibility of the randomly generated sample data below.
+:::
+
+```{r packages}
+library(FSA)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+theme_set(theme_bw())
+set.seed(678394)  # for reproducibility of randomly created data
+```
+
+&nbsp;
+
+# Introduction
+Recently I was tasked with estimating mean weights-at-age for data that contained no weights, but did contain lengths and ages (ages were from applying an age-length key). A weight-length relationship was available (derived from a smaller sample from the same population). A question arose about whether the weight-length relationship should be used to predict weights for individual fish and then summarized to estimate mean weights at age or whether the weight-length relationship should be applied to summarized mean lengths-at-age to estimate mean weights-at-age.
+
+This issue has been addressed in the literature. Ricker (1975) states that the true mean weight is always greater, "on the order of 5%," than the mean weight computed from the weight-length relationship with the mean length. Tesch (1971) suggested that the error in predicting mean weight-at-age with the weight-length relationship using mean length-at-age would be about 5-10%. In a simulation study, Nielsen and Schoch (1980) found that Tesch's suggestion was too general and that error was less than 10% when the coefficient of variation (CV; standard deviation divided by mean) in lengths was less than 10%, but could be substantially higher when the CV was higher, with the specific result dependent on the weight-length regression exponent (b).^[Nielsen and Schoch (1980) povided a nice geometric description of why this bias occurs.] Pienaar and Ricker (1968) and Beyer (1991) both suggested corrections to reduce the bias in the mean weight-at-age produced by the weight-length regression using the mean length.
+
+In this post, I explore the bias in using the weight-length regression to estimate mean weight-at-age from mean length-at-age and the correction factors suggested by Beyer (1991).
+
+&nbsp;
+
+# Sample Data
+I created a very simple population that consisted of lengths, weights, and ages of fish. Ages were derived from a population with roughly a 30% annual mortality rate. Mean lengths-at-age were modeled with a von Bertalanffy growth curve using a $L_{\infty}$=650 mm, $K$=0.3, and $t_{0}$=0. Individual lengths were modeled from normal distributions using the modeled mean length and a constant standard deviation of 30 mm) within each age-class. Weights were predicted directly from a known weight-length relationship without any error (in `wt1`) and with a small amount of error (in `wt2`).
+
+```{r}
+# Generate some lengths
+ages <- 3:8
+N3 <- 100      ## number at age-3
+A <- 0.3       ## annual morality rate
+ns <- round(N3*(1-A)^(ages-min(ages)),0)  ## numbers at age
+Linf <- 650    ## von B parameters
+K <- 0.3
+t0 <- 0
+mns <- Linf*(1-exp(-K*(ages-t0)))         ## mean length-at-age
+sds <- rep(30,length(mns))
+lens <- NULL
+for (i in 1:length(ages))                 ## individual lengths-at-age
+  lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+loga <- -13.5  ## weight-length relationship parameters
+b <- 3.2
+# Compute weights from the W-L relationship, w/ & w/o error
+df <- data.frame(age=rep(ages,ns),len=round(lens,0)) |>
+  mutate(wt1=round(exp(loga+b*log(len)),0),
+         wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+headtail(df)
+```
+
+Modeling data in this way is simple, but at least somewhat realistic (@fig-explore1).
+ 
+```{r}
+#| label: fig-explore1
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right).
+#| fig.alt: Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right).
+lenh <- ggplot(data=df,aes(x=len)) +
+  geom_histogram(binwidth=10,boundary=0,color="black",fill="gray70") +
+  scale_x_continuous(name="Length (mm)") +
+  scale_y_continuous(name="frequency",expand=expansion(mult=c(0,0.05)))
+lenw <- ggplot(data=df,aes(x=wt2)) +
+  geom_histogram(binwidth=25,boundary=0,color="black",fill="gray70") +
+  scale_x_continuous(name="Weight (g)") +
+  scale_y_continuous(name="frequency",expand=expansion(mult=c(0,0.05)))
+wl <- ggplot(data=df,aes(x=len,y=wt2)) +
+  geom_point(pch=21,fill="gray70",color="black")  +
+  scale_x_continuous(name="Length (mm)") +
+  scale_y_continuous(name="Weight (g)")
+al <- ggplot(data=df,aes(x=age,y=len)) +
+  geom_jitter(pch=21,fill="gray70",color="black",width=0.05,height=0)  +
+  scale_x_continuous(name="Age (years)") +
+  scale_y_continuous(name="Length (mm)")
+(lenh + lenw) / (wl + al)
+```
+
+&nbsp;
+
+# Explore the Bias
+Below the mean length (`mnlen`) and mean weight without any random erro (i.e., the "true" mean weight for individuals modeled above; `true.mnwt`) are calculated  (using `group_by()` and `summarize()`). The predicted mean weight at each age is then computed from the mean length at each age and the weight-length relationship (i.e., `pr.mnwt` using `mutate()` and the regression coefficient values from above). Finally a percentage error between the predicted and true mean weights is computed for each age (in `dif.minwt`).^[The `as.data.frame()` is used here because I don't like the `tibble` format that is returned by `summarize()`.]
+
+```{r}
+sum1 <- group_by(df,age) |>
+  summarize(mnlen=mean(len),
+            true.mnwt=mean(wt1)) |>
+  mutate(pr.mnwt=exp(loga+b*log(mnlen)),
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100) |>
+  as.data.frame()
+```
+
+The results from this one sample show that the mean weights computed from the mean lengths and the weight-length regression (i.e., `pr.mnwt`) are lower at each age then the "true" mean weights (`true.mnwt`; @tbl-sum1).
+
+```{r}
+#| label: tbl-sum1
+#| echo: false
+#| tbl-cap: Summary table using weights without any error and no correction for the predicted mean weights.
+knitr::kable(sum1,digits=c(0,0,0,0,2))
+```
+
+&nbsp;
+
+Of course, weight-length relationships are not without error, so the weights with a small amount of random error were used to determine if the pattern of a negative bias when predicting mean weights from mean lengths persists with more realistic data.^[Only a small error was added because the relationship between weight and length is very strong for most fishes. The r-squared for this relationship was a realistic `r formatC(summary(lm(log(wt2)~log(len),data=df))$r.squared,format="f",digits=3)`.] Results from this one set of more realistic data showed a similar, though not as consistent, degree of negative bias when predicting mean weights from mean lengths (@tbl-sum2).
+
+```{r}
+#| label: tbl-sum2
+#| tbl-cap: Summary table using weights with a small amount of error and no correction for the predicted mean weights.
+#| echo: false
+sum2 <- group_by(df,age) |>
+  summarize(mnlen=mean(len),
+            true.mnwt=mean(wt2)) |>
+  mutate(pr.mnwt=exp(loga+b*log(mnlen)),
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100) |>
+  as.data.frame()
+knitr::kable(sum2,digits=c(0,0,0,0,2))
+```
+
+&nbsp;
+
+I then performed the analysis above 1000 times, keeping track of the percent error between the predicted weight and the true mean weight for each age for each sample.^[The code here also uses the correction factors discussed above; those results are presented further below.]
+
+```{r}
+#| echo: false
+resamples <- 1000
+pdres <- pdresn <- pdresl <- cvs <- matrix(0,nrow=resamples,ncol=length(ages))
+colnames(pdres) <- colnames(pdresn) <- colnames(pdresl) <- paste0("age",ages)
+for (j in 1:resamples) {
+  lens <- NULL
+  for (i in 1:length(ages))
+    lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+  dfx <- data.frame(age=rep(ages,ns),
+                    len=round(lens,0)) |>
+    mutate(wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+  sumx <- group_by(dfx,age) |>
+    summarize(n=n(),
+              mnlen=mean(len),
+              sdlen=sd(len),
+              true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  select(-cfn,-cfl) |>
+  as.data.frame()
+  pdres[j,] <- sumx$dif.mnwt
+  pdresn[j,] <- sumx$dif.mnwt.n
+  pdresl[j,] <- sumx$dif.mnwt.l
+  cvs[j,] <- sumx$cvlen
+}
+```
+
+The results of this simulation suggest an average negative bias near 4% for age-3 fish and between about 1 and 2% for all older fish (@tbl-sim1). Note that the CV in length for each age varied between `r formatC(100*min(cvs),format="f",digits=1)`% and  `r formatC(100*max(cvs),format="f",digits=1)`% in these simulations.
+
+```{r}
+#| label: tbl-sim1
+#| tbl-cap: Mean percentage difference in uncorrected predicted mean and true mean weights by age class for 1000 simulations.
+#| echo: false
+knitr::kable(t(colMeans(pdres)),digits=2)
+```
+
+&nbsp;
+
+Similar patterns were found using different values of the weight-length relationship exponent $b$ (see Appendix). However, larger negative biases were observed as the standard deviation in lengths increased (see Appendix).
+
+
+# A Possible Correction
+As noted above, Pienaar and Ricker (1968) and Beyer (1991) offered methods to reduce or eliminate the bias from using the weight-length regression to estimate mean weight-at-age from mean length-at-age. Beyer's corrections were simple as they were based on the CV of lengths and the $b$ coefficient from the weight-length regression. Beyer specifically offered three possible bias correcting factors for isometric growth, allometric growth assuming a lognormal distribution, and  allometric growth assuming a normal distributions for lengths. Here I will only consider Beyer's corrections for allometric growth with lognormal (i.e, [Beyer's equation 16](https://core.ac.uk/download/pdf/6389323.pdf)) and normal (i.e., [Beyer's equation 18](https://core.ac.uk/download/pdf/6389323.pdf)) distributions of lengths within age classes.
+
+Beyer's formulae are implemented by modifying `group_by()` and `summarize()` used previously. Specifically the standard deviation of lengths is calculated (in `sdlen`) so that the CV of lengths can be calculated (in `cvlen`). The correction factors are then computed (in `cfn` for the normal distribution and `cfl` for the lognormal distribution).
+
+```{r}
+sum2a <- group_by(df,age) |>
+  summarize(mnlen=mean(len),sdlen=sd(len),
+            true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  as.data.frame()
+```
+
+These calculations were again repeated 1000 times and summarized in the bottom two rows of @tbl-sim2. These results suggest that the mean bias in predicted weights at age when corrected with a correction factor appear to only be on the order of a quarter to a half a percent. These corrections seems to perform fairly consistently across a few different values of the weight-length regression exponent $b$ and standard deviations in lengths (see Appendix).
+
+```{r}
+#| label: tbl-sim2
+#| tbl-cap: Mean percentage difference in two types of corrected predicted mean and true mean weights by age class for 1000 simulations.
+#| echo: false
+tmp <- rbind(colMeans(pdres),colMeans(pdresn),colMeans(pdresl))
+rownames(tmp) <- c("No correction","Normal (eqn 18)","Lognormal (eqn 16)")
+knitr::kable(tmp,digits=2)
+```
+
+&nbsp;
+
+# Why Worry About This?
+Why am I worried about this if the bias is on the order of 4% or less? First, for my application, we are estimating mean weight so that we can expand to total biomass. While a 4% error on an individual fish may seem inconsequential, that error can become quite important when expanded to represent total biomass, especially when it is a consistent negative bias.
+
+So, why worry about correction factors when I can easily predict the weight for individual fish with the weight-length regression and then summarize these fish to get mean weight at age? In my situation, it appears that some of our mean lengths at age, and by extension mean weights at age, are poorly estimated because of small sample sizes at some ages. I am considering fitting a growth model (e.g., von Bertalanffy growth model) to the length-at-age data such that the fitted model can be used to predict mean lengths at age. The advantage of this is that information at other ages can be used to inform the calculation of mean length at an age. [*The potential downside, of course, is that I would be prescribing a smooth curve to the growth trajectory.*] If I can then estimate mean weights at age with minimal bias from the mean lengths at age from the growth model, then this could (I would need to test this) be beneficial in my situation.
+
+&nbsp;
+
+# Summary
+Mean weights at age appear to be estimated with bias when a weight-length relationship is applied to mean lengths at age without any correction factor. The correction factors suggested by Beyer (1991) are easy to implement and seem to reduce the bias in predicted mean weights-at-age to near negligible levels. Thus, if mean weights at age cannot be predicted from individual fish, then it may be possible to get reasonable estimates from the weight-length relationship and mean lengths at age.
+
+&nbsp;
+
+# References
+
+1. [Beyer, JE 1991. On length-weight relationships. Part 2. Computing mean weights from length statistics. FishByte 9:50-54.](http://pubs.iclarm.net/Naga/FB_2990.pdf)
+1. [Nielsen, L.A. and W.F. Schoch. 1980. Errors in estimating mean weight and other statistics from mean length. Transactions of the American Fisheries Society 109:319-322.](https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2)
+1. Pienaar, L.V. and W.E. Ricker. 1968. Estimating mean weight from length statistics. Journal of the Fisheries Research Board of Canada 25:2743-2747.
+1. Ricker, W.E. 1975. Computation and interpretation of biological statistics of fish populations. Bulletin of the Fisheries Research Board of Canada 25, Number 191.
+1. Tesch, F.W. 1971. Age and growth. Pages 98-126 in W.E. Ricker, editor. Methods for assessment of fish populations, 2nd edition. Blackwell Scientific Publications, Oxford, England.
+
+&nbsp;
+
+# Appendix: Summaries Using Different Values of b and SDs
+
+```{r}
+#| label: simb25
+#| tbl-cap: Summary table with everything the same but b=2.5.
+#| echo: false
+b <- 2.5
+pdres <- pdresn <- pdresl <- cvs <- matrix(0,nrow=resamples,ncol=length(ages))
+colnames(pdres) <- colnames(pdresn) <- colnames(pdresl) <- paste0("age",ages)
+for (j in 1:resamples) {
+  lens <- NULL
+  for (i in 1:length(ages)) lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+  dfx <- data.frame(age=rep(ages,ns),len=round(lens,0)) |>
+    mutate(wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+  sumx <- group_by(dfx,age) |>
+    summarize(n=n(),mnlen=mean(len),sdlen=sd(len),
+              true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  select(-cfn,-cfl) |>
+  as.data.frame()
+  pdres[j,] <- sumx$dif.mnwt
+  pdresn[j,] <- sumx$dif.mnwt.n
+  pdresl[j,] <- sumx$dif.mnwt.l
+}
+tmp <- rbind(colMeans(pdres),colMeans(pdresn),colMeans(pdresl))
+rownames(tmp) <- c("No correction","Normal (eqn 18)","Lognormal (eqn 16)")
+knitr::kable(tmp,digits=2)
+```
+
+&nbsp;
+
+```{r}
+#| label: simb3
+#| tbl-cap: Summary table with everything the same but b=3.0.
+#| echo: false
+b <- 3
+pdres <- pdresn <- pdresl <- cvs <- matrix(0,nrow=resamples,ncol=length(ages))
+colnames(pdres) <- colnames(pdresn) <- colnames(pdresl) <- paste0("age",ages)
+for (j in 1:resamples) {
+  lens <- NULL
+  for (i in 1:length(ages)) lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+  dfx <- data.frame(age=rep(ages,ns),len=round(lens,0)) |>
+    mutate(wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+  sumx <- group_by(dfx,age) |>
+    summarize(n=n(),mnlen=mean(len),sdlen=sd(len),
+              true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  select(-cfn,-cfl) |>
+  as.data.frame()
+  pdres[j,] <- sumx$dif.mnwt
+  pdresn[j,] <- sumx$dif.mnwt.n
+  pdresl[j,] <- sumx$dif.mnwt.l
+}
+tmp <- rbind(colMeans(pdres),colMeans(pdresn),colMeans(pdresl))
+rownames(tmp) <- c("No correction","Normal (eqn 18)","Lognormal (eqn 16)")
+knitr::kable(tmp,digits=2)
+```
+
+&nbsp;
+
+```{r}
+#| label: simb35
+#| tbl-cap: Summary table with everything the same but b=3.5.
+#| echo: false
+b <- 3.5
+pdres <- pdresn <- pdresl <- cvs <- matrix(0,nrow=resamples,ncol=length(ages))
+colnames(pdres) <- colnames(pdresn) <- colnames(pdresl) <- paste0("age",ages)
+for (j in 1:resamples) {
+  lens <- NULL
+  for (i in 1:length(ages)) lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+  dfx <- data.frame(age=rep(ages,ns),len=round(lens,0)) |>
+    mutate(wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+  sumx <- group_by(dfx,age) |>
+    summarize(n=n(),mnlen=mean(len),sdlen=sd(len),
+              true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  select(-cfn,-cfl) |>
+  as.data.frame()
+  pdres[j,] <- sumx$dif.mnwt
+  pdresn[j,] <- sumx$dif.mnwt.n
+  pdresl[j,] <- sumx$dif.mnwt.l
+}
+tmp <- rbind(colMeans(pdres),colMeans(pdresn),colMeans(pdresl))
+rownames(tmp) <- c("No correction","Normal (eqn 18)","Lognormal (eqn 16)")
+knitr::kable(tmp,digits=2)
+```
+
+&nbsp;
+
+```{r}
+#| label: sims50
+#| tbl-cap: Summary table with everything the same but SDs at 50.
+#| echo: false
+b <- 3.2
+sds <- rep(50,length(mns))
+pdres <- pdresn <- pdresl <- cvs <- matrix(0,nrow=resamples,ncol=length(ages))
+colnames(pdres) <- colnames(pdresn) <- colnames(pdresl) <- paste0("age",ages)
+for (j in 1:resamples) {
+  lens <- NULL
+  for (i in 1:length(ages)) lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+  dfx <- data.frame(age=rep(ages,ns),len=round(lens,0)) |>
+    mutate(wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+  sumx <- group_by(dfx,age) |>
+    summarize(n=n(),mnlen=mean(len),sdlen=sd(len),
+              true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  select(-cfn,-cfl) |>
+  as.data.frame()
+  pdres[j,] <- sumx$dif.mnwt
+  pdresn[j,] <- sumx$dif.mnwt.n
+  pdresl[j,] <- sumx$dif.mnwt.l
+}
+tmp <- rbind(colMeans(pdres),colMeans(pdresn),colMeans(pdresl))
+rownames(tmp) <- c("No correction","Normal (eqn 18)","Lognormal (eqn 16)")
+knitr::kable(tmp,digits=2)
+```
+
+&nbsp;
+
+```{r}
+#| label: sims70
+#| tbl-cap: Summary table with everything the same but SDs at 70.
+#| echo: false
+b <- 3.2
+sds <- rep(70,length(mns))
+pdres <- pdresn <- pdresl <- cvs <- matrix(0,nrow=resamples,ncol=length(ages))
+colnames(pdres) <- colnames(pdresn) <- colnames(pdresl) <- paste0("age",ages)
+for (j in 1:resamples) {
+  lens <- NULL
+  for (i in 1:length(ages)) lens <- c(lens,rnorm(ns[i],mean=mns[i],sd=sds[i]))
+  dfx <- data.frame(age=rep(ages,ns),len=round(lens,0)) |>
+    mutate(wt2=round(exp(loga+b*log(len)+rnorm(length(lens),mean=0,sd=0.1)),0))
+  sumx <- group_by(dfx,age) |>
+    summarize(n=n(),mnlen=mean(len),sdlen=sd(len),
+              true.mnwt=mean(wt2)) |>
+  mutate(cvlen=sdlen/mnlen,
+         cfn=1+b*(b-1)/2*(cvlen^2),      # eqn 18
+         cfl=(1+cvlen^2)^(b*(b-1)/2),    # eqn 16
+         pr.mnwt=exp(loga)*mnlen^b,
+         pr.mnwt.n=pr.mnwt*cfn,
+         pr.mnwt.l=pr.mnwt*cfl,
+         dif.mnwt=(pr.mnwt-true.mnwt)/true.mnwt*100,
+         dif.mnwt.n=(pr.mnwt.n-true.mnwt)/true.mnwt*100,
+         dif.mnwt.l=(pr.mnwt.l-true.mnwt)/true.mnwt*100) |>
+  select(-cfn,-cfl) |>
+  as.data.frame()
+  pdres[j,] <- sumx$dif.mnwt
+  pdresn[j,] <- sumx$dif.mnwt.n
+  pdresl[j,] <- sumx$dif.mnwt.l
+}
+tmp <- rbind(colMeans(pdres),colMeans(pdresn),colMeans(pdresl))
+rownames(tmp) <- c("No correction","Normal (eqn 18)","Lognormal (eqn 16)")
+knitr::kable(tmp,digits=2)
+```
+
+
+
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1024,height=550,units="px",
+    bg="transparent",res=216)
+wl + al
+dev.off()
+```

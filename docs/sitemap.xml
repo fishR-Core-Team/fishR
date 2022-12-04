@@ -2,50 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2022-12-04T01:47:38.748Z</lastmod>
+    <lastmod>2022-12-04T15:50:33.135Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2017-8-9_Mean_Weights/index.html</loc>
+    <lastmod>2022-12-04T15:49:17.611Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2018-3-30_Collapsing_Categories_or_Values/index.html</loc>
-    <lastmod>2022-12-04T01:47:49.733Z</lastmod>
+    <lastmod>2022-12-04T15:43:31.231Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2018-4-19_Adding_Zero_Catches/index.html</loc>
-    <lastmod>2022-12-04T01:47:56.911Z</lastmod>
+    <lastmod>2022-12-04T15:43:36.217Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2019-12-28_Length_Frequency_Histograms/index.html</loc>
-    <lastmod>2022-12-04T01:48:04.457Z</lastmod>
+    <lastmod>2022-12-04T15:43:40.639Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-3-15-AgeBiasPlots/index.html</loc>
-    <lastmod>2022-12-04T01:48:13.089Z</lastmod>
+    <lastmod>2022-12-04T15:43:45.372Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/books.html</loc>
-    <lastmod>2022-12-04T01:48:16.750Z</lastmod>
+    <lastmod>2022-12-04T15:43:49.417Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/data_Comp_byPackage.html</loc>
-    <lastmod>2022-12-04T01:48:18.842Z</lastmod>
+    <lastmod>2022-12-04T15:43:51.972Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/data_Comp_byTopic.html</loc>
-    <lastmod>2022-12-04T01:48:21.146Z</lastmod>
+    <lastmod>2022-12-04T15:43:54.474Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/data_fishR_alpha.html</loc>
-    <lastmod>2022-12-04T01:48:23.039Z</lastmod>
+    <lastmod>2022-12-04T15:43:56.537Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/data_fishR_byTopic.html</loc>
-    <lastmod>2022-12-04T01:48:25.099Z</lastmod>
+    <lastmod>2022-12-04T15:43:58.700Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/index.html</loc>
-    <lastmod>2022-12-04T01:48:26.510Z</lastmod>
+    <lastmod>2022-12-04T15:47:47.704Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/packages.html</loc>
-    <lastmod>2022-12-04T01:48:28.111Z</lastmod>
+    <lastmod>2022-12-04T15:44:02.099Z</lastmod>
   </url>
 </urlset>

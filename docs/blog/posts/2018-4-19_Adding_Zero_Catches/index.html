@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.269">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
 <meta name="author" content="Derek H. Ogle">
 <meta name="description" content="Add zeroes for species not caught so that CPE calculations are correct">
+
 <title>fishR - Adding Zero Catches</title>
 <style>
 code{white-space: pre-wrap;}
@@ -84,6 +87,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -101,7 +105,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -119,7 +124,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script><style>html{ scroll-behavior: smooth; }</style>
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
 <link rel="stylesheet" href="../../../css/styles.css">
 <meta property="og:title" content="fishR - Adding Zero Catches">
 <meta property="og:description" content="Add zeroes for species not caught so that CPE calculations are correct">
@@ -136,20 +144,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2018-4-19_Adding_Zero_Catches">
 <meta name="citation_language" content="en">
 </head>
+
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo"></a>
+    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="../../../blog/index.html">
  <span class="menu-text">Blog</span></a>
   </li>  
@@ -165,8 +177,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Data</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">
-<li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
     <a class="dropdown-item" href="../../../data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
@@ -183,9 +195,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
-</li>
+  </li>
 </ul>
-<div class="quarto-toggle-container">
+              <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -196,7 +208,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav></header><!-- content --><header id="title-block-header" class="quarto-title-block default page-columns page-full"><div class="quarto-title-banner page-columns page-full">
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Adding Zero Catches</h1>
                   <div>
@@ -242,18 +258,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
    
   <ul>
-<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#simple-data" id="toc-simple-data" class="nav-link" data-scroll-target="#simple-data">Simple Data</a></li>
   <li><a href="#multiple-values-to-receive-zeroes" id="toc-multiple-values-to-receive-zeroes" class="nav-link" data-scroll-target="#multiple-values-to-receive-zeroes">Multiple Values to Receive Zeroes</a></li>
   <li><a href="#more-information-that-does-not-get-zeroes" id="toc-more-information-that-does-not-get-zeroes" class="nav-link" data-scroll-target="#more-information-that-does-not-get-zeroes">More Information that Does Not Get Zeroes</a></li>
   <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts">Final Thoughts</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2018-4-19_Adding_Zero_Catches/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2018-4-19_Adding_Zero_Catches/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content"><div class="callout-note callout callout-style-default callout-captioned">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -267,16 +290,19 @@ Note
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>    <span class="co"># for |&gt;, group_by(), summarize(), mutate(), right_join()</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>    <span class="co"># for complete(), nesting()</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">678394</span><span class="op">)</span>  <span class="co"># for reproducibility of randomly created data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)    <span class="co"># for |&gt;, group_by(), summarize(), mutate(), right_join()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)    <span class="co"># for complete(), nesting()</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">678394</span>)  <span class="co"># for reproducibility of randomly created data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-<section id="introduction" class="level1"><h1>Introduction</h1>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <p>Much of my work is with undergraduates who are first learning to analyze fisheries data. A common “learning opportunity” occurs when students are asked to compute the mean catch (or CPE), along with a standard deviation (SD), across multiple gear sets for each species. The learning opportunity occurs because some species will invariably not be caught in some gear sets. When the students summarize the number of fish caught for each species in each gear set those species not caught in a particular gear set will not “appear” in their data. Thus, when calculating the mean, the student will get the correct numerator (sum of catch across all gear sets) but not denominator (they use number of catches summed rather than total number of gear sets), which inflates (over-estimates) the mean catch and (usually) deflates (under-estimates) the SD of catches. Once confronted with this issue, they easily realize how to correct the mean calculation, but calculating the standard deviation is still an issue. These problems are exacerbated when using software to compute these summary statistics across many individual gear sets.</p>
-<p>In software, the “trick” is to add a zero for each species not caught in a specific gear set that was caught in at least one gear set. For example, if Bluegill were caught in at least one gear set but not in the third gear set, then a zero must be added as the catch of Bluegill in the third gear set. The <code>addZeroCatch()</code> function in the <code>FSA</code> package was an attempt to efficiently add these zeroes. This function has proven useful over the years, but I have become dissatisfied with its clunkiness. Additionally, I recently became aware of the <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> function in the <code>tidyr</code> package which holds promise for handling the same task. In this post, I explore the use of <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> for handling this issue.</p>
+<p>In software, the “trick” is to add a zero for each species not caught in a specific gear set that was caught in at least one gear set. For example, if Bluegill were caught in at least one gear set but not in the third gear set, then a zero must be added as the catch of Bluegill in the third gear set. The <code>addZeroCatch()</code> function in the <code>FSA</code> package was an attempt to efficiently add these zeroes. This function has proven useful over the years, but I have become dissatisfied with its clunkiness. Additionally, I recently became aware of the <code>complete()</code> function in the <code>tidyr</code> package which holds promise for handling the same task. In this post, I explore the use of <code>complete()</code> for handling this issue.</p>
 <p>&nbsp;</p>
-</section><section id="simple-data" class="level1 page-columns page-full"><h1>Simple Data</h1>
+</section>
+<section id="simple-data" class="level1 page-columns page-full">
+<h1>Simple Data</h1>
 <p>In this first example, the data consists of <code>species</code> and <code>length</code> recorded for each captured fish organized by the gear set identification number (<code>ID</code>) and held in the <code>fishdat</code> data.frame.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
@@ -289,13 +315,13 @@ Note
 #R|  6  1     BLG 145</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The catch of each species in each gear set may be found using <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> with <code><a href="https://dplyr.tidyverse.org/reference/context.html">n()</a></code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp; I find the <code>tibble</code> structure returned by <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> to be annoying with simple data frames like this. Thus, I usually use <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> to remove it.</p></li></div></div>
+<div class="page-columns page-full"><p>The catch of each species in each gear set may be found using <code>group_by()</code> and <code>summarize()</code> with <code>n()</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp; I find the <code>tibble</code> structure returned by <code>group_by()</code> to be annoying with simple data frames like this. Thus, I usually use <code>as.data.frame()</code> to remove it.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch</span> <span class="op">&lt;-</span> <span class="va">fishdat</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>num<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">catch</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>catch <span class="ot">&lt;-</span> fishdat <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID,species) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>catch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID species num
 #R|  1   1     BLG  10
@@ -311,13 +337,13 @@ Note
 #R|  11  5     BLG   9</code></pre>
 </div>
 </div>
-<p>From this it is seen that three species (“BLG”, “LMB”, and “YEP”) were captured across all nets, but that “BLG” were not captured in “ID=2”, “LMB” were not captured in “ID=3”, and “LMB” and “YEP” were not captured in “ID=5”. The sample size, mean, and SD of catches per species from these data may be found by again using <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code>. However, these calculations are <strong>INCORRECT</strong> because they do not include the zero catches of “BLG” in “ID=2”, “LMB” in “ID=3”, and “LMB” and “YEP” in “ID=5”. The problem is most evident in the sample sizes, which should be five (gear sets) for each species.</p>
+<p>From this it is seen that three species (“BLG”, “LMB”, and “YEP”) were captured across all nets, but that “BLG” were not captured in “ID=2”, “LMB” were not captured in “ID=3”, and “LMB” and “YEP” were not captured in “ID=5”. The sample size, mean, and SD of catches per species from these data may be found by again using <code>group_by()</code> and <code>summarize()</code>. However, these calculations are <strong>INCORRECT</strong> because they do not include the zero catches of “BLG” in “ID=2”, “LMB” in “ID=3”, and “LMB” and “YEP” in “ID=5”. The problem is most evident in the sample sizes, which should be five (gear sets) for each species.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Example of INCORRECT summaries because not using zeroes</span></span>
-<span><span class="va">catch</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,mn<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">num</span><span class="op">)</span>,sd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">num</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Example of INCORRECT summaries because not using zeroes</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>catch <span class="sc">|&gt;</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),<span class="at">mn=</span><span class="fu">mean</span>(num),<span class="at">sd=</span><span class="fu">sd</span>(num)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|    species n       mn       sd
 #R|  1     BLG 4 8.000000 4.830459
@@ -325,12 +351,12 @@ Note
 #R|  3     YEP 4 7.500000 2.516611</code></pre>
 </div>
 </div>
-<p>The <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> function can be used to add rows to a data frame for variables (or combinations of variables) that should be present in the data frame (relative to other values that are present) but are not. The <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> function takes a data frame as its first argument (but will be “piped” in below with <code>|&gt;</code>) and the variable or variables that will be used to identify which items are missing. For example, with these data, a zero should be added to <code>num</code> for missing combinations defined by <code>ID</code> and <code>species</code>.</p>
+<p>The <code>complete()</code> function can be used to add rows to a data frame for variables (or combinations of variables) that should be present in the data frame (relative to other values that are present) but are not. The <code>complete()</code> function takes a data frame as its first argument (but will be “piped” in below with <code>|&gt;</code>) and the variable or variables that will be used to identify which items are missing. For example, with these data, a zero should be added to <code>num</code> for missing combinations defined by <code>ID</code> and <code>species</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Example of default complete ... see below to add zeroes, not NAs</span></span>
-<span><span class="va">catch</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html">complete</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Example of default complete ... see below to add zeroes, not NAs</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>catch <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID species num
 #R|  1   1     BLG  10
@@ -350,12 +376,12 @@ Note
 #R|  15  5     YEP  NA</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>From this result, it is seen that <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> added a row for “BLG” in “ID=2”, “LMB” in “ID=3”, and “LMB” and “YEP” in “ID=5” as we had hoped. However, <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> adds <code>NA</code>s by default. The value to add can be changed with <code>fill=</code>, which takes a list that includes the name of the variable to which the <code>NA</code>s were added (<code>num</code> in this case) set equal to the value to be added (<code>0</code> in this case).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;Here the result is saved into the <code>catch</code> data frame, thus modifying the original data frame with the addition of the zeroes.</p></li></div></div>
+<div class="page-columns page-full"><p>From this result, it is seen that <code>complete()</code> added a row for “BLG” in “ID=2”, “LMB” in “ID=3”, and “LMB” and “YEP” in “ID=5” as we had hoped. However, <code>complete()</code> adds <code>NA</code>s by default. The value to add can be changed with <code>fill=</code>, which takes a list that includes the name of the variable to which the <code>NA</code>s were added (<code>num</code> in this case) set equal to the value to be added (<code>0</code> in this case).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;Here the result is saved into the <code>catch</code> data frame, thus modifying the original data frame with the addition of the zeroes.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch</span> <span class="op">&lt;-</span> <span class="va">catch</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html">complete</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">species</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>num<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">catch</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>catch <span class="ot">&lt;-</span> catch <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species,<span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>catch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID species num
 #R|  1   1     BLG  10
@@ -377,10 +403,10 @@ Note
 </div>
 <p>These correct catch data can then be summarized as above to show the correct sample size, mean, and SD of catches per species.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,mn<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">num</span><span class="op">)</span>,sd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">num</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>catch <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),<span class="at">mn=</span><span class="fu">mean</span>(num),<span class="at">sd=</span><span class="fu">sd</span>(num)) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|    species n  mn       sd
 #R|  1     BLG 5 6.4 5.504544
@@ -389,7 +415,9 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-</section><section id="multiple-values-to-receive-zeroes" class="level1"><h1>Multiple Values to Receive Zeroes</h1>
+</section>
+<section id="multiple-values-to-receive-zeroes" class="level1">
+<h1>Multiple Values to Receive Zeroes</h1>
 <p>Suppose that the fish data included a column that indicates whether the fish was marked and returned to the waterbody or not.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
@@ -402,13 +430,13 @@ Note
 #R|  6  1     BLG 145    YES</code></pre>
 </div>
 </div>
-<p>The catch and number of fish marked and returned per gear set ID and species may again be computed with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code>. Note, however, the use of <code><a href="https://rdrr.io/r/base/ifelse.html">ifelse()</a></code> to use a <code>1</code> if the fish was marked and a <code>0</code> if it was not. Summing these values returns the number of fish that were marked. Giving this data frame to <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> as before will add zeroes for both the <code>num</code> and <code>nmarked</code> variables as long as both are included in the list given to <code>fill=</code>.</p>
+<p>The catch and number of fish marked and returned per gear set ID and species may again be computed with <code>group_by()</code> and <code>summarize()</code>. Note, however, the use of <code>ifelse()</code> to use a <code>1</code> if the fish was marked and a <code>0</code> if it was not. Summing these values returns the number of fish that were marked. Giving this data frame to <code>complete()</code> as before will add zeroes for both the <code>num</code> and <code>nmarked</code> variables as long as both are included in the list given to <code>fill=</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch2</span> <span class="op">&lt;-</span> <span class="va">fishdat2</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>num<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            nmarked<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">marked</span><span class="op">==</span><span class="st">"YES"</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">catch2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>catch2 <span class="ot">&lt;-</span> fishdat2 <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID,species) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num=</span><span class="fu">n</span>(),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">nmarked=</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(marked<span class="sc">==</span><span class="st">"YES"</span>,<span class="dv">1</span>,<span class="dv">0</span>)))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>catch2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|  # A tibble: 11 × 4
 #R|  # Groups:   ID [5]
@@ -427,13 +455,13 @@ Note
 #R|  11     5 BLG         9       6</code></pre>
 </div>
 </div>
-<p>There are two things to note in this output. First, that there are no zeroes for <code>num</code> and <code>nmarked</code> for the same species and gear sets as before. Second, the summarization was across two groups but <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> only removes one of the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> variables. Thus, this result is still grouped by <code>ID</code> as shown above, which will interfere with using <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> to add the zeroes. This grouping can be removed with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup()</a></code> as shown below before using <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code>.</p>
+<p>There are two things to note in this output. First, that there are no zeroes for <code>num</code> and <code>nmarked</code> for the same species and gear sets as before. Second, the summarization was across two groups but <code>summarize()</code> only removes one of the <code>group_by()</code> variables. Thus, this result is still grouped by <code>ID</code> as shown above, which will interfere with using <code>complete()</code> to add the zeroes. This grouping can be removed with <code>ungroup()</code> as shown below before using <code>complete()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch2</span> <span class="op">&lt;-</span> <span class="va">catch2</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html">complete</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">species</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>num<span class="op">=</span><span class="fl">0</span>,nmarked<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">catch2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>catch2 <span class="ot">&lt;-</span> catch2 <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species,<span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>catch2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID species num nmarked
 #R|  1   1     BLG  10       8
@@ -454,13 +482,15 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-</section><section id="more-information-that-does-not-get-zeroes" class="level1"><h1>More Information that Does Not Get Zeroes</h1>
+</section>
+<section id="more-information-that-does-not-get-zeroes" class="level1">
+<h1>More Information that Does Not Get Zeroes</h1>
 <p>Suppose there is a data frame called <code>geardat</code> that contains information specific to each gear set.</p>
 <div class="cell" data-layout-align="center">
 
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">geardat</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>geardat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|    ID mon year  lake run effort
 #R|  1  1 May 2018 round   1   1.34
@@ -472,12 +502,12 @@ Note
 </div>
 <p>And, for the purposes of this example, suppose that we have summarized catch data WITHOUT the zeroes having been added.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch3</span> <span class="op">&lt;-</span> <span class="va">fishdat2</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>num<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            nmarked<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">marked</span><span class="op">==</span><span class="st">"YES"</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">catch3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="ot">&lt;-</span> fishdat2 <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID,species) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num=</span><span class="fu">n</span>(),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">nmarked=</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(marked<span class="sc">==</span><span class="st">"YES"</span>,<span class="dv">1</span>,<span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>catch3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID species num nmarked
 #R|  1   1     BLG  10       8
@@ -495,8 +525,8 @@ Note
 </div>
 <p>Finally, suppose that these summarized catch data are joined with the gear data such that the gear set specific information is shown with each catch.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join</a></span><span class="op">(</span><span class="va">geardat</span>,<span class="va">catch3</span>,by<span class="op">=</span><span class="st">"ID"</span><span class="op">)</span></span>
-<span><span class="va">catch3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="ot">&lt;-</span> <span class="fu">right_join</span>(geardat,catch3,<span class="at">by=</span><span class="st">"ID"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>catch3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID mon year  lake run effort species num nmarked
 #R|  1   1 May 2018 round   1   1.34     BLG  10       8
@@ -513,11 +543,11 @@ Note
 </div>
 </div>
 <p>These data simulate what might be seen from a flat database.</p>
-<p>With these data, zeroes still need to be added as defined by missing combinations of <code>ID</code> and <code>species</code>. However, if only these two variables are included in <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> then zeroes will be added for <code>mon</code>, <code>year</code>, <code>lake</code>, <code>run</code>, and <code>effort</code>, which is not desired. These five variables are connected to or “nested” with the <code>ID</code> variable (i.e., if you know <code>ID</code> then you know the values of these other variables) and should be treated as a group. Nesting of variables can be handled in <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> by including the names of all the connected variables in <code><a href="https://tidyr.tidyverse.org/reference/expand.html">nesting()</a></code>.</p>
+<p>With these data, zeroes still need to be added as defined by missing combinations of <code>ID</code> and <code>species</code>. However, if only these two variables are included in <code>complete()</code> then zeroes will be added for <code>mon</code>, <code>year</code>, <code>lake</code>, <code>run</code>, and <code>effort</code>, which is not desired. These five variables are connected to or “nested” with the <code>ID</code> variable (i.e., if you know <code>ID</code> then you know the values of these other variables) and should be treated as a group. Nesting of variables can be handled in <code>complete()</code> by including the names of all the connected variables in <code>nesting()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch3</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html">complete</a></span><span class="op">(</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand.html">nesting</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">mon</span>,<span class="va">year</span>,<span class="va">lake</span>,<span class="va">run</span>,<span class="va">effort</span><span class="op">)</span>,<span class="va">species</span>,</span>
-<span>                    fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>num<span class="op">=</span><span class="fl">0</span>,nmarked<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="sc">|&gt;</span> <span class="fu">complete</span>(<span class="fu">nesting</span>(ID,mon,year,lake,run,effort),species,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID mon year  lake run effort species num nmarked
 #R|  1   1 May 2018 round   1   1.34     BLG  10       8
@@ -542,7 +572,7 @@ Note
 
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>catch4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID species                spsci num nmarked mon year  lake run effort
 #R|  1   1     BLG  Lepomis macrochirus  10       8 May 2018 round   1   1.34
@@ -560,11 +590,11 @@ Note
 </div>
 <p>The zeroes are then added to this data.frame making sure to note the nesting of <code>species</code> and <code>spsci</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">catch4</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html">complete</a></span><span class="op">(</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand.html">nesting</a></span><span class="op">(</span><span class="va">ID</span>,<span class="va">mon</span>,<span class="va">year</span>,<span class="va">lake</span>,<span class="va">run</span>,<span class="va">effort</span><span class="op">)</span>,</span>
-<span>           <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand.html">nesting</a></span><span class="op">(</span><span class="va">species</span>,<span class="va">spsci</span><span class="op">)</span>,</span>
-<span>           fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>num<span class="op">=</span><span class="fl">0</span>,nmarked<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>catch4 <span class="sc">|&gt;</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(<span class="fu">nesting</span>(ID,mon,year,lake,run,effort),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">nesting</span>(species,spsci),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#R|     ID mon year  lake run effort species                spsci num nmarked
 #R|  1   1 May 2018 round   1   1.34     BLG  Lepomis macrochirus  10       8
@@ -585,11 +615,16 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-</section><section id="final-thoughts" class="level1"><h1>Final Thoughts</h1>
-<p>This is my first exploration with <code><a href="https://tidyr.tidyverse.org/reference/complete.html">complete()</a></code> and it looks promising for this task of adding zeroes to data frames of catch by gear set for gear sets in which a species was not caught. I will be curious to hear what others think of this function and how it might fit in their workflow.</p>
+</section>
+<section id="final-thoughts" class="level1">
+<h1>Final Thoughts</h1>
+<p>This is my first exploration with <code>complete()</code> and it looks promising for this task of adding zeroes to data frames of catch by gear set for gear sets in which a species was not caught. I will be curious to hear what others think of this function and how it might fit in their workflow.</p>
 
 
-</section><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2018,
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2018,
   author = {Derek H. Ogle},
   title = {Adding {Zero} {Catches}},
   date = {2018-04-19},
@@ -599,7 +634,8 @@ Note
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2018" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
 Derek H. Ogle. 2018. <span>“Adding Zero Catches.”</span> April 19, 2018.
 <a href="https://fishr-core-team.github.io/fishR//blog/posts/2018-4-19_Adding_Zero_Catches">https://fishr-core-team.github.io/fishR//blog/posts/2018-4-19_Adding_Zero_Catches</a>.
-</div></div></section></div></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -857,22 +893,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (!isInternal(link.href)) {
           // target, if specified
           link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
       }
     }
 });
-</script><script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
+<footer class="footer">
+  <div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
-<li class="nav-item">
+    <li class="nav-item">
     <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
   </li>  
 </ul>
-</div>   
+    </div>   
   </div>
 </footer>
+
 
 
 <script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>

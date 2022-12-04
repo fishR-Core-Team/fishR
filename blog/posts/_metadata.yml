@@ -40,6 +40,8 @@ knitr:
 
 format:
   html:
-    code-link: true
-    link-external-icon: false
+    code-link: false
+    link-external-icon: true
+    link-external-newwindow: true
+
     

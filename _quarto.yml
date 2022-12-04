@@ -12,7 +12,7 @@ website:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
     left:
-      - text: Blog
+      - text: Posts
         href: blog/index.qmd
       - text: Books
         href: books.qmd
