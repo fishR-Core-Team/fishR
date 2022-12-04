@@ -6,6 +6,10 @@ The **fishR** website provides resources for fisheries-related analyses performe
 
 R is an environment for statistical analyses and graphics that is rapidly gaining popularity with fisheries scientists. See [R-project](https://www.r-project.org/about.html) and [simplilearn](https://mran.microsoft.com/documents/what-is-r) for two descriptions of R.
 
-<div style="width=auto; max-width:450px; margin-left:auto; margin-right:auto; text-align:center">
-  <img src="img/fishRlogo_Tight_Dark_trans.png" alt="fishR logo" width="100%">
-</div>
+::: main-logo-light
+![](img/fishRlogo_Tight_Dark_trans.png){fig-alt="fishR logo" }
+:::
+
+::: main-logo-dark
+![](img/fishRlogo_Tight_Light_trans.png)
+:::

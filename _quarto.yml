@@ -43,8 +43,10 @@ website:
   reader-mode: true
 format:
   html:
-    theme: flatly
-    css: styles.css
+    theme: 
+      light: [flatly, css/light.scss]
+      dark: [darkly, css/dark.scss]
+    css: css/styles.css
     toc: true
     link-external-icon: true
     link-external-newwindow: true

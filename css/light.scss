@@ -1,0 +1,15 @@
+/*-- scss:rules --*/
+
+.card-footer {
+    color: darken($body-bg, 70%);
+    background-color: darken($body-bg, 10%);
+}
+
+.main-logo-light { 
+  display: block;
+  width: auto;
+  max-width:450px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.main-logo-dark { display: none; }
