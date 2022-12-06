@@ -1,0 +1,188 @@
+---
+title: Half-Life Property of K
+description: Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.
+author: Derek H. Ogle
+date: 6/12/2016
+image: preview.png
+categories:
+  - Growth
+---
+
+:::{.callout-note}
+The following packages are loaded for use below.
+:::
+
+```{r packages}
+library(dplyr)
+```
+
+&nbsp;
+
+# Introduction
+A colleague recently questioned whether $\frac{log_{e}(2)}{K}$, where $K$ is the Brody growth coefficient in the typical parameterization of the von Bertalanffy growth function, represents the "time it takes for a fish to grow from any length to a length halfway between the initial length and the asymptotic mean length ($L_{\infty}$)". This phenomenon is briefly illustrated below.
+
+&nbsp;
+
+# One Age
+* Create an R function for the typical von Bertalanffy growth function.
+
+```{r}
+vb <- FSA::vbFuns()
+```
+
+* Declare parameter values.
+
+```{r}
+Linf <- 30
+K <- 0.3
+t0 <- -0.5
+```
+
+* Predict mean length at some initial age.
+
+```{r}
+initA <- 1
+( initL <- vb(initA,Linf,K,t0) )
+```
+
+* Predict mean length at the initial age plus $\frac{log_{e}(2)}{K}$.
+
+```{r}
+nextA <- initA+log(2)/K
+( nextL <- vb(nextA,Linf,K,t0) )
+```
+
+* Find the length that is halfway between the initial length and $L_{\infty}$.^[`all.equal()` is used to test equality with a tolerance for machine precision.]
+
+```{r}
+( hwL <- mean(c(initL,Linf)) )
+all.equal(nextL,hwL)
+```
+
+Note that these last two values are equal, which illustrates the statement above about the "half-life" meaning of $K$.
+
+&nbsp;
+
+This can be repeated for a different initial age.
+
+```{r}
+initA <- 7
+( initL <- vb(initA,Linf,K,t0) )
+nextA <- initA+log(2)/K
+( nextL <- vb(nextA,Linf,K,t0) )
+( hwL <- mean(c(initL,Linf)) )
+all.equal(nextL,hwL)
+```
+
+&nbsp;
+
+The two examples above can be examined in @fig-khalf, where the horizontal green lines illustrate the increase from the initial ages (e.g., 1 and 7) by $\frac{log_{e}(2)}{K}$, the vertical red line is the change in length from the initial length to half of $L_{\infty}$, and the vertical orange line is the remaining change in length to $L_{\infty}$. The half-life property of $K$ is thus illustrated by the equivalent lengths of the paired red and orange lines.
+
+```{r}
+#| label: fig-khalf
+#| fig.width: 5
+#| fig.height: 5
+#| fig.cap: Demonstration of the half-life property of the K parameter in the von Bertalanffy growth function. (see text for description).
+#| fig.alt: Demonstration of the half-life property of the K parameter in the von Bertalanffy growth function. (see text for description).
+#| echo: false
+
+library(ggplot2)
+
+df <- data.frame(age=c(1,1+log(2)/K,
+                       7,7+log(2)/K)) |>
+  mutate(len=vb(age,Linf,K,t0))
+
+khalf <- ggplot() +
+  geom_function(data=data.frame(x=0:20),aes(x=x),
+                fun=vb,args=list(Linf=Linf,K=K,t0=t0),
+                linewidth=1.5,color="blue") +
+  scale_x_continuous(name="Age",expand=expansion(mult=c(0,0.05))) +
+  scale_y_continuous(name="Length",limits=c(0,30),
+                     expand=expansion(mult=c(0,0.05))) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=df$age[1],xend=df$age[1],y=0,yend=df$len[1]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=df$age[2],xend=df$age[2],y=0,yend=df$len[2]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=0,xend=df$age[1],y=df$len[1],yend=df$len[1]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=0,xend=df$age[2],y=df$len[2],yend=df$len[2]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=0,xend=20,y=Linf,yend=Linf) +
+  annotate(geom="segment",color="darkgreen",linetype="solid",linewidth=1,
+           x=df$age[1],xend=df$age[2],y=df$len[1],yend=df$len[1]) +
+  annotate(geom="segment",color="darkred",linetype="solid",linewidth=1,
+           x=df$age[1],xend=df$age[1],y=df$len[1],yend=df$len[2]) +
+  annotate(geom="segment",color="darkorange",linetype="solid",linewidth=1,
+           x=df$age[1],xend=df$age[1],y=df$len[2],yend=Linf) +
+  geom_point(data=df,aes(x=age,y=len),
+             pch=21,color="black",fill="white",size=2) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=df$age[3],xend=df$age[3],y=0,yend=df$len[3]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=df$age[4],xend=df$age[4],y=0,yend=df$len[4]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=0,xend=df$age[3],y=df$len[3],yend=df$len[3]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=0,xend=df$age[4],y=df$len[4],yend=df$len[4]) +
+  annotate(geom="segment",color="gray70",linetype="dashed",
+           x=0,xend=20,y=Linf,yend=Linf) +
+  annotate(geom="segment",color="darkgreen",linetype="solid",linewidth=1,
+           x=df$age[3],xend=df$age[4],y=df$len[3],yend=df$len[3]) +
+  annotate(geom="segment",color="darkred",linetype="solid",linewidth=1,
+           x=df$age[3],xend=df$age[3],y=df$len[3],yend=df$len[4]) +
+  annotate(geom="segment",color="darkorange",linetype="solid",linewidth=1,
+           x=df$age[3],xend=df$age[3],y=df$len[4],yend=Linf) +
+  theme_bw() +
+  theme(panel.grid=element_blank())
+khalf
+```
+
+
+&nbsp;
+
+# Multiple Ages
+
+This process is repeated below for several initial age values. Note that the differences between the predicted mean length at the new age and the point halfway between the initial length and $L_{\infty}$ are equal (within machine precision) for each initial age. Again, illustrating the statement about $K$.
+
+```{r}
+data.frame(initA=1:20) |>
+  mutate(initL=vb(initA,Linf,K,t0),
+         nextA=initA+log(2)/K,
+         nextL=vb(nextA,Linf,K,t0),
+         hwL=(initL+Linf)/2,
+         areEqual=all.equal(nextL,hwL))
+```
+
+&nbsp;
+
+# Different Parameters
+
+The code below illustrates the same phenomenon for a very different set of parameter values.
+
+```{r}
+Linf <- 300
+K <- 0.9
+t0 <- 1
+data.frame(initA=1:20) |>
+  mutate(initL=vb(initA,Linf,K,t0),
+         nextA=initA+log(2)/K,
+         nextL=vb(nextA,Linf,K,t0),
+         hwL=(initL+Linf)/2,
+         areEqual=all.equal(nextL,hwL))
+```
+
+
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1024,height=550,units="px",
+    bg="transparent",res=216)
+khalf +
+  theme(aspect.ratio=1)
+dev.off()
+```
