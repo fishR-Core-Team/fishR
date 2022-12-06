@@ -22,3 +22,10 @@ $primary: #2D3F50 !default;
   margin-right:auto;
 }
 .main-logo-light { display: none; }
+
+/* this adjusts chunk output look */
+/* use class-output: output in _metadata.yml */
+.output {
+  color: darken(white,10%);
+  background-color: lighten($body-bg,5%);
+}

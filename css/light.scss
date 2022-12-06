@@ -21,3 +21,10 @@ $font-family-serif: "Atkinson Hyperlegible", sans-serif;
   margin-right:auto;
 }
 .main-logo-dark { display: none; }
+
+/* this adjusts chunk output look */
+/* use class-output: output in _metadata.yml */
+.output {
+  color: black;
+  background-color: bisque;
+}

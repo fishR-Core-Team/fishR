@@ -34,7 +34,7 @@ knitr:
     fig.height: 3.5
     fig.align: center
     comment: "#R| "
-    background: yellow
+    class-output: output
     r.options:
       show.signif.stars: false
 

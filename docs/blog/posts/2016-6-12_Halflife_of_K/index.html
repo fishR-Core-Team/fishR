@@ -320,7 +320,7 @@ Note
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>initA <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>( initL <span class="ot">&lt;-</span> <span class="fu">vb</span>(initA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] 10.87116</code></pre>
+<pre class="output"><code>#R|  [1] 10.87116</code></pre>
 </div>
 </div>
 <ul>
@@ -330,7 +330,7 @@ Note
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nextA <span class="ot">&lt;-</span> initA<span class="sc">+</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>K</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>( nextL <span class="ot">&lt;-</span> <span class="fu">vb</span>(nextA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] 20.43558</code></pre>
+<pre class="output"><code>#R|  [1] 20.43558</code></pre>
 </div>
 </div>
 <ul>
@@ -339,11 +339,11 @@ Note
 <div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<code>all.equal()</code> is used to test equality with a tolerance for machine precision.</p></li></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>( hwL <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(initL,Linf)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] 20.43558</code></pre>
+<pre class="output"><code>#R|  [1] 20.43558</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(nextL,hwL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] TRUE</code></pre>
+<pre class="output"><code>#R|  [1] TRUE</code></pre>
 </div>
 </div>
 <p>Note that these last two values are equal, which illustrates the statement above about the “half-life” meaning of <span class="math inline">\(K\)</span>.</p>
@@ -353,20 +353,20 @@ Note
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>initA <span class="ot">&lt;-</span> <span class="dv">7</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>( initL <span class="ot">&lt;-</span> <span class="fu">vb</span>(initA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] 26.83802</code></pre>
+<pre class="output"><code>#R|  [1] 26.83802</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nextA <span class="ot">&lt;-</span> initA<span class="sc">+</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>K</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>( nextL <span class="ot">&lt;-</span> <span class="fu">vb</span>(nextA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] 28.41901</code></pre>
+<pre class="output"><code>#R|  [1] 28.41901</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>( hwL <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(initL,Linf)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] 28.41901</code></pre>
+<pre class="output"><code>#R|  [1] 28.41901</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(nextL,hwL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  [1] TRUE</code></pre>
+<pre class="output"><code>#R|  [1] TRUE</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -394,7 +394,7 @@ Note
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">hwL=</span>(initL<span class="sc">+</span>Linf)<span class="sc">/</span><span class="dv">2</span>,</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">areEqual=</span><span class="fu">all.equal</span>(nextL,hwL))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     initA    initL     nextA    nextL      hwL areEqual
+<pre class="output"><code>#R|     initA    initL     nextA    nextL      hwL areEqual
 #R|  1      1 10.87116  3.310491 20.43558 20.43558     TRUE
 #R|  2      2 15.82900  4.310491 22.91450 22.91450     TRUE
 #R|  3      3 19.50187  5.310491 24.75093 24.75093     TRUE
@@ -433,7 +433,7 @@ Note
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">hwL=</span>(initL<span class="sc">+</span>Linf)<span class="sc">/</span><span class="dv">2</span>,</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">areEqual=</span><span class="fu">all.equal</span>(nextL,hwL))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     initA    initL     nextA    nextL      hwL areEqual
+<pre class="output"><code>#R|     initA    initL     nextA    nextL      hwL areEqual
 #R|  1      1   0.0000  1.770164 150.0000 150.0000     TRUE
 #R|  2      2 178.0291  2.770164 239.0146 239.0146     TRUE
 #R|  3      3 250.4103  3.770164 275.2052 275.2052     TRUE
