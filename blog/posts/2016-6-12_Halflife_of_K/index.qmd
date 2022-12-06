@@ -9,7 +9,7 @@ categories:
 ---
 
 :::{.callout-note}
-The following packages are loaded for use below.
+The following packages are loaded for use below. One function from `FSA` is also used below, but the full package was not loaded here. In addition, the plot was created with `ggplot2`, though the code is not shown in this post.
 :::
 
 ```{r packages}

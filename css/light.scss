@@ -25,6 +25,6 @@ $font-family-serif: "Atkinson Hyperlegible", sans-serif;
 /* this adjusts chunk output look */
 /* use class-output: output in _metadata.yml */
 .output {
-  color: black;
-  background-color: bisque;
+  color: lighten(black,5%);
+  background-color: lighten(cornsilk,3%);
 }
