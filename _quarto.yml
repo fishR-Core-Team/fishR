@@ -38,7 +38,7 @@ website:
     giscus:
       repo: fishR-Core-Team/fishR
       loading: lazy
-      theme: "light"
+      theme: transparent_dark
   open-graph: true
   reader-mode: true
 format:
@@ -52,6 +52,7 @@ format:
     link-external-newwindow: true
     smooth-scroll: true
     title-block-banner: true
+highlight-style: github
 date-format: medium
 execute: 
   freeze: auto

@@ -1,7 +1,7 @@
 ---
 title: R for fisheries analyses and tasks
 listing:
-  contents: .
+  contents: posts
   type: grid
   fields: [image,title,description,reading-time,date,file-modified,author]
   sort: file-modified desc
