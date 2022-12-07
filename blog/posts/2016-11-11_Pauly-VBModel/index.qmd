@@ -1,0 +1,66 @@
+---
+title: Pauly *et al.* (1992) Seasonal Cessation Growth Model
+description: Announcement of an algorithm to fit the Pauly *et al.* (1992) seasonal cessation growth model
+author: Derek H. Ogle
+date: 11/11/2016
+image: preview.png
+categories:
+  - Growth
+---
+
+I recently published [a technical note in Fisheries Research (Ogle 2017)](https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf) that described an algorithm for implementing the “seasonal cessation in growth model” of Pauly *et al.* (1992). Describing an algorithm for a growth model does not seem like a useful contribution to the literature, as fitting growth models is pretty standard fare for fisheries scientists. However, fitting the Pauly *et al.* (1992) model is complicated by the fact that the age data is modified by model parameters. This too may not seem particularly interesting given that $t_0$ in the typical von Bertalanffy growth function (VBGF) also modifies the age variable (i.e., age-$t_0$ appears in the VBGF equation). However, the modification of age in the Pauly *et al.* (1992) model is a shift AND a compression of the age variable, AND the degree of shift and compression is a function of age. This is different, and more complicated, than the simple shift along the age axis in the typical VBGF.
+
+As I demonstrate in my note, the Pauly *et al.* (1992) model has, for all practical purposes, not been used in the fisheries literature. I believe this lack of use is largely attributable to lack of clarity in how to implement the model in computer code.^[Pauly *et al.* (1992) did provide a brief description of their model, but not a detailed description of how the age variable was adjusted, and computer software for fitting their model, though that software, and its source code, have long been lost.] My hope is that the algorithm in my note will clarify the implementation of this model. Fisheries scientists can then rigorously test whether this model provides any advantage over other growth models with a seasonal component.
+
+[Full R code implementin the algorithm is available here](https://raw.githubusercontent.com/droglenc/droglenc.github.io/master/resources/pubs/SeasonalGrowth_Analysis.R). Implementation of the algorithm depends on the [FSA package](https://fishr-core-team.github.io/FSA/), which is available on CRAN. Please let me know what you think.
+
+&nbsp;
+
+```{r}
+#| name: fig-bonex
+#| fig-width: 4.5
+#| fig-height: 4.5
+#| fig-cap: Example fitting of the Pauly *et al.* (1992) seasonal cessation growth model to Bonito length-at-age data.
+#| fig-alt: Example fitting of the Pauly *et al.* (1992) seasonal cessation growth model to Bonito length-at-age data.
+#| echo: false
+library(FSA)
+library(ggplot2)
+vbPA <- vbFuns("Pauly")
+ctrl <- nls.control(maxiter=200)
+set.seed(730987)
+data(Bonito,package="FSAdata")
+Plwrbnd <- c(Linf=0,Kpr=0,t0=-Inf,ts=0,NGT=0)
+Puprbnd <- c(Linf=Inf,Kpr=Inf,t0=Inf,ts=1,NGT=1)
+PsvBon <- list(Linf=60,Kpr=0.5,t0=1.3,ts=0.25,NGT=0.2)
+PfitBon <- nls(fl~vbPA(age,Linf,Kpr,t0,ts,NGT),data=Bonito,
+               start=PsvBon,lower=Plwrbnd,upper=Puprbnd,
+               algorithm="port",control=ctrl)
+bonex <- ggplot(data=Bonito,aes(x=age,y=fl)) +
+  geom_point(pch=21,fill=col2rgbt("black",1/3),color="black") +
+  geom_function(fun=vbPA,args=list(Linf=coef(PfitBon)),
+                color="blue",linewidth=1) +
+  scale_x_continuous(name="Age (years)") +
+  scale_y_continuous(name="Fork Length (cm)") +
+  theme_bw()
+bonex
+```
+
+&nbsp;
+
+# References
+* Ogle, D. H. 2017. [An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly *et al.* (1992).](https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf) Fisheries Research 185:1-5.
+* Pauly, D., M. Soriano-Bartz, J. Moreau, and A. Jarre-Teichmann. 1992. [A new model accounting for seasonal cessation of growth in fishes.](https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf) Australian Journal of Marine and Freshwater Research 43:1151–1156.
+
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+bonex +
+  theme(aspect.ratio=1)
+dev.off()
+```

@@ -181,7 +181,7 @@ data.frame(initA=1:20) |>
 #| results: "hide"
 # This is used as a work-around for creating a preview image. See the
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-png("preview.png",width=1024,height=550,units="px",
+png("preview.png",width=1000,height=500,units="px",
     bg="transparent",res=216)
 khalf +
   theme(aspect.ratio=1)

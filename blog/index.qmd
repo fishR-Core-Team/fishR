@@ -1,5 +1,5 @@
 ---
-title: R for fisheries analyses and tasks
+title: R for Fisheries Analyses and Tasks
 listing:
   contents: posts
   type: grid

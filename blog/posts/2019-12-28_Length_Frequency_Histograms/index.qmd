@@ -121,7 +121,7 @@ lenfreq1 + facet_grid(rows=vars(loc),cols=vars(sex),scales="free_y")
 #| echo: false
 # This is used as a work-around for creating a preview image. See the
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-png("preview.png",width=1024,height=550,units="px",
+png("preview.png",width=1000,height=500,units="px",
     bg="transparent",res=216)
 lenfreq1 + theme(aspect.ratio=1)
 dev.off()

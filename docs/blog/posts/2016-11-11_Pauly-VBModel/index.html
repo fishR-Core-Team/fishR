@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="Announcement of an algorithm to fit the Pauly et al. (1992) seasonal cessation growth model">
 
-<title>fishR</title>
+<title>fishR - Pauly et al. (1992) Seasonal Cessation Growth Model</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href=".//img/fishRlogo_Tight_Dark_trans.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//img/fishRlogo_Tight_Dark_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,10 +64,23 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="css/styles.css">
-<meta property="og:title" content="">
+<link rel="stylesheet" href="../../../css/styles.css">
+<meta property="og:title" content="fishR - Pauly et al. (1992) Seasonal Cessation Growth Model">
+<meta property="og:description" content="Announcement of an algorithm to fit the Pauly *et al.* (1992) seasonal cessation growth model">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2016-11-11_Pauly-VBModel\preview.png">
 <meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="Pauly *et al.* (1992) Seasonal Cessation Growth Model">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2016-11-11">
+<meta name="citation_cover_date" content="2016-11-11">
+<meta name="citation_year" content="2016">
+<meta name="citation_online_date" content="2016-11-11">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2016-11-11_Pauly-VBModel">
+<meta name="citation_language" content="en">
 </head>
 
 <body class="nav-fixed">
@@ -75,8 +90,8 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -85,15 +100,15 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./blog/index.html">
+    <a class="nav-link" href="../../../blog/index.html">
  <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./pages/books.html">
+    <a class="nav-link" href="../../../pages/books.html">
  <span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./pages/packages.html">
+    <a class="nav-link" href="../../../pages/packages.html">
  <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -102,19 +117,19 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="./pages/data_fishR_alpha.html">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./pages/data_fishR_byTopic.html">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./pages/data_Comp_byPackage.html">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./pages/data_Comp_byTopic.html">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
@@ -129,30 +144,107 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Pauly <em>et al.</em> (1992) Seasonal Cessation Growth Model</h1>
+                  <div>
+        <div class="description">
+          Announcement of an algorithm to fit the Pauly <em>et al.</em> (1992) seasonal cessation growth model
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Growth</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">Nov 11, 2016</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Dec 7, 2022</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#references" id="toc-references" class="nav-link active" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2016-11-11_Pauly-VBModel/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
 
 
-<div class="landing-text">
-<p><strong>fishR</strong> provides resources for fisheries-related analyses performed in <a href="https://www.r-project.org/">R</a>, an environment for statistical analyses and graphics (see <a href="https://www.r-project.org/about.html">R-project</a> or <a href="https://mran.microsoft.com/documents/what-is-r">simplilearn</a>) that has gained wide popularity with fisheries scientists. We hope the resources in the navigation bar above will help you use or expand your knowledge of R for fisheries-related analyses.</p>
+
+<p>I recently published <a href="https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf">a technical note in Fisheries Research (Ogle 2017)</a> that described an algorithm for implementing the “seasonal cessation in growth model” of Pauly <em>et al.</em> (1992). Describing an algorithm for a growth model does not seem like a useful contribution to the literature, as fitting growth models is pretty standard fare for fisheries scientists. However, fitting the Pauly <em>et al.</em> (1992) model is complicated by the fact that the age data is modified by model parameters. This too may not seem particularly interesting given that <span class="math inline">\(t_0\)</span> in the typical von Bertalanffy growth function (VBGF) also modifies the age variable (i.e., age-<span class="math inline">\(t_0\)</span> appears in the VBGF equation). However, the modification of age in the Pauly <em>et al.</em> (1992) model is a shift AND a compression of the age variable, AND the degree of shift and compression is a function of age. This is different, and more complicated, than the simple shift along the age axis in the typical VBGF.</p>
+<div class="page-columns page-full"><p>As I demonstrate in my note, the Pauly <em>et al.</em> (1992) model has, for all practical purposes, not been used in the fisheries literature. I believe this lack of use is largely attributable to lack of clarity in how to implement the model in computer code.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> My hope is that the algorithm in my note will clarify the implementation of this model. Fisheries scientists can then rigorously test whether this model provides any advantage over other growth models with a seasonal component.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;Pauly <em>et al.</em> (1992) did provide a brief description of their model, but not a detailed description of how the age variable was adjusted, and computer software for fitting their model, though that software, and its source code, have long been lost.</p></li></div></div>
+<p><a href="https://raw.githubusercontent.com/droglenc/droglenc.github.io/master/resources/pubs/SeasonalGrowth_Analysis.R">Full R code implementin the algorithm is available here</a>. Implementation of the algorithm depends on the <a href="https://fishr-core-team.github.io/FSA/">FSA package</a>, which is available on CRAN. Please let me know what you think.</p>
+<p>&nbsp;</p>
+<div class="cell page-columns page-full" data-layout-align="center" name="fig-bonex">
+<div class="cell-output-display page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" alt="Example fitting of the Pauly *et al.* (1992) seasonal cessation growth model to Bonito length-at-age data." width="432"></p>
+<p></p><figcaption class="figure-caption margin-caption">Example fitting of the Pauly <em>et al.</em> (1992) seasonal cessation growth model to Bonito length-at-age data.</figcaption><p></p>
+</figure>
 </div>
-<div class="main-logo-light">
-<p><img src="img/fishRlogo_Tight_Dark_trans.png" class="img-fluid" alt="fishR logo"></p>
 </div>
-<div class="main-logo-dark">
-<p><img src="img/fishRlogo_Tight_Light_trans.png" class="img-fluid"></p>
+</div>
+<p>&nbsp;</p>
+<section id="references" class="level1">
+<h1>References</h1>
+<ul>
+<li>Ogle, D. H. 2017. <a href="https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf">An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly <em>et al.</em> (1992).</a> Fisheries Research 185:1-5.</li>
+<li>Pauly, D., M. Soriano-Bartz, J. Moreau, and A. Jarre-Teichmann. 1992. <a href="https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf">A new model accounting for seasonal cessation of growth in fishes.</a> Australian Journal of Marine and Freshwater Research 43:1151–1156.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+
 </div>
 
 
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2016,
+  author = {Derek H. Ogle},
+  title = {Pauly *Et Al.* (1992) {Seasonal} {Cessation} {Growth}
+    {Model}},
+  date = {2016-11-11},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2016-11-11_Pauly-VBModel},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2016" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2016. <span>“Pauly *Et Al.* (1992) Seasonal Cessation
+Growth Model.”</span> November 11, 2016. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2016-11-11_Pauly-VBModel">https://fishr-core-team.github.io/fishR//blog/posts/2016-11-11_Pauly-VBModel</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -417,6 +509,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
 });
 </script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="transparent_dark" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -432,5 +526,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
