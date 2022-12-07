@@ -1,0 +1,87 @@
+---
+title: Age Comparison Results for Individual Fish
+description: Demonstrates how to extract age comparison results for individual fish from the object returned by `ageComparisons()`.
+author: Derek H. Ogle
+date: 9/5/2015
+image: preview.png
+categories:
+  - Age
+  - Age Comparisons
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)
+library(dplyr)
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+An **FSA** user asked if there was a way to work with the age comparison results for individual fish. In particular, this user wanted to identify each fish for which the individual CV values from comparing two independent age estimates was greater than 10. This is fairly easy to do with an understanding of the results returned from `agePrecision()`. Below is an example using the `WhitefishLC` data found in the **FSA** package.^[These data are automatically loaded with `library(FSA)`.]
+
+These data contain, among other things, ages assigned by two readers examining otoliths in (`otolith1` and `otolith2`).^[`headtail()` from `FSA` shows the first and last three rows of a data frame. It is used here primarily to save space.]
+
+```{r}
+headtail(WhitefishLC)
+```
+
+A variety of computations on these paired age estimates are performed with `agePrecision()`.^[See [the `agePrecision()` documentation](https://fishr-core-team.github.io/FSA/reference/agePrecision.html) for full details.] The structure of the saved object shows several items returned in a list.
+
+```{r}
+ap1 <- agePrecision(~otolith1+otolith2,data=WhitefishLC)
+str(ap1)
+```
+
+For this problem, the user wants to focus on the intermediate calculations for each individual fish, which, according to the [the `agePrecision()` documentation](https://fishr-core-team.github.io/FSA/reference/agePrecision.html), is in `detail` object.
+
+```{r}
+headtail(ap1$detail)
+```
+
+The `detail` object is a data frame that can then be treated like any other data frame. For example, it can be sorted by ascending order of the CV value or filtered to find all fish that had a CV greater than 10.^[Here I use`arrange()` from `dplyr` to sort and `filter()` from `dplyr` to filter.]
+
+```{r}
+## Sort by CV
+tmp <- ap1$detail |>
+  arrange(CV)
+headtail(tmp)
+
+## Filter by CV
+tmp2 <- ap1$detail |>
+  filter(CV>10)
+headtail(tmp2)
+```
+
+The distribution of CV values can also be examined (@fig-cvdist).
+
+```{r}
+#| label: fig-cvdist
+#| fig-cap: Distribution of CV values for comparisons of readings of Lake Whitefish otoliths by two readers.
+#| fig-alt: Distribution of CV values for comparisons of readings of Lake Whitefish otoliths by two readers.
+#| fig-width: 4.5
+#| fig-height: 4.5
+cvdist <- ggplot(data=ap1$detail,aes(x=CV)) +
+  geom_histogram(binwidth=2.5,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Coefficient of Variation") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.05))) +
+  geom_vline(xintercept=10,color="red",linewidth=1,linetype="dashed")
+cvdist
+```
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+cvdist +
+  theme(aspect.ratio=1)
+dev.off()
+```

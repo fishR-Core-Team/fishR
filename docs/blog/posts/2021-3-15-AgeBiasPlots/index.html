@@ -133,8 +133,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta property="og:description" content="Flexibly construct age bias and age difference plots using ggplot2">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2021-3-15-AgeBiasPlots\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="550">
-<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
 <meta name="citation_title" content="Age Bias Plots in ggplot2">
 <meta name="citation_author" content="Michael Lant">
 <meta name="citation_publication_date" content="2021-03-15">
@@ -217,6 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">Age</div>
+                <div class="quarto-category">Age Comparisons</div>
                 <div class="quarto-category">ggplot2</div>
               </div>
                   </div>
@@ -302,20 +303,20 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(WhitefishLC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   fishID  tl scale1 scale2 scaleC finray1 finray2 finrayC otolith1 otolith2
-#R&gt; 1      1 345      3      3      3       3       3       3        3        3
-#R&gt; 2      2 334      4      3      4       3       3       3        3        3
-#R&gt; 3      3 348      7      5      6       3       3       3        3        3
-#R&gt; 4      4 300      4      3      4       3       2       3        3        3
-#R&gt; 5      5 330      3      3      3       4       3       4        3        3
-#R&gt; 6      6 316      4      4      4       2       3       3        6        5
-#R&gt;   otolithC
-#R&gt; 1        3
-#R&gt; 2        3
-#R&gt; 3        3
-#R&gt; 4        3
-#R&gt; 5        3
-#R&gt; 6        6</code></pre>
+<pre class="output"><code>#R|    fishID  tl scale1 scale2 scaleC finray1 finray2 finrayC otolith1 otolith2
+#R|  1      1 345      3      3      3       3       3       3        3        3
+#R|  2      2 334      4      3      4       3       3       3        3        3
+#R|  3      3 348      7      5      6       3       3       3        3        3
+#R|  4      4 300      4      3      4       3       2       3        3        3
+#R|  5      5 330      3      3      3       4       3       4        3        3
+#R|  6      6 316      4      4      4       2       3       3        6        5
+#R|    otolithC
+#R|  1        3
+#R|  2        3
+#R|  3        3
+#R|  4        3
+#R|  5        3
+#R|  6        6</code></pre>
 </div>
 </div>
 <div class="page-columns page-full"><p>Intermediate and summary statistics for the comparison of paired ages (e.g., between consensus scale and otolith ages) can be extracted from the objected returned by <code>ageBias()</code> from <code>FSA</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;As described in <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html">the documentation</a>.</p></li></div></div>
@@ -327,53 +328,53 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ab1<span class="sc">$</span>data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   scaleC otolithC diff mean
-#R&gt; 1      3        3    0  3.0
-#R&gt; 2      4        3    1  3.5
-#R&gt; 3      6        3    3  4.5
-#R&gt; 4      4        3    1  3.5
-#R&gt; 5      3        3    0  3.0
-#R&gt; 6      4        6   -2  5.0</code></pre>
+<pre class="output"><code>#R|    scaleC otolithC diff mean
+#R|  1      3        3    0  3.0
+#R|  2      4        3    1  3.5
+#R|  3      6        3    3  4.5
+#R|  4      4        3    1  3.5
+#R|  5      3        3    0  3.0
+#R|  6      4        6   -2  5.0</code></pre>
 </div>
 </div>
 <div class="page-columns page-full"><p>In addition, the <code>$bias</code> object of <code>ab1</code> contains summary statistics of ages for the first structure given in the <code>ageBias()</code> formula by each age of the second structure given in that formula. For example, the first row below gives the number, minimum, maximum, mean, and standard error of the scale ages that were paired with an otolith age of 1. Additionally there is a t-test, adjusted p-value, and a significance statement for testing whether the mean scale age is different from the otolith age. Finally, confidence intervals (defaults to 95%) for the mean scale age at an otolith age of 1 is given, with a statement about whether a confidence interval could be calculated.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSA/reference/ageBias.html">the documentation</a> for <code>ageBias()</code> for the criterion used to decide if the confidence interval can be calculated.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ab1<span class="sc">$</span>bias)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   otolithC  n min max     mean        SE          t   adj.p   sig       LCI
-#R&gt; 1        1  9   1   2 1.444444 0.1756821  2.5298218 0.28212 FALSE 1.0393208
-#R&gt; 2        2  7   1   5 2.000000 0.5773503  0.0000000 1.00000 FALSE 0.5872748
-#R&gt; 3        3 17   1   6 3.352941 0.2416423  1.4605937 0.81743 FALSE 2.8406824
-#R&gt; 4        4 18   2   6 3.833333 0.2322102 -0.7177407 1.00000 FALSE 3.3434126
-#R&gt; 5        5  8   4   8 5.250000 0.4909902  0.5091751 1.00000 FALSE 4.0889926
-#R&gt; 6        6 10   3   6 4.600000 0.2666667 -5.2500003 0.00686  TRUE 3.9967581
-#R&gt;        UCI canCI
-#R&gt; 1 1.849568  TRUE
-#R&gt; 2 3.412725  TRUE
-#R&gt; 3 3.865200  TRUE
-#R&gt; 4 4.323254  TRUE
-#R&gt; 5 6.411007  TRUE
-#R&gt; 6 5.203242  TRUE</code></pre>
+<pre class="output"><code>#R|    otolithC  n min max     mean        SE          t   adj.p   sig       LCI
+#R|  1        1  9   1   2 1.444444 0.1756821  2.5298218 0.28212 FALSE 1.0393208
+#R|  2        2  7   1   5 2.000000 0.5773503  0.0000000 1.00000 FALSE 0.5872748
+#R|  3        3 17   1   6 3.352941 0.2416423  1.4605937 0.81743 FALSE 2.8406824
+#R|  4        4 18   2   6 3.833333 0.2322102 -0.7177407 1.00000 FALSE 3.3434126
+#R|  5        5  8   4   8 5.250000 0.4909902  0.5091751 1.00000 FALSE 4.0889926
+#R|  6        6 10   3   6 4.600000 0.2666667 -5.2500003 0.00686  TRUE 3.9967581
+#R|         UCI canCI
+#R|  1 1.849568  TRUE
+#R|  2 3.412725  TRUE
+#R|  3 3.865200  TRUE
+#R|  4 4.323254  TRUE
+#R|  5 6.411007  TRUE
+#R|  6 5.203242  TRUE</code></pre>
 </div>
 </div>
 <p>The results in <code>$bias.diff</code> are similar to those for <code>$bias</code> except that the <em>difference</em> in age between the two structures is summarized for each otolith age.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ab1<span class="sc">$</span>bias.diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   otolithC  n min max       mean        SE          t   adj.p   sig         LCI
-#R&gt; 1        1  9   0   1  0.4444444 0.1756821  2.5298218 0.28212 FALSE  0.03932075
-#R&gt; 2        2  7  -1   3  0.0000000 0.5773503  0.0000000 1.00000 FALSE -1.41272519
-#R&gt; 3        3 17  -2   3  0.3529412 0.2416423  1.4605937 0.81743 FALSE -0.15931758
-#R&gt; 4        4 18  -2   2 -0.1666667 0.2322102 -0.7177407 1.00000 FALSE -0.65658738
-#R&gt; 5        5  8  -1   3  0.2500000 0.4909902  0.5091751 1.00000 FALSE -0.91100742
-#R&gt; 6        6 10  -3   0 -1.4000000 0.2666667 -5.2500003 0.00686  TRUE -2.00324188
-#R&gt;          UCI canCI
-#R&gt; 1  0.8495680  TRUE
-#R&gt; 2  1.4127252  TRUE
-#R&gt; 3  0.8652000  TRUE
-#R&gt; 4  0.3232540  TRUE
-#R&gt; 5  1.4110074  TRUE
-#R&gt; 6 -0.7967581  TRUE</code></pre>
+<pre class="output"><code>#R|    otolithC  n min max       mean        SE          t   adj.p   sig         LCI
+#R|  1        1  9   0   1  0.4444444 0.1756821  2.5298218 0.28212 FALSE  0.03932075
+#R|  2        2  7  -1   3  0.0000000 0.5773503  0.0000000 1.00000 FALSE -1.41272519
+#R|  3        3 17  -2   3  0.3529412 0.2416423  1.4605937 0.81743 FALSE -0.15931758
+#R|  4        4 18  -2   2 -0.1666667 0.2322102 -0.7177407 1.00000 FALSE -0.65658738
+#R|  5        5  8  -1   3  0.2500000 0.4909902  0.5091751 1.00000 FALSE -0.91100742
+#R|  6        6 10  -3   0 -1.4000000 0.2666667 -5.2500003 0.00686  TRUE -2.00324188
+#R|           UCI canCI
+#R|  1  0.8495680  TRUE
+#R|  2  1.4127252  TRUE
+#R|  3  0.8652000  TRUE
+#R|  4  0.3232540  TRUE
+#R|  5  1.4110074  TRUE
+#R|  6 -0.7967581  TRUE</code></pre>
 </div>
 </div>
 <p>These data frames are used in <code>ggplot2</code> code below to create various versions of age-bias and difference plots.</p>
