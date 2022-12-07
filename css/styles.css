@@ -10,6 +10,5 @@
 /* Makes the text on the landing page a little larger */
 .landing-text {
   font-size: 125%;
-  font-family: cursive, Sans-Serif;
   padding-bottom: 50px;
 }
