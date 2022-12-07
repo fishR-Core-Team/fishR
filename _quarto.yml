@@ -39,7 +39,7 @@ website:
     giscus:
       repo: fishR-Core-Team/fishR
       loading: lazy
-      theme: transparent_dark
+      theme: preferred_color_scheme
   open-graph: true
 format:
   html:
