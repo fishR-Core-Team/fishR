@@ -6,6 +6,7 @@ date: 4/19/2018
 categories:
   - Data Wrangling
   - CPE
+  - Teaching
 ---
 
 :::{.callout-note}

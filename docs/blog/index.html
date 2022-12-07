@@ -97,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="../css/styles.css">
 <meta property="og:title" content="fishR - R for fisheries analyses and tasks">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2016-6-12_Halflife_of_K\preview.png">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2018-4-19_Adding_Zero_Catches\preview.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="550">
 <meta property="og:image:width" content="1024">
@@ -124,11 +124,11 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../books.html">
+    <a class="nav-link" href="../pages/books.html">
  <span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../packages.html">
+    <a class="nav-link" href="../pages/packages.html">
  <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -137,19 +137,19 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../data_fishR_alpha.html">
+    <a class="dropdown-item" href="../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../data_fishR_byTopic.html">
+    <a class="dropdown-item" href="../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../data_Comp_byPackage.html">
+    <a class="dropdown-item" href="../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../data_Comp_byTopic.html">
+    <a class="dropdown-item" href="../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
@@ -157,11 +157,6 @@ ul.task-list li input[type="checkbox"] {
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
-                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
-  <div class="quarto-reader-toggle-btn">
-  <i class="bi"></i>
-  </div>
-</a>
               </div>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
@@ -190,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Age">Age <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Biomasss">Biomasss <span class="quarto-category-count">(1)</span></div><div class="category" data-category="CPE">CPE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data Wrangling">Data Wrangling <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Growth">Growth <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Histogram">Histogram <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Length Frequency">Length Frequency <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Size">Size <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Weight-Length">Weight-Length <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ggplot2">ggplot2 <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Age">Age <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Biomasss">Biomasss <span class="quarto-category-count">(1)</span></div><div class="category" data-category="CPE">CPE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data Wrangling">Data Wrangling <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Growth">Growth <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Histogram">Histogram <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Length Frequency">Length Frequency <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Size">Size <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Teaching">Teaching <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Weight-Length">Weight-Length <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ggplot2">ggplot2 <span class="quarto-category-count">(2)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -227,7 +222,40 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </div>
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="Growth" data-listing-date-sort="1465707600000" data-listing-file-modified-sort="1670360508004" data-listing-reading-time-sort="4.295">
+<div class="g-col-1" data-index="0" data-categories="Data Wrangling,CPE,Teaching" data-listing-date-sort="1524114000000" data-listing-file-modified-sort="1670380588122" data-listing-reading-time-sort="9.025">
+<a href="../blog/posts/2018-4-19_Adding_Zero_Catches/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="../blog/posts/2018-4-19_Adding_Zero_Catches/preview.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Adding Zero Catches
+</h5>
+<div class="listing-reading-time card-text text-muted">
+9 min
+</div>
+<div class="card-text listing-description">
+Add zeroes for species not caught so that CPE calculations are correct
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Derek H. Ogle
+</div>
+<div class="listing-date">
+Apr 19, 2018
+</div>
+</div>
+</div>
+<div class="card-footer">
+<div class="card-file-modified listing-file-modified">
+<p>Dec 6, 2022</p>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="Growth,Teaching" data-listing-date-sort="1465707600000" data-listing-file-modified-sort="1670380570466" data-listing-reading-time-sort="4.295">
 <a href="../blog/posts/2016-6-12_Halflife_of_K/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -260,7 +288,7 @@ Jun 12, 2016
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="Weight-Length,Biomasss" data-listing-date-sort="1502254800000" data-listing-file-modified-sort="1670168942636" data-listing-reading-time-sort="15.86">
+<div class="g-col-1" data-index="2" data-categories="Weight-Length,Biomasss" data-listing-date-sort="1502254800000" data-listing-file-modified-sort="1670168942636" data-listing-reading-time-sort="15.86">
 <a href="../blog/posts/2017-8-9_Mean_Weights/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -288,39 +316,6 @@ Aug 9, 2017
 <div class="card-footer">
 <div class="card-file-modified listing-file-modified">
 <p>Dec 4, 2022</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="Data Wrangling,CPE" data-listing-date-sort="1524114000000" data-listing-file-modified-sort="1670102277097" data-listing-reading-time-sort="9.025">
-<a href="../blog/posts/2018-4-19_Adding_Zero_Catches/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="../blog/posts/2018-4-19_Adding_Zero_Catches/preview.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Adding Zero Catches
-</h5>
-<div class="listing-reading-time card-text text-muted">
-9 min
-</div>
-<div class="card-text listing-description">
-Add zeroes for species not caught so that CPE calculations are correct
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Derek H. Ogle
-</div>
-<div class="listing-date">
-Apr 19, 2018
-</div>
-</div>
-</div>
-<div class="card-footer">
-<div class="card-file-modified listing-file-modified">
-<p>Dec 3, 2022</p>
 </div>
 </div>
 </div>

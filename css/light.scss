@@ -22,6 +22,10 @@ $font-family-serif: "Atkinson Hyperlegible", sans-serif;
 }
 .main-logo-dark { display: none; }
 
+.landing-text {
+  color: darken($body-bg, 70%);
+}
+
 /* this adjusts chunk output look */
 /* use class-output: output in _metadata.yml */
 .output {

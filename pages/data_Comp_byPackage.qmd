@@ -1,5 +1,5 @@
 ---
-title: Fisheries-related datasets in CRAN packages by Topic
+title: Fisheries-related datasets in CRAN packages
 comments: false
 ---
 
@@ -11,17 +11,17 @@ Datasets from packages not controlled by the fishR Core Team (i.e., `FSA` and `F
 
 ```{r}
 #| include=FALSE
-source("helpers/data_helpers.R")
+source("../helpers/data_helpers.R")
 ```
 
 ```{r}
 #| results='asis'
 ## Datasets from other packages are manually entered into
 ##   DataFromOtherPackages.xlsx.
-tmp <- readxl::read_excel("helpers/DataFromOtherPackages.xlsx") %>%
+tmp <- readxl::read_excel("../helpers/DataFromOtherPackages.xlsx") %>%
   select(-starts_with("Entered"))
 ## Database of datasets in FSA and FSAdata, with other packages appended
 fish_db <- rbind(prepare_db("FSA"),prepare_db("FSAdata"),tmp)
 
-maketable(fish_db,topics)
+maketable(fish_db,pkgs=unique(fish_db$Package),showPkg=FALSE)
 ```

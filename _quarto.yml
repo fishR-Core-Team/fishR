@@ -11,23 +11,24 @@ website:
   navbar:
     title: false
     logo: /img/fishRlogo_Tight_Light_trans.png
+    background: primary
     left:
       - text: Posts
         href: blog/index.qmd
       - text: Books
-        href: books.qmd
+        href: pages/books.qmd
       - text: Packages
-        href: packages.qmd
+        href: pages/packages.qmd
       - text: Data
         menu: 
           - text: "fishR (alphabetical)"
-            file: data_fishR_alpha.qmd
+            file: pages/data_fishR_alpha.qmd
           - text: "fishR (by topic)"
-            file: data_fishR_byTopic.qmd
+            file: pages/data_fishR_byTopic.qmd
           - text: "Comprehensive (by package)"
-            file: data_Comp_byPackage.qmd
+            file: pages/data_Comp_byPackage.qmd
           - text: "Comprehensive (by topic)"
-            file: data_Comp_byTopic.qmd
+            file: pages/data_Comp_byTopic.qmd
     pinned: true
   page-footer:
     left: 
@@ -40,7 +41,6 @@ website:
       loading: lazy
       theme: transparent_dark
   open-graph: true
-  reader-mode: true
 format:
   html:
     theme: 

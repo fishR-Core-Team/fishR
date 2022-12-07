@@ -5,7 +5,7 @@ comments: false
 
 ```{r}
 #| include=FALSE
-source("helpers/data_helpers.R")
+source("../helpers/data_helpers.R")
 ```
 
 ```{r}

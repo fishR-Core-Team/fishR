@@ -23,6 +23,10 @@ $primary: #2D3F50 !default;
 }
 .main-logo-light { display: none; }
 
+.landing-text {
+  color: lighten($body-bg, 70%);
+}
+
 /* this adjusts chunk output look */
 /* use class-output: output in _metadata.yml */
 .output {

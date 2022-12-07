@@ -2,9 +2,9 @@
 comments: false
 ---
 
-The **fishR** website provides resources for fisheries-related analyses performed in [R](https://www.r-project.org/). It is our hope that these resources will help you to either use or expand your knowledge of [R](https://www.r-project.org/) for fisheries-related analyses. Use the menu above to take a look around!!
-
-R is an environment for statistical analyses and graphics that is rapidly gaining popularity with fisheries scientists. See [R-project](https://www.r-project.org/about.html) and [simplilearn](https://mran.microsoft.com/documents/what-is-r) for two descriptions of R.
+::: landing-text
+The **fishR** website provides resources for fisheries-related analyses performed in [R](https://www.r-project.org/), an environment for statistical analyses and graphics that is rapidly gaining popularity with fisheries scientists (see [R-project](https://www.r-project.org/about.html) or [simplilearn](https://mran.microsoft.com/documents/what-is-r) for a description of R). We hope that the resources in the navigation bar above will help you to use or expand your knowledge of R for fisheries-related analyses.
+:::
 
 ::: main-logo-light
 ![](img/fishRlogo_Tight_Dark_trans.png){fig-alt="fishR logo" }

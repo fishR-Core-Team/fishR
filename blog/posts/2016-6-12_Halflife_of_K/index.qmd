@@ -6,6 +6,7 @@ date: 6/12/2016
 image: preview.png
 categories:
   - Growth
+  - Teaching
 ---
 
 :::{.callout-note}
