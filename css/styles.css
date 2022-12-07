@@ -12,3 +12,10 @@
   font-size: 125%;
   padding-bottom: 50px;
 }
+
+
+/* Makes the text on the 404 page a little larger */
+.notfound-text {
+  font-size: 125%;
+  padding-bottom: 50px;
+}

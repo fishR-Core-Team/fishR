@@ -1,0 +1,19 @@
+---
+title: "Page Not Found"
+comments: false
+format:
+  html:
+    title-block-banner: false
+---
+
+::: notfound-text
+Sorry! We can't find that page. Press the **fishR** logo in the upper-left to return home or use the search bar in the upper-right to try to find your content.
+:::
+
+::: main-logo-light
+![](img/fishRlogo_Tight_Dark_trans.png){fig-alt="fishR logo" }
+:::
+
+::: main-logo-dark
+![](img/fishRlogo_Tight_Light_trans.png)
+:::
