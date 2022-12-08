@@ -16,6 +16,10 @@ image: preview.png
 citation: true
 google-scholar: true
 
+# set bibliograhy and style
+bibliography: ../../helpers/fishR.bib
+csl: ../../helpers/american-fisheries-society.csl
+
 # have footnotes and figure captions appear in the margin
 reference-location: margin
 cap-location: margin
@@ -43,5 +47,3 @@ format:
     code-link: false
     link-external-icon: true
     link-external-newwindow: true
-
-    

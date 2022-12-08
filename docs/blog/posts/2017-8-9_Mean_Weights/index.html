@@ -85,6 +85,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -134,8 +153,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta property="og:description" content="Demonstrates concerns and corrections with estimating mean weight from observed lengths and a weight-length relationship.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2017-8-9_Mean_Weights\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="550">
-<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
 <meta name="citation_title" content="Mean Weights at Ages From Lengths">
 <meta name="citation_author" content="Derek H. Ogle">
 <meta name="citation_publication_date" content="2017-08-09">
@@ -144,6 +163,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_online_date" content="2017-08-09">
 <meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2017-8-9_Mean_Weights">
 <meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_abstract=Age estimates of Lake Superior Kiyis Coregonus kiyi from scales and otoliths were compared and 12 years (2003–2014) of length frequency data were examined to assess year-class strength and validate age estimates. Ages estimated from otoliths were precise and were consistently older than ages estimated from scales. Maximum otolith-derived ages were 20 years for females and 12 years for males. Age estimates showed high numbers of fish of ages 5, 6, and 11 in 2014, corresponding to the 2009, 2008, and 2003 year-classes, respectively. Strong 2003 and 2009 year-classes, along with the 2005 year-class, were also evident based on distinct modes of age-1 fish (&amp;amp;amp;lt;110 mm) in the length frequency distributions from 2004, 2010, and 2006, respectively. Modes from these year-classes were present as progressively larger fish in subsequent years. Few to no age-1 fish (&amp;lt;110 mm) were present in all other years. Ages estimated from otoliths were generally within 1 year of the ages corresponding to strong year-classes, at least for age-5 and older fish, suggesting that Kiyi age may be reliably estimated to within 1 year by careful examination of thin-sectioned otoliths.;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_abstract=Pauly et al. (1992; Australian Journal of Marine and Freshwater Research 43:1151–1156) introduced a modified von Bertalanffy seasonal growth function that allowed for a period of no growth. Pauly et al. (1992) provided special purpose software to fit the model to length-at-age data, but this software is no longer available and specific details to implement a critical aspect of the new growth function were not clear. I provide details for this critical aspect of the function, implement it in the open-source R environment, and briefly demonstrate the use of this function with four data sets. With this, the growth function of Pauly et al. (1992) is now readily available to all scientists with access to software that can fit nonlinear models to data. Thus, this growth function may be implemented in more situations and its fit rigorously compared to the results from other models of fish growth.;,citation_author=Derek H. Ogle;,citation_publication_date=2017-01;,citation_cover_date=2017-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_journal_title=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_abstract=Computer simulations of length-weight data indicated that the error incurred by estimating mean weight from mean length is a function of the exponent in the length-weight relationship and the coefficient of variation in the length-frequency distribution. Errors were less than 10% for exponents up to 4.0 if the coefficient of variation were less than 0.1, but error increased to near 90% of actual mean weight for large exponents and coefficients of variation. Similar errors arise for other exponential relationships, such as length-fecundity, that commonly are developed in fisheries work.;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_abstract=Report on the general field of biological statistics of fish populations. The report covers the abundance of the population, usually somewhat restricted as to age or size; the total mortality rate at successive ages or even within each year; the fraction of the total mortality ascribable to each of several causes, such as deaths by fishing, deaths by predation other than human, and deaths from disease, parasites or senility; the rate of growth of the individual fish; the rate of reproduction, particularly as it is related to stock density; and the overall rate of surplus production of a stock which is the resultant of growth plus recruitment less natural mortality.;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_isbn=978-0-662-01440-9;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {Assessment} of {Fish} {Populations};">
 </head>
 
 <body class="nav-fixed">
@@ -243,7 +271,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 7, 2022</p>
+        <p class="date-modified">Dec 8, 2022</p>
       </div>
     </div>
       
@@ -288,11 +316,11 @@ Note
 <p>The following packages are loaded for use below. I also set the default <code>ggplot</code> theme to <code>theme_bw()</code> for a classic “black-and-white” plot (rather than the default plot with a gray background) and set the random number seed for reproducibility of the randomly generated sample data below.</p>
 </div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/packages_998f6810ac4bf139f759b8899b716289">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/packages_f3a00e1d76de81a12036c49220ef4b3f">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)           <span class="co"># for headtail()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)         <span class="co"># for mutate(), group_by(), summarize(), </span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)     <span class="co"># for combining plots</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">678394</span>)  <span class="co"># for reproducibility of randomly created data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -300,14 +328,14 @@ Note
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
 <p>Recently I was tasked with estimating mean weights-at-age for data that contained no weights, but did contain lengths and ages (ages were from applying an age-length key). A weight-length relationship was available (derived from a smaller sample from the same population). A question arose about whether the weight-length relationship should be used to predict weights for individual fish and then summarized to estimate mean weights at age or whether the weight-length relationship should be applied to summarized mean lengths-at-age to estimate mean weights-at-age.</p>
-<div class="page-columns page-full"><p>This issue has been addressed in the literature. Ricker (1975) states that the true mean weight is always greater, “on the order of 5%,” than the mean weight computed from the weight-length relationship with the mean length. Tesch (1971) suggested that the error in predicting mean weight-at-age with the weight-length relationship using mean length-at-age would be about 5-10%. In a simulation study, Nielsen and Schoch (1980) found that Tesch’s suggestion was too general and that error was less than 10% when the coefficient of variation (CV; standard deviation divided by mean) in lengths was less than 10%, but could be substantially higher when the CV was higher, with the specific result dependent on the weight-length regression exponent (b).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Pienaar and Ricker (1968) and Beyer (1991) both suggested corrections to reduce the bias in the mean weight-at-age produced by the weight-length regression using the mean length.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;Nielsen and Schoch (1980) povided a nice geometric description of why this bias occurs.</p></li></div></div>
-<p>In this post, I explore the bias in using the weight-length regression to estimate mean weight-at-age from mean length-at-age and the correction factors suggested by Beyer (1991).</p>
+<div class="page-columns page-full"><p>This issue has been addressed in the literature. <span class="citation" data-cites="ricker_computation_1975">Ricker (<a href="#ref-ricker_computation_1975" role="doc-biblioref">1975</a>)</span> states that the true mean weight is always greater, “on the order of 5%,” than the mean weight computed from the weight-length relationship with the mean length. <span class="citation" data-cites="tesch_age_1971">Tesch (<a href="#ref-tesch_age_1971" role="doc-biblioref">1971</a>)</span> suggested that the error in predicting mean weight-at-age with the weight-length relationship using mean length-at-age would be about 5-10%. In a simulation study, <span class="citation" data-cites="nielsen_errors_1980">Nielsen and Schoch (<a href="#ref-nielsen_errors_1980" role="doc-biblioref">1980</a>)</span> found that Tesch’s suggestion was too general and that error was less than 10% when the coefficient of variation (CV; standard deviation divided by mean) in lengths was less than 10%, but could be substantially higher when the CV was higher, with the specific result dependent on the weight-length regression exponent (b).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="citation" data-cites="pienaar_estimating_1968">Pienaar and Ricker (<a href="#ref-pienaar_estimating_1968" role="doc-biblioref">1968</a>)</span> and <span class="citation" data-cites="beyer_length-weight_1991">Beyer (<a href="#ref-beyer_length-weight_1991" role="doc-biblioref">1991</a>)</span> both suggested corrections to reduce the bias in the mean weight-at-age produced by the weight-length regression using the mean length.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<span class="citation" data-cites="nielsen_errors_1980">Nielsen and Schoch (<a href="#ref-nielsen_errors_1980" role="doc-biblioref">1980</a>)</span> provided a nice geometric description of why this bias occurs.</p></li></div></div>
+<p>In this post, I explore the bias in using the weight-length regression to estimate mean weight-at-age from mean length-at-age and the correction factors suggested by <span class="citation" data-cites="beyer_length-weight_1991">Beyer (<a href="#ref-beyer_length-weight_1991" role="doc-biblioref">1991</a>)</span>.</p>
 <p>&nbsp;</p>
 </section>
 <section id="sample-data" class="level1 page-columns page-full">
 <h1>Sample Data</h1>
 <p>I created a very simple population that consisted of lengths, weights, and ages of fish. Ages were derived from a population with roughly a 30% annual mortality rate. Mean lengths-at-age were modeled with a von Bertalanffy growth curve using a <span class="math inline">\(L_{\infty}\)</span>=650 mm, <span class="math inline">\(K\)</span>=0.3, and <span class="math inline">\(t_{0}\)</span>=0. Individual lengths were modeled from normal distributions using the modeled mean length and a constant standard deviation of 30 mm) within each age-class. Weights were predicted directly from a known weight-length relationship without any error (in <code>wt1</code>) and with a small amount of error (in <code>wt2</code>).</p>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-1_19d21b05e45e83e8ceb0f04012e2647c">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-1_109206f25ad10862aa604c61d8eb51d4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some lengths</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>N3 <span class="ot">&lt;-</span> <span class="dv">100</span>      <span class="do">## number at age-3</span></span>
@@ -329,7 +357,7 @@ Note
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">wt2=</span><span class="fu">round</span>(<span class="fu">exp</span>(loga<span class="sc">+</span>b<span class="sc">*</span><span class="fu">log</span>(len)<span class="sc">+</span><span class="fu">rnorm</span>(<span class="fu">length</span>(lens),<span class="at">mean=</span><span class="dv">0</span>,<span class="at">sd=</span><span class="fl">0.1</span>)),<span class="dv">0</span>))</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|      age len  wt1  wt2
+<pre class="output"><code>#R|      age len  wt1  wt2
 #R|  1     3 374  235  197
 #R|  2     3 401  293  313
 #R|  3     3 369  225  210
@@ -339,7 +367,7 @@ Note
 </div>
 </div>
 <p>Modeling data in this way is simple, but at least somewhat realistic (<a href="#fig-explore1">Figure&nbsp;1</a>).</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/fig-explore1_c7bb58aa40b23ead9830e32dcefcb7a4">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/fig-explore1_3a33f752e65c22c0ae06e50f80086efe">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lenh <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="fu">aes</span>(<span class="at">x=</span>len)) <span class="sc">+</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray70"</span>) <span class="sc">+</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Length (mm)"</span>) <span class="sc">+</span></span>
@@ -371,7 +399,7 @@ Note
 <section id="explore-the-bias" class="level1 page-columns page-full">
 <h1>Explore the Bias</h1>
 <div class="page-columns page-full"><p>Below the mean length (<code>mnlen</code>) and mean weight without any random erro (i.e., the “true” mean weight for individuals modeled above; <code>true.mnwt</code>) are calculated (using <code>group_by()</code> and <code>summarize()</code>). The predicted mean weight at each age is then computed from the mean length at each age and the weight-length relationship (i.e., <code>pr.mnwt</code> using <code>mutate()</code> and the regression coefficient values from above). Finally a percentage error between the predicted and true mean weights is computed for each age (in <code>dif.minwt</code>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;The <code>as.data.frame()</code> is used here because I don’t like the <code>tibble</code> format that is returned by <code>summarize()</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-3_eb6a19f6571164d646f5bbf83bb5ae2e">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-3_222b792c5027029ec82a73338f942c40">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sum1 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(df,age) <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mnlen=</span><span class="fu">mean</span>(len),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">true.mnwt=</span><span class="fu">mean</span>(wt1)) <span class="sc">|&gt;</span></span>
@@ -380,7 +408,7 @@ Note
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The results from this one sample show that the mean weights computed from the mean lengths and the weight-length regression (i.e., <code>pr.mnwt</code>) are lower at each age then the “true” mean weights (<code>true.mnwt</code>; <a href="#tbl-sum1">Table&nbsp;1</a>).</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum1_675757a8299e4591fe70ccf3eb36e664">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum1_97bf2688377fa2426463e750e8638b65">
 <div class="cell-output-display page-columns page-full">
 <div id="tbl-sum1" class="anchored page-columns page-full">
 <table class="table table-sm table-striped">
@@ -444,7 +472,7 @@ Note
 </div>
 <p>&nbsp;</p>
 <div class="page-columns page-full"><p>Of course, weight-length relationships are not without error, so the weights with a small amount of random error were used to determine if the pattern of a negative bias when predicting mean weights from mean lengths persists with more realistic data.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Results from this one set of more realistic data showed a similar, though not as consistent, degree of negative bias when predicting mean weights from mean lengths (<a href="#tbl-sum2">Table&nbsp;2</a>).</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Only a small error was added because the relationship between weight and length is very strong for most fishes. The r-squared for this relationship was a realistic 0.969.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum2_30e3a3f6c9cc6d91311898713e706269">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum2_b20e517ab859adb5772fc653f22125e6">
 <div class="cell-output-display page-columns page-full">
 <div id="tbl-sum2" class="anchored page-columns page-full">
 <table class="table table-sm table-striped">
@@ -508,11 +536,11 @@ Note
 </div>
 <p>&nbsp;</p>
 <div class="page-columns page-full"><p>I then performed the analysis above 1000 times, keeping track of the percent error between the predicted weight and the true mean weight for each age for each sample.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The code here also uses the correction factors discussed above; those results are presented further below.</p></li></div></div>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-6_0d6f70d31b4dec02ee276dd1dbb8e487">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-6_3cdf8e9d0a6565412415c08cbd580d9d">
 
 </div>
 <p>The results of this simulation suggest an average negative bias near 4% for age-3 fish and between about 1 and 2% for all older fish (<a href="#tbl-sim1">Table&nbsp;3</a>). Note that the CV in length for each age varied between 2.7% and 9.8% in these simulations.</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sim1_73faeb99df2aec6cc23103a1b9c5a068">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sim1_959ca319176588df8bc2c7c48c0611fb">
 <div class="cell-output-display page-columns page-full">
 <div id="tbl-sim1" class="anchored page-columns page-full">
 <table class="table table-sm table-striped">
@@ -546,9 +574,9 @@ Note
 </section>
 <section id="a-possible-correction" class="level1 page-columns page-full">
 <h1>A Possible Correction</h1>
-<p>As noted above, Pienaar and Ricker (1968) and Beyer (1991) offered methods to reduce or eliminate the bias from using the weight-length regression to estimate mean weight-at-age from mean length-at-age. Beyer’s corrections were simple as they were based on the CV of lengths and the <span class="math inline">\(b\)</span> coefficient from the weight-length regression. Beyer specifically offered three possible bias correcting factors for isometric growth, allometric growth assuming a lognormal distribution, and allometric growth assuming a normal distributions for lengths. Here I will only consider Beyer’s corrections for allometric growth with lognormal (i.e, <a href="https://core.ac.uk/download/pdf/6389323.pdf">Beyer’s equation 16</a>) and normal (i.e., <a href="https://core.ac.uk/download/pdf/6389323.pdf">Beyer’s equation 18</a>) distributions of lengths within age classes.</p>
+<p>As noted above, <span class="citation" data-cites="pienaar_estimating_1968">Pienaar and Ricker (<a href="#ref-pienaar_estimating_1968" role="doc-biblioref">1968</a>)</span> and <span class="citation" data-cites="beyer_length-weight_1991">Beyer (<a href="#ref-beyer_length-weight_1991" role="doc-biblioref">1991</a>)</span> offered methods to reduce or eliminate the bias from using the weight-length regression to estimate mean weight-at-age from mean length-at-age. Beyer’s corrections were simple as they were based on the CV of lengths and the <span class="math inline">\(b\)</span> coefficient from the weight-length regression. Beyer specifically offered three possible bias correcting factors for isometric growth, allometric growth assuming a lognormal distribution, and allometric growth assuming a normal distributions for lengths. Here I will only consider Beyer’s corrections for allometric growth with lognormal (i.e, <a href="https://core.ac.uk/download/pdf/6389323.pdf">Beyer’s equation 16</a>) and normal (i.e., <a href="https://core.ac.uk/download/pdf/6389323.pdf">Beyer’s equation 18</a>) distributions of lengths within age classes.</p>
 <p>Beyer’s formulae are implemented by modifying <code>group_by()</code> and <code>summarize()</code> used previously. Specifically the standard deviation of lengths is calculated (in <code>sdlen</code>) so that the CV of lengths can be calculated (in <code>cvlen</code>). The correction factors are then computed (in <code>cfn</code> for the normal distribution and <code>cfl</code> for the lognormal distribution).</p>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-8_580dadde9cc9a67bec5b9d2e58d61e48">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-8_941a4f38fb08adf8bf1428e4dfbbf0cc">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sum2a <span class="ot">&lt;-</span> <span class="fu">group_by</span>(df,age) <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mnlen=</span><span class="fu">mean</span>(len),<span class="at">sdlen=</span><span class="fu">sd</span>(len),</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">true.mnwt=</span><span class="fu">mean</span>(wt2)) <span class="sc">|&gt;</span></span>
@@ -564,7 +592,7 @@ Note
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>These calculations were again repeated 1000 times and summarized in the bottom two rows of <a href="#tbl-sim2">Table&nbsp;4</a>. These results suggest that the mean bias in predicted weights at age when corrected with a correction factor appear to only be on the order of a quarter to a half a percent. These corrections seems to perform fairly consistently across a few different values of the weight-length regression exponent <span class="math inline">\(b\)</span> and standard deviations in lengths (see Appendix).</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sim2_3acbce6e2cee30351bb96bfbb1667830">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sim2_54ab29081ffef6096e62478c5d4d96ac">
 <div class="cell-output-display page-columns page-full">
 <div id="tbl-sim2" class="anchored page-columns page-full">
 <table class="table table-sm table-striped">
@@ -583,30 +611,30 @@ Note
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No correction</td>
-<td style="text-align: right;">-2.52</td>
-<td style="text-align: right;">-1.83</td>
-<td style="text-align: right;">-1.82</td>
-<td style="text-align: right;">-1.55</td>
-<td style="text-align: right;">-1.11</td>
-<td style="text-align: right;">-1.08</td>
+<td style="text-align: right;">-2.49</td>
+<td style="text-align: right;">-1.97</td>
+<td style="text-align: right;">-1.74</td>
+<td style="text-align: right;">-1.50</td>
+<td style="text-align: right;">-1.32</td>
+<td style="text-align: right;">-1.39</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Normal (eqn 18)</td>
+<td style="text-align: right;">-0.43</td>
+<td style="text-align: right;">-0.45</td>
+<td style="text-align: right;">-0.52</td>
+<td style="text-align: right;">-0.45</td>
+<td style="text-align: right;">-0.35</td>
 <td style="text-align: right;">-0.49</td>
-<td style="text-align: right;">-0.31</td>
-<td style="text-align: right;">-0.59</td>
-<td style="text-align: right;">-0.47</td>
-<td style="text-align: right;">-0.15</td>
-<td style="text-align: right;">-0.17</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Lognormal (eqn 16)</td>
-<td style="text-align: right;">-0.47</td>
-<td style="text-align: right;">-0.30</td>
-<td style="text-align: right;">-0.59</td>
-<td style="text-align: right;">-0.46</td>
-<td style="text-align: right;">-0.14</td>
-<td style="text-align: right;">-0.17</td>
+<td style="text-align: right;">-0.41</td>
+<td style="text-align: right;">-0.45</td>
+<td style="text-align: right;">-0.51</td>
+<td style="text-align: right;">-0.44</td>
+<td style="text-align: right;">-0.35</td>
+<td style="text-align: right;">-0.48</td>
 </tr>
 </tbody>
 </table>
@@ -623,23 +651,33 @@ Note
 </section>
 <section id="summary" class="level1">
 <h1>Summary</h1>
-<p>Mean weights at age appear to be estimated with bias when a weight-length relationship is applied to mean lengths at age without any correction factor. The correction factors suggested by Beyer (1991) are easy to implement and seem to reduce the bias in predicted mean weights-at-age to near negligible levels. Thus, if mean weights at age cannot be predicted from individual fish, then it may be possible to get reasonable estimates from the weight-length relationship and mean lengths at age.</p>
+<p>Mean weights at age appear to be estimated with bias when a weight-length relationship is applied to mean lengths at age without any correction factor. The correction factors suggested by <span class="citation" data-cites="beyer_length-weight_1991">Beyer (<a href="#ref-beyer_length-weight_1991" role="doc-biblioref">1991</a>)</span> are easy to implement and seem to reduce the bias in predicted mean weights-at-age to near negligible levels. Thus, if mean weights at age cannot be predicted from individual fish, then it may be possible to get reasonable estimates from the weight-length relationship and mean lengths at age.</p>
 <p>&nbsp;</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<ol type="1">
-<li><a href="http://pubs.iclarm.net/Naga/FB_2990.pdf">Beyer, JE 1991. On length-weight relationships. Part 2. Computing mean weights from length statistics. FishByte 9:50-54.</a></li>
-<li><a href="https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2">Nielsen, L.A. and W.F. Schoch. 1980. Errors in estimating mean weight and other statistics from mean length. Transactions of the American Fisheries Society 109:319-322.</a></li>
-<li>Pienaar, L.V. and W.E. Ricker. 1968. Estimating mean weight from length statistics. Journal of the Fisheries Research Board of Canada 25:2743-2747.</li>
-<li>Ricker, W.E. 1975. Computation and interpretation of biological statistics of fish populations. Bulletin of the Fisheries Research Board of Canada 25, Number 191.</li>
-<li>Tesch, F.W. 1971. Age and growth. Pages 98-126 in W.E. Ricker, editor. Methods for assessment of fish populations, 2nd edition. Blackwell Scientific Publications, Oxford, England.</li>
-</ol>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-beyer_length-weight_1991" class="csl-entry" role="doc-biblioentry">
+Beyer, J. E. 1991. <a href="https://hdl.handle.net/20.500.12348/3103">On length-weight relationships. <span>Part</span> <span>II</span>. <span>Computing</span> mean weights from length statistics</a>. FishByte 9:50–54.
+</div>
+<div id="ref-nielsen_errors_1980" class="csl-entry" role="doc-biblioentry">
+Nielsen, L. A., and W. F. Schoch. 1980. <a href="https://doi.org/10.1577/1548-8659(1980)109<319:EIEMWA>2.0.CO;2">Errors in estimating mean weight and other statistics from mean length</a>. Transactions of the American Fisheries Society 109(3):319–322.
+</div>
+<div id="ref-pienaar_estimating_1968" class="csl-entry" role="doc-biblioentry">
+Pienaar, J. V., and W. K. Ricker. 1968. <a href="https://doi.org/10.1139/f68-253">Estimating mean weight from length statistics</a>. Journal of the Fisheries Research Board of Canada 25(12):2743–2747.
+</div>
+<div id="ref-ricker_computation_1975" class="csl-entry" role="doc-biblioentry">
+Ricker, W. E. 1975. Computation and <span>Interpretation</span> of <span>Biological</span> <span>Statistics</span> of <span>Fish</span> <span>Populations</span>. Bulletin of the Fisheries Research Board of Canada 191.
+</div>
+<div id="ref-tesch_age_1971" class="csl-entry" role="doc-biblioentry">
+Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E. Ricker, editor. Methods for {<span>Assessment</span>} of {<span>Fish</span>} {<span>Populations</span>}, 2nd edition. Blackwell Scientific Publications, Oxford, England.
+</div>
+</div>
 <p>&nbsp;</p>
 </section>
 <section id="appendix-summaries-using-different-values-of-b-and-sds" class="level1 page-columns page-full">
 <h1>Appendix: Summaries Using Different Values of b and SDs</h1>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb25_08b795eda24869e51f0b434d1b895e84">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb25_3842d1c7e0694ae8e01d1a4238715beb">
 <div class="cell-output-display page-columns page-full">
 <table class="table table-sm table-striped">
 
@@ -657,37 +695,37 @@ Note
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No correction</td>
-<td style="text-align: right;">-1.26</td>
-<td style="text-align: right;">-1.1</td>
-<td style="text-align: right;">-0.90</td>
-<td style="text-align: right;">-0.95</td>
-<td style="text-align: right;">-0.92</td>
+<td style="text-align: right;">-1.55</td>
+<td style="text-align: right;">-1.28</td>
+<td style="text-align: right;">-1.06</td>
 <td style="text-align: right;">-0.91</td>
+<td style="text-align: right;">-0.84</td>
+<td style="text-align: right;">-0.90</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Normal (eqn 18)</td>
-<td style="text-align: right;">-0.16</td>
-<td style="text-align: right;">-0.3</td>
-<td style="text-align: right;">-0.23</td>
-<td style="text-align: right;">-0.36</td>
-<td style="text-align: right;">-0.40</td>
-<td style="text-align: right;">-0.41</td>
+<td style="text-align: right;">-0.43</td>
+<td style="text-align: right;">-0.47</td>
+<td style="text-align: right;">-0.39</td>
+<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">-0.33</td>
+<td style="text-align: right;">-0.43</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Lognormal (eqn 16)</td>
-<td style="text-align: right;">-0.16</td>
-<td style="text-align: right;">-0.3</td>
-<td style="text-align: right;">-0.23</td>
-<td style="text-align: right;">-0.36</td>
+<td style="text-align: right;">-0.43</td>
+<td style="text-align: right;">-0.47</td>
 <td style="text-align: right;">-0.39</td>
-<td style="text-align: right;">-0.41</td>
+<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">-0.33</td>
+<td style="text-align: right;">-0.43</td>
 </tr>
 </tbody>
 </table>
 <div class="quarto-table-caption margin-caption">Summary table with everything the same but b=2.5. </div></div>
 </div>
 <p>&nbsp;</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb3_99c9ff825672da357544438445762b0a">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb3_92a9b61491e4dca0dd84b69796528480">
 <div class="cell-output-display page-columns page-full">
 <table class="table table-sm table-striped">
 
@@ -705,37 +743,37 @@ Note
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No correction</td>
-<td style="text-align: right;">-2.28</td>
-<td style="text-align: right;">-1.70</td>
-<td style="text-align: right;">-1.49</td>
-<td style="text-align: right;">-1.41</td>
-<td style="text-align: right;">-1.08</td>
-<td style="text-align: right;">-1.12</td>
+<td style="text-align: right;">-2.21</td>
+<td style="text-align: right;">-1.74</td>
+<td style="text-align: right;">-1.48</td>
+<td style="text-align: right;">-1.38</td>
+<td style="text-align: right;">-1.16</td>
+<td style="text-align: right;">-1.17</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Normal (eqn 18)</td>
-<td style="text-align: right;">-0.55</td>
-<td style="text-align: right;">-0.41</td>
-<td style="text-align: right;">-0.40</td>
-<td style="text-align: right;">-0.50</td>
-<td style="text-align: right;">-0.25</td>
+<td style="text-align: right;">-0.44</td>
+<td style="text-align: right;">-0.46</td>
 <td style="text-align: right;">-0.42</td>
+<td style="text-align: right;">-0.48</td>
+<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">-0.39</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Lognormal (eqn 16)</td>
-<td style="text-align: right;">-0.54</td>
-<td style="text-align: right;">-0.41</td>
+<td style="text-align: right;">-0.42</td>
+<td style="text-align: right;">-0.46</td>
+<td style="text-align: right;">-0.42</td>
+<td style="text-align: right;">-0.48</td>
+<td style="text-align: right;">-0.33</td>
 <td style="text-align: right;">-0.39</td>
-<td style="text-align: right;">-0.50</td>
-<td style="text-align: right;">-0.25</td>
-<td style="text-align: right;">-0.41</td>
 </tr>
 </tbody>
 </table>
 <div class="quarto-table-caption margin-caption">Summary table with everything the same but b=3.0. </div></div>
 </div>
 <p>&nbsp;</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb35_7fa4544f455bb2da8a83101e4ad0d6d2">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb35_518a65e8c1527f959c80e84bda51c836">
 <div class="cell-output-display page-columns page-full">
 <table class="table table-sm table-striped">
 
@@ -754,36 +792,36 @@ Note
 <tr class="odd">
 <td style="text-align: left;">No correction</td>
 <td style="text-align: right;">-3.07</td>
-<td style="text-align: right;">-2.33</td>
-<td style="text-align: right;">-1.90</td>
-<td style="text-align: right;">-1.55</td>
-<td style="text-align: right;">-1.07</td>
-<td style="text-align: right;">-1.45</td>
+<td style="text-align: right;">-2.29</td>
+<td style="text-align: right;">-2.04</td>
+<td style="text-align: right;">-1.73</td>
+<td style="text-align: right;">-1.59</td>
+<td style="text-align: right;">-1.50</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Normal (eqn 18)</td>
 <td style="text-align: right;">-0.47</td>
-<td style="text-align: right;">-0.43</td>
-<td style="text-align: right;">-0.38</td>
-<td style="text-align: right;">-0.22</td>
-<td style="text-align: right;">0.12</td>
-<td style="text-align: right;">-0.32</td>
+<td style="text-align: right;">-0.42</td>
+<td style="text-align: right;">-0.52</td>
+<td style="text-align: right;">-0.41</td>
+<td style="text-align: right;">-0.40</td>
+<td style="text-align: right;">-0.40</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Lognormal (eqn 16)</td>
 <td style="text-align: right;">-0.45</td>
-<td style="text-align: right;">-0.42</td>
-<td style="text-align: right;">-0.37</td>
-<td style="text-align: right;">-0.21</td>
-<td style="text-align: right;">0.12</td>
-<td style="text-align: right;">-0.32</td>
+<td style="text-align: right;">-0.41</td>
+<td style="text-align: right;">-0.51</td>
+<td style="text-align: right;">-0.40</td>
+<td style="text-align: right;">-0.39</td>
+<td style="text-align: right;">-0.39</td>
 </tr>
 </tbody>
 </table>
 <div class="quarto-table-caption margin-caption">Summary table with everything the same but b=3.5. </div></div>
 </div>
 <p>&nbsp;</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/sims50_24c6d4766da1c3ceff08f12f2b58f59d">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/sims50_ba31eac60e07bf8c46e8e1679d85653a">
 <div class="cell-output-display page-columns page-full">
 <table class="table table-sm table-striped">
 
@@ -801,37 +839,37 @@ Note
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No correction</td>
-<td style="text-align: right;">-5.92</td>
-<td style="text-align: right;">-4.32</td>
-<td style="text-align: right;">-3.64</td>
-<td style="text-align: right;">-2.84</td>
-<td style="text-align: right;">-2.89</td>
-<td style="text-align: right;">-2.63</td>
+<td style="text-align: right;">-5.98</td>
+<td style="text-align: right;">-4.50</td>
+<td style="text-align: right;">-3.82</td>
+<td style="text-align: right;">-3.32</td>
+<td style="text-align: right;">-2.93</td>
+<td style="text-align: right;">-2.75</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Normal (eqn 18)</td>
-<td style="text-align: right;">-0.43</td>
 <td style="text-align: right;">-0.38</td>
-<td style="text-align: right;">-0.38</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">-0.33</td>
-<td style="text-align: right;">-0.26</td>
+<td style="text-align: right;">-0.46</td>
+<td style="text-align: right;">-0.48</td>
+<td style="text-align: right;">-0.42</td>
+<td style="text-align: right;">-0.28</td>
+<td style="text-align: right;">-0.28</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Lognormal (eqn 16)</td>
-<td style="text-align: right;">-0.31</td>
-<td style="text-align: right;">-0.32</td>
-<td style="text-align: right;">-0.33</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">-0.30</td>
-<td style="text-align: right;">-0.24</td>
+<td style="text-align: right;">-0.26</td>
+<td style="text-align: right;">-0.40</td>
+<td style="text-align: right;">-0.44</td>
+<td style="text-align: right;">-0.39</td>
+<td style="text-align: right;">-0.25</td>
+<td style="text-align: right;">-0.26</td>
 </tr>
 </tbody>
 </table>
 <div class="quarto-table-caption margin-caption">Summary table with everything the same but SDs at 50. </div></div>
 </div>
 <p>&nbsp;</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/sims70_722007e917323f97639e2089841b4ef4">
+<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/sims70_fde22b8887e6bbcda78c534c1d2c08ed">
 <div class="cell-output-display page-columns page-full">
 <table class="table table-sm table-striped">
 
@@ -849,36 +887,36 @@ Note
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No correction</td>
-<td style="text-align: right;">-10.90</td>
-<td style="text-align: right;">-8.10</td>
-<td style="text-align: right;">-6.74</td>
-<td style="text-align: right;">-6.14</td>
-<td style="text-align: right;">-5.37</td>
-<td style="text-align: right;">-4.94</td>
+<td style="text-align: right;">-10.66</td>
+<td style="text-align: right;">-8.03</td>
+<td style="text-align: right;">-6.71</td>
+<td style="text-align: right;">-5.84</td>
+<td style="text-align: right;">-5.20</td>
+<td style="text-align: right;">-4.96</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Normal (eqn 18)</td>
-<td style="text-align: right;">-0.55</td>
-<td style="text-align: right;">-0.34</td>
-<td style="text-align: right;">-0.33</td>
-<td style="text-align: right;">-0.46</td>
-<td style="text-align: right;">-0.29</td>
-<td style="text-align: right;">-0.29</td>
+<td style="text-align: right;">-0.36</td>
+<td style="text-align: right;">-0.36</td>
+<td style="text-align: right;">-0.44</td>
+<td style="text-align: right;">-0.30</td>
+<td style="text-align: right;">-0.23</td>
+<td style="text-align: right;">-0.27</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Lognormal (eqn 16)</td>
-<td style="text-align: right;">-0.11</td>
-<td style="text-align: right;">-0.09</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">-0.12</td>
+<td style="text-align: right;">-0.28</td>
 <td style="text-align: right;">-0.17</td>
-<td style="text-align: right;">-0.33</td>
-<td style="text-align: right;">-0.19</td>
-<td style="text-align: right;">-0.20</td>
+<td style="text-align: right;">-0.13</td>
+<td style="text-align: right;">-0.18</td>
 </tr>
 </tbody>
 </table>
 <div class="quarto-table-caption margin-caption">Summary table with everything the same but SDs at 70. </div></div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-15_33aad5c9cd6b1c7b830b4f497b519304">
+<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-15_120def9e6a772972ed0311302b3776de">
 
 </div>
 
@@ -894,8 +932,7 @@ Note
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2017" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2017. <span>“Mean Weights at Ages From Lengths.”</span>
-August 9, 2017. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2017-8-9_Mean_Weights">https://fishr-core-team.github.io/fishR//blog/posts/2017-8-9_Mean_Weights</a>.
+Derek H. Ogle. 2017, August 9. Mean Weights at Ages From Lengths. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2017-8-9_Mean_Weights">https://fishr-core-team.github.io/fishR//blog/posts/2017-8-9_Mean_Weights</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
