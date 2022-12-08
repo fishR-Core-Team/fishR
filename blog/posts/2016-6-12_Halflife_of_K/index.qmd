@@ -14,7 +14,7 @@ The following packages are loaded for use below. One function from `FSA` is also
 :::
 
 ```{r packages}
-library(dplyr)
+library(dplyr)  # for mutate()
 ```
 
 &nbsp;

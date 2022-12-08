@@ -17,10 +17,10 @@ The following packages are loaded for use below. I also set the default `ggplot`
 :::
 
 ```{r packages}
-library(FSA)
-library(dplyr)
+library(FSA)           # for headtail()
+library(dplyr)         # for mutate(), group_by(), summarize(), 
 library(ggplot2)
-library(patchwork)
+library(patchwork)     # for combining plots
 theme_set(theme_bw())
 set.seed(678394)  # for reproducibility of randomly created data
 ```

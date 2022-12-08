@@ -19,8 +19,8 @@ The following packages are loaded for use below. I also set the default `ggplot`
 :::
 
 ```{r packages}
-library(FSA)
-library(dplyr)
+library(FSA)          # for WhitefishLC, ageBias(), plotAB()
+library(dplyr)        # for mutate()
 library(ggplot2)
 theme_set(theme_bw())
 ```
@@ -183,7 +183,7 @@ Graphics made in `ggplot2` are more flexible than the ones produced in `FSA`. Fo
 Standard deviations are not returned in any of the `ageBias()` results (saved in `ab1`). However, the standard error and sample size are returned in the `$bias` data frame. The standard deviation can be "back-calculated" from these two values using `SD=SE*sqrt(n)`. Two new variables called `LSD` and `USD` that are the means minus and plus two standard deviations can then be created. All three of these variables are added to the `$bias` data frame using `mutate()` from `dplyr`.
 
 ```{r}
-ab1$bias <- ab1$bias %>%
+ab1$bias <- ab1$bias |>
   mutate(SD=SE*sqrt(n),
          LSD=mean-2*SD,
          USD=mean+2*SD)

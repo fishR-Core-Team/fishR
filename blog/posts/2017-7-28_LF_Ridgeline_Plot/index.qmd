@@ -1,0 +1,124 @@
+---
+title: Ridgeline Length Frequency Plots
+description: How to visualize multiple length frequencies as ridgline plots.
+author: Derek H. Ogle
+date: 7/28/2017
+image: preview.png
+categories:
+  - Length Frequency
+  - Size
+  - ggplot2
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r}
+#| label: packages
+library(FSA)
+library(dplyr)        # for filter(), mutate(), select()
+library(ggplot2)
+library(ggridges)     # for geom_density_ridges(), stat_density_ridges(), et al.
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+# Lake Superior Kiyi
+[Wilke](https://wilkelab.org/ggridges/articles/introduction.html) described ridgeline plots as "partially overlapping line plots that create the impression of a mountain range." I would describe them as partially overlapping density plots (akin to a smoothed histogram).
+
+I thought that ridgeline plots might provide a nice visualization of length frequencies over time. For example, we [published a paper](https://derekogle.com/resources/pubs/Lepak_et_al_2017.pdf) that examined (among other things) the lengths of Kiyi (*Coregonus kiyi*) captured in trawl tows in Lake Superior from 2003 to 2014. The length frequency data used in that paper is shown below (and stored in the `lf` object). @fig-kiyihist is a modified version^[Stripped of code that increased fonts, changed colors, etc.] of the length frequency histograms we included in the paper.
+
+```{r}
+#| label: data
+#| echo: false
+lf <- read.csv("Kiyi_lenfreq_all.csv") |>
+  filter(year %in% 2003:2014) |>
+  mutate(year=factor(year)) |>
+  select(year,mon,tl)
+headtail(lf)
+```
+
+```{r KiyiHist, echo=FALSE, results='hide'}
+#| label: fig-kiyihist
+#| fig-cap: Histograms of the total lengths of Lake Superior Kiyi from 2003 to 2014.
+#| fig-alt: Histograms of the total lengths of Lake Superior Kiyi from 2003 to 2014.
+#| fig-width: 7
+#| fig-height: 7
+ggplot(lf,aes(x=tl)) +
+  geom_histogram(aes(y=after_stat(ncount)),binwidth=5,fill="gray40") +
+  facet_wrap(vars(year),nrow=4,dir="v") +
+  scale_x_continuous(name="Total Length (mm)",
+                     expand=expansion(mult=0.02),limits=c(40,310),
+                     breaks=seq(0,350,50),labels=c("","",100,"",200,"",300,"")) +
+  scale_y_continuous(name="Relative Frequency",expand=expansion(mult=c(0,0.05))) +
+  theme(axis.text.y=element_blank())
+```
+
+&nbsp;
+
+@fig-kiyirl is a near default joyplot of the same data.
+ 
+```{r}
+#| label: fig-kiyirl
+#| fig-cap: Ridgelinle plot of the total lengths of Lake Superior Kiyi from 2003 to 2014.
+#| fig-alt: Ridgelinle plot of the total lengths of Lake Superior Kiyi from 2003 to 2014.
+#| fig-width: 7
+#| fig-height: 7
+ggplot(lf,aes(x=tl,y=year)) +
+  geom_density_ridges() +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_discrete(expand=expansion(mult=c(0.01,0.16))) +
+  theme(axis.title.y=element_blank())
+```
+
+&nbsp;
+
+In my opinion, it is easier on the ridgeline plot to follow the strong year-classes that first appear in 2004 and 2010 through time and to see how fish in the strong year-classes grow and eventually merge in size with older fish. Thus, ridgeline plots look useful for displaying length (or age) data across many groups (years, locations, etc.).^[[Wilke](https://wilkelab.org/ggridges/articles/introduction.html)illustrates many possible modifications to the ridgeline plots including adding data points, show summary statistics, or using histograms rather than densities.]
+
+&nbsp;
+
+# Lake Erie Walleye
+The following code use the `WalleyeErie2` data frame built-in to `FSA`. This provides an example with data that you can run on your own. I include some bells-and-whistles from [Wilke's demonstration](https://wilkelab.org/ggridges/articles/introduction.html).
+
+```{r}
+#| label: fig-waerl
+#| fig-cap: Ridgelinle plot of the total lengths of Lake Erie Walleye from 2003 to 2014.
+#| fig-alt: Ridgelinle plot of the total lengths of Lake Erie Walleye from 2003 to 2014.
+#| fig-width: 7
+#| fig-height: 7
+
+# reduce data to one location and make sure year variable is a factor
+data(WalleyeErie2,package="FSAdata")
+we2 <- WalleyeErie2 |>
+  filter(loc==2) |>
+  mutate(fyear=as.factor(year))
+
+ggplot(we2,aes(x=tl,y=fyear,fill=0.5-abs(0.5-after_stat(ecdf)))) +
+  stat_density_ridges(geom="density_ridges_gradient",calc_ecdf=TRUE,scale=1) +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_discrete(expand=expansion(mult=c(0.01,0.05))) +
+  scale_fill_viridis_c(name="Tail Probability",guide="none") +
+  theme(axis.title.y=element_blank())
+```
+
+
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+ggplot(filter(we2,year %in% 2008:2014),
+       aes(x=tl,y=fyear,fill=0.5-abs(0.5-after_stat(ecdf)))) +
+  stat_density_ridges(geom="density_ridges_gradient",calc_ecdf=TRUE,scale=1) +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_discrete(expand=expansion(mult=c(0.01,0.05))) +
+  scale_fill_viridis_c(name="Tail Probability",guide="none") +
+  theme(axis.title.y=element_blank())
+dev.off()
+```

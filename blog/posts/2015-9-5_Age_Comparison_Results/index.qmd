@@ -14,14 +14,15 @@ The following packages are loaded for use below. I also set the default `ggplot`
 :::
 
 ```{r packages}
-library(FSA)
-library(dplyr)
+library(FSA)           # for WhitefishLC, agePrecision(), headtail()
+library(dplyr)         # for arrange(), filter()
 library(ggplot2)
 theme_set(theme_bw())
 ```
 
 &nbsp;
 
+# Introduction
 An **FSA** user asked if there was a way to work with the age comparison results for individual fish. In particular, this user wanted to identify each fish for which the individual CV values from comparing two independent age estimates was greater than 10. This is fairly easy to do with an understanding of the results returned from `agePrecision()`. Below is an example using the `WhitefishLC` data found in the **FSA** package.^[These data are automatically loaded with `library(FSA)`.]
 
 These data contain, among other things, ages assigned by two readers examining otoliths in (`otolith1` and `otolith2`).^[`headtail()` from `FSA` shows the first and last three rows of a data frame. It is used here primarily to save space.]
@@ -30,6 +31,9 @@ These data contain, among other things, ages assigned by two readers examining o
 headtail(WhitefishLC)
 ```
 
+&nbsp;
+
+# Manipulate `agePrecision()` object
 A variety of computations on these paired age estimates are performed with `agePrecision()`.^[See [the `agePrecision()` documentation](https://fishr-core-team.github.io/FSA/reference/agePrecision.html) for full details.] The structure of the saved object shows several items returned in a list.
 
 ```{r}

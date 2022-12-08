@@ -14,7 +14,7 @@ The following packages are loaded for use below. I also set the random number se
 :::
 
 ```{r packages}
-library(dplyr)    # for |>, group_by(), summarize(), mutate(), right_join()
+library(dplyr)    # for group_by(), summarize(), mutate(), right_join()
 library(tidyr)    # for complete(), nesting()
 set.seed(678394)  # for reproducibility of randomly created data
 ```
