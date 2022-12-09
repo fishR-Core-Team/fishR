@@ -9,36 +9,63 @@ You may submit additions or corrections by using the links at the bottom of the 
 
 &nbsp;
 
+<table>
+<tr><td colspan=2>
 # Age and Growth of Fish: Principles and Techniques
-
+</td></tr>
+<tr>
+<td style="width:15%"><img src="../img/Age-and-Growth-Cover.webp" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="vertical-align: top;">
 * **Editors**: Michael Quist and Daniel Isermann
 * **Year**: 2017
 * [**Book Webpage**](https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/) 
 * [**R Resources**](https://derekogle.com/AGF/)
+* **Reviews**: [Here](https://fisheries.org/wp-content/uploads/2018/11/Age-and-Growth-book-review.pdf) and [here](https://fisheries.org/wp-content/uploads/2019/08/Age-Growth-book-review.pdf).
+</td></tr></table>
 
 &nbsp;
 
+<table>
+<tr><td colspan=2>
 # Analysis and Interpretation of Freshwater Fisheries Data I
-
+</td></tr>
+<tr>
+<td style="width:15%"><img src="../img/AIFFD1_cover.webp" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="vertical-align: top;">
 * **Editors**: Christopher Guy and Michael Brown
 * **Year**: 2007
 * [**Book Webpage**](https://fisheries.org/bookstore/all-titles/professional-and-trade/55049c/) 
 * [**R Resources**](http://derekogle.com/aiffd2007/)
+* **Reviews**: [Here (2nd page)](https://www.researchgate.net/publication/259311329_Book_review_Analysis_and_Interpretation_of_Freshwater_Fisheries_Data), [here (paywall)](https://www.journals.uchicago.edu/doi/abs/10.1086/590581), and [here (paywall)](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1365-2427.2008.02034.x)
+</td></tr></table>
 
 &nbsp;
 
+<table>
+<tr><td colspan=2>
 # Introductory Fisheries Analyses with R
-
+</td></tr>
+<tr>
+<td style="width:15%"><img src="../img/IFARCover_large.JPG" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="vertical-align: top;">
 * **Author**: Derek H. Ogle
 * **Year**: 2015
 * [**Book Webpage**](http://derekogle.com/IFAR/book/) 
 * **R Resources**: [Chapter Scripts](http://derekogle.com/IFAR/scripts/), [Supplements](http://derekogle.com/IFAR/supplements/), [related package](https://fishr-core-team.github.io/FSA/)
+* **Reviews**: [Here (paywall)](https://onlinelibrary.wiley.com/doi/10.1111/jfb.13153)
+</td></tr></table>
 
 &nbsp;
 
+<table>
+<tr><td colspan=2>
 # Using R for Modelling and Quantitative Methods in Fisheries
-
+</td></tr>
+<tr>
+<td style="width:15%"><img src="../img/URMQMF_cover.png" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="vertical-align: top;">
 * **Author**: Malcolm Haddon
 * **Year**: 2020
 * [**Book Webpage**](https://haddonm.github.io/URMQMF/) 
 * **R Resources**: within book link and [related package](https://github.com/haddonm/MQMF)
+</td></tr></table>
