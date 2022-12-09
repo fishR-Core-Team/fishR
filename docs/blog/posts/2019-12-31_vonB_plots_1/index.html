@@ -275,7 +275,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 8, 2022</p>
+        <p class="date-modified">Dec 9, 2022</p>
       </div>
     </div>
       
@@ -365,8 +365,8 @@ Note
 #R|      }
 #R|      Linf * (1 - exp(-K * (t - t0)))
 #R|  }
-#R|  &lt;bytecode: 0x0000018af463a068&gt;
-#R|  &lt;environment: 0x0000018af4672188&gt;</code></pre>
+#R|  &lt;bytecode: 0x000002849eaee880&gt;
+#R|  &lt;environment: 0x000002849dcf20e8&gt;</code></pre>
 </div>
 </div>
 <div class="page-columns page-full"><p>Some of the methods below use the fact that the three parameters of the typical VBGF (<span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(t_{0}\)</span>) can be given to this function separately (in that order) or as a vector (still in that order). For example, both lines below can be used to predict the mean length for an age-3 fish with the given VBGF parameters.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The paramters could be given in a different order but would need to be named; e.g., <code>vb(3,t0=-0.5,K=0.3,Linf=300)</code>.</p></li></div></div>
@@ -485,6 +485,7 @@ Note
 </div>
 </div>
 </div>
+<p>&nbsp;</p>
 </section>
 <section id="simple-model-fit-with-predicted-values" class="level1 page-columns page-full">
 <h1>Simple Model Fit with Predicted Values</h1>
@@ -550,7 +551,7 @@ Note
 <p>A confidence band for the mean lengths at each age is then added to the plot with <code>geom_ribbon()</code>, noting the use of <code>ymin=LCI</code> and <code>ymax=UCI</code>. The <code>fill=</code> will be the color of the enclosed ribbon. I added <code>geom_ribbon()</code> first so that it would sit behind the points and model lines. The results is shown in <a href="#fig-vbfit4a">Figure&nbsp;5</a>.</p>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>pred1,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),<span class="at">fill=</span><span class="st">"gray90"</span>) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>pred1,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">y=</span>tl,<span class="at">x=</span>age),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>pred1,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>plen),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(pred1,age<span class="sc">&gt;=</span><span class="dv">0</span>,age<span class="sc">&lt;=</span><span class="dv">11</span>),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>plen),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
@@ -570,7 +571,7 @@ Note
 </section>
 <section id="add-equation-to-plot" class="level1 page-columns page-full">
 <h1>Add Equation to Plot</h1>
-<div class="page-columns page-full"><p>The following function can be used to extract the model coefficients from <code>nls()</code> object and place them into a “plotmath” format to be added to the <code>ggplot</code> graph. The object returned from this function can be added to the <code>ggplot</code> graph with <code>annotate()</code> as shown below.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;The <code>x=</code>, <code>y=</code>, <code>hjust=</code>, and <code>vjust=</code> arguments are used to position and justify the text and may take some trial-and-error to get what you want.</p></li></div></div>
+<p>The following function can be used to extract the model coefficients from <code>nls()</code> object and place them into a “plotmath” format to be added to the <code>ggplot</code> graph.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>makeVBEqnLabel <span class="ot">&lt;-</span> <span class="cf">function</span>(fit,<span class="at">digits=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>)) {</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Isolate coefficients (and control decimals)</span></span>
@@ -585,9 +586,11 @@ Note
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
+<div class="page-columns page-full"><p>The object returned from this function can be added to the <code>ggplot</code> graph with <code>annotate()</code> as shown below.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;The <code>x=</code>, <code>y=</code>, <code>hjust=</code>, and <code>vjust=</code> arguments are used to position and justify the text and may take some trial-and-error to get what you want.</p></li></div></div>
+<p>&nbsp;</p>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>pred1,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),<span class="at">fill=</span><span class="st">"gray90"</span>) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>pred1,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">y=</span>tl,<span class="at">x=</span>age),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>pred1,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>plen),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(pred1,age<span class="sc">&gt;=</span><span class="dv">0</span>,age<span class="sc">&lt;=</span><span class="dv">11</span>),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>plen),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
@@ -600,7 +603,7 @@ Note
 <div id="fig-vbfit4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="figure page-columns page-full">
 <p><img src="index_files/figure-html/fig-vbfit4-1.png" class="img-fluid figure-img" width="384"></p>
-<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;6: Fit of typibcal von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.</figcaption><p></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.</figcaption><p></p>
 </figure>
 </div>
 </div>

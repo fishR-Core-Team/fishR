@@ -140,6 +140,8 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
   theme(panel.grid.minor.x=element_blank())
 ```
 
+&nbsp;
+
 # Simple Model Fit with Predicted Values
 @fig-vbfit1 and @fig-vbfit1a can also be constructed from lengths predicted at a variety of ages "outside" of any `ggplot()` layers. For this to work below, a new function must be created that has **only** the `nls()` object as an argument. This requires a bit of sleight-of-hand where we will assume that the ages to make the predictions at are in a vector called `ages`. The function is created below and is called `predict2()`.
 
@@ -189,7 +191,7 @@ A confidence band for the mean lengths at each age is then added to the plot wit
 #| label: fig-vbfit4a
 #| fig.cap: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
 ggplot() + 
-  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray90") +
+  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray80") +
   geom_point(data=wf14T,aes(y=tl,x=age),size=2,alpha=0.1) +
   geom_line(data=pred1,aes(x=age,y=plen),linewidth=1,linetype="dashed") +
   geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
@@ -225,9 +227,9 @@ The object returned from this function can be added to the `ggplot` graph with `
 
 ```{r}
 #| label: fig-vbfit4
-#| fig.cap: Fit of typibcal von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
+#| fig.cap: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
 ggplot() + 
-  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray90") +
+  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray80") +
   geom_point(data=wf14T,aes(y=tl,x=age),size=2,alpha=0.1) +
   geom_line(data=pred1,aes(x=age,y=plen),linewidth=1,linetype="dashed") +
   geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
