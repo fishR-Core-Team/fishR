@@ -40,7 +40,8 @@ You may submit additions or corrections to the list of packages by using the lin
 * [fishMod](https://cran.r-project.org/web/packages/fishMod/index.html); *fits models to catch and effort data*
 * [fishStan](https://code.usgs.gov/umesc/quant-ecology/fishstan); *Collection of hierarchical Bayesian models for fisheries analyses written in the Stan language*
 * [fishualize](https://cran.r-project.org/web/packages/fishualize/index.html): *Color palettes based on fish species*
-* [hafroAssmt](https://data.hafro.is/readme.html): *fisheries stock assessment at Hafro, the Marine Research Institute in Iceland*
+* [gfplot](https://pbs-assess.github.io/gfplot/index.html): *Data extraction and plotting of British Columbia groundfish data*
+* [hafroAssmt](https://data.hafro.is/readme.html): *Fisheries stock assessment at Hafro, the Marine Research Institute in Iceland*
 * [LBSPR: Length-Based Spawning Potential Ratio](https://cran.r-project.org/web/packages/LBSPR/index.html): *Simulate expected equilibrium length composition, YPR, and SPR using the LBSPR model. Fit the LBSPR model to length data to estimate selectivity, relative fishing mortality, and spawning potential ratio for data-limited fisheries.*
 * [LeMaRns](https://cran.r-project.org/web/packages/LeMaRns/index.html): *Set-up, run, and explore the outputs of the Length-based Multi-species model (LeMans; [Hall et al. 2006](https://doi.org/10.1139/f06-039)), focused on the marine environment. [Introductory publication is here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0227767).*
 * [mapplots](https://cran.r-project.org/web/packages/mapplots/index.html): *Create simple maps; add sub-plots like pie plots to a map or any other plot; format, plot and export gridded data*
@@ -73,7 +74,7 @@ You may submit additions or corrections to the list of packages by using the lin
 
 
 # Data
-* [FSAdata: Data for FSA](https://github.com/fishR-core-team/FSAdata#readme): *Collection of many fisheries-related data sets*
+* [FSAdata: Data for FSA](https://fishr-core-team.github.io/FSAdata/): *Collection of many fisheries-related data sets*
 * [fishdata](https://cran.r-project.org/web/packages/fishdata/index.html): *Four datasets (fish size and per-day growth history) of migratory fish, from 2015-2016, in the Wellington region of New Zealand*
 * [fishkirkko2015](https://cran.r-project.org/web/packages/fishkirkko2015/index.html): *Length and weight measurements of fish species at Kirkkojarvi Lake, Finland*
 * [fishbc](https://cran.r-project.org/web/packages/fishbc/index.html): *Raw and curated data on the codes, classification, and conservation status of freshwater fishes in British Columbia*
