@@ -32,7 +32,7 @@ theme_set(theme_bw())
 # Introduction
 The most common questions that I receive through the **fishR** website are related to fitting a von Bertalanffy growth function (VBGF) to data and viewing the results. In this post, I briefly demonstrate how to fit a VBGF to a single group of data and then provide several options for how to view the fit of the function to those data.
 
-In this post I will use data on the lengths and ages of Lake Erie Walleye (*Sander vitreus*) captured during October-November, 2003-2014. These data are available in [`FSAdata`](https://fishr-core-team.github.io/FSAdata/) package and formed many of the examples in @ogle_growth_2017. My primary interest here is in the `tl` (total length in mm) and `age` variables^[See more details about the data](https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html).]. I focus on female Walleye from location "1" captured in 2014 in this example.^[For succinctness, I also removed `year` and `sex` as they only had one category after filtering and three variables related to the `loc`ation of capture.]
+I will use lengths and ages of Lake Erie Walleye (*Sander vitreus*) captured during October-November, 2003-2014 available in [`FSAdata`](https://fishr-core-team.github.io/FSAdata/) package. These data formed many of the examples in @ogle_growth_2017. My primary interest here is in the `tl` (total length in mm) and `age` variables^[See [more details about the data](https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html).]. I focus on female Walleye from location "1" captured in 2014 in this example.^[For succinctness, I removed `year` and `sex` as they only had one category after filtering and three variables related to the `loc`ation of capture.]
 
 ```{r data}
 #| label: data
@@ -68,7 +68,7 @@ Reasonable starting values for the optimization algorithm may be obtained with `
 ( f.starts <- vbStarts(tl~age,data=wf14T) )
 ```
 
-The `nls()` function is typically used to estimate parameters of the VBGF from the observed data. The first argument is a formula that has `lengths` on the left-hand-side and the VBGF function created above on the right-hand-side. The VBGF function has the `ages` variable as its first argument and then `Linf`, `K`, and `t0` as the remaining arguments (just as they appear here). Again, the data frame with the observed lengths and ages is given to `data=` and the starting values derived above are given to `start=`.
+The `nls()` function is typically used to estimate parameters of the VBGF from observed data. The first argument is a formula that has `lengths` on the left-hand-side and the VBGF function created above on the right-hand-side. The VBGF function has the `ages` variable as its first argument and then `Linf`, `K`, and `t0` as the remaining arguments (just as they appear here). Again, the data frame with the observed lengths and ages is given to `data=` and the starting values derived above are given to `start=`.
 
 ```{r}
 f.fit <- nls(tl~vb(age,Linf,K,t0),data=wf14T,start=f.starts)
@@ -80,7 +80,7 @@ The parameter estimates are extracted from the saved `nls()` object with `coef()
 coef(f.fit)
 ```
 
-Bootstrapped confidence intervals for the parameter estimates are computed by giving the saved `nls()` object to `Boot()` and giving the saved `Boot()` object to `confint()`.
+Bootstrapped confidence intervals for the parameter estimates are computed by giving the saved `nls()` object to `Boot()` (from `car`) and giving the saved `Boot()` object to `confint()`.
 
 ```{r}
 #| cache: true
@@ -90,8 +90,8 @@ confint(f.boot1)
 
 &nbsp;
 
-# Simple Model Fit with `stat_function()`
-In these examples, all "layers" of the plot will use the same data. Thus, `data=` and the `aes()`thetic mappings are defined in `ggplot()`. Observed lengths and ages are added to the plot with `geom_point()`. The points in @fig-vbfit1 were made slightly larger than the default (with `size=`) and also with a fairly low transparency value to handle considerable over-plotting. The `scale_y_continuous()` and `scale_x_continuous()` functions are used to control aspects of y- and x-axes, respectively. Labels for axes are given in `name=`, minimum and maximum limits for the asis are in `limits=`, and specific major breaks for the axis are in `breaks=`.^[`seq(0,700,100)` makes a vector of numbers from 0 to 700 in increments of 100 and `0:11` makes a vector of integers from 0 to 11.] Finally, the fitted line is added to the plot with `stat_function()` using the VBGF function created above in `fun=` and a list of arguments to this function in `args=`.^[The usage here exploits the fact that all three parameters to the VBGF can be given in the first parameter argument, `Linf=`.] In @fig-vbfit1 I made the model line a little wider than the default. Finally the `theme()` was modified to remove the minor grid lines from the x-axis.
+# Model Fit Using `stat_function()`
+Here all "layers" of the plot will use the same data; thus, `data=` and the `aes()`thetic mappings are defined in `ggplot()`. Observed lengths and ages are added to the plot with `geom_point()`. The points in @fig-vbfit1 were made slightly larger than the default (with `size=`) and also with a fairly low transparency value to handle considerable over-plotting. `scale_y_continuous()` and `scale_x_continuous()` control aspects of y- and x-axes, respectively -- labels for axes are given in `name=`, minimum and maximum limits for the axis are in `limits=`, and specific major breaks for the axis are in `breaks=`.^[`seq(0,700,100)` makes a vector of numbers from 0 to 700 in increments of 100 and `0:11` makes a vector of integers from 0 to 11.] Finally, the fitted model line is added to the plot with `stat_function()` with the VBGF function created above in `fun=` and a list of arguments to this function in `args=`.^[The usage here exploits the fact that all three parameters of the VBGF can be given in the first parameter argument, `Linf=`.] In @fig-vbfit1 I made the model line a little wider than the default. Finally the `theme()` was modified to remove the minor grid lines from both axes.^[Thus the gridlines only appear for labelled axis breaks.]
 
 ```{r}
 #| label: fig-vbfit1
@@ -102,12 +102,12 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
                      limits=c(0,700),breaks=seq(0,700,100)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
   stat_function(fun=vb,args=list(Linf=coef(f.fit)),linewidth=1) +
-  theme(panel.grid.minor.x=element_blank())
+  theme(panel.grid.minor=element_blank())
 ```
 
 &nbsp;
 
-The model line can be shown outside the range of the data by including minimum and maximum values over which to evaluate the function in `xlim=` in `stat_function()`. In @fig-vbfit1a I add a dashed line for the model that includes evaluation at ages outside the observed range of ages (first `stat_function()`) and the plotted the model line for observed ages on top of that (second `stat_function()`). This gives the impression of using a dashed line for the ages that would be extrapolated.^[I would change the axis expansion factors here to clean this plot up a bit.]
+The model line can be displayed outside the range of observed ages by including minimum and maximum values in `xlim=` over which the function in `fun=` will be evaluated. In @fig-vbfit1a I add a dashed line for the model that includes evaluation at ages outside the observed range of ages (first `stat_function()`) and then plotted the model line for observed ages on top of that (second `stat_function()`). This gives the impression of using a dashed line only for the ages that would be extrapolated.^[I would usually change the axis expansion factors here to clean this plot up a bit.]
 
 ```{r}
 #| label: fig-vbfit1a
@@ -119,13 +119,13 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
   stat_function(fun=vb,args=list(Linf=coef(f.fit)),
                 xlim=c(-1,12),linewidth=1,linetype="dashed") +
   stat_function(fun=vb,args=list(Linf=coef(f.fit)),linewidth=1) +
-  theme(panel.grid.minor.x=element_blank())
+  theme(panel.grid.minor=element_blank())
 ```
 
 &nbsp;
 
-# Simple Model Fit with `geom_smooth()`
-@fig-vbfit1 can also be produced using `geom_smooth()` (@fig-vbfit2), which can use `nls()` to fit the VBGF "behind the scenes." For this purpose `geom_smooth()` requires that `method=` be `"nls"` and that `se=FALSE`.^[`se=FALSE` is required because this argument is not implemented in `nls()`.] In addition,  `methods.args=` takes required arguments for fitting the VBGF in `nls()`. Minimum required arguments for fitting the VBGF are the VBGF `formula=` and `start=`ing values as shown for `nls()` in the previous section.
+# Model Fit Using `geom_smooth()`
+`geom_smooth()` can use `nls()` to fit the VBGF "behind the scenes" and then add the resultant model line to the plot. For this purpose `geom_smooth()` requires `method="nls"` and `se=FALSE`.^[`se=FALSE` is required because this argument is not implemented in `nls()`.] In addition, arguments for fitting the VBGF required by `nls()` must be in a list given to `methods.args=`. Minimum required arguments for fitting the VBGF are the VBGF `formula=` and `start=`ing values as shown for `nls()` above. @fig-vbfit2 uses `geom_smooth()` in this way to reproduce @fig-vbfit1.
 
 ```{r}
 #| label: fig-vbfit2
@@ -142,23 +142,30 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
 
 &nbsp;
 
-# Simple Model Fit with Predicted Values
-@fig-vbfit1 and @fig-vbfit1a can also be constructed from lengths predicted at a variety of ages "outside" of any `ggplot()` layers. For this to work below, a new function must be created that has **only** the `nls()` object as an argument. This requires a bit of sleight-of-hand where we will assume that the ages to make the predictions at are in a vector called `ages`. The function is created below and is called `predict2()`.
+# Model Fit from Predicted Values
+@fig-vbfit1 and @fig-vbfit1a can also be constructed from lengths predicted at a variety of ages "outside" of any `ggplot()` layers. Using this method begins by creating a function to predict the mean length-at-age from model fit results. For use in the next section, this function must have the `nls()` object as its **only** argument. To meet this requirement we must use a trick that assumes that the ages to make the predictions at are in a vector called `ages`.^[The function created here for this purpose is called `predict2()`.]
 
 ```{r}
 predict2 <- function(x) predict(x,data.frame(age=ages))
 ```
 
-I then create a vector of ages over which the fitted model will be evaluated. In this case I will extend this range outside the observed ages (to -1 and 12) and make the sequence in increments of 0.1.^[Use smaller increments to make the line produced further below more smooth.] The mean length at each of these ages is then predicted with the function just created. Both results are assigned to a data frame called `preds1` below.
+A vector of ages over which the fitted model will be evaluated is then constructed. In this case the ages extend beyond the observed range of ages. The `seq()`uence produce here will have 101 age values between -1 and 12.^[Use a larger value for `length.out=` to make the line produced further below more smooth.]
 
 ```{r}
-ages <- seq(-1,12,0.1)
+ages <- seq(-1,12,length.out=101)
+```
+
+The mean length at each of these ages is then predicted with the new prediction function (i.e., `predict2()` here). The vector of ages and predicted mean lengths are then put into a data frame for plotting below.^[Here the data frame is called `pred1` and it has two variables named `age` and `plen`.]
+ 
+```{r}
 pred1 <- data.frame(age=ages,
                     plen=predict2(f.fit))
 headtail(pred1)
 ```
 
-These predicted mean lengths-at-age can then be used to add a model line to a plot of observed lengths-at-age with `geom_line()`. However, because the observed and predicted data are in different data frames, the data and mapped aesthetics should be declared within the appropriate `geom`s rather than within `ggplot()`. For example, `geom_point()` is used below to add the observed data to the plot and `geom_line()` is used below to add the modeled line. Note below that separate `geom_line()`s are used to show the modeled line over extrapolated and observed ages.^[Also note the use of `filter()` to reduce the predicted lengths-at-age to the observed ages.] The results in @fig-vbfit3a reproduce @fig-vbfit1a.
+&nbsp;
+
+These predicted mean lengths-at-age are then used to add a fitted model line to a plot of observed lengths-at-age with `geom_line()`. However, because the observed and predicted data are in different data frames, the `data=` and mapped `aes()`thetics are declared within the appropriate `geom`s rather than within `ggplot()`. For example, `geom_point()` is used below to add the observed data to the plot and `geom_line()` is used below to add the modeled line. Note below that separate `geom_line()`s are used to show the modeled line over extrapolated and observed ages.^[Also note the use of `filter()` to reduce the predicted lengths-at-age to the observed ages.] The results in @fig-vbfit3a reproduce @fig-vbfit1a.
 
 ```{r}
 #| label: fig-vbfit3a
@@ -169,13 +176,15 @@ ggplot() +
   geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
-  theme(panel.grid.minor.x=element_blank())
+  theme(panel.grid.minor=element_blank())
 ```
 
 &nbsp;
 
-# Model Fit with Confidence Region
-The main reason for introducing the idea of constructing a graphic from predicted values is that it will give us the opportunity to add a confidence ribbon to the graphic. Bootstrapped samples of predictions of mean length at each age given the VBGF are constructed by giving `Boot()` (from `car`) the saved `nls()` object AND the new prediction function (created above) in `f=`. The object returned from `Boot()` is then given to `confint()` to extract the confidence intervals for the mean length at each age. These results are then wrapped into a data frame with the vector of ages and the predicted mean lengths at each age.^[The code below is for all ages between -1 and 12 in increments of 0.1 as `ages` was created above.]
+# Model Fit with Confidence Band
+The main reason for introducing the idea of constructing a graphic from predicted values is that it allows for the opportunity to add a confidence band around the fitted model line (@fig-vbfit4a).
+
+Creation of this plot requires modifying the data frame of predicted mean lengths at age with bootstrapped confidence intervals for the mean length at each age. Bootstrapped samples of prediction mean lengths at each age given the VBGF are constructed by giving `Boot()` (from `car`) the saved `nls()` object AND the new prediction function (created above) in `f=`. The object returned from `Boot()` is then given to `confint()` to extract the confidence intervals. These results, along with the vector of ages^[`ages` was created above.] and the predicted mean lengths at each age, are then put into a data frame e.^[Because confint returns a matrix with two columns, the names of the variables must be added wih `names()` after the data frame is created.]
 
 ```{r}
 # Be patient! Be aware of some non-convergence
@@ -185,7 +194,7 @@ names(pred1) <- c("age","plen","LCI","UCI")
 headtail(pred1)
 ```
 
-A confidence band for the mean lengths at each age is then added to the plot with `geom_ribbon()`, noting the use of `ymin=LCI` and `ymax=UCI`. The `fill=` will be the color of the enclosed ribbon. I added `geom_ribbon()` first so that it would sit behind the points and model lines. The results is shown in @fig-vbfit4a.
+A confidence band for mean lengths at age is added to the plot with `geom_ribbon()` where the lower part of the ribbon is at the lower confidence values (i.e., `ymin=LCI`) and the upper part is at the upper confidence value (i.e., `ymax=UCI`).^[Add `geom_ribbon()` first so that it is behind the points and model lines.] `fill=` gives the color of the enclosed ribbon.
 
 ```{r}
 #| label: fig-vbfit4a
@@ -197,13 +206,13 @@ ggplot() +
   geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
-  theme(panel.grid.minor.x=element_blank())
+  theme(panel.grid.minor=element_blank())
 ```
 
 &nbsp;
 
 # Add Equation to Plot
-The following function can be used to extract the model coefficients from `nls()` object and place them into a "plotmath" format to be added to the `ggplot` graph.
+The following function can be used to extract the model coefficients from an `nls()` object and place them into a "plotmath" format to be added to the `ggplot` graph.
 
 ```{r}
 makeVBEqnLabel <- function(fit,digits=c(1,3,3)) {
@@ -223,8 +232,6 @@ makeVBEqnLabel <- function(fit,digits=c(1,3,3)) {
 
 The object returned from this function can be added to the `ggplot` graph with `annotate()` as shown below.^[The `x=`, `y=`, `hjust=`, and `vjust=` arguments are used to position and justify the text and may take some trial-and-error to get what you want.]
 
-&nbsp;
-
 ```{r}
 #| label: fig-vbfit4
 #| fig.cap: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
@@ -235,7 +242,7 @@ ggplot() +
   geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
-  theme(panel.grid.minor.x=element_blank()) +
+  theme(panel.grid.minor=element_blank()) +
   annotate(geom="text",label=makeVBEqnLabel(f.fit),parse=TRUE,
            size=4,x=Inf,y=-Inf,hjust=1.1,vjust=-0.5)
 ```
