@@ -1,0 +1,305 @@
+---
+title: von Bertalanffy Growth Plots II
+description: How to plot multiple von Bertalanffy growth models with data.
+author: Derek H. Ogle
+date: 1/2/2019
+image: preview.png
+categories:
+  - Age
+  - Growth
+  - Size
+  - ggplot2
+knitr: 
+  opts_chunk:
+    fig.width: 4
+    fig.height: 4
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. The data are also from `FSAdata`, which is not loaded below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)     # for vbFuns(), vbStarts(), confint.bootCase(), headtail()
+library(car)     # for Boot()
+library(dplyr)   # for filter(), mutate()
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+# Introduction
+In [a previous post]() I demonstrated how to plot the fit of a von Bertalanffy growth function (VBGF) for a single group of observed data. In this post, I explore methods to do the same for multiple groups of observed data (e.g., multiple sexes, locations, years).
+
+I will again use the lengths and ages of Lake Erie Walleye (*Sander vitreus*) captured during October-November, 2003-2014 available in [`FSAdata`](https://fishr-core-team.github.io/FSAdata/) package. These data formed many of the examples in @ogle_growth_2017. My primary interest here is in the `tl` (total length in mm), `age`, and `sex` variables^[See [more details about the data](https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html).]. I initially focus on Walleye from location "1" captured in 2014 in this example.^[For succinctness, I removed `year` as it only had one level after filtering and three variables related to the `loc`ation of capture.]
+
+```{r data}
+#| label: data
+data(WalleyeErie2,package="FSAdata")
+w14T <- WalleyeErie2 |>
+  filter(year==2014,loc==1) |>
+  select(-year,-setID,-loc,-grid)
+headtail(w14T)
+```
+
+As in the previous post, a function that uses the typical VBGF to predict mean length given a set of VBGF parameters and age is needed.^[Other parameterizations of the VBGF can be used with `param=` in `vbFuns()` as described in [its documentation](https://fishr-core-team.github.io/FSA/reference/growthModels.html).]
+
+```{r}
+( vb <- vbFuns(param="Typical") )
+```
+
+&nbsp;
+
+# Model Fits Using `geom_smooth()`
+One of the simpler ways to plot multiple VBGF fits uses `geom_smooth()`, which, as described in the previous post, uses `nls()` to fit the model "behind-the-scenes." Given this uses of `nls()` a set of starting values is needed. It is critical to note, though, that this method will only work if the **same** starting values can be used for each group in the data. With this warning, possible starting values for the optimization algorithm may be obtained with `vbStarts()`, where the first argument is a formula of the form `lengths~ages` where `lengths` and `ages` are replaced with the actual variable names that contain the observed lengths and ages, respectively, and `data=` is set to the data frame that contains those variables.
+
+```{r}
+( f.starts <- vbStarts(tl~age,data=w14T) )
+```
+
+The use of `geom_smooth()` to produce separate lines for the groups is exactly as described in the previous post except that the variable to identify the groups (i.e., `sex` in this example) must be mapped to the `color=` `aes()`thetic. For @fig-sex1 I also used `scale_color_manual()` to demonstrate how to change colors of the points and lines. Addition, I altered the theme to move the legend/guide into the plot panel and to remove the default `sex` label that would appear on top of the legend.^[In this case the legend is placed 80% down the x-axis and 20% up the y-axis.]
+
+```{r}
+#| label: fig-sex1
+#| fig.cap: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014.
+ggplot(data=w14T,aes(x=age,y=tl,color=sex)) +
+  geom_point(size=2,alpha=0.3) +
+  scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
+  scale_x_continuous(name="Age (years)",breaks=0:11) +
+  scale_color_manual(values=c("male"="darkblue","female"="darkred")) +
+  geom_smooth(method="nls",se=FALSE,
+              method.args=list(formula=y~vb(x,Linf,K,t0),start=f.starts),
+              linewidth=1) +
+  theme(panel.grid.minor.x=element_blank(),
+        legend.position=c(0.8,0.2),
+        legend.title=element_blank())
+```
+
+&nbsp;
+
+An alternative visualization is to put the two groups into separate panels using `facet_wrap()`.^[Simply put the grouping variable inside of `vars()` as the argument to `facet_wrap()`.] Note that color is superfluous in @fig-sex1a, but I kept it for comparison to @fig-sex1. However, mapping color to a variable will cause a legend to be produced by default. This legend, however, is redundant with the panel labels, so it was removed in `theme()` below.
+
+```{r}
+#| label: fig-sex1a
+#| fig.cap: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014.
+#| fig-width: 8
+ggplot(data=w14T,aes(x=age,y=tl,color=sex)) +
+  geom_point(size=2,alpha=0.3) +
+  scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
+  scale_x_continuous(name="Age (years)",breaks=0:11) +
+  scale_color_manual(values=c("male"="darkblue","female"="darkred")) +
+  geom_smooth(method="nls",se=FALSE,
+              method.args=list(formula=y~vb(x,Linf,K,t0),start=f.starts),
+              linewidth=1) +
+  theme(panel.grid.minor.x=element_blank(),
+             legend.position="none") +
+  facet_wrap(vars(sex))
+```
+
+&nbsp;
+
+# Fitting the VBGF to Multiple Groups
+Methods for fitting a von Bertalanfy growth function (VBGF) to multiple groups are detailed in @ogleIntroductoryFisheriesAnalyses2016 and @ogle_growth_2017. Thus, this methodology will only be briefly explained here.
+
+Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., `tl` and `age`) and assuming different parameters should be estimated for each group.^[See the linked resources for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.] Identifying the different groups is accomplished here by appending `[group]`, where `group` is replaced with the specific variable name that identifies the groups (i.e., `sex` here). The expression is assigned to an object name (i.e., `vbLKt` here).
+
+```{r}
+vbLKt <- tl~Linf[sex]*(1-exp(-K[sex]*(age-t0[sex])))
+```
+
+For use below, I identify the "groups" (with `unique()`) and create an object that contains the number of groups (with `length()`).
+
+```{r}
+( grps <- unique(w14T$sex) )
+( ngrps <- length(grps) )
+```
+
+This model has six parameters -- $L_{\infty}$, $K$, and $t_{0}$ for each of the two groups (male and female walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using `vbStarts()` as described in the previous post) and replicate those starting values for both groups.^[In some instances using the same starting values for both groups will not result in model convergence. The linked resources provide suggestions for handling those cases.] `Map` replicates the starting values in the list from `vbStarts()` with `rep` (the replicated function), the object returned from `vbStarts()`, and a numeric vector that explains how many times each parameter should be repeated (i.e., the same as the number of groups).
+
+```{r}
+( sv0 <- vbStarts(tl~age,data=w14T) )
+( svLKt <- Map(rep,sv0,c(2,2,2)) )
+```
+
+The model is then fit to the data by including the VBGF expression object, `data=`, and `start=` as arguments to `nls()`. The estimated parameters may be extracted from the saved `nls()` object with `coef()`. Note that the parameters will be appended with numbers in the alphabetical order of the groups.^[Unless your chose to order the levels of the group variable differently.] Thus, in this example, it is seen that the estimated $L_{\infty}$ for females is greater than that for males.
+
+```{r}
+fitLKt <- nls(vbLKt,data=w14T,start=svLKt)
+coef(fitLKt)
+```
+
+&nbsp;
+
+# Model Fits from Predicted Values
+The model fits can also be shown for predicted values, both within and outside the observed range of ages. This, however, first takes a bit of work outside of `ggplot` to prepare the relevant data.
+
+In particular, a data frame that contains predicted mean lengths at age over the range of observed ages for all groups is needed. I being this process by finding (and assigning to an object for later use) the range of ages for each group.
+
+```{r}
+obsagerng <- w14T |>
+  group_by(sex) |>
+  summarize(min=min(age),
+            max=max(age))
+obsagerng
+```
+
+From this, I create a temporary vector of 101 ages^[Use a larger value for `length.out=` to make the line produced further below more smooth.] evenly spaced over a range of ages larger than what was observed.^[Zero was an observed age here, if not I usually make sure it is included.]
+
+```{r}
+atmp <- seq(-1,12,length.out=101)
+```
+
+I then create a data frame that has the name of each group repeated as many times as there ages in the temporary age vector (i.e., 101 here) and then has the ages in the temporary age vector repeated for each group (i.e., twice here). Note the careful use of `each=` and `times=` in the two uses of `rep()` below.
+
+```{r}
+preds <- data.frame(sex=rep(grps,each=length(atmp)),
+                    age=rep(atmp,times=ngrps))
+headtail(preds)
+```
+
+Predicted mean lengths at each age for each group is then appended to this data frame by giving the fitted `nls()` object and this data frame to `predict()`.
+
+```{r}
+preds <- preds |>
+  mutate(ptl=predict(fitLKt,preds))
+headtail(preds)
+```
+
+Finally, I add a fourth variable that will be `TRUE` if the age is within the range of observed ages for the group. This is accomplished with the code below that creates a new `preds` data frame. That code can be a little tricky to understand, so lets walk through a couple parts of it. First, note that the `group_by()` acts sort of like a loop here in the sense that what follows that line will be completed for the first group, then the second group, and so on. In the next snippets, consider that we are working the the "female" group. In this case, `unique(sex)` will return `female` such that `obsagerng[obsagerng$sex==unique(sex),]` will find the row of `obsagerng` where its `sex` variable is equal to "female". The `$min` appended to that will extract just the value in the `min` variable of that row (so the minimum observed age for females). The `age>=obsagerng[obsagerng$sex==unique(sex),]$min` portion is thus asking if the `age` variable in `preds` is greater than or equal to the minimum observed age for females. If it is it will return `TRUE`, otherwise `FALSE` is returned. The second part of that `mutate()` line asks if the `age` variable in `preds` is less than or equal to the maximum observed age for females, again returning `TRUE` or `FALSE` as appropriate. Those two conditions are then connected with an `&` such that if they are both `TRUE` then a `TRUE` is returned, otherwise a `FALSE` is returned. The result is that the new `inrng` variable will be `TRUE` if the `age` variable within `preds` is within the observed range of ages for the sex given in the `sex` variable of `preds`.^[`FSA::peek()` is used here to show an evenly spaced 20 rows in the data frame. This provides more output than `headtail()` for observing the results of code.]
+
+```{r}
+preds <- preds |>
+  group_by(sex) |>
+  mutate(inrng=age>=obsagerng[obsagerng$sex==unique(sex),]$min &
+               age<=obsagerng[obsagerng$sex==unique(sex),]$max)
+FSA::peek(preds)
+```
+
+
+The following code is redundant with what was done above, but it shows how the making of `preds` can be put together in one piped workflow.
+
+```{r}
+preds <- data.frame(sex=rep(grps,each=length(atmp)),
+                    age=rep(atmp,times=ngrps)) |>
+  mutate(ptl=predict(fitLKt,preds)) |>
+  group_by(sex) |>
+  mutate(inrng=age>=obsagerng[obsagerng$sex==unique(sex),]$min &
+               age<=obsagerng[obsagerng$sex==unique(sex),]$max)
+FSA::peek(preds)
+```
+
+&nbsp;
+
+@fig-sex2 is created with the code below that largely combines similar code from the previous post and the use of `color=` provided above. In brief, `geom_point()` is used to add points at the observed lengths at age, the first `geom_line()` adds the fitted models as dashed lines from the predicted mean lengths at **all** ages in `preds`, and the second `geom_line()` adds the fitted models solid lines from the predicted mean lengths **only** at observed ages for each group.^[Note the use `filter()` in the second `geom_line()` so that only data for which `inrng==TRUE` is used.]
+
+```{r}
+#| label: fig-sex2
+#| fig.cap: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.
+ggplot() +
+  geom_point(data=w14T,aes(x=age,y=tl,color=sex),
+             size=2,alpha=0.3) +
+  geom_line(data=preds,aes(x=age,y=ptl,color=sex),
+              linewidth=1,linetype="dashed") +
+  geom_line(data=filter(preds,inrng),aes(x=age,y=ptl,color=sex),
+              linewidth=1) +
+  scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
+  scale_x_continuous(name="Age (years)",breaks=0:11) +
+  scale_color_manual(values=c("male"="darkblue","female"="darkred")) +
+  theme(panel.grid.minor.x=element_blank(),
+        legend.position=c(0.8,0.2),
+        legend.title=element_blank())
+```
+
+&nbsp;
+
+# Model Fit with Confidence Band
+
+
+```{r}
+vb <- vbFuns(param="Typical")     ## Typical VBGF
+grps <- unique(w14T$sex)          ## Names of groups
+ngrps <- length(grps)             ## Number of groups
+obsagerng <- w14T |>                   ## Range of observed ages by group
+  group_by(sex) |>
+  summarize(min=min(age),
+            max=max(age))
+sv0 <- vbStarts(tl~age,data=w14T) ## Starting values ignoring groups
+```
+
+```{r}
+## Use same starting values for all groups; works in this case, won't in all
+( svLKt <- data.frame(sex=grps,
+                      Map(rep,sv0,c(ngrps,ngrps,ngrps))) )
+```
+
+```{r}
+# eval: false
+## Not run: Demo of manually entering starting values; not needed in this case
+( svLKt <- data.frame(sex=grps,
+                      Linf=c(630,580),
+                      K=c(0.34,0.34),
+                      t0=c(-1,-2)) )
+```
+
+
+```{r}
+preds1 <- preds2 <- NULL
+```
+
+```{r}
+vbLOOP1 <- function(grp,dat,svs,oagerng,eagerng) {
+  ## Make prediction function
+  predict2 <- function(x) predict(x,data.frame(age=eages))
+  
+  ## Loop notification (for peace of mind)
+  cat(grp,"Loop\n")
+  ## Isolate group's data, starting values, and age range
+  dat1 <- dplyr::filter(dat,sex==grp)
+  sv1 <- svs |>
+    filter(sex==grp) |>
+    select(-sex) |>
+    as.list()
+  oagerng1 <- filter(oagerng,sex==grp)
+  ## Make ages for predictions
+  eages <- seq(min(eagerng),max(eagerng),length.out=101)
+  ## Fit von B to that group
+  fit1 <- nls(tl~vb(age,Linf,K,t0),data=dat1,start=sv1)
+  ## Get boostrap
+  boot1 <- Boot(fit1,f=predict2,R=10)
+  ## Make data frame of predicted mean lengths at age with bootstrapped CIs
+  preds1 <- data.frame(sex=grp,
+                       age=eages,
+                       fit=predict(fit1,data.frame(age=eages)),
+                       confint(boot1)) |>
+    group_by(sex) |>
+    mutate(inrng=age>=oagerng$min & age<=oagerng$max) |>
+    as.data.frame()
+  names(preds1) <- c("sex","age","fit","LCI","UCI","inrng")
+  preds1
+}
+```
+
+```{r}
+vbLOOP1("female",w14T,svLKt,obsagerng,c(-1,12))
+```
+
+
+```{r}
+for (i in seq_along(grps)) {
+
+```
+
+
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+plot(1)
+dev.off()
+```
