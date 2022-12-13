@@ -16,12 +16,11 @@ knitr:
 ---
 
 :::{.callout-note}
-The following packages are loaded for use below. The data are also from `FSAdata`, which is not loaded below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+The following packages are loaded for use below. One function from `investr` is also used but the whole package is not loaded here. The data are also from `FSAdata`, which is not loaded below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
 :::
 
 ```{r packages}
-library(FSA)     # for vbFuns(), vbStarts(), confint.bootCase(), headtail()
-library(car)     # for Boot()
+library(FSA)     # for vbFuns(), vbStarts(), headtail()
 library(dplyr)   # for filter(), mutate()
 library(ggplot2)
 theme_set(theme_bw())
@@ -65,27 +64,19 @@ vb(3,tmp)
 Reasonable starting values for the optimization algorithm may be obtained with `vbStarts()`, where the first argument is a formula of the form `lengths~ages` where `lengths` and `ages` are replaced with the actual variable names that contain the observed lengths and ages, respectively, and `data=` is set to the data frame that contains those variables.
 
 ```{r}
-( f.starts <- vbStarts(tl~age,data=wf14T) )
+( sv0 <- vbStarts(tl~age,data=wf14T) )
 ```
 
 The `nls()` function is typically used to estimate parameters of the VBGF from observed data. The first argument is a formula that has `lengths` on the left-hand-side and the VBGF function created above on the right-hand-side. The VBGF function has the `ages` variable as its first argument and then `Linf`, `K`, and `t0` as the remaining arguments (just as they appear here). Again, the data frame with the observed lengths and ages is given to `data=` and the starting values derived above are given to `start=`.
 
 ```{r}
-f.fit <- nls(tl~vb(age,Linf,K,t0),data=wf14T,start=f.starts)
+fit0 <- nls(tl~vb(age,Linf,K,t0),data=wf14T,start=sv0)
 ```
 
-The parameter estimates are extracted from the saved `nls()` object with `coef()`.
+The parameter estimates and confidence intervals are extracted from the saved `nls()` object with `coef()` and `confint()`, respectively.^[This `confint()` requires the `MASS` package which is usually loaded automatically with base R.] They are column-bound together here for aesthetic reasons.
 
 ```{r}
-coef(f.fit)
-```
-
-Bootstrapped confidence intervals for the parameter estimates are computed by giving the saved `nls()` object to `Boot()` (from `car`) and giving the saved `Boot()` object to `confint()`.
-
-```{r}
-#| cache: true
-f.boot1 <- Boot(f.fit)  # Be patient! Be aware of some non-convergence
-confint(f.boot1)
+cbind(Est=coef(fit0),confint(fit0))
 ```
 
 &nbsp;
@@ -101,7 +92,7 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
   scale_y_continuous(name="Total Length (mm)",
                      limits=c(0,700),breaks=seq(0,700,100)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
-  stat_function(fun=vb,args=list(Linf=coef(f.fit)),linewidth=1) +
+  stat_function(fun=vb,args=list(Linf=coef(fit0)),linewidth=1) +
   theme(panel.grid.minor=element_blank())
 ```
 
@@ -116,9 +107,9 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
   geom_point(size=2,alpha=0.1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
-  stat_function(fun=vb,args=list(Linf=coef(f.fit)),
+  stat_function(fun=vb,args=list(Linf=coef(fit0)),
                 xlim=c(-1,12),linewidth=1,linetype="dashed") +
-  stat_function(fun=vb,args=list(Linf=coef(f.fit)),linewidth=1) +
+  stat_function(fun=vb,args=list(Linf=coef(fit0)),linewidth=1) +
   theme(panel.grid.minor=element_blank())
 ```
 
@@ -135,7 +126,7 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
   geom_smooth(method="nls",se=FALSE,
-              method.args=list(formula=y~vb(x,Linf,K,t0),start=f.starts),
+              method.args=list(formula=y~vb(x,Linf,K,t0),start=sv0),
               color="black",linewidth=1) +
   theme(panel.grid.minor.x=element_blank())
 ```
@@ -143,24 +134,18 @@ ggplot(data=wf14T,aes(x=age,y=tl)) +
 &nbsp;
 
 # Model Fit from Predicted Values
-@fig-vbfit1 and @fig-vbfit1a can also be constructed from lengths predicted at a variety of ages "outside" of any `ggplot()` layers. Using this method begins by creating a function to predict the mean length-at-age from model fit results. For use in the next section, this function must have the `nls()` object as its **only** argument. To meet this requirement we must use a trick that assumes that the ages to make the predictions at are in a vector called `ages`.^[The function created here for this purpose is called `predict2()`.]
-
-```{r}
-predict2 <- function(x) predict(x,data.frame(age=ages))
-```
-
-A vector of ages over which the fitted model will be evaluated is then constructed. In this case the ages extend beyond the observed range of ages. The `seq()`uence produce here will have 101 age values between -1 and 12.^[Use a larger value for `length.out=` to make the line produced further below more smooth.]
+@fig-vbfit1 and @fig-vbfit1a can also be constructed from lengths predicted at a variety of ages "outside" of any `ggplot()` layers. I find it easier when using this method to first create a vector of ages over which the fitted model will be evaluated is then constructed. In this case the ages extend beyond the observed range of ages. The `seq()`uence produced here will have 101 age values between -1 and 12.^[Use a larger value for `length.out=` to make the line produced further below more smooth.]
 
 ```{r}
 ages <- seq(-1,12,length.out=101)
 ```
 
-The mean length at each of these ages is then predicted with the new prediction function (i.e., `predict2()` here). The vector of ages and predicted mean lengths are then put into a data frame for plotting below.^[Here the data frame is called `pred1` and it has two variables named `age` and `plen`.]
+The mean length at each of these ages is predicted with `predict()`, where the age vector just created is set equal to the name of the age variable in the `nls()` object inside of `data.frame()`. The vector of ages and predicted mean lengths are put into a data frame for plotting below.^[Here the data frame is called `preds` and it has two variables named `age` and `fit`.]
  
 ```{r}
-pred1 <- data.frame(age=ages,
-                    plen=predict2(f.fit))
-headtail(pred1)
+preds <- data.frame(age=ages,
+                    fit=predict(fit0,data.frame(age=ages)))
+headtail(preds)
 ```
 
 &nbsp;
@@ -172,8 +157,8 @@ These predicted mean lengths-at-age are then used to add a fitted model line to 
 #| fig.cap: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.
 ggplot() +
   geom_point(data=wf14T,aes(x=age,y=tl),size=2,alpha=0.1) +
-  geom_line(data=pred1,aes(x=age,y=plen),linewidth=1,linetype="dashed") +
-  geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
+  geom_line(data=preds,aes(x=age,y=fit),linewidth=1,linetype="dashed") +
+  geom_line(data=filter(preds,age>=0,age<=11),aes(x=age,y=fit),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
   theme(panel.grid.minor=element_blank())
@@ -182,28 +167,27 @@ ggplot() +
 &nbsp;
 
 # Model Fit with Confidence Band
-The main reason for introducing the idea of constructing a graphic from predicted values is that it allows for the opportunity to add a confidence band around the fitted model line (@fig-vbfit4a).
+The main reason for introducing the idea of constructing a graphic from predicted values is that it allows for the opportunity to add confidence and prediction bands around the fitted model line (@fig-vbfit4a).
 
-Creation of this plot requires modifying the data frame of predicted mean lengths at age with bootstrapped confidence intervals for the mean length at each age. Bootstrapped samples of prediction mean lengths at each age given the VBGF are constructed by giving `Boot()` (from `car`) the saved `nls()` object AND the new prediction function (created above) in `f=`. The object returned from `Boot()` is then given to `confint()` to extract the confidence intervals. These results, along with the vector of ages^[`ages` was created above.] and the predicted mean lengths at each age, are then put into a data frame e.^[Because confint returns a matrix with two columns, the names of the variables must be added wih `names()` after the data frame is created.]
+Creation of this plot requires modifying the data frame of predicted mean lengths at age with confidence (or prediction) intervals for the mean length at each age. As mentioned previously, constructing these intervals is not straightforward with non-linear models. However, confidence (or prediction) intervals can be estimated with Taylor series approximations as implemented in `predFit()` of `investr`.^[Use of `::` here allows `predFit()` from `investr` to be used without loading all of `investr`.] `predFit()` requires the saved `nls()` object as its first argument, a data frame of ages over which to make predictions as the second argument, and either `interval="confidence"` for confidence intervals or `interval="prediction"` for prediction intervals.
 
 ```{r}
-# Be patient! Be aware of some non-convergence
-pred1 <- data.frame(ages,predict2(f.fit),
-                    confint(Boot(f.fit,f=predict2)))
-names(pred1) <- c("age","plen","LCI","UCI")
-headtail(pred1)
+preds <- data.frame(age=ages,
+                    investr::predFit(fit0,data.frame(age=ages),
+                                     interval="confidence"))
+headtail(preds)
 ```
 
-A confidence band for mean lengths at age is added to the plot with `geom_ribbon()` where the lower part of the ribbon is at the lower confidence values (i.e., `ymin=LCI`) and the upper part is at the upper confidence value (i.e., `ymax=UCI`).^[Add `geom_ribbon()` first so that it is behind the points and model lines.] `fill=` gives the color of the enclosed ribbon.
+A confidence band for mean lengths at age is added to the plot with `geom_ribbon()` where the lower part of the ribbon is at the lower confidence values (i.e., `ymin=lwr`) and the upper part is at the upper confidence value (i.e., `ymax=upr`).^[Add `geom_ribbon()` first so that it is behind the points and model lines.] `fill=` gives the color of the enclosed ribbon.
 
 ```{r}
 #| label: fig-vbfit4a
 #| fig.cap: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
 ggplot() + 
-  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray80") +
+  geom_ribbon(data=preds,aes(x=age,ymin=lwr,ymax=upr),fill="gray80") +
   geom_point(data=wf14T,aes(y=tl,x=age),size=2,alpha=0.1) +
-  geom_line(data=pred1,aes(x=age,y=plen),linewidth=1,linetype="dashed") +
-  geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
+  geom_line(data=preds,aes(x=age,y=fit),linewidth=1,linetype="dashed") +
+  geom_line(data=filter(preds,age>=0,age<=11),aes(x=age,y=fit),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
   theme(panel.grid.minor=element_blank())
@@ -236,14 +220,14 @@ The object returned from this function can be added to the `ggplot` graph with `
 #| label: fig-vbfit4
 #| fig.cap: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
 ggplot() + 
-  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray80") +
+  geom_ribbon(data=preds,aes(x=age,ymin=lwr,ymax=upr),fill="gray80") +
   geom_point(data=wf14T,aes(y=tl,x=age),size=2,alpha=0.1) +
-  geom_line(data=pred1,aes(x=age,y=plen),linewidth=1,linetype="dashed") +
-  geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
+  geom_line(data=preds,aes(x=age,y=fit),linewidth=1,linetype="dashed") +
+  geom_line(data=filter(preds,age>=0,age<=11),aes(x=age,y=fit),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
   theme(panel.grid.minor=element_blank()) +
-  annotate(geom="text",label=makeVBEqnLabel(f.fit),parse=TRUE,
+  annotate(geom="text",label=makeVBEqnLabel(fit0),parse=TRUE,
            size=4,x=Inf,y=-Inf,hjust=1.1,vjust=-0.5)
 ```
 
@@ -256,15 +240,15 @@ ggplot() +
 png("preview.png",width=1000,height=500,units="px",
     bg="transparent",res=216)
 ggplot() + 
-  geom_ribbon(data=pred1,aes(x=age,ymin=LCI,ymax=UCI),fill="gray90") +
+  geom_ribbon(data=preds,aes(x=age,ymin=lwr,ymax=upr),fill="gray90") +
   geom_point(data=wf14T,aes(y=tl,x=age),size=2,alpha=0.1) +
-  geom_line(data=pred1,aes(x=age,y=plen),linewidth=1,linetype="dashed") +
-  geom_line(data=filter(pred1,age>=0,age<=11),aes(x=age,y=plen),linewidth=1) +
+  geom_line(data=preds,aes(x=age,y=fit),linewidth=1,linetype="dashed") +
+  geom_line(data=filter(preds,age>=0,age<=11),aes(x=age,y=fit),linewidth=1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,700)) +
   scale_x_continuous(name="Age (years)",breaks=0:11) +
   theme(panel.grid.minor.x=element_blank(),
         aspect.ratio=1) +
-  annotate(geom="text",label=makeVBEqnLabel(f.fit),parse=TRUE,
+  annotate(geom="text",label=makeVBEqnLabel(fit0),parse=TRUE,
            size=4,x=Inf,y=-Inf,hjust=1.1,vjust=-0.5)
 dev.off()
 ```
