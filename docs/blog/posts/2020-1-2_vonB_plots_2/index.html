@@ -275,7 +275,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 12, 2022</p>
+        <p class="date-modified">Dec 13, 2022</p>
       </div>
     </div>
       
@@ -294,6 +294,8 @@ div.csl-indent {
   <li><a href="#model-fits-using-geom_smooth" id="toc-model-fits-using-geom_smooth" class="nav-link" data-scroll-target="#model-fits-using-geom_smooth">Model Fits Using <code>geom_smooth()</code></a></li>
   <li><a href="#fitting-the-vbgf-to-multiple-groups" id="toc-fitting-the-vbgf-to-multiple-groups" class="nav-link" data-scroll-target="#fitting-the-vbgf-to-multiple-groups">Fitting the VBGF to Multiple Groups</a></li>
   <li><a href="#model-fits-from-predicted-values" id="toc-model-fits-from-predicted-values" class="nav-link" data-scroll-target="#model-fits-from-predicted-values">Model Fits from Predicted Values</a></li>
+  <li><a href="#model-fit-with-confidence-band" id="toc-model-fit-with-confidence-band" class="nav-link" data-scroll-target="#model-fit-with-confidence-band">Model Fit with Confidence Band</a></li>
+  <li><a href="#more-than-two-groups" id="toc-more-than-two-groups" class="nav-link" data-scroll-target="#more-than-two-groups">More than Two Groups</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2020-1-2_vonB_plots_2/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -313,21 +315,20 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The following packages are loaded for use below. The data are also from <code>FSAdata</code>, which is not loaded below. I also set the default <code>ggplot</code> theme to <code>theme_bw()</code> for a classic “black-and-white” plot (rather than the default plot with a gray background).</p>
+<p>The following packages are loaded for use below. One function from <code>investr</code> is also used but the whole package is not loaded here. The data are also from <code>FSAdata</code>, which is not loaded below. I also set the default <code>ggplot</code> theme to <code>theme_bw()</code> for a classic “black-and-white” plot (rather than the default plot with a gray background).</p>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)     <span class="co"># for vbFuns(), vbStarts(), confint.bootCase(), headtail()</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)     <span class="co"># for Boot()</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)   <span class="co"># for filter(), mutate()</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)     <span class="co"># for vbFuns(), vbStarts(), headtail(), peek()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)   <span class="co"># for filter(), mutate(), group_by()</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
-<p>In <a href="">a previous post</a> I demonstrated how to plot the fit of a von Bertalanffy growth function (VBGF) for a single group of observed data. In this post, I explore methods to do the same for multiple groups of observed data (e.g., multiple sexes, locations, years).</p>
-<div class="page-columns page-full"><p>I will again use the lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a> package. These data formed many of the examples in <span class="citation" data-cites="ogle_growth_2017">Ogle et al. (<a href="#ref-ogle_growth_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm), <code>age</code>, and <code>sex</code> variables<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I initially focus on Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> as it only had one level after filtering and three variables related to the <code>loc</code>ation of capture.</p></li></div></div>
+<p>In <a href="../2019-12-31_vonB_plots_1/index.html">a previous post</a> I demonstrated how to plot the fit of a von Bertalanffy growth function (VBGF) for a single group of observed data. In this post, I explore methods to do the same for multiple groups of observed data (e.g., multiple sexes, locations, years).</p>
+<div class="page-columns page-full"><p>I will again use the lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a>. These data formed many of the examples in <span class="citation" data-cites="ogle_growth_2017">Ogle et al. (<a href="#ref-ogle_growth_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm), <code>age</code>, and <code>sex</code> variables.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I initially focus on Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> as it only had one level after filtering and three variables related to the <code>loc</code>ation of capture.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>w14T <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">|&gt;</span></span>
@@ -344,7 +345,7 @@ Note
 #R|  614 530 1553   male   mature   5</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>As in the previous post, a function that uses the typical VBGF to predict mean length given a set of VBGF parameters and age is needed.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></li></div></div>
+<div class="page-columns page-full"><p>As in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, a function that uses the typical VBGF to predict mean length given a set of VBGF parameters and age is needed.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>( vb <span class="ot">&lt;-</span> <span class="fu">vbFuns</span>(<span class="at">param=</span><span class="st">"Typical"</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -357,17 +358,17 @@ Note
 #R|      }
 #R|      Linf * (1 - exp(-K * (t - t0)))
 #R|  }
-#R|  &lt;bytecode: 0x0000021bacf7c9a0&gt;
-#R|  &lt;environment: 0x0000021bacfb6f90&gt;</code></pre>
+#R|  &lt;bytecode: 0x000001b27db58110&gt;
+#R|  &lt;environment: 0x000001b27dbadee8&gt;</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
 </section>
 <section id="model-fits-using-geom_smooth" class="level1 page-columns page-full">
 <h1>Model Fits Using <code>geom_smooth()</code></h1>
-<p>One of the simpler ways to plot multiple VBGF fits uses <code>geom_smooth()</code>, which, as described in the previous post, uses <code>nls()</code> to fit the model “behind-the-scenes.” Given this uses of <code>nls()</code> a set of starting values is needed. It is critical to note, though, that this method will only work if the <strong>same</strong> starting values can be used for each group in the data. With this warning, possible starting values for the optimization algorithm may be obtained with <code>vbStarts()</code>, where the first argument is a formula of the form <code>lengths~ages</code> where <code>lengths</code> and <code>ages</code> are replaced with the actual variable names that contain the observed lengths and ages, respectively, and <code>data=</code> is set to the data frame that contains those variables.</p>
+<p>One of the simpler ways to plot multiple VBGF fits uses <code>geom_smooth()</code>, which, as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, uses <code>nls()</code> to fit the model “behind-the-scenes.” Thus, a set of starting values is needed. It is critical to note that using <code>geom_smooth()</code> requires the <strong>same</strong> starting values for each group. With this warning, possible starting values for the optimization algorithm may be obtained with <code>vbStarts()</code> as shown in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>( f.starts <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>w14T) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>( sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>w14T) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|  $Linf
 #R|  [1] 591.1587
@@ -379,7 +380,7 @@ Note
 #R|  [1] -1.544479</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The use of <code>geom_smooth()</code> to produce separate lines for the groups is exactly as described in the previous post except that the variable to identify the groups (i.e., <code>sex</code> in this example) must be mapped to the <code>color=</code> <code>aes()</code>thetic. For <a href="#fig-sex1">Figure&nbsp;1</a> I also used <code>scale_color_manual()</code> to demonstrate how to change colors of the points and lines. Addition, I altered the theme to move the legend/guide into the plot panel and to remove the default <code>sex</code> label that would appear on top of the legend.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;In this case the legend is placed 80% down the x-axis and 20% up the y-axis.</p></li></div></div>
+<div class="page-columns page-full"><p>The use of <code>geom_smooth()</code> to produce separate lines for the groups is exactly as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, except that the variable for identifyng the groups (i.e., <code>sex</code> in this example) must be mapped to the <code>color=</code> <code>aes()</code>thetic. For <a href="#fig-sex1">Figure&nbsp;1</a> I also used <code>scale_color_manual()</code> to demonstrate how to change the default colors of the points and lines. Additionally, in <code>theme()</code> I moved the legend into the plot panel<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and removed the default <code>sex</code> label that would appear on top of the legend.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;In this case the legend is placed 80% down the x-axis and 20% up the y-axis.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex)) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
@@ -387,7 +388,7 @@ Note
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"male"</span><span class="ot">=</span><span class="st">"darkblue"</span>,<span class="st">"female"</span><span class="ot">=</span><span class="st">"darkred"</span>)) <span class="sc">+</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"nls"</span>,<span class="at">se=</span><span class="cn">FALSE</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">formula=</span>y<span class="sc">~</span><span class="fu">vb</span>(x,Linf,K,t0),<span class="at">start=</span>f.starts),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">formula=</span>y<span class="sc">~</span><span class="fu">vb</span>(x,Linf,K,t0),<span class="at">start=</span>sv0),</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
@@ -402,7 +403,7 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>An alternative visualization is to put the two groups into separate panels using <code>facet_wrap()</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Note that color is superfluous in <a href="#fig-sex1a">Figure&nbsp;2</a>, but I kept it for comparison to <a href="#fig-sex1">Figure&nbsp;1</a>. However, mapping color to a variable will cause a legend to be produced by default. This legend, however, is redundant with the panel labels, so it was removed in <code>theme()</code> below.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;Simply put the grouping variable inside of <code>vars()</code> as the argument to <code>facet_wrap()</code>.</p></li></div></div>
+<div class="page-columns page-full"><p>An alternative visualization is to put the two groups into separate panels using <code>facet_wrap()</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Note that color is superfluous in <a href="#fig-sex1a">Figure&nbsp;2</a>, but I kept it for comparison to <a href="#fig-sex1">Figure&nbsp;1</a>. Mapping color to a variable will produce a legend by default. This legend was removed (in <code>theme()</code>), however, because it is redundant with the panel labels.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;Simply put the grouping variable inside of <code>vars()</code> as the argument to <code>facet_wrap()</code>.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex)) <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
@@ -410,10 +411,10 @@ Note
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"male"</span><span class="ot">=</span><span class="st">"darkblue"</span>,<span class="st">"female"</span><span class="ot">=</span><span class="st">"darkred"</span>)) <span class="sc">+</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"nls"</span>,<span class="at">se=</span><span class="cn">FALSE</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">formula=</span>y<span class="sc">~</span><span class="fu">vb</span>(x,Linf,K,t0),<span class="at">start=</span>f.starts),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">formula=</span>y<span class="sc">~</span><span class="fu">vb</span>(x,Linf,K,t0),<span class="at">start=</span>sv0),</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
 <div id="fig-sex1a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
@@ -429,11 +430,12 @@ Note
 <section id="fitting-the-vbgf-to-multiple-groups" class="level1 page-columns page-full">
 <h1>Fitting the VBGF to Multiple Groups</h1>
 <p>Methods for fitting a von Bertalanfy growth function (VBGF) to multiple groups are detailed in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogle_growth_2017">Ogle et al. (<a href="#ref-ogle_growth_2017" role="doc-biblioref">2017</a>)</span>. Thus, this methodology will only be briefly explained here.</p>
-<div class="page-columns page-full"><p>Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., <code>tl</code> and <code>age</code>) and assuming different parameters should be estimated for each group.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Identifying the different groups is accomplished here by appending <code>[group]</code>, where <code>group</code> is replaced with the specific variable name that identifies the groups (i.e., <code>sex</code> here). The expression is assigned to an object name (i.e., <code>vbLKt</code> here).</p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;See the linked resources for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.</p></li></div></div>
+<div class="page-columns page-full"><p>Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., <code>tl</code> and <code>age</code>) and assuming different parameters should be estimated for each group.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Identifying the different groups is accomplished here by appending <code>[group]</code>, where <code>group</code> is replaced with the specific variable name that identifies the groups (i.e., <code>sex</code> here). The expression is assigned to an object name (i.e., <code>vbLKt</code> here).</p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;See <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogle_growth_2017">Ogle et al. (<a href="#ref-ogle_growth_2017" role="doc-biblioref">2017</a>)</span> for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>vbLKt <span class="ot">&lt;-</span> tl<span class="sc">~</span>Linf[sex]<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">exp</span>(<span class="sc">-</span>K[sex]<span class="sc">*</span>(age<span class="sc">-</span>t0[sex])))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For use below, I identify the “groups” (with <code>unique()</code>) and create an object that contains the number of groups (with <code>length()</code>).</p>
+<p>&nbsp;</p>
+<p>I created vectors of group names (with <code>unique()</code>) and the number of groups (with <code>length()</code>) for ease of use below.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>( grps <span class="ot">&lt;-</span> <span class="fu">unique</span>(w14T<span class="sc">$</span>sex) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -445,7 +447,8 @@ Note
 <pre class="output"><code>#R|  [1] 2</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>This model has six parameters – <span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(t_{0}\)</span> for each of the two groups (male and female walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using <code>vbStarts()</code> as described in the previous post) and replicate those starting values for both groups.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> <code>Map</code> replicates the starting values in the list from <code>vbStarts()</code> with <code>rep</code> (the replicated function), the object returned from <code>vbStarts()</code>, and a numeric vector that explains how many times each parameter should be repeated (i.e., the same as the number of groups).</p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;In some instances using the same starting values for both groups will not result in model convergence. The linked resources provide suggestions for handling those cases.</p></li></div></div>
+<p>&nbsp;</p>
+<div class="page-columns page-full"><p>This model has six parameters – <span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(t_{0}\)</span> for each of the two groups (male and female Walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using <code>vbStarts()</code> as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>) and replicate those starting values for both groups.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;In some instances using the same starting values for both groups will not result in model convergence. See <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogle_growth_2017">Ogle et al. (<a href="#ref-ogle_growth_2017" role="doc-biblioref">2017</a>)</span> for suggestions for handling those cases.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>( sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>w14T) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -458,6 +461,9 @@ Note
 #R|  $t0
 #R|  [1] -1.544479</code></pre>
 </div>
+</div>
+<p><code>Map</code> replicates the starting values in the list from <code>vbStarts()</code> with <code>rep</code> (the replicated function), the object returned from <code>vbStarts()</code>, and a numeric vector that explains how many times each parameter should be repeated (i.e., the same as the number of groups).</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>( svLKt <span class="ot">&lt;-</span> <span class="fu">Map</span>(rep,sv0,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|  $Linf
@@ -470,43 +476,47 @@ Note
 #R|  [1] -1.544479 -1.544479</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The model is then fit to the data by including the VBGF expression object, <code>data=</code>, and <code>start=</code> as arguments to <code>nls()</code>. The estimated parameters may be extracted from the saved <code>nls()</code> object with <code>coef()</code>. Note that the parameters will be appended with numbers in the alphabetical order of the groups.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Thus, in this example, it is seen that the estimated <span class="math inline">\(L_{\infty}\)</span> for females is greater than that for males.</p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;Unless your chose to order the levels of the group variable differently.</p></li></div></div>
+<div class="page-columns page-full"><p>The model is fit to the data by including the VBGF expression object, <code>data=</code>, and <code>start=</code> as arguments to <code>nls()</code>. The parameter estimates and confidence intervals may be extracted from the saved <code>nls()</code> object with <code>coef()</code> and <code>confint()</code>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Note that the parameters will be appended with numbers in the alphabetical order of the groups.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Thus, in this example, it is seen that the estimated <span class="math inline">\(L_{\infty}\)</span> for females (appended with a “1”) is greater than that for males.</p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;Column-bound here for aesthetic reasons.</p></li><li id="fn9"><p><sup>9</sup>&nbsp;Unless your chose to order the levels of the group variable differently.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fitLKt <span class="ot">&lt;-</span> <span class="fu">nls</span>(vbLKt,<span class="at">data=</span>w14T,<span class="at">start=</span>svLKt)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fitLKt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">Ests=</span><span class="fu">coef</span>(fitLKt),<span class="fu">confint</span>(fitLKt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|        Linf1       Linf2          K1          K2         t01         t02 
-#R|  648.2083813 574.1512545   0.3615399   0.3354067  -1.2836317  -1.9702829</code></pre>
+<pre class="output"><code>#R|               Ests        2.5%       97.5%
+#R|  Linf1 648.2083813 627.2685519 672.1242978
+#R|  Linf2 574.1512545 561.6722232 588.0005006
+#R|  K1      0.3615399   0.3171679   0.4106412
+#R|  K2      0.3354067   0.2946359   0.3805994
+#R|  t01    -1.2836317  -1.4846294  -1.0991040
+#R|  t02    -1.9702829  -2.2978880  -1.6783578</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
 </section>
 <section id="model-fits-from-predicted-values" class="level1 page-columns page-full">
 <h1>Model Fits from Predicted Values</h1>
-<p>The model fits can also be shown for predicted values, both within and outside the observed range of ages. This, however, first takes a bit of work outside of <code>ggplot</code> to prepare the relevant data.</p>
-<p>In particular, a data frame that contains predicted mean lengths at age over the range of observed ages for all groups is needed. I being this process by finding (and assigning to an object for later use) the range of ages for each group.</p>
+<p>The model fit above can be used to predict the mean length at age for all groups, both within and outside the observed range of ages. These results can then be used to show the model fit by group. However, a bit of work outside of <code>ggplot</code> is required to prepare the relevant data.</p>
+<div class="page-columns page-full"><p>A data frame that contains predicted mean lengths at age over a range of ages for all groups is needed. I begin this process by finding (and assigning to an object for later use) the range of ages for each group.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn10"><p><sup>10</sup>&nbsp;<code>as.data.frame()</code> removes the <code>tibble</code> returned by <code>group_by()</code>, which I don’t prefer</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>arng <span class="ot">&lt;-</span> w14T <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>obsagerng <span class="ot">&lt;-</span> w14T <span class="sc">|&gt;</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min=</span><span class="fu">min</span>(age),</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(age))</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>arng</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(age)) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>obsagerng</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  # A tibble: 2 × 3
-#R|    sex      min   max
-#R|    &lt;fct&gt;  &lt;int&gt; &lt;int&gt;
-#R|  1 female     0    11
-#R|  2 male       1    11</code></pre>
+<pre class="output"><code>#R|       sex min max
+#R|  1 female   0  11
+#R|  2   male   1  11</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>From this, I create a temporary vector of 101 ages<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> evenly spaced over a range of ages larger than what was observed.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></li><li id="fn10"><p><sup>10</sup>&nbsp;Zero was an observed age here, if not I usually make sure it is included.</p></li></div></div>
+<div class="page-columns page-full"><p>From this, I create a temporary vector of 101 ages<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> evenly spaced over a range of ages larger than what was observed.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></li><li id="fn12"><p><sup>12</sup>&nbsp;Zero was an observed age here, if not I usually make sure it is included.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>atmp <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>,<span class="at">length.out=</span><span class="dv">101</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>,<span class="at">length.out=</span><span class="dv">101</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>I then create a data frame that has the name of each group repeated as many times as there ages in the temporary age vector (i.e., 101 here) and then has the ages in the temporary age vector repeated for each group (i.e., twice here). Note the careful use of <code>each=</code> and <code>times=</code> in the two uses of <code>rep()</code> below.</p>
+<p>I then create a data frame that has the name of each group repeated as many times as there are ages in the temporary age vector (i.e., 101 here) and has ages from the temporary age vector repeated for each group (i.e., twice here). Note the careful use of <code>each=</code> and <code>times=</code> in <code>rep()</code> below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span><span class="fu">rep</span>(grps,<span class="at">each=</span><span class="fu">length</span>(atmp)),</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">age=</span><span class="fu">rep</span>(atmp,<span class="at">times=</span>ngrps))</span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span><span class="fu">rep</span>(grps,<span class="at">each=</span><span class="fu">length</span>(ages)),</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">age=</span><span class="fu">rep</span>(ages,<span class="at">times=</span>ngrps))</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|         sex   age
@@ -518,13 +528,13 @@ Note
 #R|  202   male 12.00</code></pre>
 </div>
 </div>
-<p>Predicted mean lengths at each age for each group is then appended to this data frame by giving the fitted <code>nls()</code> object and this data frame to <code>predict()</code>.</p>
+<p>Predicted mean lengths at each age for each group are then appended to this data frame by giving the fitted <code>nls()</code> object and this data frame to <code>predict()</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> preds <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ptl=</span><span class="fu">predict</span>(fitLKt,preds))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fit=</span><span class="fu">predict</span>(fitLKt,preds))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         sex   age       ptl
+<pre class="output"><code>#R|         sex   age       fit
 #R|  1   female -1.00  63.17550
 #R|  2   female -0.87  90.03599
 #R|  3   female -0.74 115.66324
@@ -533,48 +543,15 @@ Note
 #R|  202   male 12.00 568.85411</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>Finally, I add a fourth variable that will be <code>TRUE</code> if the age is within the range of observed ages for the group. This is accomplished with the code below that creates a new <code>preds</code> data frame. That code can be a little tricky to understand, so lets walk through a couple parts of it. First, note that the <code>group_by()</code> acts sort of like a loop here in the sense that what follows that line will be completed for the first group, then the second group, and so on. In the next snippets, consider that we are working the the “female” group. In this case, <code>unique(sex)</code> will return <code>female</code> such that <code>arng[arng$sex==unique(sex),]</code> will find the row of <code>arng</code> where its <code>sex</code> variable is equal to “female”. The <code>$min</code> appended to that will extract just the value in the <code>min</code> variable of that row (so the minimum observed age for females). The <code>age&gt;=arng[arng$sex==unique(sex),]$min</code> portion is thus asking if the <code>age</code> variable in <code>preds</code> is greater than or equal to the minimum observed age for females. If it is it will return <code>TRUE</code>, otherwise <code>FALSE</code> is returned. The second part of that <code>mutate()</code> line asks if the <code>age</code> variable in <code>preds</code> is less than or equal to the maximum observed age for females, again returning <code>TRUE</code> or <code>FALSE</code> as appropriate. Those two conditions are then connected with an <code>&amp;</code> such that if they are both <code>TRUE</code> then a <code>TRUE</code> is returned, otherwise a <code>FALSE</code> is returned. The result is that the new <code>inrng</code> variable will be <code>TRUE</code> if the <code>age</code> variable within <code>preds</code> is within the observed range of ages for the sex given in the <code>sex</code> variable of <code>preds</code>.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;<code>FSA::peek()</code> is used here to show an evenly spaced 20 rows in the data frame. This provides more output than <code>headtail()</code> for observing the results of code.</p></li></div></div>
+<div class="page-columns page-full"><p>Finally, I add a fourth variable that will be <code>TRUE</code> if the age is within the range of observed ages for the group. <code>group_by()</code> below behaves like a loop here in the sense that what follows that line will be completed for the first group, then the second group, and so on. For the <code>mutate()</code> lines suppose that we are working with the first group (i.e., “female”). In this case, <code>unique(sex)</code> will return <code>female</code> such that <code>obsagerng[obsagerng$sex==unique(sex),]</code> will find the row of <code>obsagerng</code> where its <code>sex</code> variable is equal to “female”. The <code>$min</code> appended to that will extract just the value in the <code>min</code> variable of that row (so the minimum observed age for females). The <code>age&gt;=obsagerng[obsagerng$sex==unique(sex),]$min</code> portion is thus asking if the <code>age</code> variable in <code>preds</code> is greater than or equal to the minimum observed age for females. If it is it will return <code>TRUE</code>, otherwise <code>FALSE</code> will be returned. The second part <code>mutate()</code> asks if the <code>age</code> variable in <code>preds</code> is less than or equal to the maximum observed age for females, again returning <code>TRUE</code> or <code>FALSE</code> as appropriate. Those two conditions are connected with an <code>&amp;</code> such that if they are <strong>both</strong> <code>TRUE</code> then a <code>TRUE</code> is returned, otherwise a <code>FALSE</code> is returned. The result is that the new <code>inrng</code> variable will be <code>TRUE</code> if the <code>age</code> variable within <code>preds</code> is within the observed range of ages for each <code>sex</code> in <code>preds</code>.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;<code>FSA::peek()</code> is used here to show an evenly spaced 20 rows in the data frame. This provides more output than <code>headtail()</code> for observing the results of code.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> preds <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inrng=</span>age<span class="sc">&gt;=</span>arng[arng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>min <span class="sc">&amp;</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>               age<span class="sc">&lt;=</span>arng[arng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>max)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inrng=</span>age<span class="sc">&gt;=</span>obsagerng[obsagerng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>min <span class="sc">&amp;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>               age<span class="sc">&lt;=</span>obsagerng[obsagerng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>max)</span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">peek</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         sex   age      ptl inrng
-#R|  1   female -1.00  63.1755 FALSE
-#R|  11  female  0.30 282.5622  TRUE
-#R|  21  female  1.60 419.6791  TRUE
-#R|  32  female  3.03 511.9351  TRUE
-#R|  43  female  4.46 566.9479  TRUE
-#R|  53  female  5.76 597.4205  TRUE
-#R|  64  female  7.19 617.9233  TRUE
-#R|  74  female  8.49 629.2802  TRUE
-#R|  85  female  9.92 636.9214  TRUE
-#R|  96  female 11.35 641.4779 FALSE
-#R|  106   male -0.48 225.8590 FALSE
-#R|  117   male  0.95 358.5543 FALSE
-#R|  128   male  2.38 440.6943  TRUE
-#R|  138   male  3.68 487.8581  TRUE
-#R|  149   male  5.11 520.7348  TRUE
-#R|  159   male  6.41 539.6122  TRUE
-#R|  170   male  7.84 552.7712  TRUE
-#R|  181   male  9.27 560.9168  TRUE
-#R|  191   male 10.57 565.5938  TRUE
-#R|  202   male 12.00 568.8541 FALSE</code></pre>
-</div>
-</div>
-<p>The following code is redundant with what was done above, but it shows how the making of <code>preds</code> can be put together in one piped workflow.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span><span class="fu">rep</span>(grps,<span class="at">each=</span><span class="fu">length</span>(atmp)),</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">age=</span><span class="fu">rep</span>(atmp,<span class="at">times=</span>ngrps)) <span class="sc">|&gt;</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ptl=</span><span class="fu">predict</span>(fitLKt,preds)) <span class="sc">|&gt;</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inrng=</span>age<span class="sc">&gt;=</span>arng[arng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>min <span class="sc">&amp;</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>               age<span class="sc">&lt;=</span>arng[arng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>max)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">peek</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         sex   age      ptl inrng
+<pre class="output"><code>#R|         sex   age      fit inrng
 #R|  1   female -1.00  63.1755 FALSE
 #R|  11  female  0.30 282.5622  TRUE
 #R|  21  female  1.60 419.6791  TRUE
@@ -598,26 +575,307 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p><a href="#fig-sex2">Figure&nbsp;3</a> is created with the code below that largely combines similar code from the previous post and the use of <code>color=</code> provided above. In brief, <code>geom_point()</code> is used to add points at the observed lengths at age, the first <code>geom_line()</code> adds the fitted models as dashed lines from the predicted mean lengths at <strong>all</strong> ages in <code>preds</code>, and the second <code>geom_line()</code> adds the fitted models solid lines from the predicted mean lengths <strong>only</strong> at observed ages for each group.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Note the use <code>filter()</code> in the second <code>geom_line()</code> so that only data for which <code>inrng==TRUE</code> is used.</p></li></div></div>
+<div class="page-columns page-full"><p><a href="#fig-sex2">Figure&nbsp;3</a> is created by combining similar code from the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a> and the use of <code>color=</code> from above. In brief, <code>geom_point()</code> adds points at the observed lengths at age, the first <code>geom_line()</code> adds the fitted models from the predicted mean lengths at <strong>all</strong> ages in <code>preds</code> as dashed lines, and the second <code>geom_line()</code> adds the fitted models from the predicted mean lengths <strong>only</strong> at observed ages for each group as solid lines.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;Note the use <code>filter()</code> in the second <code>geom_line()</code> so that only data for which <code>inrng==TRUE</code> is used.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex),</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>ptl,<span class="at">color=</span>sex),</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,inrng),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>ptl,<span class="at">color=</span>sex),</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"male"</span><span class="ot">=</span><span class="st">"darkblue"</span>,<span class="st">"female"</span><span class="ot">=</span><span class="st">"darkred"</span>)) <span class="sc">+</span></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex),</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>sex),</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,inrng),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>sex),</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"male"</span><span class="ot">=</span><span class="st">"darkblue"</span>,<span class="st">"female"</span><span class="ot">=</span><span class="st">"darkred"</span>)) <span class="sc">+</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
 <div id="fig-sex2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="figure page-columns page-full">
 <p><img src="index_files/figure-html/fig-sex2-1.png" class="img-fluid figure-img" width="384"></p>
 <p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;3: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="model-fit-with-confidence-band" class="level1 page-columns page-full">
+<h1>Model Fit with Confidence Band</h1>
+<p>Creating a graphic that has the model fit <strong>with</strong> confidence (or prediction) bands for multiple groups again requires some preparatory work before using <code>ggplot()</code>.</p>
+<p>For simplicity and completeness of presentation, the code below is repeated from above.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>vb <span class="ot">&lt;-</span> <span class="fu">vbFuns</span>(<span class="at">param=</span><span class="st">"Typical"</span>)     <span class="do">## Typical VBGF</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>grps <span class="ot">&lt;-</span> <span class="fu">unique</span>(w14T<span class="sc">$</span>sex)          <span class="do">## Names of groups</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>ngrps <span class="ot">&lt;-</span> <span class="fu">length</span>(grps)             <span class="do">## Number of groups</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>obsagerng <span class="ot">&lt;-</span> w14T <span class="sc">|&gt;</span>              <span class="do">## Range of observed ages by group</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min=</span><span class="fu">min</span>(age),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(age))</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>w14T) <span class="do">## Starting values ignoring groups</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>As before, starting values are needed for each group. Here, however, I place the starting values into a data frame where each row corresponds to one group and a variable that identifies the groups is included.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;For simplicity name this variable the same as it is in the main data frame.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>( svLKt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span>grps,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">Map</span>(rep,sv0,<span class="fu">c</span>(ngrps,ngrps,ngrps))) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|       sex     Linf         K        t0
+#R|  1 female 591.1587 0.3930388 -1.544479
+#R|  2   male 591.1587 0.3930388 -1.544479</code></pre>
+</div>
+</div>
+<div class="page-columns page-full"><p>The starting values created here are the same for each group. This will likely work in most cases (of fish growth data) but likely not all. Starting values can be entered into the data frame manually as shown below.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn16"><p><sup>16</sup>&nbsp;<span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogle_growth_2017">Ogle et al. (<a href="#ref-ogle_growth_2017" role="doc-biblioref">2017</a>)</span> discuss alternative methods of finding starting values. But note that this may take some work if there are many groups.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Not run: Demo of manually entering starting values; not needed in this case</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>( svLKt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span>grps,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Linf=</span><span class="fu">c</span>(<span class="dv">630</span>,<span class="dv">580</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">K=</span><span class="fu">c</span>(<span class="fl">0.34</span>,<span class="fl">0.34</span>),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">t0=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>The method used here basically loops through the groups, uses the procedures of the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a> (for one group) and above to find fitted values and confidence (or prediction) bands for each group, and then (row) binds those results together to produce a synthetic data frame for all groups. The process for a single group is wrapped into a function called <code>vbLOOP1()</code> below. The ordered arguments to <code>vbLOOP1()</code> are a group name, the original data frame, the data frame of starting values for all groups, the data frame of observed age ranges, and a vector that identifies the overall range over which to predict mean lengths at age. <code>vbLOOP1</code> will default to returning confidence intervals, but prediction intervals can be returned by including <code>interval="prediction"</code>.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn17"><p><sup>17</sup>&nbsp;See code comments for the parts of this function that are specific to this case and, thus, might have to be changed for other data.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>vbLOOP1 <span class="ot">&lt;-</span> <span class="cf">function</span>(grp,dat,svs,oagerng,eagerng,<span class="at">interval=</span><span class="st">"confidence"</span>) {</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !! This requires a 'sex', 'tl', and 'age' variable in data frames !!</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !!   Otherwise need to change 'sex', 'tl', and 'age' below</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !!   Everything else can stay as is</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Loop notification (for peace of mind)</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(grp,<span class="st">"Loop</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Isolate group's data, starting values, and age range</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  dat1 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(dat,sex<span class="sc">==</span>grp)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  sv1 <span class="ot">&lt;-</span> svs <span class="sc">|&gt;</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(sex<span class="sc">==</span>grp) <span class="sc">|&gt;</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>sex) <span class="sc">|&gt;</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.list</span>()</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  oagerng1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(oagerng,sex<span class="sc">==</span>grp)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Make ages for predictions</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(eagerng),<span class="fu">max</span>(eagerng),<span class="at">length.out=</span><span class="dv">101</span>)</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Fit von B to that group</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  fit1 <span class="ot">&lt;-</span> <span class="fu">nls</span>(tl<span class="sc">~</span><span class="fu">vb</span>(age,Linf,K,t0),<span class="at">data=</span>dat1,<span class="at">start=</span>sv1)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Make data frame of predicted mean lengths at age with CIs</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  preds1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span>grp,</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">age=</span>ages,</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>                       <span class="at">fit=</span>investr<span class="sc">::</span><span class="fu">predFit</span>(fit1,<span class="fu">data.frame</span>(<span class="at">age=</span>ages),</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">interval=</span>interval)) <span class="sc">|&gt;</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">inrng=</span>age<span class="sc">&gt;=</span>oagerng1<span class="sc">$</span>min <span class="sc">&amp;</span> age<span class="sc">&lt;=</span>oagerng1<span class="sc">$</span>max) <span class="sc">|&gt;</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>()</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Rename variables</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(preds1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>,<span class="st">"age"</span>,<span class="st">"fit"</span>,<span class="st">"lwr"</span>,<span class="st">"upr"</span>,<span class="st">"inrng"</span>)</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Return data frame</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>  preds1</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+<p>The code below initiates an object called <code>preds</code> that will hold the resulting data frame and then loops through the values in <code>grps</code>, running <code>vbLOOP1()</code> for each group with the <code>w14T</code> data frame of observed lengths and ages, <code>svLKt</code> data frame of starting values, <code>obsagerng</code> data frame of observed age ranges, and ages for making predictions that are between -1 and 12. The results for each group are row bound (i.e., using <code>rbind()</code>) together to produce the stacked results partially shown with <code>peek()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span>  <span class="cn">NULL</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> grps) preds <span class="ot">&lt;-</span> <span class="fu">rbind</span>(preds,<span class="fu">vbLOOP1</span>(i,w14T,svLKt,obsagerng,<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  female Loop
+#R|  male Loop</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">peek</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|         sex   age       fit       lwr       upr inrng
+#R|  1   female -1.00  63.17589  32.40811  93.94366 FALSE
+#R|  11  female  0.30 282.56223 275.45559 289.66887  TRUE
+#R|  21  female  1.60 419.67905 417.10638 422.25173  TRUE
+#R|  32  female  3.03 511.93506 508.44481 515.42531  TRUE
+#R|  43  female  4.46 566.94788 562.17160 571.72416  TRUE
+#R|  53  female  5.76 597.42054 589.97092 604.87016  TRUE
+#R|  64  female  7.19 617.92339 607.37308 628.47370  TRUE
+#R|  74  female  8.49 629.28032 616.34116 642.21948  TRUE
+#R|  85  female  9.92 636.92157 621.94832 651.89482  TRUE
+#R|  96  female 11.35 641.47810 625.02853 657.92767 FALSE
+#R|  106   male -0.48 225.85896 206.22610 245.49182 FALSE
+#R|  117   male  0.95 358.55434 354.06691 363.04177 FALSE
+#R|  128   male  2.38 440.69430 436.91620 444.47240  TRUE
+#R|  138   male  3.68 487.85809 483.57573 492.14046  TRUE
+#R|  149   male  5.11 520.73480 516.13704 525.33256  TRUE
+#R|  159   male  6.41 539.61222 533.94616 545.27827  TRUE
+#R|  170   male  7.84 552.77120 545.45179 560.09060  TRUE
+#R|  181   male  9.27 560.91675 552.00041 569.83310  TRUE
+#R|  191   male 10.57 565.59384 555.46575 575.72192  TRUE
+#R|  202   male 12.00 568.85412 557.68844 580.01980 FALSE</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="page-columns page-full"><p><a href="#fig-sex3">Figure&nbsp;4</a> is then constructed almost identically to <a href="#fig-sex2">Figure&nbsp;3</a> except that <code>geom_ribbon()</code> is used to produce the confidence bands, with the lower part of the ribbon at the lower confidence values (i.e., <code>ymin=lwr</code>) and the upper part at the upper confidence value (i.e., <code>ymax=upr</code>) produced from the loop above.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> <code>fill=</code> gives the color of the enclosed ribbon. Further note that <code>aesthetics=</code> must be defined in <code>scale_color_manual()</code> because <code>geom_ribbon()</code> used <code>fill=</code>, whereas the other geoms used <code>color=</code>.</p><div class="no-row-height column-margin column-container"><li id="fn18"><p><sup>18</sup>&nbsp;Add <code>geom_ribbon()</code> first so that it is behind the points and model lines.</p></li></div></div>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr,<span class="at">fill=</span>sex),<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex),</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>sex),</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,inrng),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>sex),</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"male"</span><span class="ot">=</span><span class="st">"darkblue"</span>,<span class="st">"female"</span><span class="ot">=</span><span class="st">"darkred"</span>),</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">aesthetics=</span><span class="fu">c</span>(<span class="st">"color"</span>,<span class="st">"fill"</span>)) <span class="sc">+</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-sex3" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-sex3-1.png" class="img-fluid figure-img" width="384"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;4: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+
+</div>
+<p>&nbsp;</p>
+<p>Of course, the graph can also be separated by the grouping variable (<a href="#fig-sex3a">Figure&nbsp;5</a>).</p>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr,<span class="at">fill=</span>sex),<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex),</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>sex),</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,inrng),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>sex),</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"male"</span><span class="ot">=</span><span class="st">"darkblue"</span>,<span class="st">"female"</span><span class="ot">=</span><span class="st">"darkred"</span>),</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">aesthetics=</span><span class="fu">c</span>(<span class="st">"color"</span>,<span class="st">"fill"</span>)) <span class="sc">+</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-sex3a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-sex3a-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;5: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="more-than-two-groups" class="level1 page-columns page-full">
+<h1>More than Two Groups</h1>
+<p>The process defined above can be extended to more than two groups. Here I examine just female walleye captured in four years, as an example. Note here that <code>year</code> must be explicitly turned to a factor so that it will be treated as a group identifier rather than a numeric value.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>wfT <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">"female"</span>,loc<span class="sc">==</span><span class="dv">1</span>,year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2005</span>,<span class="dv">2008</span>,<span class="dv">2011</span>,<span class="dv">2014</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">factor</span>(year)) <span class="sc">|&gt;</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>loc,<span class="sc">-</span>setID,<span class="sc">-</span>grid,<span class="sc">-</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code below is repeated from above, but everywhere where <code>sex</code> was in the code has been changed to <code>year</code> (our new grouping variable). Once again note that using the same starting values for all groups may not always work (but it did here).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>grps <span class="ot">&lt;-</span> <span class="fu">unique</span>(wfT<span class="sc">$</span>year)          <span class="do">## Names of groups</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>ngrps <span class="ot">&lt;-</span> <span class="fu">length</span>(grps)             <span class="do">## Number of groups</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>obsagerng <span class="ot">&lt;-</span> wfT <span class="sc">|&gt;</span>               <span class="do">## Range of observed ages by group</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min=</span><span class="fu">min</span>(age),</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(age))</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>wfT)  <span class="do">## Starting values ignoring groups</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>( svLKt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">year=</span>grps,</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">Map</span>(rep,sv0,<span class="fu">c</span>(ngrps,ngrps,ngrps))) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    year     Linf         K        t0
+#R|  1 2005 703.7264 0.2529961 -1.903874
+#R|  2 2008 703.7264 0.2529961 -1.903874
+#R|  3 2011 703.7264 0.2529961 -1.903874
+#R|  4 2014 703.7264 0.2529961 -1.903874</code></pre>
+</div>
+</div>
+<p>The <code>vbLOOP1()</code> function needs to be modified by replacing all instances of <code>sex</code> to <code>year</code>. Be careful to change <strong>all</strong> instances here.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>vbLOOP1 <span class="ot">&lt;-</span> <span class="cf">function</span>(grp,dat,svs,oagerng,eagerng,<span class="at">interval=</span><span class="st">"confidence"</span>) {</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !! This requires a 'year', 'tl', and 'age' variable in data frames !!</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !!   Otherwise need to change 'year', 'tl', and 'age' below</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !!   Everything else can stay as is</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Loop notification (for peace of mind)</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(grp,<span class="st">"Loop</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Isolate group's data, starting values, and age range</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  dat1 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(dat,year<span class="sc">==</span>grp)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  sv1 <span class="ot">&lt;-</span> svs <span class="sc">|&gt;</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(year<span class="sc">==</span>grp) <span class="sc">|&gt;</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>year) <span class="sc">|&gt;</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.list</span>()</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  oagerng1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(oagerng,year<span class="sc">==</span>grp)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Make ages for predictions</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(eagerng),<span class="fu">max</span>(eagerng),<span class="at">length.out=</span><span class="dv">101</span>)</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Fit von B to that group</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>  fit1 <span class="ot">&lt;-</span> <span class="fu">nls</span>(tl<span class="sc">~</span><span class="fu">vb</span>(age,Linf,K,t0),<span class="at">data=</span>dat1,<span class="at">start=</span>sv1)</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Make data frame of predicted mean lengths at age with CIs</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>  preds1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">year=</span>grp,</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>                       <span class="at">age=</span>ages,</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>                       <span class="at">fit=</span>investr<span class="sc">::</span><span class="fu">predFit</span>(fit1,<span class="fu">data.frame</span>(<span class="at">age=</span>ages),</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">interval=</span>interval)) <span class="sc">|&gt;</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">inrng=</span>age<span class="sc">&gt;=</span>oagerng1<span class="sc">$</span>min <span class="sc">&amp;</span> age<span class="sc">&lt;=</span>oagerng1<span class="sc">$</span>max) <span class="sc">|&gt;</span></span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>()</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Rename variables</span></span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(preds1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"age"</span>,<span class="st">"fit"</span>,<span class="st">"lwr"</span>,<span class="st">"upr"</span>,<span class="st">"inrng"</span>)</span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Return data frame</span></span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>  preds1</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This code is largerly the same as in the previous example except that the name of the observed data is changed as is the range over which the model will be evaluated.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span>  <span class="cn">NULL</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> grps) preds <span class="ot">&lt;-</span> <span class="fu">rbind</span>(preds,<span class="fu">vbLOOP1</span>(i,wfT,svLKt,obsagerng,<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">14</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  2005 Loop
+#R|  2008 Loop
+#R|  2011 Loop
+#R|  2014 Loop</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">peek</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|      year   age      fit      lwr      upr inrng
+#R|  1   2005  0.00 240.2624 210.7322 269.7926 FALSE
+#R|  21  2005  2.80 453.7806 447.9004 459.6609  TRUE
+#R|  43  2005  5.88 585.6538 570.6736 600.6340  TRUE
+#R|  64  2005  8.82 655.0832 622.4730 687.6935  TRUE
+#R|  85  2005 11.76 693.9627 642.5513 745.3741 FALSE
+#R|  106 2008  0.56 308.2649 300.5394 315.9905 FALSE
+#R|  128 2008  3.64 534.2380 528.2457 540.2303  TRUE
+#R|  149 2008  6.58 599.0074 589.8620 608.1528  TRUE
+#R|  170 2008  9.52 619.1141 602.5247 635.7036 FALSE
+#R|  191 2008 12.46 625.3559 605.0004 645.7115 FALSE
+#R|  213 2011  1.40 399.5019 396.3923 402.6116  TRUE
+#R|  234 2011  4.34 574.1318 568.6675 579.5961  TRUE
+#R|  255 2011  7.28 634.0238 625.8571 642.1905  TRUE
+#R|  276 2011 10.22 654.5647 642.6946 666.4349  TRUE
+#R|  298 2011 13.30 661.7922 647.7538 675.8307 FALSE
+#R|  319 2014  2.10 457.4716 454.3409 460.6023  TRUE
+#R|  340 2014  5.04 582.3197 576.4395 588.1998  TRUE
+#R|  361 2014  7.98 625.4476 613.3847 637.5105  TRUE
+#R|  383 2014 11.06 640.7339 624.5441 656.9237 FALSE
+#R|  404 2014 14.00 645.6264 627.5198 663.7329 FALSE</code></pre>
+</div>
+</div>
+<p>Once again, change all instances of <code>sex</code> to <code>year</code> below. I also need to modify the <code>limits=</code> of the y-axis and the <code>breaks=</code> of the x-axis. Also note that I removed <code>scale_color_manual()</code> so that the default colors would be used. If you don’t want to use the default colors you would need to make sure that you identify as many colors as you have groups (four in this case).</p>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr,<span class="at">fill=</span>year),<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wfT,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>year),</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>year),</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,inrng),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit,<span class="at">color=</span>year),</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">800</span>)) <span class="sc">+</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-sex4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-sex4-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2005, 2008, 2011, and 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption><p></p>
 </figure>
 </div>
 </div>
