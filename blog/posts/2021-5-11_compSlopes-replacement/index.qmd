@@ -126,3 +126,15 @@ In the [next post](../2021-5-12_compIntercepts-replacement/) I will demonstrate 
 :::{.callout-note}
 This change to `FSA` does not affect anything in @ogleIntroductoryFisheriesAnalyses2016. However, the use of `compSlopes()` in [this supplement](http://derekogle.com/IFAR/supplements/weightlength/index.html) to @ogleIntroductoryFisheriesAnalyses2016 will no longer work as described and will need to use `emtrends()` instead.
 :::
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+source("../_helpers.R")
+sc2pv()
+```

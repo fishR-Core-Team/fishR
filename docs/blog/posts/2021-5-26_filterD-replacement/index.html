@@ -289,13 +289,13 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="do">## for filter()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -311,12 +311,12 @@ Note
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|          tl spec
-#R|  1 163.9865  LMB
-#R|  2 196.6884  LMB
-#R|  3 156.8377  SMB
-#R|  4 190.3749   BG
-#R|  5 191.2181   BG
-#R|  6 100.4647   BG</code></pre>
+#R|  1 136.9208  LMB
+#R|  2 120.8994  LMB
+#R|  3 161.4157  SMB
+#R|  4 125.8987   BG
+#R|  5 132.3581   BG
+#R|  6 131.1328   BG</code></pre>
 </div>
 </div>
 <p>Now suppose that this data frame is reduced to just Bluegill.</p>
@@ -364,6 +364,10 @@ Note
 </div>
 </div>
 <p>However, this was a hacky solution to a simple problem. Thus, we deprecated and subsequently removed <code>filterD()</code> from <code>FSA</code>. Thus, please use <code>droplevels()</code> (or <code>fct_drop()</code> from <code>forcats</code>) after using <code>filter()</code> to accomplish the same task of the defunct <code>filterD()</code>.</p>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
 
 
 

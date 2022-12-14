@@ -68,3 +68,15 @@ xtabs(~spec,data=dbg3)
 ```
 
 However, this was a hacky solution to a simple problem. Thus, we deprecated and subsequently removed `filterD()` from `FSA`. Thus, please use `droplevels()` (or `fct_drop()` from `forcats`) after using `filter()` to accomplish the same task of the defunct `filterD()`.
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+source("../_helpers.R")
+sc2pv()
+```

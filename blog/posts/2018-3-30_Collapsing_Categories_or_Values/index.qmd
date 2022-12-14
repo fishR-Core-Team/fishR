@@ -166,3 +166,13 @@ You may be motivated from this example to use `case_when()` to develop a length 
 :::
 
 &nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+source("../_helpers.R")
+sc2pv()
+```

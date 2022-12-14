@@ -229,6 +229,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
                           <div class="quarto-categories">
                 <div class="quarto-category">Data Wrangling</div>
                 <div class="quarto-category">CPE</div>
+                <div class="quarto-category">Teaching</div>
               </div>
                   </div>
   </div>
@@ -253,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 7, 2022</p>
+        <p class="date-modified">Dec 14, 2022</p>
       </div>
     </div>
       
@@ -296,7 +297,7 @@ Note
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)    <span class="co"># for |&gt;, group_by(), summarize(), mutate(), right_join()</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)    <span class="co"># for group_by(), summarize(), mutate(), right_join()</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)    <span class="co"># for complete(), nesting()</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">678394</span>)  <span class="co"># for reproducibility of randomly created data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -312,7 +313,7 @@ Note
 <p>In this first example, the data consists of <code>species</code> and <code>length</code> recorded for each captured fish organized by the gear set identification number (<code>ID</code>) and held in the <code>fishdat</code> data.frame.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|    ID species  tl
+<pre class="output"><code>#R|    ID species  tl
 #R|  1  1     BLG 148
 #R|  2  1     BLG 153
 #R|  3  1     BLG 147
@@ -329,7 +330,7 @@ Note
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>catch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID species num
+<pre class="output"><code>#R|     ID species num
 #R|  1   1     BLG  10
 #R|  2   1     LMB   5
 #R|  3   1     YEP   5
@@ -351,7 +352,7 @@ Note
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),<span class="at">mn=</span><span class="fu">mean</span>(num),<span class="at">sd=</span><span class="fu">sd</span>(num)) <span class="sc">|&gt;</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|    species n       mn       sd
+<pre class="output"><code>#R|    species n       mn       sd
 #R|  1     BLG 4 8.000000 4.830459
 #R|  2     LMB 3 8.333333 3.055050
 #R|  3     YEP 4 7.500000 2.516611</code></pre>
@@ -364,7 +365,7 @@ Note
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species) <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID species num
+<pre class="output"><code>#R|     ID species num
 #R|  1   1     BLG  10
 #R|  2   1     LMB   5
 #R|  3   1     YEP   5
@@ -389,7 +390,7 @@ Note
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>catch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID species num
+<pre class="output"><code>#R|     ID species num
 #R|  1   1     BLG  10
 #R|  2   1     LMB   5
 #R|  3   1     YEP   5
@@ -414,7 +415,7 @@ Note
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),<span class="at">mn=</span><span class="fu">mean</span>(num),<span class="at">sd=</span><span class="fu">sd</span>(num)) <span class="sc">|&gt;</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|    species n  mn       sd
+<pre class="output"><code>#R|    species n  mn       sd
 #R|  1     BLG 5 6.4 5.504544
 #R|  2     LMB 5 5.0 5.049752
 #R|  3     YEP 5 6.0 4.000000</code></pre>
@@ -427,7 +428,7 @@ Note
 <p>Suppose that the fish data included a column that indicates whether the fish was marked and returned to the waterbody or not.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|    ID species  tl marked
+<pre class="output"><code>#R|    ID species  tl marked
 #R|  1  1     BLG 148    YES
 #R|  2  1     BLG 153    YES
 #R|  3  1     BLG 147    YES
@@ -444,7 +445,7 @@ Note
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">nmarked=</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(marked<span class="sc">==</span><span class="st">"YES"</span>,<span class="dv">1</span>,<span class="dv">0</span>)))</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>catch2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|  # A tibble: 11 × 4
+<pre class="output"><code>#R|  # A tibble: 11 × 4
 #R|  # Groups:   ID [5]
 #R|        ID species   num nmarked
 #R|     &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;   &lt;dbl&gt;
@@ -469,7 +470,7 @@ Note
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>catch2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID species num nmarked
+<pre class="output"><code>#R|     ID species num nmarked
 #R|  1   1     BLG  10       8
 #R|  2   1     LMB   5       2
 #R|  3   1     YEP   5       2
@@ -498,7 +499,7 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>geardat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|    ID mon year  lake run effort
+<pre class="output"><code>#R|    ID mon year  lake run effort
 #R|  1  1 May 2018 round   1   1.34
 #R|  2  2 May 2018 round   2   1.87
 #R|  3  3 May 2018 round   3   1.56
@@ -515,7 +516,7 @@ Note
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>catch3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID species num nmarked
+<pre class="output"><code>#R|     ID species num nmarked
 #R|  1   1     BLG  10       8
 #R|  2   1     LMB   5       2
 #R|  3   1     YEP   5       2
@@ -534,7 +535,7 @@ Note
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="ot">&lt;-</span> <span class="fu">right_join</span>(geardat,catch3,<span class="at">by=</span><span class="st">"ID"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>catch3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID mon year  lake run effort species num nmarked
+<pre class="output"><code>#R|     ID mon year  lake run effort species num nmarked
 #R|  1   1 May 2018 round   1   1.34     BLG  10       8
 #R|  2   1 May 2018 round   1   1.34     LMB   5       2
 #R|  3   1 May 2018 round   1   1.34     YEP   5       2
@@ -555,7 +556,7 @@ Note
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID mon year  lake run effort species num nmarked
+<pre class="output"><code>#R|     ID mon year  lake run effort species num nmarked
 #R|  1   1 May 2018 round   1   1.34     BLG  10       8
 #R|  2   1 May 2018 round   1   1.34     LMB   5       2
 #R|  3   1 May 2018 round   1   1.34     YEP   5       2
@@ -580,7 +581,7 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>catch4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID species                spsci num nmarked mon year  lake run effort
+<pre class="output"><code>#R|     ID species                spsci num nmarked mon year  lake run effort
 #R|  1   1     BLG  Lepomis macrochirus  10       8 May 2018 round   1   1.34
 #R|  2   1     LMB Micropterus dolomieu   5       2 May 2018 round   1   1.34
 #R|  3   1     YEP     Perca flavescens   5       2 May 2018 round   1   1.34
@@ -602,7 +603,7 @@ Note
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R|     ID mon year  lake run effort species                spsci num nmarked
+<pre class="output"><code>#R|     ID mon year  lake run effort species                spsci num nmarked
 #R|  1   1 May 2018 round   1   1.34     BLG  Lepomis macrochirus  10       8
 #R|  2   1 May 2018 round   1   1.34     LMB Micropterus dolomieu   5       2
 #R|  3   1 May 2018 round   1   1.34     YEP     Perca flavescens   5       2
@@ -625,6 +626,10 @@ Note
 <section id="final-thoughts" class="level1">
 <h1>Final Thoughts</h1>
 <p>This is my first exploration with <code>complete()</code> and it looks promising for this task of adding zeroes to data frames of catch by gear set for gear sets in which a species was not caught. I will be curious to hear what others think of this function and how it might fit in their workflow.</p>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
 
 
 </section>

@@ -133,8 +133,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta property="og:description" content="How to collapse categories or values into other categories">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2018-3-30_Collapsing_Categories_or_Values\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="550">
-<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
 <meta name="citation_title" content="Collapsing Categories or Values">
 <meta name="citation_author" content="Derek H. Ogle">
 <meta name="citation_publication_date" content="2018-03-30">
@@ -252,7 +252,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 3, 2022</p>
+        <p class="date-modified">Dec 14, 2022</p>
       </div>
     </div>
       
@@ -315,13 +315,13 @@ Note
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">year=</span><span class="fu">sample</span>(<span class="dv">1980</span><span class="sc">:</span><span class="dv">2017</span>,n,<span class="at">replace=</span><span class="cn">TRUE</span>))</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year
-#R&gt; 1     YEP 1996
-#R&gt; 2     PKS 2005
-#R&gt; 3     PKS 2013
-#R&gt; 4     YEP 2014
-#R&gt; 5     CRP 2016
-#R&gt; 6     PKS 2006</code></pre>
+<pre class="output"><code>#R|    species year
+#R|  1     YEP 1996
+#R|  2     PKS 2005
+#R|  3     PKS 2013
+#R|  4     YEP 2014
+#R|  5     CRP 2016
+#R|  6     PKS 2006</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -335,7 +335,7 @@ Note
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>()</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>short</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt; [1] "BLG" "CRP" "LMB" "PKS" "WAE" "YEP"</code></pre>
+<pre class="output"><code>#R|  [1] "BLG" "CRP" "LMB" "PKS" "WAE" "YEP"</code></pre>
 </div>
 </div>
 <p>In addition, I also create a vector of codes that these codes will be converted to. For example, the <code>long</code> vector below contains the long-form names for each species (in the same order as the abbreviations in <code>short</code>)</p>
@@ -347,13 +347,13 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(short,long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;      short long             
-#R&gt; [1,] "BLG" "Bluegill"       
-#R&gt; [2,] "CRP" "Carp"           
-#R&gt; [3,] "LMB" "Largemouth Bass"
-#R&gt; [4,] "PKS" "Pumpkinseed"    
-#R&gt; [5,] "WAE" "Walleye"        
-#R&gt; [6,] "YEP" "Yellow Perch"</code></pre>
+<pre class="output"><code>#R|       short long             
+#R|  [1,] "BLG" "Bluegill"       
+#R|  [2,] "CRP" "Carp"           
+#R|  [3,] "LMB" "Largemouth Bass"
+#R|  [4,] "PKS" "Pumpkinseed"    
+#R|  [5,] "WAE" "Walleye"        
+#R|  [6,] "YEP" "Yellow Perch"</code></pre>
 </div>
 </div>
 <div class="page-columns page-full"><p>The <code>mapvalues()</code> function (from <code>plyr</code>) may be used to efficiently recode character (or factor) values.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Because <code>mapvalues()</code> operates on a vector, it should be used within <code>mutate()</code> (from <code>dplyr</code>) to add a new variable with the recoded values to a data frame. Within <code>mutate()</code> the first argument to <code>mapvalues()</code> is the variable that contains the original data to be recoded. A vector of categories to code from is given in <code>from=</code> and a vector of <strong>new</strong> categories to code to is given in <code>to=</code>. For example, the combined use of <code>mutate()</code> and <code>mapvalues()</code> below demonstrates creating a new variable in the data frame with the long species names.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;The use of <code>plyr::</code> in front of <code>mapvalues()</code> ensures that <code>mapvalues()</code> from <code>plyr</code> and not another package will be used and allows for not loading the entire <code>plyr</code> package.</p></li></div></div>
@@ -362,13 +362,13 @@ Note
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesL=</span>plyr<span class="sc">::</span><span class="fu">mapvalues</span>(species,<span class="at">from=</span>short,<span class="at">to=</span>long))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year     speciesL
-#R&gt; 1     YEP 1996 Yellow Perch
-#R&gt; 2     PKS 2005  Pumpkinseed
-#R&gt; 3     PKS 2013  Pumpkinseed
-#R&gt; 4     YEP 2014 Yellow Perch
-#R&gt; 5     CRP 2016         Carp
-#R&gt; 6     PKS 2006  Pumpkinseed</code></pre>
+<pre class="output"><code>#R|    species year     speciesL
+#R|  1     YEP 1996 Yellow Perch
+#R|  2     PKS 2005  Pumpkinseed
+#R|  3     PKS 2013  Pumpkinseed
+#R|  4     YEP 2014 Yellow Perch
+#R|  5     CRP 2016         Carp
+#R|  6     PKS 2006  Pumpkinseed</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -398,13 +398,13 @@ Information
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Yellow Perch"</span> <span class="ot">=</span> <span class="st">"YEP"</span>))</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year     speciesL    speciesL2
-#R&gt; 1     YEP 1996 Yellow Perch Yellow Perch
-#R&gt; 2     PKS 2005  Pumpkinseed  Pumpkinseed
-#R&gt; 3     PKS 2013  Pumpkinseed  Pumpkinseed
-#R&gt; 4     YEP 2014 Yellow Perch Yellow Perch
-#R&gt; 5     CRP 2016         Carp         Carp
-#R&gt; 6     PKS 2006  Pumpkinseed  Pumpkinseed</code></pre>
+<pre class="output"><code>#R|    species year     speciesL    speciesL2
+#R|  1     YEP 1996 Yellow Perch Yellow Perch
+#R|  2     PKS 2005  Pumpkinseed  Pumpkinseed
+#R|  3     PKS 2013  Pumpkinseed  Pumpkinseed
+#R|  4     YEP 2014 Yellow Perch Yellow Perch
+#R|  5     CRP 2016         Carp         Carp
+#R|  6     PKS 2006  Pumpkinseed  Pumpkinseed</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -417,13 +417,13 @@ Information
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Centrarchidae"</span>,<span class="st">"Percidae"</span>,<span class="st">"Percidae"</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(short,long,fam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;      short long              fam            
-#R&gt; [1,] "BLG" "Bluegill"        "Centrarchidae"
-#R&gt; [2,] "CRP" "Carp"            "Cyprinidae"   
-#R&gt; [3,] "LMB" "Largemouth Bass" "Centrarchidae"
-#R&gt; [4,] "PKS" "Pumpkinseed"     "Centrarchidae"
-#R&gt; [5,] "WAE" "Walleye"         "Percidae"     
-#R&gt; [6,] "YEP" "Yellow Perch"    "Percidae"</code></pre>
+<pre class="output"><code>#R|       short long              fam            
+#R|  [1,] "BLG" "Bluegill"        "Centrarchidae"
+#R|  [2,] "CRP" "Carp"            "Cyprinidae"   
+#R|  [3,] "LMB" "Largemouth Bass" "Centrarchidae"
+#R|  [4,] "PKS" "Pumpkinseed"     "Centrarchidae"
+#R|  [5,] "WAE" "Walleye"         "Percidae"     
+#R|  [6,] "YEP" "Yellow Perch"    "Percidae"</code></pre>
 </div>
 </div>
 <p>The example below shows how to convert the species name abbreviations to family names. In addition, the last use of <code>mapvalues()</code> shows how to change the long-form names to family names. This last example is, of course, repetitive, but it is used here to demonstrate how <code>mutate()</code> allows a variable that was “just created” to be immediately used.</p>
@@ -433,13 +433,13 @@ Information
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">family2=</span>plyr<span class="sc">::</span><span class="fu">mapvalues</span>(speciesL,<span class="at">from=</span>long,<span class="at">to=</span>fam))</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
-#R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
-#R&gt; 6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae</code></pre>
+<pre class="output"><code>#R|    species year     speciesL    speciesL2        family       family2
+#R|  1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
+#R|  6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae</code></pre>
 </div>
 </div>
 <p>The “collapsing” of multiple levels into one level can also be accomplished with <code>fct_collapse()</code> (from <code>forcats</code>). The first argument to this function is again the variable containing the “old” levels. Subsequent arguments are formed by setting a new level name equal to a vector containing old level names to collapse.</p>
@@ -451,20 +451,20 @@ Information
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Cyprinidae"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"CRP"</span>)))</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
-#R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
-#R&gt; 6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt;        family3
-#R&gt; 1     Percidae
-#R&gt; 2 Centarchidae
-#R&gt; 3 Centarchidae
-#R&gt; 4     Percidae
-#R&gt; 5   Cyprinidae
-#R&gt; 6 Centarchidae</code></pre>
+<pre class="output"><code>#R|    species year     speciesL    speciesL2        family       family2
+#R|  1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
+#R|  6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|         family3
+#R|  1     Percidae
+#R|  2 Centarchidae
+#R|  3 Centarchidae
+#R|  4     Percidae
+#R|  5   Cyprinidae
+#R|  6 Centarchidae</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -483,20 +483,20 @@ Information
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
-#R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
-#R&gt; 6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt;        family3 decade
-#R&gt; 1     Percidae  1990s
-#R&gt; 2 Centarchidae  2000s
-#R&gt; 3 Centarchidae  2010s
-#R&gt; 4     Percidae  2010s
-#R&gt; 5   Cyprinidae  2010s
-#R&gt; 6 Centarchidae  2000s</code></pre>
+<pre class="output"><code>#R|    species year     speciesL    speciesL2        family       family2
+#R|  1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
+#R|  6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|         family3 decade
+#R|  1     Percidae  1990s
+#R|  2 Centarchidae  2000s
+#R|  3 Centarchidae  2010s
+#R|  4     Percidae  2010s
+#R|  5   Cyprinidae  2010s
+#R|  6 Centarchidae  2000s</code></pre>
 </div>
 </div>
 <p>The lines in <code>case_when()</code> operate sequentially (like a series of “if” statements) such that the above operation can be more succinctly coded as below. Also note in this example that the resulting variable is numeric rather than categorical (simply as an example).</p>
@@ -510,33 +510,33 @@ Information
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt;   species year     speciesL    speciesL2        family       family2
-#R&gt; 1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt; 4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
-#R&gt; 5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
-#R&gt; 6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
-#R&gt;        family3 decade decade2
-#R&gt; 1     Percidae  1990s    1990
-#R&gt; 2 Centarchidae  2000s    2000
-#R&gt; 3 Centarchidae  2010s    2010
-#R&gt; 4     Percidae  2010s    2010
-#R&gt; 5   Cyprinidae  2010s    2010
-#R&gt; 6 Centarchidae  2000s    2000</code></pre>
+<pre class="output"><code>#R|    species year     speciesL    speciesL2        family       family2
+#R|  1     YEP 1996 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  2     PKS 2005  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  3     PKS 2013  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|  4     YEP 2014 Yellow Perch Yellow Perch      Percidae      Percidae
+#R|  5     CRP 2016         Carp         Carp    Cyprinidae    Cyprinidae
+#R|  6     PKS 2006  Pumpkinseed  Pumpkinseed Centrarchidae Centrarchidae
+#R|         family3 decade decade2
+#R|  1     Percidae  1990s    1990
+#R|  2 Centarchidae  2000s    2000
+#R|  3 Centarchidae  2010s    2010
+#R|  4     Percidae  2010s    2010
+#R|  5   Cyprinidae  2010s    2010
+#R|  6 Centarchidae  2000s    2000</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#R&gt; 'data.frame':   250 obs. of  9 variables:
-#R&gt;  $ species  : chr  "YEP" "PKS" "PKS" "YEP" ...
-#R&gt;  $ year     : int  1996 2005 2013 2014 2016 2006 2002 2012 2013 2014 ...
-#R&gt;  $ speciesL : chr  "Yellow Perch" "Pumpkinseed" "Pumpkinseed" "Yellow Perch" ...
-#R&gt;  $ speciesL2: Factor w/ 6 levels "Bluegill","Carp",..: 6 4 4 6 2 4 5 1 3 6 ...
-#R&gt;  $ family   : chr  "Percidae" "Centrarchidae" "Centrarchidae" "Percidae" ...
-#R&gt;  $ family2  : chr  "Percidae" "Centrarchidae" "Centrarchidae" "Percidae" ...
-#R&gt;  $ family3  : Factor w/ 3 levels "Centarchidae",..: 3 1 1 3 2 1 3 1 1 3 ...
-#R&gt;  $ decade   : chr  "1990s" "2000s" "2010s" "2010s" ...
-#R&gt;  $ decade2  : num  1990 2000 2010 2010 2010 2000 2000 2010 2010 2010 ...</code></pre>
+<pre class="output"><code>#R|  'data.frame':  250 obs. of  9 variables:
+#R|   $ species  : chr  "YEP" "PKS" "PKS" "YEP" ...
+#R|   $ year     : int  1996 2005 2013 2014 2016 2006 2002 2012 2013 2014 ...
+#R|   $ speciesL : chr  "Yellow Perch" "Pumpkinseed" "Pumpkinseed" "Yellow Perch" ...
+#R|   $ speciesL2: Factor w/ 6 levels "Bluegill","Carp",..: 6 4 4 6 2 4 5 1 3 6 ...
+#R|   $ family   : chr  "Percidae" "Centrarchidae" "Centrarchidae" "Percidae" ...
+#R|   $ family2  : chr  "Percidae" "Centrarchidae" "Centrarchidae" "Percidae" ...
+#R|   $ family3  : Factor w/ 3 levels "Centarchidae",..: 3 1 1 3 2 1 3 1 1 3 ...
+#R|   $ decade   : chr  "1990s" "2000s" "2010s" "2010s" ...
+#R|   $ decade2  : num  1990 2000 2010 2010 2010 2000 2000 2010 2010 2010 ...</code></pre>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -554,6 +554,9 @@ Warning
 </div>
 </div>
 <p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
 
 
 </section>
