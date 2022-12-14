@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Derek H. Ogle">
+<meta name="dcterms.date" content="2021-05-11">
+<meta name="description" content="Using emtrends() from emmeans as an alternative to compSlopes() which was removed from FSA.">
+
+<title>fishR - Replace compSlopes() with emtrends()</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//img/fishRlogo_Tight_Dark_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../css/styles.css">
+<meta property="og:title" content="fishR - Replace compSlopes() with emtrends()">
+<meta property="og:description" content="Using `emtrends()` from `emmeans` as an alternative to `compSlopes()` which was removed from `FSA`.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2021-5-11_compSlopes-replacement\preview.png">
+<meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1188">
+<meta name="citation_title" content="Replace compSlopes() with emtrends()">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2021-05-11">
+<meta name="citation_cover_date" content="2021-05-11">
+<meta name="citation_year" content="2021">
+<meta name="citation_online_date" content="2021-05-11">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2021-5-11_compSlopes-replacement">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_abstract=Age estimates of Lake Superior Kiyis Coregonus kiyi from scales and otoliths were compared and 12 years (2003–2014) of length frequency data were examined to assess year-class strength and validate age estimates. Ages estimated from otoliths were precise and were consistently older than ages estimated from scales. Maximum otolith-derived ages were 20 years for females and 12 years for males. Age estimates showed high numbers of fish of ages 5, 6, and 11 in 2014, corresponding to the 2009, 2008, and 2003 year-classes, respectively. Strong 2003 and 2009 year-classes, along with the 2005 year-class, were also evident based on distinct modes of age-1 fish (&amp;amp;amp;lt;110 mm) in the length frequency distributions from 2004, 2010, and 2006, respectively. Modes from these year-classes were present as progressively larger fish in subsequent years. Few to no age-1 fish (&amp;lt;110 mm) were present in all other years. Ages estimated from otoliths were generally within 1 year of the ages corresponding to strong year-classes, at least for age-5 and older fish, suggesting that Kiyi age may be reliably estimated to within 1 year by careful examination of thin-sectioned otoliths.;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_abstract=Pauly et al. (1992; Australian Journal of Marine and Freshwater Research 43:1151–1156) introduced a modified von Bertalanffy seasonal growth function that allowed for a period of no growth. Pauly et al. (1992) provided special purpose software to fit the model to length-at-age data, but this software is no longer available and specific details to implement a critical aspect of the new growth function were not clear. I provide details for this critical aspect of the function, implement it in the open-source R environment, and briefly demonstrate the use of this function with four data sets. With this, the growth function of Pauly et al. (1992) is now readily available to all scientists with access to software that can fit nonlinear models to data. Thus, this growth function may be implemented in more situations and its fit rigorously compared to the results from other models of fish growth.;,citation_author=Derek H. Ogle;,citation_publication_date=2017-01;,citation_cover_date=2017-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_journal_title=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_abstract=Computer simulations of length-weight data indicated that the error incurred by estimating mean weight from mean length is a function of the exponent in the length-weight relationship and the coefficient of variation in the length-frequency distribution. Errors were less than 10% for exponents up to 4.0 if the coefficient of variation were less than 0.1, but error increased to near 90% of actual mean weight for large exponents and coefficients of variation. Similar errors arise for other exponential relationships, such as length-fecundity, that commonly are developed in fisheries work.;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_abstract=Report on the general field of biological statistics of fish populations. The report covers the abundance of the population, usually somewhat restricted as to age or size; the total mortality rate at successive ages or even within each year; the fraction of the total mortality ascribable to each of several causes, such as deaths by fishing, deaths by predation other than human, and deaths from disease, parasites or senility; the rate of growth of the individual fish; the rate of reproduction, particularly as it is related to stock density; and the overall rate of surplus production of a stock which is the resultant of growth plus recruitment less natural mortality.;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_isbn=978-0-662-01440-9;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {Assessment} of {Fish} {Populations};">
+<meta name="citation_reference" content="citation_title=Age and Growth of Fishes: Principles and Techniques;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/;,citation_doi=10.47886/9781934874486;,citation_isbn=978-1-934874-48-6;">
+<meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/books.html">
+ <span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/packages.html">
+ <span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+ <span class="dropdown-text">fishR (alphabetical)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+ <span class="dropdown-text">fishR (by topic)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+ <span class="dropdown-text">Comprehensive (by package)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+ <span class="dropdown-text">Comprehensive (by topic)</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Replace compSlopes() with emtrends()</h1>
+                  <div>
+        <div class="description">
+          Using <code>emtrends()</code> from <code>emmeans</code> as an alternative to <code>compSlopes()</code> which was removed from <code>FSA</code>.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">FSA</div>
+                <div class="quarto-category">emmeans</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 11, 2021</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Dec 14, 2022</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#example-data" id="toc-example-data" class="nav-link" data-scroll-target="#example-data">Example Data</a></li>
+  <li><a href="#what-compslopes-did" id="toc-what-compslopes-did" class="nav-link" data-scroll-target="#what-compslopes-did">What <code>compSlopes()</code> Did</a></li>
+  <li><a href="#what-emtrends-does" id="toc-what-emtrends-does" class="nav-link" data-scroll-target="#what-emtrends-does">What <code>emtrends()</code> Does</a>
+  <ul class="collapse">
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2021-5-11_compSlopes-replacement/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following packages are loaded for use below.</p>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)    <span class="do">## for filter(), mutate()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)  <span class="do">## for emtrends()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Some functions illustrated below were in the <code>FSA</code> package but have now been removed and put into the non-released <code>FSAmisc</code> package that I maintain. These functions are used below <strong>only</strong> to show what could be done in older versions of <code>FSA</code> but should now be done as described in this post. <strong>DO NOT USE any of the functions below that begin with <code>FSAmisc::</code>.</strong></p>
+</div>
+</div>
+<p>&nbsp;</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p><code>compSlopes()</code> in <code>FSA</code> prior to v0.9.0 was used to statistically compare slopes for all pairs of groups in an indicator/dummy variable regression (IVR). However, the excellent <code>emtrends()</code> in <code>emmmeans</code> is a more general and strongly principled function for this purpose. As such, <code>compSlopes()</code> was removed from <code>FSA</code> in early 2022. The purpose of this post is to demonstrate how to use <code>emtrends()</code> for the same purpose for which <code>compSlopes()</code> was used.</p>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The results from <code>compSlopes()</code> and <code>emtrends()</code> will not be identical because they use different methods to correct for multiple comparisons when comparing pairs of slopes.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="example-data" class="level1">
+<h1>Example Data</h1>
+<p>Examples below use the <code>Mirex</code> data set from <code>FSA</code>, which contains the concentration of mirex in the tissue and the body weight of two species of salmon (<code>chinook</code> and <code>coho</code>) captured in six years. The <code>year</code> variable is converted to a factor for modeling purposes. To keep the presentation simple, data from only three years will be used here.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Mirex,<span class="at">package=</span><span class="st">"FSA"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Mirex <span class="ot">&lt;-</span> Mirex <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">&gt;</span><span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">factor</span>(year))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Mirex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    year weight mirex species
+#R|  1 1992    1.9  0.10    coho
+#R|  2 1992    2.0  0.09    coho
+#R|  3 1992    2.4  0.12 chinook
+#R|  4 1992    2.6  0.15    coho
+#R|  5 1992    7.5  0.13 chinook
+#R|  6 1992    7.9  0.18    coho</code></pre>
+</div>
+</div>
+<p>The <code>lm()</code> below fits the IVR to determine if the relationship between mirex concentration and weight of the salmon differs by year.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lm1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mirex<span class="sc">~</span>weight<span class="sc">*</span>year,<span class="at">data=</span>Mirex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>weight:year</code> interaction term p-value suggests that the slopes (i.e., relationship between mirex concentration and salmon weight) differs among some pair(s) of the three years.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  Analysis of Variance Table
+#R|  
+#R|  Response: mirex
+#R|              Df   Sum Sq  Mean Sq F value    Pr(&gt;F)    
+#R|  weight       1 0.115886 0.115886 30.6459 1.615e-06 ***
+#R|  year         2 0.205825 0.102912 27.2149 2.028e-08 ***
+#R|  weight:year  2 0.042176 0.021088  5.5767   0.00694 ** 
+#R|  Residuals   44 0.166385 0.003781                      
+#R|  ---
+#R|  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The next step is to determine which pair(s) of slopes differ significantly, which was the purpose of <code>compSlopes()</code> and is the purpose of <code>emtrends()</code>.</p>
+<p>&nbsp;</p>
+</section>
+<section id="what-compslopes-did" class="level1 page-columns page-full">
+<h1>What <code>compSlopes()</code> Did</h1>
+<div class="page-columns page-full"><p>The procedure used by <code>compSlopes()</code> to compare slopes is described in more detail <a href="http://derekogle.com/IFAR/supplements/weightlength/index.html">here</a>. <code>compSlopes()</code> was simple in that it onl6 required the saved <code>lm()</code> object as an argument and its returned results should be assigned to an object for further examaination.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<code>compSlopes()</code> had a <code>print()</code> function for nicely printing the results. However, here we will look at each component separately to ease comparison with the <code>emtrends()</code> results.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>csfsa <span class="ot">&lt;-</span> FSAmisc<span class="sc">::</span><span class="fu">compSlopes</span>(lm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>$comparisons</code> component in the <code>compSlopes()</code> object contained the results from comparing all pairs of slopes. Each paired comparison was a row in these results with the groups compared under <code>comparison</code>, the differences in sample slopes under <code>diff</code>, 95% confidence intervals for the difference in slopes under <code>95% LCI</code> and <code>95% UCI</code>, and unadjusted and adjusted (for multiple comparisons) p-values for the hypothesis test comparing the slopes under <code>p.unadj</code> and <code>p.adj</code>, respectively.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>csfsa<span class="sc">$</span>comparisons</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    comparison     diff  95% LCI  95% UCI p.unadj   p.adj
+#R|  1  1996-1992 -0.01428 -0.02581 -0.00275 0.01638 0.03276
+#R|  2  1999-1992 -0.02267 -0.03668 -0.00867 0.00214 0.00642
+#R|  3  1999-1996 -0.00839 -0.02020  0.00341 0.15895 0.15895</code></pre>
+</div>
+</div>
+<p>For example, these results suggest that the slopes for 1996 and 1992 ARE statistically different (first row), but the slopes for 1999 and 1996 are NOT statistically different (last row).</p>
+<p>The <code>$slope</code> component in the <code>compSoloes()</code> object contained results specific to each slope. The groups were under <code>level</code>, sample slopes under <code>slopes</code>, 95% confidence intervals for the slopes under <code>95% LCI</code> and <code>95% UCI</code>, and unadjusted and adjusted p-values for the test if the slope is different from 0 under <code>p.unadj</code> and <code>p.adj</code>, respectively.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>csfsa<span class="sc">$</span>slope</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    level  slopes  95% LCI 95% UCI p.unadj   p.adj
+#R|  3  1999 0.00386 -0.00620 0.01393 0.44342 0.44342
+#R|  2  1996 0.01225  0.00609 0.01842 0.00024 0.00048
+#R|  1  1992 0.02653  0.01679 0.03628 0.00000 0.00000</code></pre>
+</div>
+</div>
+<p>For example, the slope for 1992 (last row) appears to be significantly different from 0 and may be between 0.01679 and 0.03628.</p>
+<p>&nbsp;</p>
+</section>
+<section id="what-emtrends-does" class="level1 page-columns page-full">
+<h1>What <code>emtrends()</code> Does</h1>
+<p>Similar results can be obtained with <code>emtrends()</code> from <code>emmeans</code> using the fitted <code>lm()</code> object as the first argument, a <code>specs=</code> argument with <code>pairwise~</code> followed by the name of the factor variable from the <code>lm()</code> model (<code>year</code> in this case), and <code>var=</code> followed by the name of the covariate from the <code>lm()</code> model (<code>weight</code> in this case), which <strong>must</strong> be in quotes. The results should be assigned to an object so that specific results can be extracted.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">emtrends</span>(lm1,<span class="at">specs=</span>pairwise<span class="sc">~</span>year,<span class="at">var=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>The object saved from <code>emtrends()</code> is then given as the first argument to <code>summary()</code>, which also requires <code>infer=TRUE</code> if you would like p-values to be calculated.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;<code>emmeas</code> does not compute p-values by default.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>css <span class="ot">&lt;-</span> <span class="fu">summary</span>(cs,<span class="at">infer=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>$contrasts</code> component in this saved object contains the results for comparing all pairs of slopes. Each paired comparison is a row with the groups compared under <code>contrasts</code>, the difference in sample slopes under <code>diff</code>, the standard error of the difference in sample slopes under <code>SE</code>, the degrees-of-freedom under <code>df</code>, a 95% confidence interval for the difference in slopes under <code>lower.CL</code> and <code>upper.CL</code>, and the t test statistic and p-value adjusted for multiple comparisons for testing a difference in slopes under <code>t.ratio</code> and <code>p.value</code>, respectively.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>css<span class="sc">$</span>contrasts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|   contrast            estimate      SE df  lower.CL upper.CL t.ratio p.value
+#R|   year1992 - year1996  0.01428 0.00572 44  0.000403   0.0282   2.496  0.0425
+#R|   year1992 - year1999  0.02267 0.00695 44  0.005815   0.0395   3.262  0.0059
+#R|   year1996 - year1999  0.00839 0.00586 44 -0.005813   0.0226   1.433  0.3331
+#R|  
+#R|  Confidence level used: 0.95 
+#R|  Conf-level adjustment: tukey method for comparing a family of 3 estimates 
+#R|  P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+</div>
+</div>
+<p>Comparing these results to the <code>$comparison</code> component from <code>compSlopes()</code> shows that the difference in sample slopes are the same, but that the confidence interval values and p-values are slightly different. Again, this is due to <code>emtrends()</code> and <code>compSlopes()</code> using different methods of adjusting for multiple comparisons. These differences did not result in different conclusions in this case, but they could, especially if the p-values are near the rejection criterion.</p>
+<p>The <code>$emtrends</code> component contains results for each slope with the groups under the name of the factor variable (<code>year</code> in this example), the sample slopes under <code>xxx.trend</code> (where <code>xxx</code> is replaced with the name of the covariate variable, <code>weight</code> in this example), standard errors of the sample slopes under <code>SE</code>, degrees-of-freedom under <code>df</code>, 95% confidence intervals for the slope under <code>lower.CL</code> and <code>upper.CL</code>, and t test statistics and p-values adjusted for multiple comparisons for testing that the slope is not equal to zero under <code>t.ratio</code> and <code>p.adj</code>, respectively.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>css<span class="sc">$</span>emtrends</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|   year weight.trend      SE df lower.CL upper.CL t.ratio p.value
+#R|   1992      0.02653 0.00483 44  0.01679   0.0363   5.489  &lt;.0001
+#R|   1996      0.01225 0.00306 44  0.00609   0.0184   4.004  0.0002
+#R|   1999      0.00386 0.00499 44 -0.00620   0.0139   0.773  0.4434
+#R|  
+#R|  Confidence level used: 0.95</code></pre>
+</div>
+</div>
+<p>Here the results match exactly with those in the <code>$slopes</code> component of <code>compSlopes()</code>.</p>
+<p>&nbsp;</p>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p><code>emtrends()</code> in <code>emmeans</code> provides a more general solution to comparing multiple slopes than what was used in <code>compSlopes()</code> in <code>FSA</code> prior to v0.9.0. As <code>compSlopes()</code> was removed from FSA in 2022, you should now use <code>emtrends()</code> for this purpose.</p>
+<p><code>emmeans</code> has extensive vignettes that further explain its use. Please see <a href="https://cran.r-project.org/web/packages/emmeans/vignettes/interactions.html#covariates">this discussion</a> for the use case described in this post. Their <a href="https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html">“Basics” vignette</a> is also useful.</p>
+<p>In the <a href="../2021-5-12_compIntercepts-replacement/">next post</a> I will demonstrate how to use <code>emmeans()</code> from the <code>emmeans</code> package to replace <code>compIntercepts()</code>, which was also removed from <code>FSA</code>.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This change to <code>FSA</code> does not affect anything in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>. However, the use of <code>compSlopes()</code> in <a href="http://derekogle.com/IFAR/supplements/weightlength/index.html">this supplement</a> to <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> will no longer work as described and will need to use <code>emtrends()</code> instead.</p>
+</div>
+</div>
+
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry" role="doc-biblioentry">
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/book/">Introductory <span>Fisheries</span> <span>Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2021,
+  author = {Derek H. Ogle},
+  title = {Replace {compSlopes()} with Emtrends()},
+  date = {2021-05-11},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2021-5-11_compSlopes-replacement},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2021" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2021, May 11. Replace compSlopes() with emtrends(). <a href="https://fishr-core-team.github.io/fishR//blog/posts/2021-5-11_compSlopes-replacement">https://fishr-core-team.github.io/fishR//blog/posts/2021-5-11_compSlopes-replacement</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+  </li>  
+</ul>
+    </div>   
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -28,7 +28,7 @@ library(patchwork)    ## placing plots (in conclusion)
 theme_set(theme_bw())
 ```
 
-:::{.callout-note}
+:::{.callout-warning}
 Some functions illustrated below were in the `FSA` package but have now been removed and put into the non-released `FSAmisc` package that I maintain. These functions are used below **only** to show what could be done in older versions of `FSA` but should now be done as described in this post. **DO NOT USE any of the functions below that begin with `FSAmisc::`.** 
 :::
 

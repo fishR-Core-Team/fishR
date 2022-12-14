@@ -1,0 +1,128 @@
+---
+title: Replace compSlopes() with emtrends()
+description: Using `emtrends()` from `emmeans` as an alternative to `compSlopes()` which was removed from `FSA`.
+author: Derek H. Ogle
+date: 5/11/2021
+image: preview.png
+categories:
+  - FSA
+  - emmeans
+---
+
+:::{.callout-note}
+The following packages are loaded for use below.
+:::
+
+```{r packages}
+library(dplyr)    ## for filter(), mutate()
+library(emmeans)  ## for emtrends()
+```
+
+:::{.callout-warning}
+Some functions illustrated below were in the `FSA` package but have now been removed and put into the non-released `FSAmisc` package that I maintain. These functions are used below **only** to show what could be done in older versions of `FSA` but should now be done as described in this post. **DO NOT USE any of the functions below that begin with `FSAmisc::`.** 
+:::
+
+&nbsp;
+
+# Introduction
+`compSlopes()` in `FSA` prior to v0.9.0 was used to statistically compare slopes for all pairs of groups in an indicator/dummy variable regression (IVR). However, the excellent `emtrends()` in `emmmeans` is a more general and strongly principled function for this purpose. As such, `compSlopes()` was removed from `FSA` in early 2022. The purpose of this post is to demonstrate how to use `emtrends()` for the same purpose for which `compSlopes()` was used.
+
+:::{.callout-important}
+The results from `compSlopes()` and `emtrends()` will not be identical because they use different methods to correct for multiple comparisons when comparing pairs of slopes.
+:::
+
+&nbsp;
+
+# Example Data
+Examples below use the `Mirex` data set from `FSA`, which contains the concentration of mirex in the tissue and the body weight of two species of salmon (`chinook` and `coho`) captured in six years. The `year` variable is converted to a factor for modeling purposes. To keep the presentation simple, data from only three years will be used here.
+
+```{r}
+data(Mirex,package="FSA")
+Mirex <- Mirex |>
+  filter(year>1990) |>
+  mutate(year=factor(year))
+head(Mirex)
+```
+
+The `lm()` below fits the IVR to determine if the relationship between mirex concentration and weight of the salmon differs by year.
+
+```{r}
+lm1 <- lm(mirex~weight*year,data=Mirex)
+```
+
+The `weight:year` interaction term p-value suggests that the slopes (i.e., relationship between mirex concentration and salmon weight) differs among some pair(s) of the three years.
+
+```{r}
+anova(lm1)
+```
+
+The next step is to determine which pair(s) of slopes differ significantly, which was the purpose of `compSlopes()` and is the purpose of `emtrends()`.
+
+&nbsp;
+
+# What `compSlopes()` Did
+The procedure used by `compSlopes()` to compare slopes is described in more detail [here](http://derekogle.com/IFAR/supplements/weightlength/index.html). `compSlopes()` was simple in that it onl6 required the saved `lm()` object as an argument and its returned results should be assigned to an object for further examaination.^[`compSlopes()` had a `print()` function for nicely printing the results. However, here we will look at each component separately to ease comparison with the `emtrends()` results.]
+
+```{r}
+csfsa <- FSAmisc::compSlopes(lm1)
+```
+
+The `$comparisons` component in the `compSlopes()` object contained the results from comparing all pairs of slopes. Each paired comparison was a row in these results with the groups compared under `comparison`, the differences in sample slopes under `diff`, 95% confidence intervals for the difference in slopes under `95% LCI` and `95% UCI`, and unadjusted and adjusted (for multiple comparisons) p-values for the hypothesis test comparing the slopes under `p.unadj` and `p.adj`, respectively.
+
+```{r}
+csfsa$comparisons
+```
+
+For example, these results suggest that the slopes for 1996 and 1992 ARE statistically different (first row), but the slopes for 1999 and 1996 are NOT statistically different (last row).
+
+The `$slope` component in the `compSoloes()` object contained results specific to each slope. The groups were under `level`, sample slopes under `slopes`, 95% confidence intervals for the slopes under `95% LCI` and `95% UCI`, and unadjusted and adjusted p-values for the test if the slope is different from 0 under `p.unadj` and `p.adj`, respectively.
+
+```{r}
+csfsa$slope
+```
+
+For example, the slope for 1992 (last row) appears to be significantly different from 0 and may be between `r formatC(csfsa$slope[3,"95% LCI"],format="f",digits=5)` and `r formatC(csfsa$slope[3,"95% UCI"],format="f",digits=5)`.
+
+&nbsp;
+
+# What `emtrends()` Does
+Similar results can be obtained with `emtrends()` from `emmeans` using the fitted `lm()` object as the first argument, a `specs=` argument with `pairwise~` followed by the name of the factor variable from the `lm()` model (`year` in this case), and `var=` followed by the name of the covariate from the `lm()` model (`weight` in this case), which **must** be in quotes. The results should be assigned to an object so that specific results can be extracted.
+
+```{r}
+cs <- emtrends(lm1,specs=pairwise~year,var="weight")
+```
+
+The object saved from `emtrends()` is then given as the first argument to `summary()`, which also requires `infer=TRUE` if you would like p-values to be calculated.^[`emmeas` does not compute p-values by default.]
+
+```{r}
+css <- summary(cs,infer=TRUE)
+```
+
+The `$contrasts` component in this saved object contains the results for comparing all pairs of slopes. Each paired comparison is a row with the groups compared under `contrasts`, the difference in sample slopes under `diff`, the standard error of the difference in sample slopes under `SE`, the degrees-of-freedom under `df`, a 95% confidence interval for the difference in slopes under `lower.CL` and `upper.CL`, and the t test statistic and p-value adjusted for multiple comparisons for testing a difference in slopes under `t.ratio` and `p.value`, respectively.
+
+```{r}
+css$contrasts
+```
+
+Comparing these results to the `$comparison` component from `compSlopes()` shows that the difference in sample slopes are the same, but that the confidence interval values and p-values are slightly different. Again, this is due to `emtrends()` and `compSlopes()` using different methods of adjusting for multiple comparisons. These differences did not result in different conclusions in this case, but they could, especially if the p-values are near the rejection criterion.
+
+The `$emtrends` component contains results for each slope with the groups under the name of the factor variable (`year` in this example), the sample slopes under `xxx.trend` (where `xxx` is replaced with the name of the covariate variable, `weight` in this example), standard errors of the sample slopes under `SE`, degrees-of-freedom under `df`, 95% confidence intervals for the slope under `lower.CL` and `upper.CL`, and t test statistics and p-values adjusted for multiple comparisons for testing that the slope is not equal to zero under `t.ratio` and `p.adj`, respectively.
+
+```{r}
+css$emtrends
+```
+
+Here the results match exactly with those in the `$slopes` component of `compSlopes()`.
+
+&nbsp;
+
+## Conclusion
+`emtrends()` in `emmeans` provides a more general solution to comparing multiple slopes than what was used in `compSlopes()` in `FSA` prior to v0.9.0. As `compSlopes()` was removed from FSA in 2022, you should now use `emtrends()` for this purpose.
+
+`emmeans` has extensive vignettes that further explain its use. Please see [this discussion](https://cran.r-project.org/web/packages/emmeans/vignettes/interactions.html#covariates) for the use case described in this post. Their ["Basics" vignette](https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html) is also useful.
+
+In the [next post](../2021-5-12_compIntercepts-replacement/) I will demonstrate how to use `emmeans()` from the `emmeans` package to replace `compIntercepts()`, which was also removed from `FSA`.
+
+:::{.callout-note}
+This change to `FSA` does not affect anything in @ogleIntroductoryFisheriesAnalyses2016. However, the use of `compSlopes()` in [this supplement](http://derekogle.com/IFAR/supplements/weightlength/index.html) to @ogleIntroductoryFisheriesAnalyses2016 will no longer work as described and will need to use `emtrends()` instead.
+:::
