@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2022-12-14T14:22:47.192Z</lastmod>
+    <lastmod>2022-12-14T15:42:24.707Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -78,10 +78,14 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-26_filterD-replacement/index.html</loc>
-    <lastmod>2022-12-14T14:15:14.740Z</lastmod>
+    <lastmod>2022-12-14T15:00:43.134Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-25_fitPlot-replacement/index.html</loc>
-    <lastmod>2022-12-14T14:22:43.379Z</lastmod>
+    <lastmod>2022-12-14T15:04:22.442Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-6-1_residPlot-replacement/index.html</loc>
+    <lastmod>2022-12-14T15:42:33.520Z</lastmod>
   </url>
 </urlset>
