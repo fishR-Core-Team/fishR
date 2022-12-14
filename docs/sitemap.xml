@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2022-12-13T18:32:01.508Z</lastmod>
+    <lastmod>2022-12-14T14:22:47.192Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -38,11 +38,11 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2019-12-31_vonB_plots_1/index.html</loc>
-    <lastmod>2022-12-13T18:32:52.401Z</lastmod>
+    <lastmod>2022-12-14T14:21:38.512Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2020-1-2_vonB_plots_2/index.html</loc>
-    <lastmod>2022-12-13T18:32:58.607Z</lastmod>
+    <lastmod>2022-12-14T14:21:45.125Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-3-15-AgeBiasPlots/index.html</loc>
@@ -75,5 +75,13 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/packages.html</loc>
     <lastmod>2022-12-13T18:33:19.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-26_filterD-replacement/index.html</loc>
+    <lastmod>2022-12-14T14:15:14.740Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-25_fitPlot-replacement/index.html</loc>
+    <lastmod>2022-12-14T14:22:43.379Z</lastmod>
   </url>
 </urlset>

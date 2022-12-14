@@ -1,0 +1,492 @@
+---
+title: Replace fitPlot() with ggplot
+description: Using `ggplot()` as an alternative to `fitPlot()` which was removed from `FSA`.
+author: Derek H. Ogle
+date: 5/25/2021
+image: preview.png
+categories:
+  - FSA
+  - ggplot2
+---
+
+```{r}
+#| include: false
+knitr::knit_hooks$set(par1 = function(before, options, envir) {
+  if (before) par(mar=c(3.5,3.5,1,1),mgp=c(2.1,0.4,0),tcl=-0.2)
+})
+```
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)         ## for peek()
+library(emmeans)     ## for emmeans()
+library(dplyr)       ## for mutate(), select(), filter(), group_by(), summarize()
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+:::{.callout-note}
+Some functions illustrated below were in the `FSA` package but have now been removed and put into the non-released `FSAmisc` package that I maintain. These functions are used below **only** to show what could be done in older versions of `FSA` but should now be done as described in this post. **DO NOT USE any of the functions below that begin with `FSAmisc::`.** 
+:::
+
+&nbsp;
+
+# Introduction
+We deprecated `fitPlot()` from FSA v0.9.0 and fully removed it by the start of 2022. We took this action to make `FSA` more focused on fisheries applications and to eliminate "black box" functions. `fitPlot()` was originally designed for students to quickly visualize the results of one- and two-way ANOVAs and simple, indicator variable, and logistic regressions.^[Over time functionality for non-linear regressions was added.] We now feel that students are better served by learning how to create these visualizations using methods provided by `ggplot2`, which require more code, but are more modern, flexible, and transparent.
+
+The basic plots produced by `fitPlot()` are recreated here using `ggplot2` to provide a resource to help users that relied on `fitPlot()` transition to `ggplot2`.
+
+&nbsp;
+
+# Example Data
+Examples below use the `Mirex` data set from `FSA`, which contains the concentration of mirex in the tissue and the body weight of two species of salmon (`chinook` and `coho`) captured in six years. The `year` variable is converted to a factor for modeling purposes and a new variable is created that indicates if the mirex concentration was greater that 0.2 or not. This new variable is used to demonstrate a logistic regression.^[`peek()` from `FSA` is used to examine a portion of the data from evenly-spaced row.]
+
+```{r}
+data(Mirex,package="FSA")
+Mirex <- Mirex |>
+  mutate(year=factor(year),
+         gt2=ifelse(mirex>0.2,1,0))
+peek(Mirex,n=10)
+```
+
+&nbsp;
+
+# One-Way ANOVA
+The code below fits a one-way ANOVA model to examine if mean weight differs by species.
+
+```{r}
+aov1 <- lm(weight~species,data=Mirex)
+anova(aov1)
+```
+
+&nbsp;
+
+There are at least two simple ways to visualize results from a one-way ANOVA. First, *summarized* means of raw data with 95% confidence intervals derived from the standard error, sample size, and degrees-of-freedom specific to each group are shown. These are computed below.
+
+```{r}
+sumdata <- Mirex |>
+  group_by(species) |>
+  summarize(n=n(),
+            mn=mean(weight),
+            se=se(weight)) |>
+  mutate(lci=mn-qt(0.975,df=n-1)*se,
+         uci=mn+qt(0.975,df=n-1)*se)
+sumdata
+```
+
+&nbsp;
+
+Second, marginal means may be predicted or estimated from the fitted model.^[These are discussed in detail in [this vignette](https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html) from the `emmeans` package.] The main difference from above is that confidence intervals for the marginal means use an "overall" standard deviation and degrees-of-freedom estimated from across all groups. The estimated marginal means may be computed with with `emmeans()` from `emmeans`.^[They may also be computed with `predict(aov1,newdata=data.frame(species=c("chinook","coho")),interval="confidence").`]
+
+```{r}
+aov1mc <- emmeans::emmeans(aov1,specs=pairwise~species)
+aov1mcs <- summary(aov1mc)
+aov1mcs$emmeans
+```
+
+&nbsp;
+
+`fitPlot()` from `FSA` used the summarized means with 95% confidence intervals for both species.
+
+```{r}
+#| label: fitPlot_1way_A
+#| par1: true
+FSAmisc::fitPlot(aov1)
+```
+
+&nbsp;
+ 
+### Using Manually Summarized Means
+The summarized means saved in `sumdata` above can be plotted as shown below to recreate the `fitPlot()` result. `width=0.1` in `geom_errorbar()` is used to reduce the width of the "caps" at the confidence values and `group=1` is needed in `geom_line()` as there is only one point for each factor level. Changes (themes, colors, labels, etc) to this basic plot can be made as usual for `ggplot()`s (and is illustrated further below).
+
+```{r}
+#| label: fitPlot_1way_B
+ggplot(data=sumdata,mapping=aes(x=species)) +
+  geom_errorbar(mapping=aes(ymin=lci,ymax=uci),width=0.1) +
+  geom_line(mapping=aes(y=mn,group=1)) +
+  geom_point(mapping=aes(y=mn))
+```
+
+&nbsp;
+
+### Using Built-In Functions for Summarized Means
+This plot can also be constructed without having previously summarized the group means by using `stat_summary()` coupled with `mean_cl_normal()` and `mean()`. Below note how each `geom=` in each `stat_summary()` mirrors what was used above. Also note the use of `width=0.1` and `group=1` here as done above.
+
+```{r}
+#| label: fitPlot_1way_C
+ggplot(data=Mirex,mapping=aes(x=species,y=weight)) +  
+  stat_summary(fun.data=mean_cl_normal,geom="errorbar",width=0.1) +  
+  stat_summary(fun=mean,geom="line",mapping=aes(group=1)) +  
+  stat_summary(fun=mean,geom="point")
+```
+
+&nbsp;
+
+### Using Marginal Means from `emmeans`
+The estimated marginal means may be plotted similarly to the manually summarized means. However, the `aov1mcs$emmeans` data frame created above is used, which also requires using `lower.CL` and `upper.CL` for the `ymin=` and `ymax=` in `geom_errorbar()` and `emmean` for the `y=` mean value in `geom_line()` and `geom_point()`.^[Review the output from `aov1mcs$emmeans` above taking special note of the variable names.]
+
+```{r}
+#| label: fitPlot_1way_D
+ggplot(data=aov1mcs$emmeans,mapping=aes(x=species)) +
+  geom_errorbar(mapping=aes(ymin=lower.CL,ymax=upper.CL),width=0.1) +
+  geom_line(mapping=aes(y=emmean,group=1)) +
+  geom_point(mapping=aes(y=emmean))
+```
+
+&nbsp;
+
+# Two-Way ANOVA
+The code below fits a two-way ANOVA model to examine if mean weight differs by species, by year, or by the interaction between species and year.
+
+```{r}
+aov2 <- lm(weight~year*species,data=Mirex)
+anova(aov2)
+```
+
+&nbsp;
+
+
+`fitPlot()` from `FSA` used the mean with 95% confidence interval for all combinations of species and year.
+
+```{r}
+#| label: fitPlot_2way_A
+#| par1: true
+FSAmisc::fitPlot(aov2)
+```
+
+&nbsp;
+
+### Using Built-In Functions for Summarized Means 
+Again, `stat_summary()` can be used to efficiently calculate and then plot the 95% confidence intervals and means similar to what was shown above for a one-way ANOVA. However, there are three major differences.
+
+First, in the main `ggplot()` call the color of the points and lines is mapped to one of the two factor variables (`species` in this case) whereas the other factor variable is mapped to `x=`.^[These two variables can, of course, be exchanged. However, I generally prefer to have the variable with more levels on the x-axis.] Second, the `group=` aesthetic for the line geom must be set to the factor that describes how the lines should be connected, which will be the same as the variable mapped to the color aesthetic (e.g., `species` in this case). Third, the intervals and (possibly) the points at each level on the x-axis will overlap if they are not "dodged" a small amount.^[Note this same problem occurs for the `fitPlot()`, though there is no simple solution for it.] The "dodge" amount should be set outside the `geom()`s so that each geom uses the same amount of "dodging." This will assure that the intervals, points, and connecting lines for each level defined by the colors align. Below this "dodge" amount is set with `position_dodge()` and saved to an object called `pd` which is then set equal to `position=` in each `geom()`.
+
+```{r}
+#| label: fitPlot_2way_B
+#| fig.width: 5
+pd <- position_dodge(width=0.2)
+ggplot(data=Mirex,mapping=aes(x=year,y=weight,color=species)) +  
+  stat_summary(fun.data=mean_cl_normal,geom="errorbar",width=0.2,position=pd) + 
+  stat_summary(fun=mean,geom="line",mapping=aes(group=species),position=pd) +  
+  stat_summary(fun=mean,geom="point",position=pd)
+```
+
+&nbsp;
+
+### Using Marginal Means from `emmeans`
+The mearginal means are again computed with `emmeans()`, but with `year:species` so that the marginal means and confidence intervals are estimated for each combination of `year` and `species`.
+
+
+```{r}
+aov2mc <- emmeans::emmeans(aov2,specs=pairwise~year:species)
+aov2mcs <- summary(aov2mc)
+aov2mcs$emmeans
+```
+
+The plot of these marginal means is constructed similarly to that for the one-way ANOVA but using the dodging and color aesthetics described above.
+
+```{r}
+#| label: fitPlot_2way_C
+#| fig.width: 5
+pd <- position_dodge(width=0.2)
+ggplot(data=aov2mcs$emmeans,mapping=aes(x=year,color=species)) +
+  geom_errorbar(mapping=aes(ymin=lower.CL,ymax=upper.CL),width=0.2,position=pd) +
+  geom_line(mapping=aes(y=emmean,group=species),position=pd) +
+  geom_point(mapping=aes(y=emmean),position=pd)
+```
+
+&nbsp;
+
+# Simple Linear Regression
+The code below fits a simple linear regression for examining the relationship between mirex concentration and salmon weight.
+
+```{r}
+slr <- lm(mirex~weight,data=Mirex)
+anova(slr)
+```
+
+&nbsp;
+
+`fitPlot()` from `FSA` showed the best-fit line with a 95% confidence band.
+
+```{r}
+#| label: fitPlot_SLR_A
+#| par1: true
+FSAmisc::fitPlot(slr,interval="confidence")
+```
+
+&nbsp;
+
+### Using Manually Predicted Values I
+One method for recreating this plot is to create a new data frame that first has the two variables of observed data and then adds on predicted values of the response at each observed value of the explanatory variable with 95% confidence intervals. The two observed variables are selected from the original data frame with `select()`. If this new data frame is given to `newdata=` in `predict()` with `interval="confidence"` then the predicted values (and 95% confidence intervals) will be constructed at each value of the explanatory variable. The two data frames are then column-bound together with `cbind()` to make one data frame for plotting (further below).
+
+```{r}
+slrdf <- Mirex |>
+  select(weight,mirex)
+slrdf <- cbind(slrdf,predict(slr,newdata=slrdf,interval="confidence"))
+peek(slrdf,n=6)
+```
+
+The confidence band is first plotted as a "ribbon" with the best-fit line then added followed by the observed points. In this plot, `weight` is globally mapped to `x=` in `ggplot()` so that it will be used for each geom. The lower and upper confidence values are mapped to `ymin=` and `ymax=` in `geom_ribbon()`, whereas the predicted or "fit"ted values are mapped to `y=` `geom_line()` to make the line and the observed mirex concentrations are mapped to `y=` in `geom_point()` to plot the observed points. Further note the use of `alpha=` to make the confidence band semi-transparent and `size=` to make the fitted line slightly larger than the default. Again all aspects of this plot can be changed in the usual ggplot way.
+
+```{r}
+#| label: fitPlot_SLR_B
+ggplot(data=slrdf,mapping=aes(x=weight)) +
+  geom_ribbon(mapping=aes(ymin=lwr,ymax=upr),alpha=0.2) +
+  geom_line(mapping=aes(y=fit),size=1) +
+  geom_point(mapping=aes(y=mirex))
+```
+
+&nbsp;
+
+### Using Manually Predicted Values II
+With more sparse data sets there may not be enough predicted values to make a smooth plot. In these cases, a separate data frame with more designated values for the explanatory variable is useful. The first line below creates a data frame of weights that consists of 101 evenly spaced values from the minimum to maximum observed weight in the original data frame. Concentrations of mirex at each of these weights are then predicted from the regression line and bound to the data frame.
+
+```{r}
+nd <- data.frame(weight=seq(min(slrdf$weight),max(slrdf$weight),length.out=101))
+nd <- cbind(nd,predict(slr,newdata=nd,interval="confidence"))
+peek(slrdf,n=6)
+```
+
+The plot is now constructed from two data frames -- `slrdf` with the original observed data and `nd` with predicted concentrations of mirex at specifically chosen weights. Given this, the data to use must be specifically declared within each geom, with `geom_ribbon()` and `geom_line()` using the predicted data frame (i.e., `nd`) and `geom_point()` using the observed data (i.e., `slrdf`).
+
+```{r}
+#| label: fitPlot_SLR_C
+ggplot() +
+  geom_ribbon(data=nd,mapping=aes(x=weight,ymin=lwr,ymax=upr),alpha=0.2) +
+  geom_line(data=nd,mapping=aes(x=weight,y=fit),size=1) +
+  geom_point(data=slrdf,mapping=aes(x=weight,y=mirex))
+```
+
+&nbsp;
+
+### Using A Built-In Function
+The best-fit line can also be added to a scatterplot with `geom_smooth()`, where `method="lm"` makes sure that a linear model is used for the "smoother."
+
+```{r}
+#| label: fitPlot_SLR_D
+ggplot(data=Mirex,mapping=aes(x=weight,y=mirex)) +
+  geom_smooth(method="lm",alpha=0.2) +
+  geom_point()
+```
+
+&nbsp;
+
+## Indicator Variable Regression
+The code below fits an indicator variable regression to examine if the relationship between mirex concentration and salmon weight differs betwen species.
+
+```{r}
+ivr <- lm(mirex~weight*species,data=Mirex)
+anova(ivr)
+```
+
+&nbsp;
+
+`fitPlot()` from `FSA` showed the best-fit line for both species.
+
+```{r}
+#| label: fitPlot_IVR_A
+#| par1: true
+FSAmisc::fitPlot(ivr,interval="confidence")
+```
+
+&nbsp;
+
+### Using Manually Predicted Values
+The process of constructing a similar plot in `ggplot()` follows the same general procedure as that for a simple linear regression. First, make a data frame that has the observed variables used in the model and predicted values and confidence limits for each observation.^[Again, one may want to make a data frame with more values of the explanatory variable if the observed data is sparse.]
+
+```{r}
+ivrdf <- select(Mirex,weight,mirex,species)
+ivrdf <- cbind(ivrdf,predict(ivr,newdata=ivrdf,interval="confidence"))
+peek(ivrdf,n=6)
+```
+
+&nbsp;
+
+Then plot the data as before but making sure to map `color=` and `fill=` (just for the ribbon) to the species factor variable.
+
+```{r}
+#| label: fitPlot_IVR_B
+#| fig.width: 4.5
+ggplot(data=ivrdf,mapping=aes(x=weight,color=species)) +
+  geom_ribbon(mapping=aes(ymin=lwr,ymax=upr,fill=species),alpha=0.2) +
+  geom_line(mapping=aes(y=fit),size=1) +
+  geom_point(mapping=aes(y=mirex))
+```
+
+&nbsp;
+
+### Using a Built-In Function
+This plot can also be constructed with `geom_smooth()`, again making sure to map the `color=` and `fill=` to the species factor variable.
+
+```{r}
+#| label: fitPlot_IVR_C
+#| fig.width: 4.5
+ggplot(data=Mirex,mapping=aes(x=weight,y=mirex,color=species,fill=species)) +
+  geom_smooth(method="lm",alpha=0.2) +
+  geom_point()
+```
+
+&nbsp;
+
+## Logistic Regression
+The code below fits a logistic regression to examine the relationship between the probability that mirex concentration is greater than 0.2 and salmon weight.
+
+```{r}
+logreg <- glm(gt2~weight,data=Mirex,family="binomial")
+summary(logreg)
+```
+
+&nbsp;
+
+`fitPlot()` from `FSA` showed the fitted logistic regression curve with the observed values transparently at the top and bottom of the y-axis and symbols at the proportion of "successes" for "windows" of the x-axis.
+
+```{r}
+#| label: fitPlot_LogReg_A
+#| par1: true
+FSAmisc::fitPlot(logreg)
+```
+
+&nbsp;
+
+### Using Manually Predicted Values
+The first method for showing the logistic regression curve follows the general methodology for simple linear regression shown above. Note, however, that `predict()` does not produce confidence interval values for a logistic regression. Thus, the plot created in this way cannot have a confidence band.
+
+```{r}
+logregdf <- select(Mirex,gt2,weight)
+logregdf$fit <- predict(logreg,newdata=logregdf,
+                        type="response",interval="confidence")
+peek(logregdf,n=6)
+```
+
+```{r}
+#| label: fitPlot_LogReg_B
+ggplot(data=logregdf,mapping=aes(x=weight)) +
+  geom_point(mapping=aes(y=gt2),alpha=0.25) +
+  geom_line(mapping=aes(y=fit),size=1)
+```
+
+&nbsp;
+
+### Using a Built-In Function
+The best-fit logistic regression curve with a confidence band can, however, be added to a scatterplot with `geom_smooth()`. In this case, `method=` must be changed to `glm` and `method.args=` must be used as shown below so that `glm` will construct a logistic (rather than linear) regression.
+
+```{r}
+#| label: fitPlot_LogReg_C
+ggplot(data=Mirex,mapping=aes(x=weight,y=gt2)) +
+  geom_smooth(method="glm",alpha=0.2,method.args=list(family="binomial")) +
+  geom_point(alpha=0.25)
+```
+
+&nbsp;
+
+Note that this method easily generalizes to an indicator variable logistic regression (note that `color=` and `fill=` are mapped to the species factor variable).
+
+```{r}
+#| label: fitPlot_LogReg_D
+#| fig.width: 4.5
+logreg2 <- glm(gt2~weight*species,data=Mirex,family="binomial")
+
+ggplot(data=Mirex,mapping=aes(x=weight,y=gt2,color=species,fill=species)) +
+  geom_smooth(method="glm",alpha=0.2,
+              method.args=list(family="binomial")) +
+  geom_point(alpha=0.25)
+```
+
+&nbsp;
+
+## Polynomial Regression
+The code below fits a quadratic (second degree polynomial) regression for the relationship between mirex concentration and salmon weight.
+
+```{r}
+poly2 <- lm(mirex~weight+I(weight^2),data=Mirex)
+summary(poly2)
+```
+
+&nbsp;
+
+`fitPlot()` from `FSA` showed the best-fit regression curve.
+
+```{r}
+#| label: fitPlot_poly_A
+#| par1: true
+FSAmisc::fitPlot(poly2,interval="confidence")
+```
+
+&nbsp;
+
+### Using Manually Predicted Values
+This regression can be viewed similarly to the way the simple linear regressions was viewed.
+
+```{r}
+#| label: fitPlot_poly_B
+polydf <- select(Mirex,weight,mirex)
+polydf <- cbind(polydf,predict(poly2,newdata=polydf,interval="confidence"))
+ggplot(polydf,mapping=aes(x=weight)) +
+  geom_ribbon(mapping=aes(ymin=lwr,ymax=upr),alpha=0.2) +
+  geom_line(mapping=aes(y=fit),size=1) +
+  geom_point(mapping=aes(y=mirex))
+```
+
+&nbsp;
+
+### Using a Built-In Function
+This type of regression can also be viewed using `geom_smooth()` but the formula for the polynomial must be given to `formula=`. However, note that in this formula you put `y` and `x` rather than the names of the variables that are mapped to `y` and `x`.
+
+```{r}
+#| label: fitPlot_poly_C
+ggplot(data=Mirex,mapping=aes(x=weight,y=mirex)) +
+  geom_smooth(method="lm",formula="y~x+I(x^2)",alpha=0.2) +
+  geom_point()
+```
+
+&nbsp;
+
+## Nonlinear Regression
+The concepts about producing a fitted line plot for a non-linear regression in `ggplot` is described in detail, with respect to a von Bertalanffy growth function, in [this post](../2019-12-31_vonB_plots_1/) and [this post](../2020-1-2_vonB_plots_2/).
+
+&nbsp;
+
+## Conclusion
+`fitPlot()` in `FSA` was removed in early 2022. This post describes a more transparent (i.e., not a "black box") and flexible set of methods for constructing similar plots using `ggplot2` for those who will need to transition away from using `fitPlot()`.
+
+As mentioned in the examples above, each plot can be modified further using typical methods for `ggplot2`. These changes were not illustrated above to minimize the amount of code shown in this post. However, as an example, the code below shows a possible modification of the IVR plot shown above.
+
+```{r}
+#| label: fitPlot_Final
+ggplot(data=Mirex,mapping=aes(x=weight,y=mirex,color=species,fill=species)) +
+  geom_smooth(method="lm",alpha=0.1,size=1.25) +
+  geom_point(size=1.5) +
+  scale_y_continuous(name="Mirex Concentration in Tissue",limits=c(0,0.5),
+                     expand=expansion(mult=0)) +
+  scale_x_continuous(name="Salmon Weight (kg)",limits=c(0,15),
+                     expand=expansion(mult=0)) +
+  scale_color_manual(values=c("#E69F00","#0072B2"),
+                     aesthetics=c("color","fill")) +
+  theme(panel.grid.major=element_line(color="gray90",linetype="dashed"),
+        panel.grid.minor=element_blank(),
+        axis.title=element_text(size=rel(1.25)),
+        axis.text=element_text(size=rel(1.1)),
+        legend.position=c(0,1),
+        legend.justification=c(-0.05,1.02),
+        legend.title=element_blank(),
+        legend.text=element_text(size=rel(1.1)))
+```
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+last_plot() +
+  theme(aspect.ratio=1)
+dev.off()
+```

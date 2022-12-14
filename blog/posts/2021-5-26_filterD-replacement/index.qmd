@@ -1,0 +1,70 @@
+---
+title: Replace filterD()
+description: An alternative to `filterD()` which was removed from `FSA`.
+author: Derek H. Ogle
+date: 5/26/2021
+image: preview.png
+categories:
+  - FSA
+  - Data Wrangling
+---
+
+:::{.callout-note}
+The following packages are loaded for use below.
+:::
+
+```{r packages}
+library(dplyr)  ## for
+```
+
+:::{.callout-note}
+Some functions illustrated below were in the `FSA` package but have now been removed and put into the non-released `FSAmisc` package that I maintain. These functions are used below **only** to show what could be done in older versions of `FSA` but should now be done as described in this post. **DO NOT USE any of the functions below that begin with `FSAmisc::`.**
+:::
+
+&nbsp;
+
+We deprecated `filterD()` from FSA v0.9.0 and fully removed it by the start of 2022. `filterD()` was an attempt to streamline the process of using `filter()` (from `dplyr`) followed by `droplevels()` to remove levels of a factor variable that no longer existed in the filtered data frame.
+
+For example, consider the very simple data frame below.
+
+```{r}
+d <- data.frame(tl=runif(6,min=100,max=200),
+                spec=factor(c("LMB","LMB","SMB","BG","BG","BG")))
+d
+```
+
+Now suppose that this data frame is reduced to just Bluegill.
+
+```{r}
+dbg <- d |>
+  filter(spec=="BG")
+```
+
+A quick frequency table of species caught shows that levels for species that no longer exist in the data frame are maintained.
+
+```{r}
+xtabs(~spec,data=dbg)
+```
+
+This same "problem" occurs when using `subset()` from base R.
+
+```{r}
+dbg <- subset(d,spec=="BG")
+xtabs(~spec,data=dbg)
+```
+
+These "problems" can be eliminated by submitting the new data frame to `drop.levels()`.
+
+```{r}
+dbg2 <- droplevels(dbg)
+xtabs(~spec,data=dbg2)
+```
+
+`filterD()` was a simple work-around that eliminated this second step and was useful for helping students who were just getting started with R.
+
+```{r}
+dbg3 <- FSAmisc::filterD(d,spec=="BG")
+xtabs(~spec,data=dbg3)
+```
+
+However, this was a hacky solution to a simple problem. Thus, we deprecated and subsequently removed `filterD()` from `FSA`. Thus, please use `droplevels()` (or `fct_drop()` from `forcats`) after using `filter()` to accomplish the same task of the defunct `filterD()`.
