@@ -1,0 +1,76 @@
+---
+title: Two New Cumulative Sum Functions
+description: Introducing the missing current and reverse cumulative sum functions.
+author: Derek H. Ogle
+date: 9/6/20
+image: preview.png
+categories:
+  - FSA
+  - Data Wrangling
+---
+
+:::{.callout-note}
+The following packages are loaded for use below.
+:::
+
+```{r packages}
+library(FSA)   ## for pcumsum(), rcumsum()
+```
+
+&nbsp;
+
+# Introduction
+In fisheries analyses it is fairly common to compute the cumulative sum of values in a vector -- i.e., all values before and including the current position in the vector. For example, the third value in the cumulative sum would be the sum of the first, second, and third values in the original vector. These types of cumulative sums are easily accomplished with `cumsum()` in base R.
+
+```{r}
+vec <- 1:10
+( cum <- cumsum(vec) )
+cum[3]
+```
+
+Some applications in fisheries science (e.g., depletion estimators) require the cumulative sum **NOT** including the current value in the vector. For example, the third value in this case would be the sum of the first and second values in the original vector. These values may be computed by subtracting the original vector from the vector returned by `cumsum()`.
+
+```{r}
+cum-vec
+```
+
+In still other applications (e.g., proportional size distribution calculations) a cumulative sum from the **RIGHT** rather than the left is required.  For example, the third value in this case would be the sum of the third, fourth, fifth, ..., last values in the original vector. These values may be computed by reversing the order of the result from `cumsum()` that had been applied to the reverse order of the original vector.
+
+```{r}
+rev(cumsum(rev(vec)))
+```
+
+&nbsp;
+
+# `FSA` Functions
+For efficiency, these simple processes has been coded in `pcumsum()` and `rcumsum()` in **FSA**.
+
+```{r}
+## cumsum without the current value
+( pcum <- pcumsum(vec) )
+pcum[3]
+
+## "reverse" (from the right) cumsum
+( rcum <- rcumsum(vec) )
+rcum[3]
+```
+
+The three types of cumulative sums are shown, along with the original vector, in the matrix below.
+
+```{r}
+cbind(vec,cum,pcum,rcum)
+```
+
+These two new functions are unlikely to change the world as we know it; however, I wanted to document them in this blog so that others could find them if needed.^[The function documentation is available [here](https://fishr-core-team.github.io/FSA/reference/rcumsum.html).]
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+source("../_helpers.R")
+sc2pv()
+```

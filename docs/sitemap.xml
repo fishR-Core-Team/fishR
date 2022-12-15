@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2022-12-14T17:28:30.637Z</lastmod>
+    <lastmod>2022-12-15T01:46:32.949Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-11_compSlopes-replacement/index.html</loc>
-    <lastmod>2022-12-14T17:28:26.342Z</lastmod>
+    <lastmod>2022-12-14T23:30:32.654Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-25_fitPlot-replacement/index.html</loc>
@@ -91,5 +91,13 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/packages.html</loc>
     <lastmod>2022-12-14T16:29:00.269Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-12_compIntercepts-replacement/index.html</loc>
+    <lastmod>2022-12-14T18:47:44.975Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-6_Cumulative_Sums/index.html</loc>
+    <lastmod>2022-12-15T01:46:41.015Z</lastmod>
   </url>
 </urlset>
