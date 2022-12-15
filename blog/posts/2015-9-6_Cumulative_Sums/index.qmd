@@ -2,7 +2,7 @@
 title: Two New Cumulative Sum Functions
 description: Introducing the missing current and reverse cumulative sum functions.
 author: Derek H. Ogle
-date: 9/6/20
+date: 9/6/2015
 image: preview.png
 categories:
   - FSA

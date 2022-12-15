@@ -1,0 +1,86 @@
+---
+title: Computing SE for PSD indices
+description: Demonstrate how to compute SE for PSD indices.
+author: Derek H. Ogle
+date: 12/9/2016
+image: preview.png
+categories:
+  - PSD
+  - Size Structure
+---
+
+:::{.callout-note}
+The following packages are loaded for use below.
+:::
+
+```{r packages}
+library(FSA)   ## for psdAdd(), rcumsum(), headtail() 
+library(dplyr) ## for mutate(), filter()
+```
+
+&nbsp;
+
+A reader of @ogleIntroductoryFisheriesAnalyses2016 asked how to compute standard errors (SE) for the various PSD indices with the usual SE equation of a proportion (i.e., $\sqrt{\frac{p(1-p)}{n}}$. I demonstrate this calculation in this post
+
+:::{.callout-warning}
+I caution against using these standard errors to produce confidence intervals for PSD-X values. If confidence intervals are the end product for this analysis, then I suggest using the binomial or multinomial distribution methods described in @ogleIntroductoryFisheriesAnalyses2016.
+:::
+
+&nbsp;
+
+I will use the same Inch Lake data from the Size Structure chapter of @ogleIntroductoryFisheriesAnalyses2016, where I used `psdAdd()` (from `FSA`) to add a variable with the Gabelhouse length categories and eliminated all sub-stock size fish.^[this and next step is from [this script](http://derekogle.com/IFAR/scripts/SizeStructure.R)) from @ogleIntroductoryFisheriesAnalyses2016.]
+
+```{r}
+#| message: true
+inchAlls <- read.csv("http://derekogle.com/IFAR/scripts/InchLake1113.csv") |>
+  mutate(gcat=psdAdd(tl,species)) |>
+  filter(gcat!="substock") |>
+  droplevels()
+headtail(inchAlls)
+```
+
+I then computed the PSD-X values as shown in @ogleIntroductoryFisheriesAnalyses2016. These will be the proportions (i.e., $p$) in the SE calculations.
+
+```{r}
+( freq <- xtabs(~species+gcat,data=inchAlls) )
+iPSDs <- prop.table(freq,margin=1)*100
+( PSDs <- t(apply(iPSDs,MARGIN=1,FUN=rcumsum)) )
+```
+
+The row sums from the `freq` table are the total number of fish (that are stock size or greater) and will be $n$ in the SE calculations.
+
+```{r}
+( sums <- rowSums(freq) )
+```
+
+Finally, with these two results the SE for PSD-Q may be computed.
+```{r}
+p <- PSDs[,"quality"]
+SEs <- sqrt(p*(100-p)/sums)
+round(SEs,1)
+```
+
+And can be repeat for other size indices; e.g., for PSD-P.
+```{r}
+p <- PSDs[,"preferred"]
+SEs <- sqrt(p*(100-p)/sums)
+round(SEs,1)
+```
+
+&nbsp;
+
+:::{.callout-note}
+The SE formula is usually used for proportions (and then multiplied by 100 to get a SE for percentages). However, it can be shown algebraically to apply to percentages as well.
+:::
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+source("../_helpers.R")
+sc2pv()
+```

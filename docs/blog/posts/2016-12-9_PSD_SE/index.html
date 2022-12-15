@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Introducing the missing current and reverse cumulative sum functions.">
+<meta name="description" content="Demonstrate how to compute SE for PSD indices.">
 
-<title>fishR - Two New Cumulative Sum Functions</title>
+<title>fishR - Computing SE for PSD indices</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -85,6 +85,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -127,21 +146,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Two New Cumulative Sum Functions">
-<meta property="og:description" content="Introducing the missing current and reverse cumulative sum functions.">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2015-9-6_Cumulative_Sums\preview.png">
+<meta property="og:title" content="fishR - Computing SE for PSD indices">
+<meta property="og:description" content="Demonstrate how to compute SE for PSD indices.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2016-12-9_PSD_SE\preview.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
-<meta name="citation_title" content="Two New Cumulative Sum Functions">
+<meta name="citation_title" content="Computing SE for PSD indices">
 <meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2020-09-06">
-<meta name="citation_cover_date" content="2020-09-06">
-<meta name="citation_year" content="2020">
-<meta name="citation_online_date" content="2020-09-06">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2015-9-6_Cumulative_Sums">
+<meta name="citation_publication_date" content="2016-12-09">
+<meta name="citation_cover_date" content="2016-12-09">
+<meta name="citation_year" content="2016">
+<meta name="citation_online_date" content="2016-12-09">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2016-12-9_PSD_SE">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -220,15 +240,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Two New Cumulative Sum Functions</h1>
+      <h1 class="title">Computing SE for PSD indices</h1>
                   <div>
         <div class="description">
-          Introducing the missing current and reverse cumulative sum functions.
+          Demonstrate how to compute SE for PSD indices.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">FSA</div>
-                <div class="quarto-category">Data Wrangling</div>
+                <div class="quarto-category">PSD</div>
+                <div class="quarto-category">Size Structure</div>
               </div>
                   </div>
   </div>
@@ -246,7 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Sep 6, 2020</p>
+        <p class="date">Dec 9, 2016</p>
       </div>
     </div>
     
@@ -264,14 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#fsa-functions" id="toc-fsa-functions" class="nav-link" data-scroll-target="#fsa-functions"><code>FSA</code> Functions</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2015-9-6_Cumulative_Sums/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+        
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
@@ -293,98 +306,133 @@ Note
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)   <span class="do">## for pcumsum(), rcumsum()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)   <span class="do">## for psdAdd(), rcumsum(), headtail() </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="do">## for mutate(), filter()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>In fisheries analyses it is fairly common to compute the cumulative sum of values in a vector – i.e., all values before and including the current position in the vector. For example, the third value in the cumulative sum would be the sum of the first, second, and third values in the original vector. These types of cumulative sums are easily accomplished with <code>cumsum()</code> in base R.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>( cum <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(vec) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|   [1]  1  3  6 10 15 21 28 36 45 55</code></pre>
+<p>A reader of <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> asked how to compute standard errors (SE) for the various PSD indices with the usual SE equation of a proportion (i.e., <span class="math inline">\(\sqrt{\frac{p(1-p)}{n}}\)</span>. I demonstrate this calculation in this post</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cum[<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 6</code></pre>
+<div class="callout-caption-container flex-fill">
+Warning
 </div>
 </div>
-<p>Some applications in fisheries science (e.g., depletion estimators) require the cumulative sum <strong>NOT</strong> including the current value in the vector. For example, the third value in this case would be the sum of the first and second values in the original vector. These values may be computed by subtracting the original vector from the vector returned by <code>cumsum()</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cum<span class="sc">-</span>vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|   [1]  0  1  3  6 10 15 21 28 36 45</code></pre>
-</div>
-</div>
-<p>In still other applications (e.g., proportional size distribution calculations) a cumulative sum from the <strong>RIGHT</strong> rather than the left is required. For example, the third value in this case would be the sum of the third, fourth, fifth, …, last values in the original vector. These values may be computed by reversing the order of the result from <code>cumsum()</code> that had been applied to the reverse order of the original vector.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(<span class="fu">cumsum</span>(<span class="fu">rev</span>(vec)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|   [1] 55 54 52 49 45 40 34 27 19 10</code></pre>
+<div class="callout-body-container callout-body">
+<p>I caution against using these standard errors to produce confidence intervals for PSD-X values. If confidence intervals are the end product for this analysis, then I suggest using the binomial or multinomial distribution methods described in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>.</p>
 </div>
 </div>
 <p>&nbsp;</p>
-</section>
-<section id="fsa-functions" class="level1 page-columns page-full">
-<h1><code>FSA</code> Functions</h1>
-<p>For efficiency, these simple processes has been coded in <code>pcumsum()</code> and <code>rcumsum()</code> in <strong>FSA</strong>.</p>
+<div class="page-columns page-full"><p>I will use the same Inch Lake data from the Size Structure chapter of <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>, where I used <code>psdAdd()</code> (from <code>FSA</code>) to add a variable with the Gabelhouse length categories and eliminated all sub-stock size fish.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;this and next step is from <a href="http://derekogle.com/IFAR/scripts/SizeStructure.R">this script</a>) from <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cumsum without the current value</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>( pcum <span class="ot">&lt;-</span> <span class="fu">pcumsum</span>(vec) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>inchAlls <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"http://derekogle.com/IFAR/scripts/InchLake1113.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gcat=</span><span class="fu">psdAdd</span>(tl,species)) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gcat<span class="sc">!=</span><span class="st">"substock"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">droplevels</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#R|  No known Gabelhouse (PSD) lengths for: Iowa Darter</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(inchAlls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|   [1]  0  1  3  6 10 15 21 28 36 45</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pcum[<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## "reverse" (from the right) cumsum</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>( rcum <span class="ot">&lt;-</span> <span class="fu">rcumsum</span>(vec) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|   [1] 55 54 52 49 45 40 34 27 19 10</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rcum[<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 52</code></pre>
+<pre class="output"><code>#R|       gearType year       species  tl      gcat
+#R|  1        fyke 2012 Black Crappie 246   quality
+#R|  2        fyke 2012 Black Crappie 165     stock
+#R|  3        fyke 2012 Black Crappie 330 memorable
+#R|  1270     fyke 2013  Yellow Perch 348 memorable
+#R|  1271     fyke 2013  Yellow Perch 135     stock
+#R|  1272     fyke 2013  Yellow Perch 137     stock</code></pre>
 </div>
 </div>
-<p>The three types of cumulative sums are shown, along with the original vector, in the matrix below.</p>
+<p>I then computed the PSD-X values as shown in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>. These will be the proportions (i.e., <span class="math inline">\(p\)</span>) in the SE calculations.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(vec,cum,pcum,rcum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>( freq <span class="ot">&lt;-</span> <span class="fu">xtabs</span>(<span class="sc">~</span>species<span class="sc">+</span>gcat,<span class="at">data=</span>inchAlls) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|        vec cum pcum rcum
-#R|   [1,]   1   1    0   55
-#R|   [2,]   2   3    1   54
-#R|   [3,]   3   6    3   52
-#R|   [4,]   4  10    6   49
-#R|   [5,]   5  15   10   45
-#R|   [6,]   6  21   15   40
-#R|   [7,]   7  28   21   34
-#R|   [8,]   8  36   28   27
-#R|   [9,]   9  45   36   19
-#R|  [10,]  10  55   45   10</code></pre>
+<pre class="output"><code>#R|                   gcat
+#R|  species           stock quality preferred memorable
+#R|    Black Crappie      33      40         8        81
+#R|    Bluegill          571     199       223        43
+#R|    Largemouth Bass    26      36         0         0
+#R|    Pumpkinseed         5       2         0         0
+#R|    Yellow Perch        4       0         0         1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>iPSDs <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(freq,<span class="at">margin=</span><span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>( PSDs <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(iPSDs,<span class="at">MARGIN=</span><span class="dv">1</span>,<span class="at">FUN=</span>rcumsum)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|                   gcat
+#R|  species           stock  quality preferred memorable
+#R|    Black Crappie     100 79.62963  54.93827 50.000000
+#R|    Bluegill          100 44.88417  25.67568  4.150579
+#R|    Largemouth Bass   100 58.06452   0.00000  0.000000
+#R|    Pumpkinseed       100 28.57143   0.00000  0.000000
+#R|    Yellow Perch      100 20.00000  20.00000 20.000000</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>These two new functions are unlikely to change the world as we know it; however, I wanted to document them in this blog so that others could find them if needed.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;The function documentation is available <a href="https://fishr-core-team.github.io/FSA/reference/rcumsum.html">here</a>.</p></li></div></div>
+<p>The row sums from the <code>freq</code> table are the total number of fish (that are stock size or greater) and will be <span class="math inline">\(n\)</span> in the SE calculations.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>( sums <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(freq) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    Black Crappie        Bluegill Largemouth Bass     Pumpkinseed    Yellow Perch 
+#R|              162            1036              62               7               5</code></pre>
+</div>
+</div>
+<p>Finally, with these two results the SE for PSD-Q may be computed.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> PSDs[,<span class="st">"quality"</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>SEs <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">100</span><span class="sc">-</span>p)<span class="sc">/</span>sums)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(SEs,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    Black Crappie        Bluegill Largemouth Bass     Pumpkinseed    Yellow Perch 
+#R|              3.2             1.5             6.3            17.1            17.9</code></pre>
+</div>
+</div>
+<p>And can be repeat for other size indices; e.g., for PSD-P.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> PSDs[,<span class="st">"preferred"</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>SEs <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">100</span><span class="sc">-</span>p)<span class="sc">/</span>sums)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(SEs,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    Black Crappie        Bluegill Largemouth Bass     Pumpkinseed    Yellow Perch 
+#R|              3.9             1.4             0.0             0.0            17.9</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The SE formula is usually used for proportions (and then multiplied by 100 to get a SE for percentages). However, it can be shown algebraically to apply to percentages as well.</p>
+</div>
+</div>
 <p>&nbsp;</p>
 <div class="cell" data-layout-align="center">
 
 </div>
 
 
-</section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2015,
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry" role="doc-biblioentry">
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/book/">Introductory <span>Fisheries</span> <span>Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2016,
   author = {Derek H. Ogle},
-  title = {Two {New} {Cumulative} {Sum} {Functions}},
-  date = {2015-09-06},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2015-9-6_Cumulative_Sums},
+  title = {Computing {SE} for {PSD} Indices},
+  date = {2016-12-09},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2016-12-9_PSD_SE},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2015" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2015, September 6. Two New Cumulative Sum Functions. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2015-9-6_Cumulative_Sums">https://fishr-core-team.github.io/fishR//blog/posts/2015-9-6_Cumulative_Sums</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2016" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2016, December 9. Computing SE for PSD indices. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2016-12-9_PSD_SE">https://fishr-core-team.github.io/fishR//blog/posts/2016-12-9_PSD_SE</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

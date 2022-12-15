@@ -353,7 +353,7 @@ Important
 </div>
 <p>&nbsp;</p>
 </section>
-<section id="example-data" class="level1">
+<section id="example-data" class="level1 page-columns page-full">
 <h1>Example Data</h1>
 <p>Examples below use the <code>Mirex</code> data set from <code>FSA</code>, which contains the concentration of mirex in the tissue and the body weight of two species of salmon (<code>chinook</code> and <code>coho</code>) captured in six years. The <code>year</code> variable is converted to a factor for modeling purposes. To keep the presentation simple, data from only three years will be used here.</p>
 <div class="cell" data-layout-align="center">
@@ -372,9 +372,9 @@ Important
 #R|  6 1992    7.9  0.18    coho</code></pre>
 </div>
 </div>
-<p>The <code>lm()</code> below fits the IVR to determine if the relationship between mirex concentration and weight of the salmon differs by year.</p>
+<div class="page-columns page-full"><p>The <code>lm()</code> below fits the IVR to determine if the relationship between mirex concentration and weight of the salmon differs by year.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;The three terms on the left side of the formula are the covariate (i.e., <code>weight</code>), main factor (i.e., <code>year</code>), and the interaction between the two (defined with the <code>:</code>).</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lm1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mirex<span class="sc">~</span>weight<span class="sc">*</span>year,<span class="at">data=</span>Mirex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lm1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mirex<span class="sc">~</span>weight<span class="sc">+</span>year<span class="sc">+</span>weight<span class="sc">:</span>year,<span class="at">data=</span>Mirex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>weight:year</code> interaction term p-value suggests that the slopes (i.e., relationship between mirex concentration and salmon weight) differs among some pair(s) of the three years.</p>
 <div class="cell" data-layout-align="center">
@@ -397,7 +397,7 @@ Important
 </section>
 <section id="what-compslopes-did" class="level1 page-columns page-full">
 <h1>What <code>compSlopes()</code> Did</h1>
-<div class="page-columns page-full"><p>The procedure used by <code>compSlopes()</code> to compare slopes is described in more detail <a href="http://derekogle.com/IFAR/supplements/weightlength/index.html">here</a>. <code>compSlopes()</code> was simple in that it onl6 required the saved <code>lm()</code> object as an argument and its returned results should be assigned to an object for further examaination.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<code>compSlopes()</code> had a <code>print()</code> function for nicely printing the results. However, here we will look at each component separately to ease comparison with the <code>emtrends()</code> results.</p></li></div></div>
+<div class="page-columns page-full"><p>The procedure used by <code>compSlopes()</code> to compare slopes is described in more detail <a href="http://derekogle.com/IFAR/supplements/weightlength/index.html">here</a>. <code>compSlopes()</code> was simple in that it only required the saved <code>lm()</code> object as an argument. Its returned results should be assigned to an object for further examination.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;<code>compSlopes()</code> had a <code>print()</code> function for nicely printing the results. However, here we will look at each component separately to ease comparison with the <code>emtrends()</code> results.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>csfsa <span class="ot">&lt;-</span> FSAmisc<span class="sc">::</span><span class="fu">compSlopes</span>(lm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -431,7 +431,7 @@ Important
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">emtrends</span>(lm1,<span class="at">specs=</span>pairwise<span class="sc">~</span>year,<span class="at">var=</span><span class="st">"weight"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>The object saved from <code>emtrends()</code> is then given as the first argument to <code>summary()</code>, which also requires <code>infer=TRUE</code> if you would like p-values to be calculated.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;<code>emmeas</code> does not compute p-values by default.</p></li></div></div>
+<div class="page-columns page-full"><p>The object saved from <code>emtrends()</code> is then given as the first argument to <code>summary()</code>, which also requires <code>infer=TRUE</code> if you would like p-values to be calculated.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;<code>emmeas</code> does not compute p-values by default.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>css <span class="ot">&lt;-</span> <span class="fu">summary</span>(cs,<span class="at">infer=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
