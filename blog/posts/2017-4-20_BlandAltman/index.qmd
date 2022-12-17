@@ -1,0 +1,231 @@
+---
+title: Bland-Altman Plot for Age Comparisons?
+description: Explore the use of Bland-Altman plots for comparing paired age estimates.
+author: Derek H. Ogle
+date: 4/20/2017
+image: preview.png
+categories:
+  - Age Comparisons
+  - ggplot2
+---
+
+```{r}
+#| include: false
+knitr::knit_hooks$set(par1 = function(before, options, envir) {
+  if (before) par(mar=c(3.5,3.5,1,1),mgp=c(2.1,0.4,0),tcl=-0.2)
+})
+options(show.signif.stars=FALSE) # option in meta.yml does not seem to work
+```
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)            ## for WhitefishLC, headtail()
+library(dplyr)          ## for mutate()
+library(ggplot2)
+library(BlandAltmanLeh) ## for bland.altman.plot()
+library(mgcv)
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+# Introduction
+In this post, I describe the Bland-Altman plot, demonstrate how to construct it in R, give a mild critique of its use for comparing fish age estimates, and develop an alternative that is meant to address my critique. This is largely a "thinking out loud" exercise so I am open to suggestions you may have.
+
+The `WhitefishLC` data frame from FSA.^[These data are loaded automatically with `library(FSA)`.] contains age readings made by two readers on scales, fin rays, and otoliths, along with consensus readings for each structure. These data will be used throughout this post.
+
+```{r}
+headtail(WhitefishLC)
+```
+
+# Bland-Altman Plot
+The Bland-Altman plot (@bland_statistical_1986) is commonly used in medical and chemistry research to assess agreement between two measurement or assay methods (@giavarina_understanding_2015). @mcbride_diagnosis_2015 used the Bland-Altman plot in his simulation study of the effects of accuracy and precision on the ability to diagnose agreement between sets of fish age estimates. @mcbride_diagnosis_2015 noted that Bland-Altman plots "*readily depict both bias and imprecision*" and that this was summarized for "*the entire sample, rather than specific age classes.*" Despite this, I am aware of only two entries in the fisheries literature that used the Bland-Altman plot to compare fish age estimates (one in the grey literature, one in a thesis). Below, I describe the Bland-Altman plot and then offer a modified version for comparing estimates of fish age.
+
+The Bland-Altman plot is a scatterplot where the differences in two age estimates are on the y-axis and means of the two age estimates are on the x-axis. The plot may be augmented with several horizontal lines at the following locations (@fig-BAEx1):
+
+* Zero,
+* Mean difference in ages (heavy red dashed line),
+* Upper and lower 95% confidence limits for the mean difference in ages (dark red dashed lines),
+* Upper and lower 95% "agreement limits" (usually 1.96 times the standard deviation for the difference in ages above and below the mean difference in ages; heavy dashed blue lines), and
+* Upper and lower 95% confidence limits for the upper and lower "agreement limits" (dashed dark blue lines).
+
+```{r}
+#| label: fig-BAEx1
+#| fig-cap: Bland-Altman plot for comparing scale to otolith age estimates of Lake Champlain Lake Whitefish. Thiw was constructed with `BlandAltmanLeh`.
+#| echo: FALSE
+#| results: hide
+#| par1: true
+bland.altman.plot(WhitefishLC$scaleC,WhitefishLC$otolithC,
+                  xlab="Mean Age",ylab="Scale Age - Otolith Age",
+                  conf.int=0.95)
+abline(h=0,col="gray50")
+```
+
+&nbsp;
+
+As a general rule, a 95% confidence interval for the mean difference that does not contain zero suggests a difference (or a bias) between the two age estimates. For example, a bias is evident in @fig-BAEx1. In addition, one would expect 95% of the points to fall within the "agreement limits." Points that fall outside this range may be considered further as possible outliers. Log differences have been used if the differences are not normally distributed and the percentage difference (where the difference is divided by the mean age) have also been used (@giavarina_understanding_2015).
+
+The Bland-Altman plot in @fig-BAEx1 was created with `bland.altman.plot()` from the `BlandAltmanLeh` package (@lehnert_blandaltmanleh_2015). Other R functions exist for creating Bland-Altman plots (or the equivalent "Tukey's Mean Difference Plot"). However, I demonstrate below how to construct this plot from "scratch."
+
+&nbsp;
+
+# Constructing a Bland-Altman Plot
+In this example, a Bland-Altman plot is created to compare consensus (between two readers) scale (`scaleC`) and otolith (`otolithC`) age estimates for Lake Champlain Lake Whitefish. For simplicity, I restrict (using `select()`) the data frame below to just these two variables plus `fishID` and `tl`. In addition, for making the plot the mean and differences between the two age estimates are added the data frame (using `mutate()`).
+
+```{r}
+wfSO <- WhitefishLC |>
+  select(fishID,tl,scaleC,otolithC) |>
+  mutate(meanSO=(scaleC+otolithC)/2,
+         diffSO=scaleC-otolithC)
+headtail(wfSO)
+```
+
+A data frame of summary statistics is also needed. Below the sample, mean, standard deviation, and standard error for the differences is ages are calculated and then approximate 95% confidence limits for the differences (i.e., using the SE) and agreement limits (i.e., using the SD) are added.
+
+```{r}
+sumSO <- wfSO |>
+  summarize(n=n(),
+            mean=mean(diffSO,na.rm=TRUE),
+            sd=sd(diffSO,na.rm=TRUE),
+            se=se(diffSO,na.rm=TRUE)) |>
+  mutate(lwrci=mean-1.96*se,
+         uprci=mean+1.96*se,
+         lwrag=mean-1.96*sd,
+         uprag=mean+1.96*sd)
+sumSO
+```
+
+The Bland-Altman plot can then be constructed in layers using `ggplot()` (@fig-BAEx2). Horizontal lines at zero, the mean difference, confidence limits for the mean difference, and the agreement limits are added with `geom_hline()` using `yintercept=` to denoted the location of the line and varying colors (with `color=`), line widths (with `linewidth=`), and line types (with `linetype=`). `geom_point()` is then used to add the observed differences in ages at the mean age as points that are slightly transparent such that as more points are plotted on top of each other the apparent point becomes darker. Finally, labels are provided for the x- and y-axes.
+
+```{r}
+#| label: fig-BAEx2
+#| fig-cap: Bland-Altman plot for comparing scale to otolith age estimates of Lake Champlain Lake Whitefish constructed using `ggplot`.
+ggplot(data=wfSO,mapping=aes(x=meanSO,y=diffSO)) +
+  geom_hline(yintercept=0,color="gray70",linewidth=1) +
+  geom_hline(yintercept=sumSO$mean,
+             color="red",linewidth=1,linetype="dashed") +
+  geom_hline(yintercept=c(sumSO$lwrci,sumSO$uprci),
+             color="darkred",linewidth=1,linetype="dashed") +
+  geom_hline(yintercept=c(sumSO$lwrag,sumSO$uprag),
+             color="blue",linewidth=1,linetype="dashed") +
+  geom_point(col=col2rgbt("black",1/5),size=2) +
+  scale_x_continuous(name="Mean Age") +
+  scale_y_continuous(name="Scale-Otolith Age")
+```
+
+&nbsp;
+
+# A Critique of the Bland-Altman Plot for Age Comparisons
+I like that Bland-Altman plots (relative to age bias plots) do not require that one of the variables be designated as the "reference" group. This may be more useful when comparing age estimates where one set of estimates is not clearly *a priori* considered to be more accurate (e.g., comparing readers with similar levels of experience).
+
+However, I don't like the following characteristics of (default) Bland-Altman plots.
+
+* There may be considerable overlap of the plotted points because of the discrete nature of most age data. Various authors have dealt with this by adding a "petal" to the point for each overplotted point to make a so-called "sunflower plot" (@lehnert_whats_2015) or using bubbles that are proportional to the number of overplotted points (@mcbride_diagnosis_2015). However, I find the "sunflowers" and "bubbles" to be distracting. I addressed this issue with transparent points above.
+* The "agreement lines" are not particularly useful. They may be useful for identifying outliers, but an egregious outlier will likely stand out without these lines.
+* The single confidence interval for the mean difference suggests that any bias between the sets of estimates is "constant" across the range of mean ages. This can be relaxed somewhat if the percentage difference is plotted on the y-axis. However, neither of these allows for more complex situations where the bias is nonlinear with age. For example, a common situation of little difference between the estimates at young ages, but increasing differences with increasing ages (e.g., @fig-BAEx2) is not well-represented by this single confidence interval.
+
+&nbsp;
+
+# A Modified Bland-Altman Plot for Age Comparisons
+The third issue above has been addressed with some Bland-Altman plots by fitting a linear regression that describes the difference in age estimates as a function of mean age (@giavarina_understanding_2015). However, this only allows for a linear relationship, which may not represent or reveal more interesting nonlinear relationships. A "smoother" (a loess or a generalized additive model (GAM)) could be used to estimate a "smoothed" potentially nonlinear relationship between the differences in ages and the means of the ages. For example, a GAM smoother is added to @fig-BAEx2 with `geom_smooth()` below.^[`geom_smooth()` defaults to a loess smoother when n<1000 points. Use `method="gam"` to force using a GAM smoother. I use the GAM smoother for the hypothesis testing shown at the bottom of this section.]
+
+```{r}
+#| label: fig-MBAEx1
+#| fig-cap: Bland-Altman plot for comparing scale to otolith age estimates of Lake Champlain Lake Whitefish with a loess smoother.
+ggplot(data=wfSO,mapping=aes(x=meanSO,y=diffSO)) +
+  geom_hline(yintercept=0,color="gray70",linewidth=1) +
+  geom_hline(yintercept=c(sumSO$lwrci,sumSO$uprci),
+             color="red",linewidth=1,linetype="dashed") +
+  geom_hline(yintercept=c(sumSO$lwrag,sumSO$uprag),
+             color="blue",linewidth=1,linetype="dashed") +
+  geom_point(col=col2rgbt("black",1/5),size=2) +
+  scale_x_continuous(name="Mean Age") +
+  scale_y_continuous(name="Scale-Otolith Age") +
+  geom_smooth(method="gam",color="gray30")
+```
+
+These results suggest that there is little difference between scale and otolith age estimates up to a mean age estimate of approximately five, after which age estimates from scales are less than age estimates from otoliths, with the difference between the two generally increasing with increasing mean age (@fig-MBAEx1).
+
+A similar plot is shown for the comparison of otolith age estimates between two readers in @fig-MBAEx2. Also note (see below) that the smoother term is not significant for the between-reader comparison of otolith age estimates, which suggests no relationship between the differences in ages and the mean age. In addition, the intercept term is not significantly different from zero, which indicates that there is not a constant bias between the two readers.
+
+```{r}
+#| label: fig-MBAEx2
+#| fig-cap: Bland-Altman plot for comparing age estimates among two readers of Lake Champlain Lake Whitefish otoliths.
+#| echo: false
+
+wfOO <- WhitefishLC |>
+  select(fishID,tl,otolith1,otolith2) |>
+  mutate(meanOO=(otolith1+otolith2)/2,
+         diffOO=otolith1-otolith2)
+
+sumOO <- wfOO |>
+  summarize(n=n(),
+            mean=mean(diffOO,na.rm=TRUE),
+            sd=sd(diffOO,na.rm=TRUE),
+            se=se(diffOO,na.rm=TRUE)) |>
+  mutate(lwrci=mean-1.96*se,
+         uprci=mean+1.96*se,
+         lwrag=mean-1.96*sd,
+         uprag=mean+1.96*sd)
+
+ggplot(data=wfOO,mapping=aes(x=meanOO,y=diffOO)) +
+  geom_hline(yintercept=0,color="gray70",linewidth=1) +
+  geom_hline(yintercept=c(sumOO$lwrci,sumOO$uprci),
+             color="red",linewidth=1,linetype="dashed") +
+  geom_hline(yintercept=c(sumOO$lwrag,sumOO$uprag),
+             color="blue",linewidth=1,linetype="dashed") +
+  geom_point(col=col2rgbt("black",1/5),size=2) +
+  scale_x_continuous(name="Mean Age") +
+  scale_y_continuous(name="Reader 1 - Reader 2 Otolith Age") +
+  geom_smooth(method="gam",color="gray30")
+```
+
+&nbsp;
+
+Hypotheses about the relationship between the difference in ages and the mean age can be tested with the GAM smoother model. The first line below fits the GAM smoother model used by `geom_smooth()`. First note that `gam()` is from the `mgcv` package and is preceded by `mgcv::` so as not to load the whole package. The formula in `gam` has the difference in ages on the left side and a smoother term (denoted with the `s()` on the right side. The smoother funtion contains the mean aes and `bs="cs"` (to force using the same algorithm as `geom_smoother()`). The saved object is the submitted to `summary()` to get, among other things, hypothesis test results about the significance of the smoother term.
+
+```{r}
+gamSO <- mgcv::gam(diffSO~s(meanSO,bs="cs"),data=wfSO)
+summary(gamSO)
+```
+
+The p-value for the significance of the smoother term (i.e., whether it adds significantly to the model or not) is <2e-16 as found under "Approximate significance of smooth term:". This indicates that the smoother term is important to the model and that mean difference in age depends on the mean age. Thus, the difference in ages is not the same for all mean ages.
+
+```{r}
+#| echo: false
+gamOO <- mgcv::gam(diffOO~s(meanOO,bs="cs"),data=wfOO)
+```
+
+A similar table for the comparison of otolith ages between two readers shows that the smoother term is not significant (`r formatC(summary(gamOO)$s.table["s(meanOO)","p-value"],format="f",digits=3)`); thus, the difference in otolith ages does not depend on the mean age. In addition, the intercept term for the model is not significantly different from 0 (`r formatC(summary(gamOO)$p.table["(Intercept)","Pr(>|t|)"],format="f",digits=3)`), which along with the result about the smoother, suggests that the mean difference in ages is 0 regardless of the mean otolith age.
+
+```{r}
+#| echo: false
+summary(gamOO)
+```
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+ggplot(data=wfSO,mapping=aes(x=meanSO,y=diffSO)) +
+  geom_hline(yintercept=0,color="gray70",linewidth=1) +
+  geom_hline(yintercept=c(sumSO$lwrci,sumSO$uprci),
+             color="red",linewidth=1,linetype="dashed") +
+  geom_hline(yintercept=c(sumSO$lwrag,sumSO$uprag),
+             color="blue",linewidth=1,linetype="dashed") +
+  geom_point(col=col2rgbt("black",1/5),size=2) +
+  scale_x_continuous(name="Mean Age") +
+  scale_y_continuous(name="Scale-Otolith Age") +
+  geom_smooth(method="gam",color="gray30") +
+  theme(aspect.ratio=1)
+dev.off()
+```
