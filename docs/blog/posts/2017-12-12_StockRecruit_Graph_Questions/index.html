@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="A reply to a user’s questions with respect to stock-recruitment function graphics.">
+
+<title>fishR - Stock-Recruitment Graphing Questions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//img/fishRlogo_Tight_Dark_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../css/styles.css">
+<meta property="og:title" content="fishR - Stock-Recruitment Graphing Questions">
+<meta property="og:description" content="A reply to a user's questions with respect to stock-recruitment function graphics.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2017-12-12_StockRecruit_Graph_Questions\preview.png">
+<meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="Stock-Recruitment Graphing Questions">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2017-12-12">
+<meta name="citation_cover_date" content="2017-12-12">
+<meta name="citation_year" content="2017">
+<meta name="citation_online_date" content="2017-12-12">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2017-12-12_StockRecruit_Graph_Questions">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_author=Derek H. Ogle;,citation_publication_date=2017-01;,citation_cover_date=2017-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_journal_title=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_isbn=978-0-662-01440-9;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {Assessment} of {Fish} {Populations};">
+<meta name="citation_reference" content="citation_title=Age and Growth of Fishes: Principles and Techniques;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/;,citation_doi=10.47886/9781934874486;,citation_isbn=978-1-934874-48-6;">
+<meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
+<meta name="citation_reference" content="citation_title=Graphical and statistical methods for determining the consistency of age determinations;,citation_author=Steven Campana;,citation_author=M. Annand;,citation_author=James McMillan;,citation_publication_date=1995-01;,citation_cover_date=1995-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/254328508_Graphical_and_Statistical_Methods_for_Determining_the_Consistency_of_Age_Determinations;,citation_doi=10.1577/1548-8659(1995)124&amp;amp;amp;lt;0131:GASMFD&amp;gt;2.3.CO;2;,citation_volume=124;,citation_journal_title=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;">
+<meta name="citation_reference" content="citation_title=A comparison of the scale and otolith methods of age estimation for lake whitefish in lake huron;,citation_author=Andrew M. Muir;,citation_author=Mark P. Ebener;,citation_author=Ji X. He;,citation_author=James E. Johnson;,citation_publication_date=2008-06;,citation_cover_date=2008-06;,citation_year=2008;,citation_fulltext_html_url=https://doi.org/10.1577/M06-160.1;,citation_issue=3;,citation_doi=10.1577/M06-160.1;,citation_issn=0275-5947;,citation_volume=28;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Statistical methods for assessing agreement between two methods of clinical measurement;,citation_author=J Martin Bland;,citation_author=Douglas G Altman;,citation_publication_date=1986;,citation_cover_date=1986;,citation_year=1986;,citation_fulltext_html_url=https://www-users.york.ac.uk/~mb55/meas/ba.pdf;,citation_volume=i;,citation_journal_title=Lancet;">
+<meta name="citation_reference" content="citation_title=Understanding Bland Altman analysis;,citation_author=Davide Giavarina;,citation_publication_date=2015-06;,citation_cover_date=2015-06;,citation_year=2015;,citation_fulltext_html_url=https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4470095/;,citation_issue=2;,citation_doi=10.11613/BM.2015.015;,citation_issn=1330-0962;,citation_pmid=26110027;,citation_volume=25;,citation_journal_title=Biochemia Medica;">
+<meta name="citation_reference" content="citation_title=What’s the main idea behind Bland-Altman plots?;,citation_author=Bernhard Lehnert;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_fulltext_html_url=https://cran.r-project.org/web/packages/BlandAltmanLeh/vignettes/Intro.html;">
+<meta name="citation_reference" content="citation_title=BlandAltmanLeh: Plots (Slightly Extended) Bland-Altman Plots;,citation_author=Bernhard Lehnert;,citation_publication_date=2015-12;,citation_cover_date=2015-12;,citation_year=2015;,citation_fulltext_html_url=https://CRAN.R-project.org/package=BlandAltmanLeh;">
+<meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10;,citation_cover_date=2015-10;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;">
+<meta name="citation_reference" content="citation_title=Thin plate regression splines;,citation_author=Simon N. Wood;,citation_publication_date=2003;,citation_cover_date=2003;,citation_year=2003;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00374;,citation_issue=1;,citation_doi=10.1111/1467-9868.00374;,citation_issn=1467-9868;,citation_volume=65;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Generalized Additive Models: An Introduction with R;,citation_author=Simon N. Wood;,citation_publication_date=2017-05;,citation_cover_date=2017-05;,citation_year=2017;,citation_fulltext_html_url=https://www.taylorfrancis.com/books/mono/10.1201/9781315370279/generalized-additive-models-simon-wood;,citation_doi=10.1201/9781315370279;,citation_isbn=978-1-315-37027-9;">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/books.html">
+ <span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/packages.html">
+ <span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+ <span class="dropdown-text">fishR (alphabetical)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+ <span class="dropdown-text">fishR (by topic)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+ <span class="dropdown-text">Comprehensive (by package)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+ <span class="dropdown-text">Comprehensive (by topic)</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Stock-Recruitment Graphing Questions</h1>
+                  <div>
+        <div class="description">
+          A reply to a user’s questions with respect to stock-recruitment function graphics.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Stock-Recruitment</div>
+                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">FSA</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">Dec 12, 2017</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Dec 18, 2022</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#dynamic-plot-issue" id="toc-dynamic-plot-issue" class="nav-link" data-scroll-target="#dynamic-plot-issue">Dynamic Plot Issue</a></li>
+  <li><a href="#plot-of-recruits-per-spawner-versus-spawners" id="toc-plot-of-recruits-per-spawner-versus-spawners" class="nav-link" data-scroll-target="#plot-of-recruits-per-spawner-versus-spawners">Plot of Recruits per Spawner versus Spawners</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2017-12-12_StockRecruit_Graph_Questions/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following packages are loaded for use below. I also set the default <code>ggplot</code> theme to <code>theme_bw()</code> for a classic “black-and-white” plot (rather than the default plot with a gray background).</p>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)          <span class="co"># for headtail(), srStarts(), srFuns()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)        <span class="co"># for filter(), mutate(), select()</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlstools)     <span class="co"># for nlsBoot()</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+<section id="introduction" class="level1 page-columns page-full">
+<h1>Introduction</h1>
+<p>A <strong>fishR</strong> user recently asked me</p>
+<blockquote class="blockquote">
+<p>In the book that you published, I frequently use the stock-recruit curve code. The interface that shows both the Ricker/Beverton-Holt figure with the recruit per spawner to spawner figure (i.e., the dynamic plot for <code>srStarts()</code>) has not been working for quite some time. Additionally, I can get the recruits versus spawner plot for the Beverton-Holt or Ricker curve with confidence bounds around the curve, but how do you do the same for the recruit per spawner to spawner curve?</p>
+</blockquote>
+<div class="page-columns page-full"><p>In this post I will answer the first question and provide a possible answer to the second questions. I will use the <code>PSalmonAK</code> data used in the book <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">(<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">Ogle 2016</a>)</span> and available in <code>FSAdata</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> As in the book, I remove all records with missing stock (<code>escapement</code>) or recruit (<code>return</code>) data, rescale both the <code>escapement</code> and <code>return</code> variables to be 1000s of 1000s of fish (so millions of fish), create a log of returns variable (<code>logret</code>), create “recruits per spawner” (<code>retperesc</code>) and log recruits per spawner (<code>logretperesc</code>) variables, and, for convenience, remove the <code>harvest</code> and <code>SST</code> variables.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;Also documented <a href="https://fishr-core-team.github.io/FSAdata/reference/PSalmonAK.html">here</a>.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(PSalmonAK,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pinks <span class="ot">&lt;-</span> PSalmonAK <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(escapement),<span class="sc">!</span><span class="fu">is.na</span>(return)) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">escapement=</span>escapement<span class="sc">/</span><span class="dv">1000</span>,<span class="at">return=</span>return<span class="sc">/</span><span class="dv">1000</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">logret=</span><span class="fu">log</span>(return),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">retperesc=</span>return<span class="sc">/</span>escapement,<span class="at">logretperesc=</span><span class="fu">log</span>(retperesc)) <span class="sc">|&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>harvest,<span class="sc">-</span>SST)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(pinks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     year escapement return   logret retperesc logretperesc
+#R|  1  1960      1.418  2.446 0.894454  1.724965    0.5452066
+#R|  2  1961      2.835 14.934 2.703640  5.267725    1.6615986
+#R|  3  1962      1.957 10.031 2.305680  5.125703    1.6342676
+#R|  28 1987      4.289 18.215 2.902245  4.246911    1.4461918
+#R|  29 1988      2.892  9.461 2.247178  3.271438    1.1852298
+#R|  30 1989      4.577 23.359 3.150982  5.103561    1.6299386</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="dynamic-plot-issue" class="level1 page-columns page-full">
+<h1>Dynamic Plot Issue</h1>
+<p>Since <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> was published the <code>dynamicPlot=</code> argument was removed from <code>srStarts()</code> in <code>FSA</code> because the code for that argument relied on the <code>tcltk</code> package, which I found difficult to reliably support. A similar, though more manual, approach is accomplished with the new <code>fixed=</code> and <code>plot=</code> arguments. For example, using <code>plot=TRUE</code> (without <code>fixed=</code>) generates a plot of “recruits” versus “stock” with the chosen stock-recruitment model evaluated at the automatically chosen parameter starting values superimposed.</p>
+<div class="cell page-columns page-full" data-layout-align="center" data-par1="true">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>svR <span class="ot">&lt;-</span> <span class="fu">srStarts</span>(return<span class="sc">~</span>escapement,<span class="at">data=</span>pinks,<span class="at">type=</span><span class="st">"Ricker"</span>,<span class="at">plot=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-srStarts1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-srStarts1-1.png" class="img-fluid figure-img" width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: Recruitment versus stock plot with the Ricker function evaluated at the automatically chosen starting values superimposed.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>The user, however, can show the stock-recruitment model evaluated at manually chosen parameter starting values by including those starting values in a named <code>list()</code> supplied to <code>fixed=</code>. These values can be iteratively changed in subsequent calls to <code>srStarts()</code> to manually find starting values that provide a model that reasonably fits (by eye) the stock-recruit data.</p>
+<div class="cell page-columns page-full" data-layout-align="center" data-par1="true">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>svR <span class="ot">&lt;-</span> <span class="fu">srStarts</span>(return<span class="sc">~</span>escapement,<span class="at">data=</span>pinks,<span class="at">type=</span><span class="st">"Ricker"</span>,<span class="at">plot=</span><span class="cn">TRUE</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">fixed=</span><span class="fu">list</span>(<span class="at">a=</span><span class="dv">4</span>,<span class="at">b=</span><span class="fl">0.15</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-srStarts2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-srStarts2-1.png" class="img-fluid figure-img" width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;2: Recruitment versus stock plot with the Ricker function evaluated at the manually chosen starting values superimposed.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>srStarts()</code> no longer, however, supports the simultaneously plotting of spawners versus recruits and recruits per spawner versus recruits.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="plot-of-recruits-per-spawner-versus-spawners" class="level1 page-columns page-full">
+<h1>Plot of Recruits per Spawner versus Spawners</h1>
+<div class="page-columns page-full"><p>The first way that I imagined plotting recruits per spawners versus spawners with the fitted curve and confidence bands is to first follow the code for fitting the stock-recruit function to the stock and recruit data as described in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>. In this case, the stock-recruit function is fit on the log scale to adjust for a multiplicative error structure (as described in the book).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;The manually selected starting values from above are used here.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rckr <span class="ot">&lt;-</span> <span class="fu">srFuns</span>(<span class="st">"Ricker"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>srR <span class="ot">&lt;-</span> <span class="fu">nls</span>(logret<span class="sc">~</span><span class="fu">log</span>(<span class="fu">rckr</span>(escapement,a,b)),<span class="at">data=</span>pinks,<span class="at">start=</span>svR)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>bootR <span class="ot">&lt;-</span> <span class="fu">nlsBoot</span>(srR)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">estimates=</span><span class="fu">coef</span>(srR),<span class="fu">confint</span>(bootR))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     estimates     95% LCI  95% UCI
+#R|  a 2.84924199  1.73343530 4.843034
+#R|  b 0.05516673 -0.08315861 0.213091</code></pre>
+</div>
+</div>
+<div class="page-columns page-full"><p><span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> showed how to plot spawners versus recruits using base graphics. Here however I will use <code>ggplot2</code>. Either method first requires (i) constructing a sequence of “x” values that span the range of observed numbers of spawners,<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> (ii) predicting the number of recruits at each spawner value using the best-fit stock-recruitment model, and (iii) constructing lower and upper confidence bounds for the predicted number of recruits at each spawner value with the bootstrap results. These results are assigned to a data framed called <code>preds</code> below.</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Increase the value in <code>length.out=</code> for a smoother curve and band.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">9</span>,<span class="at">length.out=</span><span class="dv">199</span>)        <span class="co"># many S for prediction</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pR <span class="ot">&lt;-</span> <span class="fu">rckr</span>(x,<span class="at">a=</span><span class="fu">coef</span>(srR))           <span class="co"># predicted mean R</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>LCI <span class="ot">&lt;-</span> UCI <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)) {             <span class="co"># CIs for mean R @ each S</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">apply</span>(bootR<span class="sc">$</span>coefboot,<span class="at">MARGIN=</span><span class="dv">1</span>,<span class="at">FUN=</span>rckr,<span class="at">S=</span>x[i])</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  LCI[i] <span class="ot">&lt;-</span> <span class="fu">quantile</span>(tmp,<span class="fl">0.025</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  UCI[i] <span class="ot">&lt;-</span> <span class="fu">quantile</span>(tmp,<span class="fl">0.975</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">escapement=</span>x,<span class="at">return=</span>pR,<span class="at">LCI=</span>LCI,<span class="at">UCI=</span>UCI)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|      escapement     return        LCI        UCI
+#R|  1   0.00000000  0.0000000 0.00000000  0.0000000
+#R|  2   0.04545455  0.1291866 0.07911254  0.2182016
+#R|  3   0.09090909  0.2577262 0.15886812  0.4319280
+#R|  197 8.90909091 15.5279219 6.09913398 34.7018500
+#R|  198 8.95454545 15.5680589 6.07529668 35.0124059
+#R|  199 9.00000000 15.6078974 6.05159433 35.3248340</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="page-columns page-full"><p>The recruits versus spawners graph is then constructed in <code>ggplot2</code> by adding the 95% confidence band from <code>preds</code> using <code>geom_ribbon()</code>, adding the best-fit model curve from <code>preds</code> using <code>geom_line()</code>, and adding the observed data from <code>pinks</code> using <code>geom_point()</code>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;I plot the layers in this order so that the line is on top of the confidence band and the points are on top of both the line and band.</p></li></div></div>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill=</span><span class="st">"gray50"</span>,<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>return),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>pinks,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>return)) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Escapement (millions)"</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Returners (millions)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-RickerFit1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-RickerFit1-1.png" class="img-fluid figure-img" width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;3: Returners versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>These results can be modified to plot recruits per spawner versus spawners by replacing the “recruits” in the code above with “recruits per spawner.” This is simple for the observed data as <code>return</code> is simply replaced with <code>retperesc</code>. However, the predicted number of recruits (<code>return</code> in <code>preds</code>) and the confidence bounds (<code>LCI</code> and <code>UCI</code> in <code>preds</code>) from above must be divided by the number of spawners (<code>escapement</code> in <code>preds</code>). The <code>preds</code> data frame is modified accordingly below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> preds <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">retperesc=</span>return<span class="sc">/</span>escapement,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">rpeLCI=</span>LCI<span class="sc">/</span>escapement,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">rpeUCI=</span>UCI<span class="sc">/</span>escapement)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>The plot is then constructed with the appropriate modification of variable names and axis labels.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;I used red for the confidence band here for illustrative purposes below, usually I would use a gray as in <a href="#fig-RickerFit1">Figure&nbsp;3</a>.</p></li></div></div>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">ymin=</span>rpeLCI,<span class="at">ymax=</span>rpeUCI),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill=</span><span class="st">"red"</span>,<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>pinks,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc)) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Escapement (millions)"</span>) <span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Returners/Escapement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-RickerFit2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-RickerFit2-1.png" class="img-fluid figure-img" width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;4: Returners per escapement versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="page-columns page-full"><p>Alternatively, the Ricker model could be reparameterized by dividing each side of the function by “spawners” such that the left-hand-side becomes “recruits per spawner.”<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> This recruitment model can be put into an R function, with parameters estimated with nonlinear regression similar to above. The results below show that the parameter point estimates are identical and the bootsrapped confidence intervals are similar to what was obtained above.</p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;This is a fairly typical reparameterization of the Ricker model.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rckr2 <span class="ot">&lt;-</span> <span class="cf">function</span>(S,a,<span class="at">b=</span><span class="cn">NULL</span>) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(a)<span class="sc">&gt;</span><span class="dv">1</span>) { b <span class="ot">&lt;-</span> a[[<span class="dv">2</span>]]; a <span class="ot">&lt;-</span> a[[<span class="dv">1</span>]] }</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  a<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>b<span class="sc">*</span>S)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>srR2 <span class="ot">&lt;-</span> <span class="fu">nls</span>(logretperesc<span class="sc">~</span><span class="fu">log</span>(<span class="fu">rckr2</span>(escapement,a,b)),<span class="at">data=</span>pinks,<span class="at">start=</span>svR)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>bootR2 <span class="ot">&lt;-</span> <span class="fu">nlsBoot</span>(srR2)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">estimates=</span><span class="fu">coef</span>(srR2),<span class="fu">confint</span>(bootR2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     estimates    95% LCI   95% UCI
+#R|  a 2.84924192  1.6249610 4.6859663
+#R|  b 0.05516672 -0.1034364 0.1944586</code></pre>
+</div>
+</div>
+<p>With this, a second method for plotting recruits per spawner versus spawners is the same as how the main plot from the book was constructed but modified to use the results from this reparameterized function.</p>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">9</span>,<span class="at">length.out=</span><span class="dv">199</span>)        <span class="co"># many S for prediction</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pRperS <span class="ot">&lt;-</span> <span class="fu">rckr2</span>(x,<span class="at">a=</span><span class="fu">coef</span>(srR2))     <span class="co"># predicted mean RperS</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>LCI2 <span class="ot">&lt;-</span> UCI2 <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)) {             <span class="co"># CIs for mean RperS @ each S</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">apply</span>(bootR2<span class="sc">$</span>coefboot,<span class="at">MARGIN=</span><span class="dv">1</span>,<span class="at">FUN=</span>rckr2,<span class="at">S=</span>x[i])</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  LCI2[i] <span class="ot">&lt;-</span> <span class="fu">quantile</span>(tmp,<span class="fl">0.025</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  UCI2[i] <span class="ot">&lt;-</span> <span class="fu">quantile</span>(tmp,<span class="fl">0.975</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>preds2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">escapement=</span>x,<span class="at">retperesc=</span>pRperS,<span class="at">rpeLCI=</span>LCI2,<span class="at">rpeUCI=</span>UCI2)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|      escapement retperesc    rpeLCI   rpeUCI
+#R|  1   0.00000000  2.849242 1.6249610 4.685966
+#R|  2   0.04545455  2.842106 1.6310869 4.652586
+#R|  3   0.09090909  2.834988 1.6372360 4.612723
+#R|  197 8.90909091  1.742930 0.7528187 4.066259
+#R|  198 8.95454545  1.738565 0.7465528 4.079937
+#R|  199 9.00000000  1.734211 0.7403391 4.094182</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">ymin=</span>rpeLCI,<span class="at">ymax=</span>rpeUCI),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>pinks,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc)) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Escapement (millions)"</span>) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Returners/Escapement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-RickerFit3" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-RickerFit3-1.png" class="img-fluid figure-img" width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;5: Returners per escapement versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>The two methods described above for plotting recruits per spawner versuse spawners are identical for the best-fit curve and nearly identical for the confidence bounds (slight differences likely due to the randomness inherent in bootstrapping). Thus, the two methods produce nearly the same visual.</p>
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">ymin=</span>rpeLCI,<span class="at">ymax=</span>rpeUCI),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill=</span><span class="st">"red"</span>,<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">ymin=</span>rpeLCI,<span class="at">ymax=</span>rpeUCI),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>pinks,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>escapement,<span class="at">y=</span>retperesc)) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Escapement (millions)"</span>) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Returners/Escapement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-RickerFit4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="index_files/figure-html/fig-RickerFit4-1.png" class="img-fluid figure-img" width="336"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;6: Returners per escapement versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band shown for both estimation methods.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry" role="doc-biblioentry">
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/book/">Introductory <span>Fisheries</span> <span>Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2017,
+  author = {Derek H. Ogle},
+  title = {Stock-Recruitment {Graphing} {Questions}},
+  date = {2017-12-12},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2017-12-12_StockRecruit_Graph_Questions},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2017" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2017, December 12. Stock-Recruitment Graphing Questions.
+<a href="https://fishr-core-team.github.io/fishR//blog/posts/2017-12-12_StockRecruit_Graph_Questions">https://fishr-core-team.github.io/fishR//blog/posts/2017-12-12_StockRecruit_Graph_Questions</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+  </li>  
+</ul>
+    </div>   
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

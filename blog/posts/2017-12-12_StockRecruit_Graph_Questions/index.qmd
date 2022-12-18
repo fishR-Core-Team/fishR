@@ -1,0 +1,221 @@
+---
+title: Stock-Recruitment Graphing Questions
+description: A reply to a user's questions with respect to stock-recruitment function graphics.
+author: Derek H. Ogle
+date: 12/12/2017
+image: preview.png
+categories:
+  - Stock-Recruitment
+  - ggplot2
+  - FSA
+---
+
+```{r}
+#| include: false
+knitr::knit_hooks$set(par1 = function(before, options, envir) {
+  if (before) par(mar=c(3.5,3.5,1,1),mgp=c(2.1,0.4,0),tcl=-0.2)
+})
+```
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)          # for headtail(), srStarts(), srFuns()
+library(dplyr)        # for filter(), mutate(), select()
+library(nlstools)     # for nlsBoot()
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+# Introduction
+A **fishR** user recently asked me 
+
+> In the book that you published, I frequently use the stock-recruit curve code. The interface that shows both the Ricker/Beverton-Holt figure with the recruit per spawner to spawner figure (i.e., the dynamic plot for `srStarts()`) has not been working for quite some time. Additionally, I can get the recruits versus spawner plot for the Beverton-Holt or Ricker curve with confidence bounds around the curve, but how do you do the same for the recruit per spawner to spawner curve?
+
+In this post I will answer the first question and provide a possible answer to the second questions. I will use the `PSalmonAK` data used in the book [@ogleIntroductoryFisheriesAnalyses2016] and available in `FSAdata`.^[Also documented [here](https://fishr-core-team.github.io/FSAdata/reference/PSalmonAK.html).] As in the book, I remove all records with missing stock (`escapement`) or recruit (`return`) data, rescale both the `escapement` and `return` variables to be 1000s of 1000s of fish (so millions of fish), create a log of returns variable (`logret`), create "recruits per spawner" (`retperesc`) and log recruits per spawner (`logretperesc`) variables, and, for convenience, remove the `harvest` and `SST` variables.
+
+```{r}
+data(PSalmonAK,package="FSAdata")
+pinks <- PSalmonAK |>
+  filter(!is.na(escapement),!is.na(return)) |>
+  mutate(escapement=escapement/1000,return=return/1000,
+         logret=log(return),
+         retperesc=return/escapement,logretperesc=log(retperesc)) |>
+  select(-harvest,-SST)
+headtail(pinks)
+```
+
+&nbsp;
+
+# Dynamic Plot Issue
+Since @ogleIntroductoryFisheriesAnalyses2016 was published the `dynamicPlot=` argument was removed from `srStarts()` in `FSA` because the code for that argument relied on the `tcltk` package, which I found difficult to reliably support. A similar, though more manual, approach is accomplished with the new `fixed=` and `plot=` arguments. For example, using `plot=TRUE` (without `fixed=`) generates a plot of "recruits" versus "stock" with the chosen stock-recruitment model evaluated at the automatically chosen parameter starting values superimposed.
+
+```{r}
+#| label: fig-srStarts1
+#| fig-cap: Recruitment versus stock plot with the Ricker function evaluated at the automatically chosen starting values superimposed.
+#| par1: true
+svR <- srStarts(return~escapement,data=pinks,type="Ricker",plot=TRUE)
+```
+
+&nbsp;
+
+The user, however, can show the stock-recruitment model evaluated at manually chosen parameter starting values by including those starting values in a named `list()` supplied to `fixed=`. These values can be iteratively changed in subsequent calls to `srStarts()` to manually find starting values that provide a model that reasonably fits (by eye) the stock-recruit data.
+
+```{r}
+#| label: fig-srStarts2
+#| fig-cap: Recruitment versus stock plot with the Ricker function evaluated at the manually chosen starting values superimposed.
+#| par1: true
+svR <- srStarts(return~escapement,data=pinks,type="Ricker",plot=TRUE,
+                fixed=list(a=4,b=0.15))
+```
+
+:::{.callout-important}
+`srStarts()` no longer, however, supports the simultaneously plotting of spawners versus recruits and recruits per spawner versus recruits.
+:::
+
+&nbsp;
+
+# Plot of Recruits per Spawner versus Spawners
+The first way that I imagined plotting recruits per spawners versus spawners with the fitted curve and confidence bands is to first follow the code for fitting the stock-recruit function to the stock and recruit data as described in @ogleIntroductoryFisheriesAnalyses2016. In this case, the stock-recruit function is fit on the log scale to adjust for a multiplicative error structure (as described in the book).^[The manually selected starting values from above are used here.]
+
+```{r}
+rckr <- srFuns("Ricker")
+srR <- nls(logret~log(rckr(escapement,a,b)),data=pinks,start=svR)
+bootR <- nlsBoot(srR)
+cbind(estimates=coef(srR),confint(bootR))
+```
+
+@ogleIntroductoryFisheriesAnalyses2016 showed how to plot spawners versus recruits using base graphics. Here however I will use `ggplot2`. Either method first requires (i) constructing a sequence of "x" values that span the range of observed numbers of spawners,^[Increase the value in `length.out=` for a smoother curve and band.] (ii) predicting the number of recruits at each spawner value using the best-fit stock-recruitment model, and (iii) constructing lower and upper confidence bounds for the predicted number of recruits at each spawner value with the bootstrap results. These results are assigned to a data framed called `preds` below.
+
+```{r}
+x <- seq(0,9,length.out=199)        # many S for prediction
+pR <- rckr(x,a=coef(srR))           # predicted mean R
+LCI <- UCI <- numeric(length(x))
+
+for(i in 1:length(x)) {             # CIs for mean R @ each S
+  tmp <- apply(bootR$coefboot,MARGIN=1,FUN=rckr,S=x[i])
+  LCI[i] <- quantile(tmp,0.025)
+  UCI[i] <- quantile(tmp,0.975)
+}
+preds <- data.frame(escapement=x,return=pR,LCI=LCI,UCI=UCI)
+headtail(preds)
+```
+
+&nbsp;
+
+The recruits versus spawners graph is then constructed in `ggplot2` by adding the 95% confidence band from `preds` using `geom_ribbon()`, adding the best-fit model curve from `preds` using `geom_line()`, and adding the observed data from `pinks` using `geom_point()`.^[I plot the layers in this order so that the line is on top of the confidence band and the points are on top of both the line and band.]
+
+```{r}
+#| label: fig-RickerFit1
+#| fig-cap: Returners versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band.
+ggplot() +
+  geom_ribbon(data=preds,mapping=aes(x=escapement,ymin=LCI,ymax=UCI),
+              fill="gray50",alpha=0.5) +
+  geom_line(data=preds,mapping=aes(x=escapement,y=return),linewidth=1) +
+  geom_point(data=pinks,mapping=aes(x=escapement,y=return)) +
+  scale_x_continuous(name="Escapement (millions)") +
+  scale_y_continuous(name="Returners (millions)")
+```
+
+&nbsp;
+
+These results can be modified to plot recruits per spawner versus spawners by replacing the "recruits" in the code above with "recruits per spawner." This is simple for the observed data as `return` is simply replaced with `retperesc`. However, the predicted number of recruits (`return` in `preds`) and the confidence bounds (`LCI` and `UCI` in `preds`) from above must be divided by the number of spawners (`escapement` in `preds`). The `preds` data frame is modified accordingly below.
+
+```{r}
+preds <- preds |>
+  mutate(retperesc=return/escapement,
+         rpeLCI=LCI/escapement,
+         rpeUCI=UCI/escapement)
+```
+
+The plot is then constructed with the appropriate modification of variable names and axis labels.^[I used red for the confidence band here for illustrative purposes below, usually I would use a gray as in @fig-RickerFit1.]
+
+```{r}
+#| label: fig-RickerFit2
+#| fig-cap: Returners per escapement versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band.
+ggplot() +
+  geom_ribbon(data=preds,mapping=aes(x=escapement,ymin=rpeLCI,ymax=rpeUCI),
+              fill="red",alpha=0.5) +
+  geom_line(data=preds,mapping=aes(x=escapement,y=retperesc),linewidth=1) +
+  geom_point(data=pinks,mapping=aes(x=escapement,y=retperesc)) +
+  scale_x_continuous(name="Escapement (millions)") +
+  scale_y_continuous(name="Returners/Escapement")
+```
+
+&nbsp;
+
+Alternatively, the Ricker model could be reparameterized by dividing each side of the function by "spawners" such that the left-hand-side becomes "recruits per spawner."^[This is a fairly typical reparameterization of the Ricker model.] This recruitment model can be put into an R function, with parameters estimated with nonlinear regression similar to above. The results below show that the parameter point estimates are identical and the bootsrapped confidence intervals are similar to what was obtained above.
+
+```{r}
+rckr2 <- function(S,a,b=NULL) {
+  if (length(a)>1) { b <- a[[2]]; a <- a[[1]] }
+  a*exp(-b*S)
+}
+srR2 <- nls(logretperesc~log(rckr2(escapement,a,b)),data=pinks,start=svR)
+bootR2 <- nlsBoot(srR2)
+cbind(estimates=coef(srR2),confint(bootR2))
+```
+
+With this, a second method for plotting recruits per spawner versus spawners is the same as how the main plot from the book was constructed but modified to use the results from this reparameterized function.
+
+```{r}
+#| label: fig-RickerFit3
+#| fig-cap: Returners per escapement versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band.
+x <- seq(0,9,length.out=199)        # many S for prediction
+pRperS <- rckr2(x,a=coef(srR2))     # predicted mean RperS
+LCI2 <- UCI2 <- numeric(length(x))
+
+for(i in 1:length(x)) {             # CIs for mean RperS @ each S
+  tmp <- apply(bootR2$coefboot,MARGIN=1,FUN=rckr2,S=x[i])
+  LCI2[i] <- quantile(tmp,0.025)
+  UCI2[i] <- quantile(tmp,0.975)
+}
+preds2 <- data.frame(escapement=x,retperesc=pRperS,rpeLCI=LCI2,rpeUCI=UCI2)
+headtail(preds2)
+
+ggplot() +
+  geom_ribbon(data=preds2,mapping=aes(x=escapement,ymin=rpeLCI,ymax=rpeUCI),
+              fill="blue",alpha=0.5) +
+  geom_line(data=preds2,mapping=aes(x=escapement,y=retperesc),linewidth=1) +
+  geom_point(data=pinks,mapping=aes(x=escapement,y=retperesc)) +
+  scale_x_continuous(name="Escapement (millions)") +
+  scale_y_continuous(name="Returners/Escapement")
+```
+
+&nbsp;
+
+The two methods described above for plotting recruits per spawner versuse spawners are identical for the best-fit curve and nearly identical for the confidence bounds (slight differences likely due to the randomness inherent in bootstrapping). Thus, the two methods produce nearly the same visual.
+
+```{r}
+#| label: fig-RickerFit4
+#| fig-cap: Returners per escapement versus escapement for Pacific Salmon with the best-fit Ricker recruitment function and bootstrapped 95% confidence band shown for both estimation methods.
+ggplot() +
+  geom_ribbon(data=preds,mapping=aes(x=escapement,ymin=rpeLCI,ymax=rpeUCI),
+              fill="red",alpha=0.25) +
+  geom_ribbon(data=preds2,mapping=aes(x=escapement,ymin=rpeLCI,ymax=rpeUCI),
+              fill="blue",alpha=0.25) +
+  geom_line(data=preds,mapping=aes(x=escapement,y=retperesc),linewidth=1) +
+  geom_line(data=preds2,mapping=aes(x=escapement,y=retperesc),linewidth=1) +
+  geom_point(data=pinks,mapping=aes(x=escapement,y=retperesc)) +
+  scale_x_continuous(name="Escapement (millions)") +
+  scale_y_continuous(name="Returners/Escapement")
+```
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+last_plot() +
+  theme(aspect.ratio=1)
+dev.off()
+```

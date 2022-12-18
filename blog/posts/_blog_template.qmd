@@ -34,6 +34,8 @@ theme_set(theme_bw())
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
 png("preview.png",width=1000,height=500,units="px",
     bg="transparent",res=216)
-## PLOT CONSTRUCTION CODE HERE
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=1)
 dev.off()
 ```
