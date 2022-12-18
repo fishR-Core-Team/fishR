@@ -42,7 +42,7 @@ headtail(WhitefishLC)
 ```
 
 # Bland-Altman Plot
-The Bland-Altman plot (@bland_statistical_1986) is commonly used in medical and chemistry research to assess agreement between two measurement or assay methods (@giavarina_understanding_2015). @mcbride_diagnosis_2015 used the Bland-Altman plot in his simulation study of the effects of accuracy and precision on the ability to diagnose agreement between sets of fish age estimates. @mcbride_diagnosis_2015 noted that Bland-Altman plots "*readily depict both bias and imprecision*" and that this was summarized for "*the entire sample, rather than specific age classes.*" Despite this, I am aware of only two entries in the fisheries literature that used the Bland-Altman plot to compare fish age estimates (one in the grey literature, one in a thesis). Below, I describe the Bland-Altman plot and then offer a modified version for comparing estimates of fish age.
+The Bland-Altman plot [@bland_statistical_1986] is commonly used in medical and chemistry research to assess agreement between two measurement or assay methods [@giavarina_understanding_2015]. @mcbride_diagnosis_2015 used the Bland-Altman plot in his simulation study of the effects of accuracy and precision on the ability to diagnose agreement between sets of fish age estimates. @mcbride_diagnosis_2015 noted that Bland-Altman plots "*readily depict both bias and imprecision*" and that this was summarized for "*the entire sample, rather than specific age classes.*" Despite this, I am aware of only two entries in the fisheries literature that used the Bland-Altman plot to compare fish age estimates (one in the grey literature, one in a thesis). Below, I describe the Bland-Altman plot and then offer a modified version for comparing estimates of fish age.
 
 The Bland-Altman plot is a scatterplot where the differences in two age estimates are on the y-axis and means of the two age estimates are on the x-axis. The plot may be augmented with several horizontal lines at the following locations (@fig-BAEx1):
 
@@ -66,9 +66,9 @@ abline(h=0,col="gray50")
 
 &nbsp;
 
-As a general rule, a 95% confidence interval for the mean difference that does not contain zero suggests a difference (or a bias) between the two age estimates. For example, a bias is evident in @fig-BAEx1. In addition, one would expect 95% of the points to fall within the "agreement limits." Points that fall outside this range may be considered further as possible outliers. Log differences have been used if the differences are not normally distributed and the percentage difference (where the difference is divided by the mean age) have also been used (@giavarina_understanding_2015).
+As a general rule, a 95% confidence interval for the mean difference that does not contain zero suggests a difference (or a bias) between the two age estimates. For example, a bias is evident in @fig-BAEx1. In addition, one would expect 95% of the points to fall within the "agreement limits." Points that fall outside this range may be considered further as possible outliers. Log differences have been used if the differences are not normally distributed and the percentage difference (where the difference is divided by the mean age) have also been used [@giavarina_understanding_2015].
 
-The Bland-Altman plot in @fig-BAEx1 was created with `bland.altman.plot()` from the `BlandAltmanLeh` package (@lehnert_blandaltmanleh_2015). Other R functions exist for creating Bland-Altman plots (or the equivalent "Tukey's Mean Difference Plot"). However, I demonstrate below how to construct this plot from "scratch."
+The Bland-Altman plot in @fig-BAEx1 was created with `bland.altman.plot()` from the `BlandAltmanLeh` package [@lehnert_blandaltmanleh_2015]. Other R functions exist for creating Bland-Altman plots (or the equivalent "Tukey's Mean Difference Plot"). However, I demonstrate below how to construct this plot from "scratch."
 
 &nbsp;
 
@@ -123,14 +123,14 @@ I like that Bland-Altman plots (relative to age bias plots) do not require that 
 
 However, I don't like the following characteristics of (default) Bland-Altman plots.
 
-* There may be considerable overlap of the plotted points because of the discrete nature of most age data. Various authors have dealt with this by adding a "petal" to the point for each overplotted point to make a so-called "sunflower plot" (@lehnert_whats_2015) or using bubbles that are proportional to the number of overplotted points (@mcbride_diagnosis_2015). However, I find the "sunflowers" and "bubbles" to be distracting. I addressed this issue with transparent points above.
+* There may be considerable overlap of the plotted points because of the discrete nature of most age data. Various authors have dealt with this by adding a "petal" to the point for each overplotted point to make a so-called "sunflower plot" [@lehnert_whats_2015] or using bubbles that are proportional to the number of overplotted points [@mcbride_diagnosis_2015]. However, I find the "sunflowers" and "bubbles" to be distracting. I addressed this issue with transparent points above.
 * The "agreement lines" are not particularly useful. They may be useful for identifying outliers, but an egregious outlier will likely stand out without these lines.
 * The single confidence interval for the mean difference suggests that any bias between the sets of estimates is "constant" across the range of mean ages. This can be relaxed somewhat if the percentage difference is plotted on the y-axis. However, neither of these allows for more complex situations where the bias is nonlinear with age. For example, a common situation of little difference between the estimates at young ages, but increasing differences with increasing ages (e.g., @fig-BAEx2) is not well-represented by this single confidence interval.
 
 &nbsp;
 
 # A Modified Bland-Altman Plot for Age Comparisons
-The third issue above has been addressed with some Bland-Altman plots by fitting a linear regression that describes the difference in age estimates as a function of mean age (@giavarina_understanding_2015). However, this only allows for a linear relationship, which may not represent or reveal more interesting nonlinear relationships. A "smoother" (a loess or a generalized additive model (GAM)) could be used to estimate a "smoothed" potentially nonlinear relationship between the differences in ages and the means of the ages. For example, a GAM smoother is added to @fig-BAEx2 with `geom_smooth()` below.^[`geom_smooth()` defaults to a loess smoother when n<1000 points. Use `method="gam"` to force using a GAM smoother. I use the GAM smoother for the hypothesis testing shown at the bottom of this section.]
+The third issue above has been addressed with some Bland-Altman plots by fitting a linear regression that describes the difference in age estimates as a function of mean age [@giavarina_understanding_2015]. However, this only allows for a linear relationship, which may not represent or reveal more interesting nonlinear relationships. A "smoother" (a loess or a generalized additive model (GAM)) could be used to estimate a "smoothed" potentially nonlinear relationship between the differences in ages and the means of the ages. For example, a GAM smoother is added to @fig-BAEx2 with `geom_smooth()` below.^[`geom_smooth()` defaults to a loess smoother when n<1000 points. Use `method="gam"` to force using a GAM smoother. I use the GAM smoother for the hypothesis testing shown at the bottom of this section.]
 
 ```{r}
 #| label: fig-MBAEx1
