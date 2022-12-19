@@ -1,11 +1,10 @@
 ---
-title: 
-description: 
-author: 
-date: x/x/20
+title: TITLE HERE
+description: DESCRIPTION HERE
+author: AUTHOR HERE
+date: MM/DD/20YY
 image: preview.png
 categories:
-  - Age
   - ggplot2
 ---
 
@@ -38,4 +37,7 @@ png("preview.png",width=1000,height=500,units="px",
 last_plot() +
   theme(aspect.ratio=1)
 dev.off()
+## Or, if no plots, use this for a screen capture called screencap.png
+source("../../../helpers/_helpers_posts.R")
+sc2pv()
 ```

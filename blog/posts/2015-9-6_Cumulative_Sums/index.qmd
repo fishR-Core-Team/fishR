@@ -71,6 +71,6 @@ These two new functions are unlikely to change the world as we know it; however,
 #| results: "hide"
 # This is used as a work-around for creating a preview image. See the
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-source("../_helpers.R")
+source("../../../helpers/_helpers_posts.R")
 sc2pv()
 ```

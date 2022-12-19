@@ -4,9 +4,9 @@ description: Add zeroes for species not caught so that CPE calculations are corr
 author: Derek H. Ogle
 date: 4/19/2018
 categories:
+  - " Explanation"
   - Data Wrangling
   - CPE
-  - Teaching
 ---
 
 :::{.callout-note}
@@ -215,6 +215,6 @@ This is my first exploration with `complete()` and it looks promising for this t
 #| results: "hide"
 # This is used as a work-around for creating a preview image. See the
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-source("../_helpers.R")
+source("../../../helpers/_helpers_posts.R")
 sc2pv()
 ```

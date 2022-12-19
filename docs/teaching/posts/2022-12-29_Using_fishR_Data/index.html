@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.">
+<meta name="description" content="Thoughts on how best to use R package data with students.">
 
-<title>fishR - Half-Life Property of K</title>
+<title>fishR - Using fishR Data with Students</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -127,22 +127,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Half-Life Property of K">
-<meta property="og:description" content="Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2016-6-12_Halflife_of_K\preview.png">
+<meta property="og:title" content="fishR - Using fishR Data with Students">
+<meta property="og:description" content="Thoughts on how best to use R package data with students.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/teaching\posts\2022-12-29_Using_fishR_Data\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="550">
-<meta property="og:image:width" content="1024">
-<meta name="citation_title" content="Half-Life Property of K">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="Using fishR Data with Students">
 <meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2016-06-12">
-<meta name="citation_cover_date" content="2016-06-12">
-<meta name="citation_year" content="2016">
-<meta name="citation_online_date" content="2016-06-12">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2016-6-12_Halflife_of_K">
+<meta name="citation_publication_date" content="2022-12-19">
+<meta name="citation_cover_date" content="2022-12-19">
+<meta name="citation_year" content="2022">
+<meta name="citation_online_date" content="2022-12-19">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-29_Using_fishR_Data">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -217,6 +216,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
     </ul>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching/index.html">
+ <span class="menu-text">Teaching</span></a>
+  </li>  
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -230,14 +233,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Half-Life Property of K</h1>
+      <h1 class="title">Using fishR Data with Students</h1>
                   <div>
         <div class="description">
-          Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.
+          Thoughts on how best to use R package data with students.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">Growth</div>
+                <div class="quarto-category">Data</div>
+                <div class="quarto-category">Explanation</div>
               </div>
                   </div>
   </div>
@@ -255,14 +259,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Jun 12, 2016</p>
+        <p class="date">Dec 19, 2022</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 7, 2022</p>
+        <p class="date-modified">Dec 19, 2022</p>
       </div>
     </div>
       
@@ -278,11 +282,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#one-age" id="toc-one-age" class="nav-link" data-scroll-target="#one-age">One Age</a></li>
-  <li><a href="#multiple-ages" id="toc-multiple-ages" class="nav-link" data-scroll-target="#multiple-ages">Multiple Ages</a></li>
-  <li><a href="#different-parameters" id="toc-different-parameters" class="nav-link" data-scroll-target="#different-parameters">Different Parameters</a></li>
+  <li><a href="#using-csv-files" id="toc-using-csv-files" class="nav-link" data-scroll-target="#using-csv-files">Using CSV Files</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2016-6-12_Halflife_of_K/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/teaching/posts/2022-12-29_Using_fishR_Data/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
@@ -300,177 +303,66 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The following packages are loaded for use below. One function from <code>FSA</code> is also used below, but the full package was not loaded here. In addition, the plot was created with <code>ggplot2</code>, though the code is not shown in this post.</p>
+<p>No special packages are loaded for use in this post.</p>
 </div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-<section id="introduction" class="level1">
+<section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
-<p>A colleague recently questioned whether <span class="math inline">\(\frac{log_{e}(2)}{K}\)</span>, where <span class="math inline">\(K\)</span> is the Brody growth coefficient in the typical parameterization of the von Bertalanffy growth function, represents the “time it takes for a fish to grow from any length to a length halfway between the initial length and the asymptotic mean length (<span class="math inline">\(L_{\infty}\)</span>)”. This phenomenon is briefly illustrated below.</p>
+<div class="page-columns page-full"><p>A large number and variety of data sets are provided in the <code>FSA</code> and <code>FSAdata</code> packages, which I collectively call here the “fishR data.” Lists of the data available in these packages are available <a href="../../../pages/data_fishR_alpha.html">alphabetically ordered</a> or <a href="../../../pages/data_fishR_byTopic.html">arranged by fisheries topic</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Items on those lists are linked to a documentation file where the origin of the data, its variables, and other items are described. This is a rich source of open-source data that can be used for teaching purposes.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;A more comprehensive list of fisheries data in all CRAN packages is <a href="../../../pages/data_Comp_byPackage.html">here</a>.</p></li></div></div>
+<p>Data sets in <code>FSA</code> and <code>FSAdata</code> can be, as with data in all packages, accessed with <code>data()</code> by including the name of the data as the first argument and the package name in <code>package=</code>. For example, the <code>WalleyeErie2</code> data from <code>FSAdata</code> are loaded below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(WalleyeErie2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|      setID loc grid year  tl   w  sex    mat age
+#R|  1 2003001   1  940 2003 360 460 male mature   2
+#R|  2 2003001   1  940 2003 371 571 male mature   2
+#R|  3 2003001   1  940 2003 375 507 male mature   2
+#R|  4 2003001   1  940 2003 375 584 male mature   2
+#R|  5 2003001   1  940 2003 375 537 male mature   2
+#R|  6 2003001   1  940 2003 376 553 male mature   2</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="page-columns page-full"><p>While this method for accessing these data is efficient, I don’t like to use it with students because in the “real world” they will not be accessing data from an R package, rather they will be using their own data stored in some other format. With students just learning R I usually have them load CSV files that I either provide for them or they produce themselves.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> They then load the data with <code>read.csv()</code> from base R.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;We also discuss the advantages of CSV files – lightweight, not proprietary, etc.</p></li><li id="fn3"><p><sup>3</sup>&nbsp;For more advanced students I will use <code>read_csv()</code> from <code>readr</code>.</p></li></div></div>
 <p>&nbsp;</p>
 </section>
-<section id="one-age" class="level1 page-columns page-full">
-<h1>One Age</h1>
-<ul>
-<li>Create an R function for the typical von Bertalanffy growth function.</li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>vb <span class="ot">&lt;-</span> FSA<span class="sc">::</span><span class="fu">vbFuns</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ul>
-<li>Declare parameter values.</li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Linf <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fl">0.3</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ul>
-<li>Predict mean length at some initial age.</li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>initA <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>( initL <span class="ot">&lt;-</span> <span class="fu">vb</span>(initA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 10.87116</code></pre>
-</div>
-</div>
-<ul>
-<li>Predict mean length at the initial age plus <span class="math inline">\(\frac{log_{e}(2)}{K}\)</span>.</li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nextA <span class="ot">&lt;-</span> initA<span class="sc">+</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>K</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>( nextL <span class="ot">&lt;-</span> <span class="fu">vb</span>(nextA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 20.43558</code></pre>
-</div>
-</div>
-<ul>
-<li>Find the length that is halfway between the initial length and <span class="math inline">\(L_{\infty}\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
-</ul>
-<div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<code>all.equal()</code> is used to test equality with a tolerance for machine precision.</p></li></div><div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>( hwL <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(initL,Linf)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 20.43558</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(nextL,hwL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] TRUE</code></pre>
-</div>
-</div>
-<p>Note that these last two values are equal, which illustrates the statement above about the “half-life” meaning of <span class="math inline">\(K\)</span>.</p>
-<p>&nbsp;</p>
-<p>This can be repeated for a different initial age.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>initA <span class="ot">&lt;-</span> <span class="dv">7</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>( initL <span class="ot">&lt;-</span> <span class="fu">vb</span>(initA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 26.83802</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nextA <span class="ot">&lt;-</span> initA<span class="sc">+</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>K</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>( nextL <span class="ot">&lt;-</span> <span class="fu">vb</span>(nextA,Linf,K,t0) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 28.41901</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>( hwL <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(initL,Linf)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] 28.41901</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(nextL,hwL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] TRUE</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
-<p>The two examples above can be examined in <a href="#fig-khalf">Figure&nbsp;1</a>, where the horizontal green lines illustrate the increase from the initial ages (e.g., 1 and 7) by <span class="math inline">\(\frac{log_{e}(2)}{K}\)</span>, the vertical red line is the change in length from the initial length to half of <span class="math inline">\(L_{\infty}\)</span>, and the vertical orange line is the remaining change in length to <span class="math inline">\(L_{\infty}\)</span>. The half-life property of <span class="math inline">\(K\)</span> is thus illustrated by the equivalent lengths of the paired red and orange lines.</p>
+<section id="using-csv-files" class="level1 page-columns page-full">
+<h1>Using CSV Files</h1>
+<div class="page-columns page-full"><p>To aid use of the fishR data as CSV files we have provided links to the raw CSV files in the R documentation,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> in the <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">on-line documentation</a>, or in the <a href="https://cran.r-project.org/web/packages/FSAdata/FSAdata.pdf">PDF documentation on CRAN</a>. In all instances you will see a highlighted “CSV file” link at the end of the description in the “source” section of documentation (<a href="#fig-exCSVlink">Figure&nbsp;1</a>). Pressing this link will bring up the raw CSV file which can then be saved to your personal computer.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;For example, (e.g., try <code>?FSAdata::WalleyeErie2</code>.</p></li><li id="fn5"><p><sup>5</sup>&nbsp;Alternatively, right-click on the CSV link to save the file.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="cell-output-display page-columns page-full">
-<div id="fig-khalf" class="quarto-figure quarto-figure-center anchored page-columns page-full">
+<div id="fig-exCSVlink" class="quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-khalf-1.png" class="img-fluid figure-img" alt="Demonstration of the half-life property of the K parameter in the von Bertalanffy growth function. (see text for description)." width="480"></p>
-<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: Demonstration of the half-life property of the K parameter in the von Bertalanffy growth function. (see text for description).</figcaption><p></p>
+<p><img src="exCSVlink.png" class="img-fluid figure-img" width="600"></p>
+<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: Partial view of the online documentation for <code>WalleyeErie2</code> data set in <code>FSAdata</code> showing the “CSV Link” link.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
-</section>
-<section id="multiple-ages" class="level1">
-<h1>Multiple Ages</h1>
-<p>This process is repeated below for several initial age values. Note that the differences between the predicted mean length at the new age and the point halfway between the initial length and <span class="math inline">\(L_{\infty}\)</span> are equal (within machine precision) for each initial age. Again, illustrating the statement about <span class="math inline">\(K\)</span>.</p>
+<p>Students can link directly to URL for the CSV file but this requires a connection to the internet (each time the data is loaded) and does not help students learn how to organize data on their own computers.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">initA=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">initL=</span><span class="fu">vb</span>(initA,Linf,K,t0),</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">nextA=</span>initA<span class="sc">+</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>K,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">nextL=</span><span class="fu">vb</span>(nextA,Linf,K,t0),</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">hwL=</span>(initL<span class="sc">+</span>Linf)<span class="sc">/</span><span class="dv">2</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">areEqual=</span><span class="fu">all.equal</span>(nextL,hwL))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>WalleyeErie2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/WalleyeErie2.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(WalleyeErie2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     initA    initL     nextA    nextL      hwL areEqual
-#R|  1      1 10.87116  3.310491 20.43558 20.43558     TRUE
-#R|  2      2 15.82900  4.310491 22.91450 22.91450     TRUE
-#R|  3      3 19.50187  5.310491 24.75093 24.75093     TRUE
-#R|  4      4 22.22279  6.310491 26.11140 26.11140     TRUE
-#R|  5      5 24.23850  7.310491 27.11925 27.11925     TRUE
-#R|  6      6 25.73178  8.310491 27.86589 27.86589     TRUE
-#R|  7      7 26.83802  9.310491 28.41901 28.41901     TRUE
-#R|  8      8 27.65755 10.310491 28.82878 28.82878     TRUE
-#R|  9      9 28.26467 11.310491 29.13234 29.13234     TRUE
-#R|  10    10 28.71444 12.310491 29.35722 29.35722     TRUE
-#R|  11    11 29.04763 13.310491 29.52382 29.52382     TRUE
-#R|  12    12 29.29447 14.310491 29.64723 29.64723     TRUE
-#R|  13    13 29.47733 15.310491 29.73866 29.73866     TRUE
-#R|  14    14 29.61280 16.310491 29.80640 29.80640     TRUE
-#R|  15    15 29.71315 17.310491 29.85658 29.85658     TRUE
-#R|  16    16 29.78750 18.310491 29.89375 29.89375     TRUE
-#R|  17    17 29.84257 19.310491 29.92129 29.92129     TRUE
-#R|  18    18 29.88338 20.310491 29.94169 29.94169     TRUE
-#R|  19    19 29.91360 21.310491 29.95680 29.95680     TRUE
-#R|  20    20 29.93600 22.310491 29.96800 29.96800     TRUE</code></pre>
+<pre class="output"><code>#R|      setID loc grid year  tl   w  sex    mat age
+#R|  1 2003001   1  940 2003 360 460 male mature   2
+#R|  2 2003001   1  940 2003 371 571 male mature   2
+#R|  3 2003001   1  940 2003 375 507 male mature   2
+#R|  4 2003001   1  940 2003 375 584 male mature   2
+#R|  5 2003001   1  940 2003 375 537 male mature   2
+#R|  6 2003001   1  940 2003 376 553 male mature   2</code></pre>
 </div>
 </div>
+<p>However, this last example also demonstrates how an instructor could link directly to the CSV file in the resources they provide the student.</p>
 <p>&nbsp;</p>
 </section>
-<section id="different-parameters" class="level1">
-<h1>Different Parameters</h1>
-<p>The code below illustrates the same phenomenon for a very different set of parameter values.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Linf <span class="ot">&lt;-</span> <span class="dv">300</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">initA=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">initL=</span><span class="fu">vb</span>(initA,Linf,K,t0),</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">nextA=</span>initA<span class="sc">+</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>K,</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">nextL=</span><span class="fu">vb</span>(nextA,Linf,K,t0),</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">hwL=</span>(initL<span class="sc">+</span>Linf)<span class="sc">/</span><span class="dv">2</span>,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">areEqual=</span><span class="fu">all.equal</span>(nextL,hwL))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     initA    initL     nextA    nextL      hwL areEqual
-#R|  1      1   0.0000  1.770164 150.0000 150.0000     TRUE
-#R|  2      2 178.0291  2.770164 239.0146 239.0146     TRUE
-#R|  3      3 250.4103  3.770164 275.2052 275.2052     TRUE
-#R|  4      4 279.8383  4.770164 289.9192 289.9192     TRUE
-#R|  5      5 291.8029  5.770164 295.9014 295.9014     TRUE
-#R|  6      6 296.6673  6.770164 298.3337 298.3337     TRUE
-#R|  7      7 298.6450  7.770164 299.3225 299.3225     TRUE
-#R|  8      8 299.4491  8.770164 299.7246 299.7246     TRUE
-#R|  9      9 299.7760  9.770164 299.8880 299.8880     TRUE
-#R|  10    10 299.9089 10.770164 299.9545 299.9545     TRUE
-#R|  11    11 299.9630 11.770164 299.9815 299.9815     TRUE
-#R|  12    12 299.9849 12.770164 299.9925 299.9925     TRUE
-#R|  13    13 299.9939 13.770164 299.9969 299.9969     TRUE
-#R|  14    14 299.9975 14.770164 299.9988 299.9988     TRUE
-#R|  15    15 299.9990 15.770164 299.9995 299.9995     TRUE
-#R|  16    16 299.9996 16.770164 299.9998 299.9998     TRUE
-#R|  17    17 299.9998 17.770164 299.9999 299.9999     TRUE
-#R|  18    18 299.9999 18.770164 300.0000 300.0000     TRUE
-#R|  19    19 300.0000 19.770164 300.0000 300.0000     TRUE
-#R|  20    20 300.0000 20.770164 300.0000 300.0000     TRUE</code></pre>
-</div>
-</div>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In summary, we hope you will take advantage of the data resources provided in the <code>FSA</code> and <code>FSAdata</code> packages. However, we encourage you <strong>not</strong> to have students access the data through <code>data()</code> but instead to use the CSV links provided in the documentation as described above.</p>
+<p>&nbsp;</p>
 <div class="cell" data-layout-align="center">
 
 </div>
@@ -479,16 +371,16 @@ Note
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2016,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2022,
   author = {Derek H. Ogle},
-  title = {Half-Life {Property} of {K}},
-  date = {2016-06-12},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2016-6-12_Halflife_of_K},
+  title = {Using {fishR} {Data} with {Students}},
+  date = {2022-12-19},
+  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-29_Using_fishR_Data},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2016" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2016, June 12. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2016-6-12_Halflife_of_K">Half-Life
-Property of K</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2022, December 19. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-29_Using_fishR_Data">Using
+fishR Data with Students</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

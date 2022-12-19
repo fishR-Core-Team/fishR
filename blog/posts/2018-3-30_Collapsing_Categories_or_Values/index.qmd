@@ -173,6 +173,6 @@ You may be motivated from this example to use `case_when()` to develop a length 
 #| results: "hide"
 # This is used as a work-around for creating a preview image. See the
 #   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-source("../_helpers.R")
+source("../../../helpers/_helpers_posts.R")
 sc2pv()
 ```

@@ -29,6 +29,8 @@ website:
             file: pages/data_Comp_byPackage.qmd
           - text: "Comprehensive (by topic)"
             file: pages/data_Comp_byTopic.qmd
+      - text: Teaching
+        href: teaching/index.qmd
     pinned: true
   page-footer:
     left: 

@@ -5,8 +5,8 @@ author: Derek H. Ogle
 date: 6/12/2016
 image: preview.png
 categories:
+  - " Explanation"
   - Growth
-  - Teaching
 ---
 
 :::{.callout-note}

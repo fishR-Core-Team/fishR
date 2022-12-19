@@ -1,0 +1,18 @@
+---
+title: Teaching Resources
+listing:
+  contents: posts
+  type: grid
+  fields: [image,title,description,reading-time,date,file-modified,author]
+  sort: file-modified desc
+  sort-ui: [file-modified,date,author]
+  categories: true
+  table-hover: true
+  field-display-names: 
+    reading-time: Time
+    date: Published
+    file-modifid: Modified
+comments: false
+page-layout: full
+date-modified: ""
+---
