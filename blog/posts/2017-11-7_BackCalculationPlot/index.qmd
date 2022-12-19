@@ -1,0 +1,203 @@
+---
+title: Plots of Back-Calculated Lengths-At-Age
+description: Initial thoughts on displaying back-calculated lengths-at-age.
+author: Derek H. Ogle
+date: 11/7/2017
+image: preview.png
+categories:
+  - Growth
+  - Back-calculation
+  - ggplot2
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the default `ggplot` theme to `theme_bw()` for a classic "black-and-white" plot (rather than the default plot with a gray background).
+:::
+
+```{r packages}
+library(FSA)      # for filterD(), headtail()
+library(dplyr)    # for select(), arrange(), mutate(), group_by(), et al.
+library(nlme)     # for nlme()
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+&nbsp;
+
+# Introduction
+One reader commented on a past post via Twitter ...
+
+> Now that you solved the age-bias plot, how about the 'best' display of back-calculated length-at-age data, with VonB growth curve overlay?
+
+In addition, I recently received a question related to the non-convergence of a hierarchical (mixed) model applied to fitting a von Bertalanffy growth function (VBGF) to back-calculated lengths at age. In exploring that question, I realized that a "good" plot of back-calculated lengths-at-age was needed to understand why the VBGF may (or may not) fit.
+
+This post represents my initial attempts to visualize back-calculated lengths at age with what are basically spaghetti plots. Spaghetti plots show individual longitudinal traces for each subject (e.g., [one example](https://blogs.sas.com/content/iml/2016/06/02/create-spaghetti-plots-in-sas.html)). Recently "spaghetti plots" were in the news to show modeled paths of hurricanes (e.g., [I particularly enjoyed this critique](https://arstechnica.com/science/2017/09/please-please-stop-sharing-spaghetti-plots-of-hurricane-models/)).
+
+&nbsp;
+
+# Data
+In this post, I examine back-calculated lengths (mm) at age for Walleye (*Sander vitreus*) captured from Lake Mille Lacs, Minnesota in late fall (September-October).^[More details [are here](http://derekogle.com/fishR/data/data-html/WalleyeML.html).] These data were kindly provided by the Minnesota Department of Natural Resources, are available in `FSAData`, and were used extensively in @ogle_growth_2017. For simplicity of presentation here, these data were reduced (with `filter()`) to a single year and sex, several unneeded variables were removed (with `select()`, a new factored version of the estimated age variable was created (with `mutate()`), and the data were ordered by estimated, fish identification number, and back-calculated age.
+
+```{r}
+## Get data
+data(WalleyeML,package="FSAdata")
+## Wrangle data
+df <- WalleyeML |>
+  filter(Year==2002,Sex=="F") |>
+  select(-Year,-Sex,-Scale.Rad,-Dist.Ann) |>
+  mutate(fEst.Age=factor(Est.Age)) |>
+  arrange(Est.Age,ID,BC.Age)
+## Examine results
+headtail(df,n=5)
+```
+
+These fish were captured in late fall such that the observed length includes current year's growth. However, the observed age does not account for time since the fish's "birthday." In other words, the observed age at capture should be a "fractional age" such that it represents completed years of growth plus the fraction of the current year's growth season completed (i.e., the "current age" should be something like 10.9 rather than 10). An example of this is seen by comparing the observed length at capture (in `TL`) and the back-calculated length (in `BC.Len`) to age-1 for the first fish in the data.frame (first line in data shown above).
+
+Some of the plots below require a data frame where the length and age for the oldest age match in time. In other words, this data.frame should contain the length of the fish on the fish's last "birthday." With these data, that length is the back-calculated length at the age (in `BC.Age`) that matches the age of the fish at the time of capture (in `Est.Age`).^[With other data, that length may simply be the length of the fish at the time of capture.] An example of this data frame is below (especially compare the last five lines below to the last five lines in the previous data frame snippet above).
+
+```{r}
+# data.frame of just lengths at last full age
+df2 <- df |>
+  filter(BC.Age==Est.Age)
+headtail(df2,n=5)
+```
+
+Finally, in some plots below the mean back-calculated length at age is included.^[`as.data.frame()` removes the `tibble` class and the remaining grouping level from this data frame.]
+
+```{r}
+# data.frame of mean lengths at back-calculated ages
+df3 <- df |>
+  group_by(fEst.Age,BC.Age) |>
+  summarize(mnBC.Len=mean(BC.Len)) |>
+  as.data.frame()
+headtail(df3,n=5)
+```
+
+# Plots for Exploratory Data Analysis
+When modeling fish growth, I explore the data to make observations about (i) variability in length at each age and (ii) "shape" of growth (i.e., whether or not there is evidence for an horizontal asymptote or inflection point). When using repeated-measures data, for example from back-calculated lengths-at-age, I observe the "shape" of growth for each individual and (iii) identify how the back-calculated lengths at age from older fish compare to the back-calculated lengths at age from younger fish.^[As major differences could suggest ["Lee's Phenomenon"](http://www.fishbase.org/glossary/Glossary.php?q=Lee%C2%B4s+phenomenon), substantial changes in growth between year-classes or over time, or problems with the back-calculation model.] In this section, I describe two plots (with some augmentations to the first type) that could be useful during this exploratory stage. In the last section, I describe a plot that could be used for publication. 
+
+&nbsp;
+
+@fig-SpaghettiPlot1 shows longitudinal traces of back-calculated lengths at age for each fish, with separate colors for fish with different observed ages at capture. From this I see variability of approximately 100 mm at each age, individual fish that generally follow the typical shape of a VBGF, and some evidence that back-calculated lengths at earlier ages from "older" fish at capture are somewhat lower than the back-calculated lengths at earlier ages for "younger" fish at capture (this is most evident with the pinkish lines).
+
+```{r}
+#| label: fig-SpaghettiPlot1
+#| fig-cap: Traces of back-calculated lengths at age for each fish. Traces with the same color are fish with the same observed age at capture.
+sp <- ggplot(data=df,aes(x=BC.Age,y=BC.Len,color=fEst.Age,group=ID)) +
+  geom_line(alpha=1/8) +
+  scale_x_continuous("Back-Calculated Age") +
+  scale_y_continuous("Back-Calculated Length (mm)") +
+  theme(legend.position="none")
+sp
+```
+
+&nbsp;
+
+@fig-SpaghettiPlot2 is the same as @fig-SpaghettiPlot1 except that heavy lines have been added for the mean back-calculated lengths at age for fish from each age-at-capture. Here the evidence that back-calculated lengths at earlier ages from "older" fish at capture are somewhat lower than the back-calculated lengths at earlier ages for "younger" fish at capture is a little more obvious.
+
+```{r}
+#| label: fig-SpaghettiPlot2
+#| fig-cap: Traces of back-calculated lengths at age for each fish with mean back-calculated lengths at age shown by the heavier lines. Traces with the same color are fish with the same observed age at capture.
+sp +
+  geom_line(data=df3,
+            aes(x=BC.Age,y=mnBC.Len,group=fEst.Age,color=fEst.Age))
+```
+
+&nbsp;
+
+@fig-SpaghettiPlot3 is the same as @fig-SpaghettiPlot1 but also has points for the length and age of each fish at the last *completed* year of growth. These points are most near to the observed lengths and ages at capture^[They will be the observed lengths and ages at capture for datasets where the fish were captured prior to when the current season's growth had commenced.] and, thus, most nearly represent the data that would be used to fit a growth model if back-calculations had not been made. With this I observe that most traces of back-calculated lengths-at-age pass near these points, which suggests that "growth" has not changed dramatically over the time represented in these data and that the model used to back-calculate lengths and ages is not dramatically incorrect.
+
+```{r}
+#| label: fig-SpaghettiPlot3
+#| fig-cap: Traces of back-calculated lengths at age for each fish. Traces with the same color are fish with the same observed age at capture.
+sp + 
+  geom_point(data=df2,aes(color=fEst.Age),alpha=1/5)
+```
+
+&nbsp;
+
+The previous plots are cluttered because of the number of individual fish. This clutter can be somewhat reduced by creating separate spaghetti plots for each observed age at capture (@fig-SpaghettiPlotSep). From this, I observe the clear start of an asymptote at about age 5, an indication of a slight inflection around age 2 (most evident for fish that were older at capture), and that a good portion of the variability in length at early ages may be attributable to fish from different year-classes (i.e., of different observed ages-at-capture). It is, however, more difficult to see that back-calculated lengths at earlier ages from "older" fish at capture are somewhat lower than the back-calculated lengths at earlier ages for "younger" fish at capture.^[I left the facet for age-1 fish in this plot to remind me that there were age-1 fish in these data, even though they do not show a trace. Also, the color here is superfluous and could be removed. I left the color here for comparison with previous figures.]
+
+```{r}
+#| label: fig-SpaghettiPlotSep
+#| fig-cap: Traces of back-calculated lengths at age for each fish separated by observed age at capture. Black lines in each facet are the mean back-calculated lengths at age for fish shown in that facet.
+#| fig.width: 5
+#| fig.height: 5
+## Make facet labels for the plot below
+lbls <- paste("Age =",levels(df$fEst.Age))
+names(lbls) <- levels(df$fEst.Age)
+
+## Spaghetti plot separated by age at capture (with means)
+sp + 
+  facet_wrap(~fEst.Age,labeller=labeller(fEst.Age=lbls)) +
+  geom_line(data=df3,aes(x=BC.Age,y=mnBC.Len,group=1),color="black")
+```
+
+&nbsp;
+
+# Publication Graphic with Model Overlaid
+For publication I would include traces for individual fish, but without color coding by estimated age-at-capture, and overlay the population-average growth model (i.e., the growth model expressed from using the "fixed effects" for each model parameter; @fig-PubPlot).^[The model fitting code below is from @ogle_growth_2017.]
+
+```{r}
+#| label: fitModel
+## Create the Von B Function using logged version of Linf (to ease scale issue)
+vbT <- function(T,logLinf,K=NULL,t0=NULL) {
+  if (length(logLinf)==3) {
+    t0 <- logLinf[[3]]
+    K <- logLinf[[2]]
+    logLinf <- logLinf[[1]]
+  }
+  exp(logLinf)*(1-exp(-K*(T-t0)))
+}
+
+## Generate starting values from last completed length and age data
+vbStarts(BC.Len~BC.Age,data=df2)
+svVB <- list(fixed=c(logLinf=log(624.361),K=0.276,t0=0.290))
+
+## Fit hierarchical von B to back-calcd data (BE PATIENT)
+##   Will estimate population-average parameters (fixed-effect values)
+##   and parameters for each individual (in coefficients).
+fitVB <- nlme(BC.Len~vbT(BC.Age,logLinf,K,t0),data=df,
+              fixed=list(logLinf~1,K~1,t0~1),
+              random=logLinf+K+t0~1|ID,
+              start=svVB)
+```
+
+```{r}
+#| label: fig-PubPlot
+#| fig-cap: Traces of back-calculated lengths at age for each fish (lighter black lines) with the population-averaged von Bertalanffy growth function (dark black line) overlaid. The equation for the best-fit von Bertalanffy growth function is shown.
+#| cache: true
+## von B equation for the plot
+( tmp <- fixef(fitVB) )
+lbl <- paste("L==",round(exp(tmp[1]),0),
+             "*bgroup('(',1-e^-",round(tmp[2],3),
+             "(Age-",round(tmp[3],2),"),')')")
+
+ggplot(data=df,aes(x=BC.Age,y=BC.Len,group=ID)) +
+  geom_line(alpha=1/15) +
+  stat_function(data=data.frame(T=seq(1,10,0.1)),aes(x=T,y=NULL,group=NULL),
+                fun=vbT,args=list(logLinf=fixef(fitVB)),linewidth=1.1) +
+  geom_text(data=data.frame(x=7,y=120),aes(x=x,y=y,group=NULL,
+                            label=lbl),parse=TRUE,size=4) +
+  scale_x_continuous("Back-Calculated Age") +
+  scale_y_continuous("Back-Calculated Length (mm)") +
+  theme(legend.position="none")
+```
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+sp +
+  geom_line(data=df3,
+            aes(x=BC.Age,y=mnBC.Len,group=fEst.Age,color=fEst.Age)) +
+  theme(aspect.ratio=1)
+dev.off()
+```
