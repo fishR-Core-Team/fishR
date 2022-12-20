@@ -1,0 +1,33 @@
+---
+title: TITLE HERE
+description: DESCRIPTION HERE
+author: AUTHOR HERE
+date: MM/DD/20YY
+image: ../../../helpers/casestudy.png
+categories:
+  - " Case Study"
+  - 
+---
+
+# SECTION HEADING
+
+
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(ggplot2)
+
+# Load data
+ <- read.csv("")
+
+```

@@ -1,0 +1,25 @@
+---
+title: TITLE HERE
+description: DESCRIPTION HERE
+author: AUTHOR HERE
+date: MM/DD/20YY
+image: ../../../helpers/explanation.png
+categories:
+  - " Explanation"
+  - 
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the random number seed for reproducibility of the randomly generated sample data below.
+:::
+
+```{r packages}
+
+```
+
+&nbsp;
+
+# SECTION HEADING
+
+
+&nbsp;

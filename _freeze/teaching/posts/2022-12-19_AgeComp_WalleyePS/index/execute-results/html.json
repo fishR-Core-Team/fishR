@@ -1,0 +1,16 @@
+{
+  "hash": "de6e65479e71c4e3568d439bc0b71d38",
+  "result": {
+    "markdown": "---\ntitle: Exercise - Age Comparisons\nsubtitle: Pymatuning Sanctuary Walleye\ndescription: Compare age estimates from two structures taken from Walleye sampled from Pymatuning Sanctuary (PA).\nauthor: Derek H. Ogle\ndate: 12/19/2022\nimage: ../../../helpers/exercise.png\ncategories:\n  - \" Exercise\"\n  - Age Comparisons\n---\n\n\n[Kocovsky and Carline (2000)](http://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2) examined methods to estimate the age of the unexploited population of [Walleye](https://en.wikipedia.org/wiki/Walleye) in [Pymatuning Sanctuary](https://en.wikipedia.org/wiki/Pymatuning_State_Park_(Pennsylvania)) (PA).  [Scales](https://en.wikipedia.org/wiki/Fish_scale), dorsal spines, and [otoliths](https://en.wikipedia.org/wiki/Otolith) were extracted from fish sampled in trap nets during the spawning run in March and April of 1997. Two readers independently examined each structure without knowledge of fish length or sex.  Only consensus ages for each structure are recorded in [WalleyePS](https://fishr-core-team.github.io/FSAdata/reference/WalleyePS.html).^[See \"CSV file\" link in \"Source\" section of linked page.]\n\n1. Describe any apparent bias (or not) between age estimates from *scales* and *otoliths* from tabular, graphical, and statistical summaries.\n1. Does the sex of the fish impact your descriptions of bias (or not) between *scales* and *otoliths*?\n1. Repeat the previous two questions for *dorsal spines* and *otoliths*.\n\n&nbsp;\n\n:::{.callout-important appearance=\"simple\"}\n## Solution Code:\nAvailable upon request to students not in a class. Contact fishR maintainers.\n:::\n\n\n::: {.cell layout-align=\"center\"}\n\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

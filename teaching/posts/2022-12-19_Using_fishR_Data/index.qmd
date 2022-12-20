@@ -1,0 +1,66 @@
+---
+title: Using fishR Data with Students
+description: Thoughts on how best to use R package data with students.
+author: Derek H. Ogle
+date: 12/19/2022
+image: ../../../helpers/data.png
+categories:
+  - "  Data"
+---
+
+:::{.callout-note}
+No special packages are loaded for use in this post.
+:::
+
+&nbsp;
+
+# Introduction
+A large number and variety of data sets are provided in the `FSA` and `FSAdata` packages, which I collectively call here the "fishR data." Lists of the data available in these packages are available [alphabetically ordered](../../../pages/data_fishR_alpha.html) or [arranged by fisheries topic](../../../pages/data_fishR_byTopic.html).^[A more comprehensive list of fisheries data in all CRAN packages is [here](../../../pages/data_Comp_byPackage.html).] Items on those lists are linked to a documentation file where the origin of the data, its variables, and other items are described. This is a rich source of open-source data that can be used for teaching purposes.
+
+Data sets in `FSA` and `FSAdata` can be, as with data in all packages, accessed with `data()` by including the name of the data as the first argument and the package name in `package=`. For example, the `WalleyeErie2` data from `FSAdata` are loaded below.
+
+```{r}
+data(WalleyeErie2,package="FSAdata")
+head(WalleyeErie2)
+```
+
+&nbsp;
+
+While this method for accessing these data is efficient, I don't like to use it with students because in the "real world" they will not be accessing data from an R package, rather they will be using their own data stored in some other format. With students just learning R I usually have them load CSV files that I either provide for them or they produce themselves.^[We also discuss the advantages of CSV files -- lightweight, not proprietary, etc.] They then load the data with `read.csv()` from base R.^[For more advanced students I will use `read_csv()` from `readr`.]
+
+&nbsp;
+
+# Using CSV Files
+To aid use of the fishR data as CSV files we have provided links to the raw CSV files in the R documentation,^[For example,  (e.g., try `?FSAdata::WalleyeErie2`.] in the [on-line documentation](https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html), or in the [PDF documentation on CRAN](https://cran.r-project.org/web/packages/FSAdata/FSAdata.pdf). In all instances you will see a highlighted "CSV file" link at the end of the description in the "source" section of documentation (@fig-exCSVlink). Pressing this link will bring up the raw CSV file which can then be saved to your personal computer.^[Alternatively, right-click on the CSV link to save the file.]
+
+```{r}
+#| label: fig-exCSVlink
+#| echo: false
+#| fig-cap: Partial view of the online documentation for `WalleyeErie2` data set in `FSAdata` showing the "CSV file" link.
+knitr::include_graphics("exCSVlink.png")
+```
+
+&nbsp;
+
+Students can link directly to URL for the CSV file but this requires a connection to the internet (each time the data is loaded) and does not help students learn how to organize data on their own computers.
+
+```{r}
+WalleyeErie2 <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/WalleyeErie2.csv")
+head(WalleyeErie2)
+```
+
+However, this last example also demonstrates how an instructor could link directly to the CSV file in the resources they provide the student.
+
+&nbsp;
+
+# Conclusion
+In summary, we hope you will take advantage of the data resources provided in the `FSA` and `FSAdata` packages. However, we encourage you **not** to have students access the data through `data()` but instead to use the CSV files linked to in the documentation as described above.
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| results: hide
+source("../../../helpers/_helpers_posts.R")
+sc2pv()
+```

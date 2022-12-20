@@ -1,0 +1,112 @@
+---
+title: Exercise - Size Structure
+subtitle: Saginaw Bay Yellow Perch
+description: Estimate size structure statistics and compare them among groups of Yellow Perch from Saginaw Bay, Lake Huron (MI).
+author: Derek H. Ogle
+date: 12/20/2022
+image: ../../../helpers/exercise.png
+categories:
+  - "  Exercise"
+  - " Size Structure"
+  - "Yellow Perch"
+---
+
+[Diana and Salz (1990)](http://www.tandfonline.com/doi/abs/10.1577/1548-8659%281990%29119%3C0976%3AESGAMO%3E2.3.CO%3B2) examined the growth and maturity of [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) captured from  multiple sites at two locations (`inner` and `outer`) within [Saginaw Bay](https://en.wikipedia.org/wiki/Saginaw_Bay), [Lake Huron](https://en.wikipedia.org/wiki/Lake_Huron) (MI) from 1983-1985. The primary goal of this research was to determine if the growth and maturation of Yellow Perch showed evidence of stunting. The total lengths and location of capture for this study are in [YPerchSB1](https://fishr-core-team.github.io/FSAdata/reference/YPerchSB1.html).^[See "CSV file" link in "Source" section of linked page.]. Use these data to answer the following questions.
+
+1. Isolate Yellow Perch captured from the `inner` portion of Saginaw Bay.
+    a. Describe the distribution of these fish using both a histogram and frequency table.^[Choose an appropriate/reasonable bin/category width.]
+    a. Compute and interpret the **PSD-Q** value (with 95% confidence interval).
+    a. Compute and interpret the **PSD-P** value (with 95% confidence interval).
+1. Isolate Yellow Perch captured from the `outer` portion of Saginaw Bay.
+    a. Describe the distribution of these fish using both a histogram and frequency table.
+    a. Compute and interpret the **PSD-Q** value (with 95% confidence interval).
+    a. Compute and interpret the **PSD-P** value (with 95% confidence interval).
+1. Statistically compare the following metrics between Yellow Perch captured in the the `inner` and `outer` portions of Saginaw Bay.
+    a. Length frequency distribution.
+    a. Distributions into the five-cell Gabelhouse length categories.
+    a. **PSD-Q**.
+    a. **PSD-P**.
+1. Write a short paragraph describing what you learned about the size structure of Saginaw Bay Yellow Perch, with specific comments about differences (if any) between the inner and outer locations.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(dplyr)
+library(Matching)
+
+# Load data
+YPerchSB1 <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/YPerchSB1.csv") |>
+  mutate(tlmm=tl*10,
+         lcat10=lencat(tlmm,w=10),
+         psdcat=lencat(tlmm,breaks=psdVal("Yellow Perch"),use.names=TRUE))
+headtail(YPerchSB1)
+
+# Inner Location
+inr <- YPerchSB1 |>
+  filter(loc=="inner")
+
+hist(~tlmm,data=inr,w=10)
+round(prop.table(xtabs(~lcat10,data=inr))*100,1)
+
+psdCalc(~tlmm,data=inr,species="Yellow Perch",
+        what="traditional",showIntermediate=TRUE)
+
+# Outer Location
+outr <- YPerchSB1 |>
+  filter(loc=="outer")
+
+hist(~tlmm,data=outr,w=10)
+round(prop.table(xtabs(~lcat10,data=outr))*100,1)
+
+psdCalc(~tlmm,data=outr,species="Yellow Perch",
+        what="traditional",showIntermediate=TRUE)
+
+# Comparing Locations
+## Length Frequency
+clr <- c("black","gray50")
+plot(ecdf(inr$tlmm),xlab="Total Length (mm)",
+     do.points=FALSE,verticals=TRUE,main="",col.01line=NULL)
+plot(ecdf(outr$tlmm),add=TRUE,do.points=FALSE,
+     verticals=TRUE,col=clr[2],col.01line=NULL)
+legend("bottomright",c("Inner","Outer"),col=clr,lty=1,bty="n",cex=0.75)
+
+ks.test(inr$tlmm,outr$tlmm)
+
+summary(ks.boot(inr$tlmm,outr$tlmm,nboots=5000))
+
+## Distribution into Gabelhouse categories
+forGH <- YPerchSB1 |>
+  filter(psdcat!="substock") |>
+  droplevels()
+
+( ghfreq <- xtabs(~psdcat+loc,data=forGH) )
+chisq.test(ghfreq)
+
+## PSD-Q
+forPSDQ <- forGH |>
+  mutate(gcatq=plyr::mapvalues(psdcat,
+                               from=c("stock","quality","preferred"),
+                               to=c("quality-","quality-","quality+")))
+( qfreq <- xtabs(~gcatq+loc,data=forPSDQ) )
+chisq.test(qfreq)
+
+## PSD-P
+forPSDP <- forGH |>
+  mutate(gcatp=plyr::mapvalues(psdcat,
+                               from=c("stock","quality","preferred"),
+                               to=c("preferred-","preferred-","preferred+")))
+( pfreq <- xtabs(~gcatp+loc,data=forPSDP) )
+chisq.test(pfreq)
+```

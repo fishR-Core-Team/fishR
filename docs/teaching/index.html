@@ -72,7 +72,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-image','listing-title','listing-description','listing-reading-time','listing-date','listing-file-modified','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-date-sort'] }],
+      valueNames: ['listing-image','listing-title','listing-description','listing-date','listing-file-modified','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
@@ -97,10 +97,7 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="../css/styles.css">
 <meta property="og:title" content="fishR - Teaching Resources">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/teaching\posts\2022-12-29_Using_fishR_Data\preview.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="500">
-<meta property="og:image:width" content="1000">
 </head>
 
 <body class="nav-fixed">
@@ -189,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category=" Data"> Data <span class="quarto-category-count">(1)</span></div><div class="category" data-category=" Explanation"> Explanation <span class="quarto-category-count">(3)</span></div><div class="category" data-category="CPE">CPE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data Wrangling">Data Wrangling <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Growth">Growth <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="  Case Study">  Case Study <span class="quarto-category-count">(1)</span></div><div class="category" data-category="  Data">  Data <span class="quarto-category-count">(1)</span></div><div class="category" data-category="  Exercise">  Exercise <span class="quarto-category-count">(2)</span></div><div class="category" data-category="  Explanation">  Explanation <span class="quarto-category-count">(2)</span></div><div class="category" data-category=" Age Comparisons"> Age Comparisons <span class="quarto-category-count">(1)</span></div><div class="category" data-category=" CPE"> CPE <span class="quarto-category-count">(1)</span></div><div class="category" data-category=" Data Wrangling"> Data Wrangling <span class="quarto-category-count">(1)</span></div><div class="category" data-category=" Growth"> Growth <span class="quarto-category-count">(1)</span></div><div class="category" data-category=" Size Structure"> Size Structure <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Salmon/Trout">Salmon/Trout <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Walleye">Walleye <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Yellow Perch">Yellow Perch <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -207,12 +204,6 @@ ul.task-list li input[type="checkbox"] {
      <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
        <option value="" disabled="" selected="" hidden="">Order By</option>
        <option value="index" data-direction="asc">Default</option>
-         <option value="listing-file-modified-sort" data-direction="asc">
-          Modified - Oldest
-        </option>
-         <option value="listing-file-modified-sort" data-direction="desc">
-          Modified - Newest
-        </option>
          <option value="listing-date-sort" data-direction="asc">
           Published - Oldest
         </option>
@@ -222,23 +213,116 @@ ul.task-list li input[type="checkbox"] {
          <option value="listing-author" data-direction="asc">
           Author
         </option>
+         <option value="listing-file-modified-sort" data-direction="asc">
+          Modified - Oldest
+        </option>
+         <option value="listing-file-modified-sort" data-direction="desc">
+          Modified - Newest
+        </option>
      </select>
   </div>
 </div>
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories=" Data, Explanation" data-listing-date-sort="1671429600000" data-listing-file-modified-sort="1671483052026" data-listing-reading-time-sort="2.33">
-<a href="../teaching/posts/2022-12-29_Using_fishR_Data/index.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="0" data-categories="  Exercise, Size Structure,Yellow Perch" data-listing-date-sort="1671516000000" data-listing-file-modified-sort="1671547530113" data-listing-reading-time-sort="2.67">
+<a href="../teaching/posts/2022-12-19_SizeStrux_YPerchSB1/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="../teaching/posts/2022-12-29_Using_fishR_Data/preview.png" class="thumbnail-image card-img" style="height: 150px;">
+<img src="../helpers/exercise.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Exercise - Size Structure
+</h5>
+<div class="card-text listing-description">
+Estimate size structure statistics and compare them among groups of Yellow Perch from Saginaw Bay, Lake Huron (MI).
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Derek H. Ogle
+</div>
+<div class="listing-date">
+Dec 20, 2022
+</div>
+</div>
+</div>
+<div class="card-footer">
+<div class="card-file-modified listing-file-modified">
+<p>Dec 20, 2022</p>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="  Case Study, Size Structure,Salmon/Trout" data-listing-date-sort="1671516000000" data-listing-file-modified-sort="1671547535193" data-listing-reading-time-sort="4.235">
+<a href="../teaching/posts/2022-12-20_SizeStrux_Whittlesey/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="../helpers/casestudy.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Size Structure of Species in a Cold-Water Wisconsin Stream
+</h5>
+<div class="card-text listing-description">
+Develop size structure summaries to infer species identification.
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Derek H. Ogle
+</div>
+<div class="listing-date">
+Dec 20, 2022
+</div>
+</div>
+</div>
+<div class="card-footer">
+<div class="card-file-modified listing-file-modified">
+<p>Dec 20, 2022</p>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="  Exercise, Age Comparisons,Walleye" data-listing-date-sort="1671429600000" data-listing-file-modified-sort="1671547532810" data-listing-reading-time-sort="0.805">
+<a href="../teaching/posts/2022-12-19_AgeComp_WalleyePS/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="../helpers/exercise.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Exercise - Age Comparisons
+</h5>
+<div class="card-text listing-description">
+Compare age estimates from two structures taken from Walleye sampled from Pymatuning Sanctuary (PA).
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Derek H. Ogle
+</div>
+<div class="listing-date">
+Dec 19, 2022
+</div>
+</div>
+</div>
+<div class="card-footer">
+<div class="card-file-modified listing-file-modified">
+<p>Dec 20, 2022</p>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="  Data" data-listing-date-sort="1671429600000" data-listing-file-modified-sort="1671547521687" data-listing-reading-time-sort="2.335">
+<a href="../teaching/posts/2022-12-19_Using_fishR_Data/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="../helpers/data.png" class="thumbnail-image card-img" style="height: 150px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 Using fishR Data with Students
 </h5>
-<div class="listing-reading-time card-text text-muted">
-2 min
-</div>
 <div class="card-text listing-description">
 Thoughts on how best to use R package data with students.
 </div>
@@ -253,25 +337,22 @@ Dec 19, 2022
 </div>
 <div class="card-footer">
 <div class="card-file-modified listing-file-modified">
-<p>Dec 19, 2022</p>
+<p>Dec 20, 2022</p>
 </div>
 </div>
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-categories=" Explanation,Data Wrangling,CPE" data-listing-date-sort="1524114000000" data-listing-file-modified-sort="1671479118094" data-listing-reading-time-sort="9.14">
+<div class="g-col-1" data-index="4" data-categories="  Explanation, Data Wrangling, CPE" data-listing-date-sort="1524114000000" data-listing-file-modified-sort="1671547524679" data-listing-reading-time-sort="9.02">
 <a href="../teaching/posts/2018-4-19_Adding_Zero_Catches/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="../teaching/posts/2018-4-19_Adding_Zero_Catches/preview.png" class="thumbnail-image card-img" style="height: 150px;">
+<img src="../helpers/explanation.png" class="thumbnail-image card-img" style="height: 150px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 Adding Zero Catches
 </h5>
-<div class="listing-reading-time card-text text-muted">
-9 min
-</div>
 <div class="card-text listing-description">
 Add zeroes for species not caught so that CPE calculations are correct
 </div>
@@ -286,25 +367,22 @@ Apr 19, 2018
 </div>
 <div class="card-footer">
 <div class="card-file-modified listing-file-modified">
-<p>Dec 19, 2022</p>
+<p>Dec 20, 2022</p>
 </div>
 </div>
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-categories=" Explanation,Growth" data-listing-date-sort="1465707600000" data-listing-file-modified-sort="1671472915363" data-listing-reading-time-sort="4.315">
+<div class="g-col-1" data-index="5" data-categories="  Explanation, Growth" data-listing-date-sort="1465707600000" data-listing-file-modified-sort="1671547527457" data-listing-reading-time-sort="4.16">
 <a href="../teaching/posts/2016-6-12_Halflife_of_K/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="../teaching/posts/2016-6-12_Halflife_of_K/preview.png" class="thumbnail-image card-img" style="height: 150px;">
+<img src="../helpers/explanation.png" class="thumbnail-image card-img" style="height: 150px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 Half-Life Property of K
 </h5>
-<div class="listing-reading-time card-text text-muted">
-4 min
-</div>
 <div class="card-text listing-description">
 Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.
 </div>
@@ -319,7 +397,7 @@ Jun 12, 2016
 </div>
 <div class="card-footer">
 <div class="card-file-modified listing-file-modified">
-<p>Dec 19, 2022</p>
+<p>Dec 20, 2022</p>
 </div>
 </div>
 </div>

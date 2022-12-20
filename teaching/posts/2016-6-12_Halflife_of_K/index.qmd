@@ -3,10 +3,10 @@ title: Half-Life Property of K
 description: Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.
 author: Derek H. Ogle
 date: 6/12/2016
-image: preview.png
+image: ../../../helpers/explanation.png
 categories:
-  - " Explanation"
-  - Growth
+  - "  Explanation"
+  - " Growth"
 ---
 
 :::{.callout-note}
@@ -173,17 +173,4 @@ data.frame(initA=1:20) |>
          areEqual=all.equal(nextL,hwL))
 ```
 
-
-
-```{r}
-#| echo: false
-#| fig.show: "hide"
-#| results: "hide"
-# This is used as a work-around for creating a preview image. See the
-#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
-png("preview.png",width=1000,height=500,units="px",
-    bg="transparent",res=216)
-khalf +
-  theme(aspect.ratio=1)
-dev.off()
-```
+&nbsp;

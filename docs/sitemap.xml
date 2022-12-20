@@ -2,126 +2,138 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2022-12-19T20:47:19.331Z</lastmod>
+    <lastmod>2022-12-20T14:48:16.470Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
-    <lastmod>2022-12-19T19:47:56.600Z</lastmod>
+    <lastmod>2022-12-20T13:38:54.041Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-6_Cumulative_Sums/index.html</loc>
-    <lastmod>2022-12-19T19:48:01.735Z</lastmod>
+    <lastmod>2022-12-20T13:38:59.422Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2016-11-11_Pauly-VBModel/index.html</loc>
-    <lastmod>2022-12-19T19:48:06.937Z</lastmod>
+    <lastmod>2022-12-20T13:39:04.777Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2016-12-9_PSD_SE/index.html</loc>
-    <lastmod>2022-12-19T19:48:12.117Z</lastmod>
+    <lastmod>2022-12-20T13:39:10.217Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2017-11-7_BackCalculationPlot/index.html</loc>
-    <lastmod>2022-12-19T19:48:17.921Z</lastmod>
+    <lastmod>2022-12-20T13:39:15.739Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2017-12-12_StockRecruit_Graph_Questions/index.html</loc>
-    <lastmod>2022-12-19T19:48:23.584Z</lastmod>
+    <lastmod>2022-12-20T13:39:21.248Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2017-4-20_BlandAltman/index.html</loc>
-    <lastmod>2022-12-19T19:48:29.192Z</lastmod>
+    <lastmod>2022-12-20T13:39:26.863Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2017-7-28_LF_Ridgeline_Plot/index.html</loc>
-    <lastmod>2022-12-19T19:48:34.373Z</lastmod>
+    <lastmod>2022-12-20T13:39:32.078Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2017-8-9_Mean_Weights/index.html</loc>
-    <lastmod>2022-12-19T19:48:40.164Z</lastmod>
+    <lastmod>2022-12-20T13:39:37.825Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2018-3-30_Collapsing_Categories_or_Values/index.html</loc>
-    <lastmod>2022-12-19T19:48:45.525Z</lastmod>
+    <lastmod>2022-12-20T13:39:43.108Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2019-12-28_Length_Frequency_Histograms/index.html</loc>
-    <lastmod>2022-12-19T19:48:50.745Z</lastmod>
+    <lastmod>2022-12-20T13:39:48.310Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2019-12-31_vonB_plots_1/index.html</loc>
-    <lastmod>2022-12-19T19:48:56.411Z</lastmod>
+    <lastmod>2022-12-20T13:39:54.032Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2020-1-2_vonB_plots_2/index.html</loc>
-    <lastmod>2022-12-19T19:49:02.690Z</lastmod>
+    <lastmod>2022-12-20T13:40:00.044Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-3-15-AgeBiasPlots/index.html</loc>
-    <lastmod>2022-12-19T19:49:08.481Z</lastmod>
+    <lastmod>2022-12-20T13:40:05.492Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-11_compSlopes-replacement/index.html</loc>
-    <lastmod>2022-12-19T19:49:13.884Z</lastmod>
+    <lastmod>2022-12-20T13:40:10.892Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-12_compIntercepts-replacement/index.html</loc>
-    <lastmod>2022-12-19T20:47:40.277Z</lastmod>
+    <lastmod>2022-12-20T13:40:16.263Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-25_fitPlot-replacement/index.html</loc>
-    <lastmod>2022-12-19T19:49:25.229Z</lastmod>
+    <lastmod>2022-12-20T13:40:22.438Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-5-26_filterD-replacement/index.html</loc>
-    <lastmod>2022-12-19T20:47:29.662Z</lastmod>
+    <lastmod>2022-12-20T13:40:27.662Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2021-6-1_residPlot-replacement/index.html</loc>
-    <lastmod>2022-12-19T19:49:35.602Z</lastmod>
+    <lastmod>2022-12-20T13:40:33.401Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/index.html</loc>
-    <lastmod>2022-12-19T19:49:39.180Z</lastmod>
+    <lastmod>2022-12-20T13:40:37.191Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/books.html</loc>
-    <lastmod>2022-12-19T19:49:40.640Z</lastmod>
+    <lastmod>2022-12-20T13:40:38.676Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/data_Comp_byPackage.html</loc>
-    <lastmod>2022-12-19T19:49:42.734Z</lastmod>
+    <lastmod>2022-12-20T13:40:40.829Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/data_Comp_byTopic.html</loc>
-    <lastmod>2022-12-19T19:49:44.881Z</lastmod>
+    <lastmod>2022-12-20T13:40:43.164Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/data_fishR_alpha.html</loc>
-    <lastmod>2022-12-19T20:28:13.714Z</lastmod>
+    <lastmod>2022-12-20T13:40:45.047Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/data_fishR_byTopic.html</loc>
-    <lastmod>2022-12-19T19:49:48.743Z</lastmod>
+    <lastmod>2022-12-20T13:40:47.054Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/pages/packages.html</loc>
-    <lastmod>2022-12-19T19:49:50.413Z</lastmod>
+    <lastmod>2022-12-20T13:40:48.639Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/index.html</loc>
-    <lastmod>2022-12-19T20:51:09.337Z</lastmod>
+    <lastmod>2022-12-20T14:45:51.771Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2016-6-12_Halflife_of_K/index.html</loc>
-    <lastmod>2022-12-19T19:49:59.333Z</lastmod>
+    <lastmod>2022-12-20T13:41:00.066Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2018-4-19_Adding_Zero_Catches/index.html</loc>
-    <lastmod>2022-12-19T20:48:41.200Z</lastmod>
+    <lastmod>2022-12-20T16:00:02.489Z</lastmod>
   </url>
   <url>
-    <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-29_Using_fishR_Data/index.html</loc>
-    <lastmod>2022-12-19T20:51:17.549Z</lastmod>
+    <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-19_AgeComp_WalleyePS/index.html</loc>
+    <lastmod>2022-12-20T13:41:11.308Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-19_SizeStrux_YPerchSB1/index.html</loc>
+    <lastmod>2022-12-20T13:44:29.047Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-19_Using_fishR_Data/index.html</loc>
+    <lastmod>2022-12-20T16:05:26.863Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-20_SizeStrux_Whittlesey/index.html</loc>
+    <lastmod>2022-12-20T14:46:00.308Z</lastmod>
   </url>
 </urlset>

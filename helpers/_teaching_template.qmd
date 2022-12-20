@@ -1,0 +1,40 @@
+---
+title: TITLE HERE
+subtitle: SUBTITLE HERE
+description: DESCRIPTION HERE
+author: AUTHOR HERE
+date: MM/DD/20YY
+image: ../../../helpers/explanation.png
+categories:
+  - " Explanation"
+  - Data Wrangling
+  - CPE
+---
+
+:::{.callout-note}
+The following packages are loaded for use below. I also set the random number seed for reproducibility of the randomly generated sample data below.
+:::
+
+```{r packages}
+
+```
+
+&nbsp;
+
+# Introduction
+
+
+
+
+&nbsp;
+
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+
+```
+

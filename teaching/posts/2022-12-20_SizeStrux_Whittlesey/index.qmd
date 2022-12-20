@@ -1,0 +1,125 @@
+---
+title: Size Structure of Species in a Cold-Water Wisconsin Stream
+description: Develop size structure summaries to infer species identification.
+author: Derek H. Ogle
+date: 12/20/2022
+image: ../../../helpers/casestudy.png
+categories:
+  - "  Case Study"
+  - " Size Structure"
+  - "Salmon/Trout"
+---
+
+# Background
+## Motivation
+Fish length is likely most commonly collected data by fisheries biologists and managers. While length is usually not the only information collected by a fisheries biologist, summaries of length information can provide the biologist with a wealth of information on population parameters such as age distributions, growth rates, and mortality rates; the basic biology of the animal; and the effect of management regulations on the fish population. Thus, summarizing length data and then interpreting those summaries is an important task performed by fisheries biologists.
+
+```{r}
+#| label: measure
+#| fig-cap: Measuring length of a Rainbow Trout.
+#| fig-responsive: true
+#| echo: false
+knitr::include_graphics("Measure.jpg")
+```
+
+&nbsp;
+
+## Setting
+Whittlesey Creek is a tributary to Chequamegon Bay of Lake Superior. This stream has been severely degraded by past land use practices including clear-cut logging and channelization to drain wetlands for farming. The "Coaster" Brook Trout (*Salvelinus fontinalis*), a lake-dwelling stream-spawning form of Brook Trout, was largely extirpated from southern Lake Superior and the Whittlesey Creek watershed due to over-fishing and habitat degradation. In 1999, the U.S., Fish and Wildlife Service established the [Whittlesey Creek National Wildlife Refuge](http://www.fws.gov/refuge/whittlesey_creek/) with a primary goal of reestablishing a population of Coaster Brook Trout in Whittlesey Creek. That effort has included experimental introductions of Brook Trout at various life stages and much work to restore habitat.
+
+In July, 2011 a quarter-mile stretch of the lower Whittlesey Creek was modified with the addition of [large woody debris with attached "root balls."](http://www.fondriest.com/news/natural-stream-restoration-rebuilds-habitats-in-great-lakes-basin.htm) The goal of this project was to alter the morphology of this section of the stream to provide better habitat and water conditions for Brook Trout. In May, 2011 a group of students conducted two days of sampling with electrofishing gear to provide baseline information about the fish populations in this section of the stream. Their sampling yielded eight total Brook Trout but relatively larger numbers of Coho Salmon (*Oncorhynchus kisutch*), Rainbow Trout (*Oncorhynchus mykiss*), and sculpins (primarily Slimy Sculpin (*Cottus cognatus*), but some Mottled Sculpin (*Cottus bairdii*)). Data from catches of Coho Salmon, Rainbow Trout, and sculpins will be analyzed in this case study.
+
+```{r}
+#| label: electrofishing
+#| fig-cap: Students backpack electrofishing a stream.
+#| fig-responsive: true
+#| echo: false
+knitr::include_graphics("EFish.jpg")
+```
+
+&nbsp;
+
+## Data
+Data from the sampling collected by the students were stored in [Whittlesey2011.csv](Whittlesey2011.csv). The variables in this data set are defined as follows:
+
+* `study`: The name of the study.
+* `netID`: A unique label for each day of sampling.
+* `sDate`: The date of sampling.
+* `run`: A factor indicating if the sample was the `mark`ing or `recap`ture run.
+* `species`: A factor indicating the species captured. Options are `Species1`, `Species2`, or `Species3`. This variable will be discussed in more detail later.
+* `length`: The total length of the sampled fish to the nearest mm.
+* `clipped`: Indicates if the fish was clipped (=1) or not. All fish in the recapture run were not clipped.
+* `recap`: Indicates if the fish was previously clipped (i.e., a "recapture"; =1) or not. All fish in the marking run could not possibly be a recaptured fish.
+* `notes`: Any specific notes about that particular fish.
+
+&nbsp;
+
+# Preparation
+Prior to beginning this case study you should:
+
+* Research basic life history characteristics -- especially growth (length-at-age), reproduction and spawning characteristics, and obligation of migratory patterns -- of Coho Salmon, Rainbow Trout, and Slimy Sculpin. A good source is [*Fishes of Wisconsin*](http://digital.library.wisc.edu/1711.dl/EcoNatRes.FishesWI).
+* Create an R script that reads the CSV file into an object in R and displays the structure and a few rows of the data frame.
+* Review how to construct a length frequency histogram.
+
+&nbsp;
+
+# Analysis Questions
+
+1. What would you expect a length frequency histogram to look like for a fish species that reproduces only once per year during a very narrow range of time, shows exceptional growth throughout life, and has a maximum age of 5 years? Provide a rough drawing and short paragraph of explanation.
+1. Construct separate length frequency histograms for each species (combine data from both days) in the Whittlesey Creek data set. Make sure to choose bin widths that make sense for each species and to properly label all axes.
+
+&nbsp;
+
+# Interpretation Questions
+
+3. How many **distinct** age-classes do you see for each species? Provide approximate length ranges for each distinct age-class that you observe.
+1. Which species (Coho Salmon, Rainbow Trout, sculpin) corresponds to each of the length frequency histograms that you constructed? Explain your reasoning with specific references to what you know about the life history characteristics of these species.
+1. What ages would you assign to the first two distinct age-classes observed for Coho Salmon and for Rainbow Trout? Explain your reasoning with specific references to what you know about the life history characteristics of these species.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(ggplot2)
+
+# Load data
+wc <- read.csv("https://raw.githubusercontent.com/droglenc/NCNRS349/gh-pages/modules/CE/Whittlesey2011.csv")
+str(wc)
+
+# helpers
+xlbl <- "Total Length (mm)"
+yxpnd <- expansion(mult=c(0,0.03))
+theme_set(theme_bw())
+
+# Species1
+ggplot(data=dplyr::filter(wc,species=="Species1"),
+       mapping=aes(x=length)) +
+  geom_histogram(binwidth=5,color="black",fill="gray25") +
+  scale_x_continuous(name=xlbl) +
+  scale_y_continuous(name="Frequency of Species1",expand=yxpnd)
+
+# Species2
+ggplot(data=dplyr::filter(wc,species=="Species2"),
+       mapping=aes(x=length)) +
+  geom_histogram(binwidth=5,color="black",fill="gray50") +
+  scale_x_continuous(name=xlbl) +
+  scale_y_continuous(name="Frequency of Species2",expand=yxpnd)
+
+# Species3
+ggplot(data=dplyr::filter(wc,species=="Species3"),
+       mapping=aes(x=length)) +
+  geom_histogram(binwidth=20,color="black",fill="gray75") +
+  scale_x_continuous(name=xlbl) +
+  scale_y_continuous(name="Frequency of Species3",expand=yxpnd)
+```
+

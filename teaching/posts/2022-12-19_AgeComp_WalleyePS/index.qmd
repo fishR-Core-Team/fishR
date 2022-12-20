@@ -1,0 +1,51 @@
+---
+title: Exercise - Age Comparisons
+subtitle: Pymatuning Sanctuary Walleye
+description: Compare age estimates from two structures taken from Walleye sampled from Pymatuning Sanctuary (PA).
+author: Derek H. Ogle
+date: 12/19/2022
+image: ../../../helpers/exercise.png
+categories:
+  - "  Exercise"
+  - " Age Comparisons"
+  - "Walleye"
+---
+
+[Kocovsky and Carline (2000)](http://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2) examined methods to estimate the age of the unexploited population of [Walleye](https://en.wikipedia.org/wiki/Walleye) in [Pymatuning Sanctuary](https://en.wikipedia.org/wiki/Pymatuning_State_Park_(Pennsylvania)) (PA).  [Scales](https://en.wikipedia.org/wiki/Fish_scale), dorsal spines, and [otoliths](https://en.wikipedia.org/wiki/Otolith) were extracted from fish sampled in trap nets during the spawning run in March and April of 1997. Two readers independently examined each structure without knowledge of fish length or sex.  Only consensus ages for each structure are recorded in [WalleyePS](https://fishr-core-team.github.io/FSAdata/reference/WalleyePS.html).^[See "CSV file" link in "Source" section of linked page.]
+
+1. Describe any apparent bias (or not) between age estimates from *scales* and *otoliths* from tabular, graphical, and statistical summaries.
+1. Does the sex of the fish impact your descriptions of bias (or not) between *scales* and *otoliths*?
+1. Repeat the previous two questions for *dorsal spines* and *otoliths*.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+
+# Load data
+WalleyePS <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/WalleyePS.csv")
+str(WalleyePS)
+
+# Scales and Otoliths
+abSO <- ageBias(scale~otolith,data=WalleyePS)
+summary(abSO,what="table")
+plot(abSO)
+summary(abSO,what="symmetry")
+
+# Dorsal Spines and Otoliths
+abDO <- ageBias(spine~otolith,data=WalleyePS)
+summary(abDO,what="table")
+plot(abDO)
+summary(abDO,what="symmetry")
+```

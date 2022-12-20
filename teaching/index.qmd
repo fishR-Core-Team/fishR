@@ -3,9 +3,9 @@ title: Teaching Resources
 listing:
   contents: posts
   type: grid
-  fields: [image,title,description,reading-time,date,file-modified,author]
-  sort: file-modified desc
-  sort-ui: [file-modified,date,author]
+  fields: [image,title,description,date,file-modified,author]
+  sort: date desc
+  sort-ui: [date,author,file-modified]
   categories: true
   table-hover: true
   field-display-names: 
