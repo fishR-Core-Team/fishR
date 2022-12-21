@@ -1,6 +1,6 @@
 ---
 title: Size Structure of Bluegills Collected with Different Gears
-description: DESCRIPTION HERE
+description: Develop size structure summaries to infer gear type used.
 author: Derek H. Ogle
 date: 12/21/2022
 image: ../../../helpers/img/casestudy.png
