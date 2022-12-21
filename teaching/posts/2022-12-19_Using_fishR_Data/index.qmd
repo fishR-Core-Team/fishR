@@ -3,7 +3,7 @@ title: Using fishR Data with Students
 description: Thoughts on how best to use R package data with students.
 author: Derek H. Ogle
 date: 12/19/2022
-image: ../../../helpers/data.png
+image: ../../../helpers/img/data.png
 categories:
   - "  Data"
 ---

@@ -3,7 +3,7 @@ title: TITLE HERE
 description: DESCRIPTION HERE
 author: AUTHOR HERE
 date: MM/DD/20YY
-image: ../../../helpers/data.png
+image: ../../../helpers/img/data.png
 categories:
   - " Data"
   - 

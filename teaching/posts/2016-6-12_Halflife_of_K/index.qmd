@@ -3,7 +3,7 @@ title: Half-Life Property of K
 description: Demonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.
 author: Derek H. Ogle
 date: 6/12/2016
-image: ../../../helpers/explanation.png
+image: ../../../helpers/img/explanation.png
 categories:
   - "  Explanation"
   - " Growth"

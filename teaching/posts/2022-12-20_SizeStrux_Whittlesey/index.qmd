@@ -3,7 +3,7 @@ title: Size Structure of Species in a Cold-Water Wisconsin Stream
 description: Develop size structure summaries to infer species identification.
 author: Derek H. Ogle
 date: 12/20/2022
-image: ../../../helpers/casestudy.png
+image: ../../../helpers/img/casestudy.png
 categories:
   - "  Case Study"
   - " Size Structure"
@@ -19,7 +19,7 @@ Fish length is likely most commonly collected data by fisheries biologists and m
 #| fig-cap: Measuring length of a Rainbow Trout.
 #| fig-responsive: true
 #| echo: false
-knitr::include_graphics("Measure.jpg")
+knitr::include_graphics("Measure.png")
 ```
 
 &nbsp;
@@ -34,7 +34,7 @@ In July, 2011 a quarter-mile stretch of the lower Whittlesey Creek was modified 
 #| fig-cap: Students backpack electrofishing a stream.
 #| fig-responsive: true
 #| echo: false
-knitr::include_graphics("EFish.jpg")
+knitr::include_graphics("EFish.png")
 ```
 
 &nbsp;

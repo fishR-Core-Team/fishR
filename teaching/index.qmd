@@ -1,5 +1,6 @@
 ---
 title: Teaching Resources
+subtitle: Data, concept explanations, class or homework exercises, and case studies that use R and are related to fisheries.
 listing:
   contents: posts
   type: grid

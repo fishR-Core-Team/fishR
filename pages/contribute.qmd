@@ -1,0 +1,14 @@
+---
+title: Get Involved with fishR
+comments: false
+---
+
+It is our vision that **fishR** will be a website where others contribute content or resources. Specific opportunities to get involved or to contribute to this community are:
+
+* Submit edits or corrections to any page (by "Edit this page" and submitting a pull request, by "Report an issue", or simply sending us an e-mail).
+* Submit a data set for inclusion in `FSAdata` and thus the **fishR** webpage.
+* Submit ([for here](../blog/)) a post of using R for a particular fisheries-related analysis (we can help you with the formatting).
+* Submit ([for here](../teaching/)) a teaching-related concept explanation, class or homework exercise, or case study (again, we can help with formatting).
+* Suggest additions to the website.
+* Discuss [a post](../blog/) or [teaching resource](../teaching/) (see discussion box at bottom of all posts and teaching resources).
+* Tell others about the **fishR** website!!

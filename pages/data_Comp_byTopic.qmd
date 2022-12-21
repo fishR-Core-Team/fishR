@@ -11,7 +11,7 @@ Datasets from packages not controlled by the fishR Core Team (i.e., `FSA` and `F
 
 ```{r}
 #| include=FALSE
-source("../helpers/data_helpers.R")
+source("../helpers/_helpers_data.R")
 ```
 
 ```{r}

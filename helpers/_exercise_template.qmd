@@ -4,7 +4,7 @@ subtitle: SUBTITLE HERE
 description: DESCRIPTION HERE
 author: AUTHOR HERE
 date: MM/DD/20YY
-image: ../../../helpers/exercise.png
+image: ../../../helpers/img/exercise.png
 categories:
   - " Exercise"
   - 

@@ -4,7 +4,7 @@ subtitle: Saginaw Bay Yellow Perch
 description: Estimate size structure statistics and compare them among groups of Yellow Perch from Saginaw Bay, Lake Huron (MI).
 author: Derek H. Ogle
 date: 12/20/2022
-image: ../../../helpers/exercise.png
+image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Size Structure"

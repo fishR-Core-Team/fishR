@@ -3,7 +3,7 @@ title: TITLE HERE
 description: DESCRIPTION HERE
 author: AUTHOR HERE
 date: MM/DD/20YY
-image: ../../../helpers/explanation.png
+image: ../../../helpers/img/explanation.png
 categories:
   - " Explanation"
   - 

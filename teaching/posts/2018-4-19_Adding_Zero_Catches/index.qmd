@@ -3,7 +3,7 @@ title: Adding Zero Catches
 description: Add zeroes for species not caught so that CPE calculations are correct
 author: Derek H. Ogle
 date: 4/19/2018
-image: ../../../helpers/explanation.png
+image: ../../../helpers/img/explanation.png
 categories:
   - "  Explanation"
   - " Data Wrangling"

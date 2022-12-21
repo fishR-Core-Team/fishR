@@ -31,6 +31,9 @@ website:
             file: pages/data_Comp_byTopic.qmd
       - text: Teaching
         href: teaching/index.qmd
+    right: 
+      - text: Get Involved
+        href: pages/contribute.qmd
     pinned: true
   page-footer:
     left: 
