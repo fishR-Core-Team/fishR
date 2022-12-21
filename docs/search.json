@@ -270,7 +270,7 @@
     "href": "teaching/index.html",
     "title": "Teaching Resources",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Published - Oldest\n        \n         \n          Published - Newest\n        \n         \n          Author\n        \n         \n          Modified - Oldest\n        \n         \n          Modified - Newest\n        \n     \n  \n\n\n\n\n\n\n\n\n\n\nSize Structure of Bluegills Collected with Different Gears\n\n\nDevelop size structure summaries to infer gear type used.\n\n\n\nDerek H. Ogle\n\n\nDec 21, 2022\n\n\n\n\n\nDec 21, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise - Size Structure\n\n\nEstimate size structure statistics and compare them among groups of Yellow Perch from Saginaw Bay, Lake Huron (MI).\n\n\n\nDerek H. Ogle\n\n\nDec 20, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nSize Structure of Species in a Cold-Water Wisconsin Stream\n\n\nDevelop size structure summaries to infer species identification.\n\n\n\nDerek H. Ogle\n\n\nDec 20, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise - Age Comparisons\n\n\nCompare age estimates from two structures taken from Walleye sampled from Pymatuning Sanctuary (PA).\n\n\n\nDerek H. Ogle\n\n\nDec 19, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsing fishR Data with Students\n\n\nThoughts on how best to use R package data with students.\n\n\n\nDerek H. Ogle\n\n\nDec 19, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nAdding Zero Catches\n\n\nAdd zeroes for species not caught so that CPE calculations are correct\n\n\n\nDerek H. Ogle\n\n\nApr 19, 2018\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nHalf-Life Property of K\n\n\nDemonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.\n\n\n\nDerek H. Ogle\n\n\nJun 12, 2016\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Published - Oldest\n        \n         \n          Published - Newest\n        \n         \n          Author\n        \n         \n          Modified - Oldest\n        \n         \n          Modified - Newest\n        \n     \n  \n\n\n\n\n\n\n\n\n\n\nSize Structure of Bluegills Collected with Different Gears\n\n\nDevelop size structure summaries to infer gear type used.\n\n\n\nDerek H. Ogle\n\n\nDec 21, 2022\n\n\n\n\n\nDec 21, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nBag Limits in Minnesota\n\n\nUse creel data to assess the impact of bag limits on reducing harvest of freshwater fish.\n\n\n\nDerek H. Ogle\n\n\nDec 21, 2022\n\n\n\n\n\nDec 21, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise - Size Structure\n\n\nEstimate size structure statistics and compare them among groups of Yellow Perch from Saginaw Bay, Lake Huron (MI).\n\n\n\nDerek H. Ogle\n\n\nDec 20, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nSize Structure of Species in a Cold-Water Wisconsin Stream\n\n\nDevelop size structure summaries to infer species identification.\n\n\n\nDerek H. Ogle\n\n\nDec 20, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nExercise - Age Comparisons\n\n\nCompare age estimates from two structures taken from Walleye sampled from Pymatuning Sanctuary (PA).\n\n\n\nDerek H. Ogle\n\n\nDec 19, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsing fishR Data with Students\n\n\nThoughts on how best to use R package data with students.\n\n\n\nDerek H. Ogle\n\n\nDec 19, 2022\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nAdding Zero Catches\n\n\nAdd zeroes for species not caught so that CPE calculations are correct\n\n\n\nDerek H. Ogle\n\n\nApr 19, 2018\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\nHalf-Life Property of K\n\n\nDemonstrate that K is the time it takes for a mean fish to grow halfway to the aymptotic length.\n\n\n\nDerek H. Ogle\n\n\nJun 12, 2016\n\n\n\n\n\nDec 20, 2022\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "teaching/posts/2016-6-12_Halflife_of_K/index.html",
@@ -334,5 +334,82 @@
     "title": "Size Structure of Bluegills Collected with Different Gears",
     "section": "Data",
     "text": "Data\nLake Louise is a 45-ha impoundment located in Hand County, South Dakota. The maximum depth is 6.5 m with a mean depth of 2.7 m. Fish were sampled with trap nets that had 1.2- X 1.5-m frames, dual throats, and 19-mm bar mesh. Night electrofishing was undertaken with pulsed DC electricity at approximately 250 V and 8 A. Samples were collected in late May at a water temperature of 23oC.\nTotal length of each Bluegill was recorded for fish captured in both gears in LakeLouiseBG.csv. The variables in this data frame are defined as follows,\n\nlen: The total length (mm) of the sampled fish.\ngear: The gear used to capture the fish. Choices are A and B (described later)."
+  },
+  {
+    "objectID": "teaching/posts/2022-12-22_BagLimits_MN/waesum.html",
+    "href": "teaching/posts/2022-12-22_BagLimits_MN/waesum.html",
+    "title": "Walleye Harvest Summaries",
+    "section": "",
+    "text": "Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    4848 \n    72.9% \n    100.0% \n  \n  \n    1 \n    1112 \n    16.7% \n    27.1% \n  \n  \n    2 \n    433 \n    6.5% \n    10.4% \n  \n  \n    3 \n    133 \n    2.0% \n    3.9% \n  \n  \n    4 \n    67 \n    1.0% \n    1.9% \n  \n  \n    5 \n    33 \n    0.5% \n    0.9% \n  \n  \n    6 \n    27 \n    0.4% \n    0.4% \n  \n\n\n\nTable 1:  Frequency, percent, and reverse cumulative sum of percent of anglers that harvested zero to six Walleye. \n\n\n \n\n\n\n\n\nFigure 1: The percentage (left) and reverse cumulative percentage (right) of anglers that harvested zero to six Walleye.\n\n\n\n\n\n\n\nReusehttps://creativecommons.org/licenses/by/4.0/CitationBibTeX citation:@misc{untitled,\n  author = {},\n  title = {Walleye {Harvest} {Summaries}},\n  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-22_BagLimits_MN/waesum.html},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nWalleye\nHarvest Summaries. (n.d.)."
+  },
+  {
+    "objectID": "teaching/resources/waesum.html",
+    "href": "teaching/resources/waesum.html",
+    "title": "fishR",
+    "section": "",
+    "text": "Walleye Harvest Summaries\n\n\n\n\n\n\n\n\n\n\nTable 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Walleye harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    4848 \n    72.9% \n    100.0% \n  \n  \n    1 \n    1112 \n    16.7% \n    27.1% \n  \n  \n    2 \n    433 \n    6.5% \n    10.4% \n  \n  \n    3 \n    133 \n    2.0% \n    3.9% \n  \n  \n    4 \n    67 \n    1.0% \n    1.9% \n  \n  \n    5 \n    33 \n    0.5% \n    0.9% \n  \n  \n    6 \n    27 \n    0.4% \n    0.4% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Walleye harvested."
+  },
+  {
+    "objectID": "teaching/resources/WAEsum.html",
+    "href": "teaching/resources/WAEsum.html",
+    "title": "Walleye Harvest Summaries",
+    "section": "",
+    "text": "Table 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Walleye harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    4848 \n    72.9% \n    100.0% \n  \n  \n    1 \n    1112 \n    16.7% \n    27.1% \n  \n  \n    2 \n    433 \n    6.5% \n    10.4% \n  \n  \n    3 \n    133 \n    2.0% \n    3.9% \n  \n  \n    4 \n    67 \n    1.0% \n    1.9% \n  \n  \n    5 \n    33 \n    0.5% \n    0.9% \n  \n  \n    6 \n    27 \n    0.4% \n    0.4% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Walleye harvested."
+  },
+  {
+    "objectID": "teaching/resources/LMBsum.html",
+    "href": "teaching/resources/LMBsum.html",
+    "title": "Largemouth Bass Harvest Summaries",
+    "section": "",
+    "text": "Table 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Largemouth Bass harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    860 \n    75.0% \n    100.0% \n  \n  \n    1 \n    210 \n    18.3% \n    25.0% \n  \n  \n    2 \n    58 \n    5.1% \n    6.6% \n  \n  \n    3 \n    5 \n    0.4% \n    1.6% \n  \n  \n    4 \n    7 \n    0.6% \n    1.1% \n  \n  \n    5 \n    3 \n    0.3% \n    0.5% \n  \n  \n    6 \n    3 \n    0.3% \n    0.3% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Largemouth Bass harvested."
+  },
+  {
+    "objectID": "teaching/resources/NOPsum.html",
+    "href": "teaching/resources/NOPsum.html",
+    "title": "Northern Pike Harvest Summaries",
+    "section": "",
+    "text": "Table 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Northern Pike harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    1166 \n    66.2% \n    100.0% \n  \n  \n    1 \n    463 \n    26.3% \n    33.8% \n  \n  \n    2 \n    62 \n    3.5% \n    7.5% \n  \n  \n    3 \n    70 \n    4.0% \n    4.0% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Northern Pike harvested."
+  },
+  {
+    "objectID": "teaching/resources/Crappiesum.html",
+    "href": "teaching/resources/Crappiesum.html",
+    "title": "Crappie Harvest Summaries",
+    "section": "",
+    "text": "Table 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Crappie harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    813 \n    58.4% \n    100.0% \n  \n  \n    1 \n    213 \n    15.3% \n    41.6% \n  \n  \n    2 \n    58 \n    4.2% \n    26.3% \n  \n  \n    3 \n    88 \n    6.3% \n    22.1% \n  \n  \n    4 \n    58 \n    4.2% \n    15.8% \n  \n  \n    5 \n    33 \n    2.4% \n    11.6% \n  \n  \n    6 \n    22 \n    1.6% \n    9.3% \n  \n  \n    7 \n    26 \n    1.9% \n    7.7% \n  \n  \n    8 \n    10 \n    0.7% \n    5.8% \n  \n  \n    9 \n    8 \n    0.6% \n    5.1% \n  \n  \n    10 \n    10 \n    0.7% \n    4.5% \n  \n  \n    11 \n    33 \n    2.4% \n    3.8% \n  \n  \n    12 \n    3 \n    0.2% \n    1.4% \n  \n  \n    14 \n    11 \n    0.8% \n    1.2% \n  \n  \n    15 \n    6 \n    0.4% \n    0.4% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Crappie harvested."
+  },
+  {
+    "objectID": "teaching/resources/Sunfishsum.html",
+    "href": "teaching/resources/Sunfishsum.html",
+    "title": "Sunfish Harvest Summaries",
+    "section": "",
+    "text": "Table 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Sunfish harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    771 \n    38.9% \n    100.0% \n  \n  \n    3 \n    451 \n    22.7% \n    61.1% \n  \n  \n    6 \n    306 \n    15.4% \n    38.4% \n  \n  \n    9 \n    152 \n    7.7% \n    22.9% \n  \n  \n    12 \n    134 \n    6.8% \n    15.3% \n  \n  \n    15 \n    18 \n    0.9% \n    8.5% \n  \n  \n    18 \n    55 \n    2.8% \n    7.6% \n  \n  \n    21 \n    24 \n    1.2% \n    4.8% \n  \n  \n    24 \n    22 \n    1.1% \n    3.6% \n  \n  \n    27 \n    26 \n    1.3% \n    2.5% \n  \n  \n    29 \n    10 \n    0.5% \n    1.2% \n  \n  \n    30 \n    14 \n    0.7% \n    0.7% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Sunfish harvested."
+  },
+  {
+    "objectID": "teaching/resources/YEPsum.html",
+    "href": "teaching/resources/YEPsum.html",
+    "title": "Yellow Perch Harvest Summaries",
+    "section": "",
+    "text": "Table 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Yellow Perch harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    277 \n    17.2% \n    100.0% \n  \n  \n    10 \n    920 \n    57.0% \n    82.8% \n  \n  \n    20 \n    244 \n    15.1% \n    25.9% \n  \n  \n    30 \n    87 \n    5.4% \n    10.8% \n  \n  \n    40 \n    44 \n    2.7% \n    5.4% \n  \n  \n    50 \n    26 \n    1.6% \n    2.7% \n  \n  \n    60 \n    5 \n    0.3% \n    1.1% \n  \n  \n    70 \n    2 \n    0.1% \n    0.7% \n  \n  \n    80 \n    3 \n    0.2% \n    0.6% \n  \n  \n    90 \n    2 \n    0.1% \n    0.4% \n  \n  \n    100 \n    5 \n    0.3% \n    0.3% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Yellow Perch harvested."
+  },
+  {
+    "objectID": "teaching/resources/harvestsum.html",
+    "href": "teaching/resources/harvestsum.html",
+    "title": "fishR",
+    "section": "",
+    "text": "Yellow Perch Harvest Summaries\n\n\n\n\n\n\n\n\n\n\nTable 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Yellow Perch harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    277 \n    17.2% \n    100.0% \n  \n  \n    10 \n    920 \n    57.0% \n    82.8% \n  \n  \n    20 \n    244 \n    15.1% \n    25.9% \n  \n  \n    30 \n    87 \n    5.4% \n    10.8% \n  \n  \n    40 \n    44 \n    2.7% \n    5.4% \n  \n  \n    50 \n    26 \n    1.6% \n    2.7% \n  \n  \n    60 \n    5 \n    0.3% \n    1.1% \n  \n  \n    70 \n    2 \n    0.1% \n    0.7% \n  \n  \n    80 \n    3 \n    0.2% \n    0.6% \n  \n  \n    90 \n    2 \n    0.1% \n    0.4% \n  \n  \n    100 \n    5 \n    0.3% \n    0.3% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Yellow Perch harvested."
+  },
+  {
+    "objectID": "teaching/resources/harvestsum_OLD.html",
+    "href": "teaching/resources/harvestsum_OLD.html",
+    "title": "fishR",
+    "section": "",
+    "text": "Walleye Harvest Summaries\n\n\n\n\n\n\n\n\n\n\nTable 1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Walleye harvested. \n \n  \n    Harvested \n    Frequency \n    % \n    Reverse Cum % \n  \n \n\n  \n    0 \n    4848 \n    72.9% \n    100.0% \n  \n  \n    1 \n    1112 \n    16.7% \n    27.1% \n  \n  \n    2 \n    433 \n    6.5% \n    10.4% \n  \n  \n    3 \n    133 \n    2.0% \n    3.9% \n  \n  \n    4 \n    67 \n    1.0% \n    1.9% \n  \n  \n    5 \n    33 \n    0.5% \n    0.9% \n  \n  \n    6 \n    27 \n    0.4% \n    0.4% \n  \n\n\n\n\n\n\n \n\n\n\n\n\nFigure 1: Percentage (left) and reverse cumulative percentage (right) of anglers by number of Walleye harvested."
+  },
+  {
+    "objectID": "teaching/posts/2022-12-22_BagLimits_MN/index.html",
+    "href": "teaching/posts/2022-12-22_BagLimits_MN/index.html",
+    "title": "Bag Limits in Minnesota",
+    "section": "",
+    "text": "Daily bag or creel limits are the maximum number of fish an angler is allowed to harvest on a daily basis. For example, a bag limit of six Walleye would limit an angler to six or fewer harvested Walleye on a given day. Bag limits are a common management tool in many fisheries, especially in inland freshwater fisheries.\nRestrictive bag limits may be implemented for a variety of reasons. Most commonly it is thought that limiting the maximum number of fish an angler can harvest will reduce harvest, lower fishing mortality, and prevent over-exploitation of the fish population. However, bag limits have also been implemented to attempt to equitably distribute harvest among more anglers, provide anglers the satisfaction of reaching a goal (e.g., “I got my limit”), and to remind anglers that fish populations are a finite resource.\n\n\n\n\n\nAn angler’s harvest of Bluegill.\n\n\n\n\nIn this exercise, you will examine creel data (i.e., number of fish harvested by anglers) to determine how reducing the daily bag limit effects overall fish harvest.\n\n\n\nThe Minnesota Department of Natural Resources (MnDNR) conducted statewide creel surveys over a 17 year period.1 The data, available in CreelMN2 records the species and number of fish harvested per angler (in one day). The data are limited to only six species3 – Walleye (WAE), Largemouth Bass (LMB), Northern Pike (NOP), Crappies (Black, White, and hybrids combined), Sunfish (Bluegill, Pumpkinseed, etc.), and Yellow Perch (YEP).1 See Cook et al. (2001).2 See “CSV file” link in “Source” section of linked page.3 Acronyms are how the species appear in the data.\nThe following daily bag limits were in place during the study:\n\n6 Walleye\n6 Largemouth Bass\n3 Northern Pike\n15 Crappies\n30 Sunfish\n100 Yellow Perch"
   }
 ]

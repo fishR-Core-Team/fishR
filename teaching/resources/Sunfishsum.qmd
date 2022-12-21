@@ -1,0 +1,72 @@
+---
+title: Sunfish Harvest Summaries
+
+params:
+  specname: "Sunfish"
+  specabbr: "Sunfish"
+
+# set some default knitr chunk options
+execute: 
+  echo: false
+  message: false
+  warning: false
+
+comments: false
+date-modified: ""
+---
+
+```{r}
+#| label: setup
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+theme_set(theme_bw())
+data(CreelMN,package="FSAdata")
+```
+```{r}
+#| label: sum
+sum <- CreelMN |>
+  filter(species==params$specabbr) |>
+  mutate(fharvest=as.factor(harvest)) |>
+  count(fharvest) |>
+  mutate(perc=n/sum(n)*100,
+         rperc=FSA::rcumsum(perc),
+         perclbl=paste0(formatC(perc,format="f",digits=1),"%"),
+         rperclbl=paste0(formatC(rperc,format="f",digits=1),"%"))
+```
+```{r}
+#| label: tbl-sum
+#| tbl-cap: !expr paste("Frequency, percent, and reverse cumulative sum of percent of anglers by number of",params$specname,"harvested.")
+#| tbl-cap-location: top
+sum |>
+  select(-perc,-rperc) |>
+  rename('Harvested'=fharvest,'Frequency'=n,
+         '%'=perclbl,'Reverse Cum %'=rperclbl) |>
+  knitr::kable(align=c("c","r","r","r")) |>
+  kableExtra::kable_styling(full_width=FALSE) |>
+  kableExtra::column_spec(1:4,width="25%")
+```
+
+&nbsp;
+
+```{r}
+#| label: fig-sum
+#| fig-cap: !expr paste("Percentage (left) and reverse cumulative percentage (right) of anglers by number of",params$specname,"harvested.")
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: center
+#| dev: png
+p <- ggplot(data=sum,mapping=aes(x=fharvest,y=perc)) +
+  geom_bar(stat="identity",color="black",fill="gray25") +
+  geom_text(mapping=aes(label=perclbl),hjust=0,nudge_y=1,size=3,angle=90) +
+  scale_y_continuous(name="% of Anglers",
+                     expand=expansion(mult=c(0,0.12))) +
+  scale_x_discrete(name=paste("Number of",params$specname,"Harvested"))
+r <- ggplot(data=sum,mapping=aes(x=fharvest,y=rperc)) +
+  geom_bar(stat="identity",color="black",fill="gray75") +
+  geom_text(mapping=aes(label=rperclbl),hjust=0,nudge_y=1,size=3,angle=90) +
+  scale_y_continuous(name="% of Anglers",
+                     expand=expansion(mult=c(0,0.12))) +
+  scale_x_discrete(name=paste("Minimum Number of",params$specname,"Harvested"))
+p+r
+```

@@ -1,0 +1,235 @@
+---
+title: Bag Limits in Minnesota
+description: Use creel data to assess the impact of bag limits on reducing harvest of freshwater fish.
+author: Derek H. Ogle
+date: 12/21/2022
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Bag/Creel Limits"
+  - " Management"
+  - "Walleye"
+  - "Bass"
+  - "Bluegill/Sunfish"
+  - "Yellow Perch"
+  - "Pike/Muskellunge"
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+theme_set(theme_bw())
+data(CreelMN,package="FSAdata")
+```
+
+# Background
+## Motivation
+Daily bag or creel limits are the maximum number of fish an angler is allowed to harvest on a daily basis. For example, a bag limit of six Walleye would limit an angler to six or fewer harvested Walleye on a given day. Bag limits are a common management tool in many fisheries, especially in inland freshwater fisheries.
+
+Restrictive bag limits may be implemented for a variety of reasons. Most commonly it is thought that limiting the maximum number of fish an angler can harvest will reduce harvest, lower fishing mortality, and prevent over-exploitation of the fish population. However, bag limits have also been implemented to attempt to equitably distribute harvest among more anglers, provide anglers the satisfaction of reaching a goal (e.g., "I got my limit"), and to remind anglers that fish populations are a finite resource.
+
+```{r}
+#| label: catch
+#| fig-cap: An angler's harvest of Bluegill.
+#| fig-responsive: true
+#| echo: false
+knitr::include_graphics("Bluegill_Catch.png")
+```
+
+In this exercise, you will examine creel data (i.e., number of fish harvested by anglers) to determine how reducing the daily bag limit effects overall fish harvest.
+
+## Data
+The Minnesota Department of Natural Resources (MnDNR) conducted statewide creel surveys over a 17 year period.^[See [Cook *et al.* (2001)](https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change).] The data, available in [CreelMN](https://fishr-core-team.github.io/FSAdata/reference/CreelMN.html)^[See "CSV file" link in "Source" section of linked page.] records the `species` and number of fish `harvest`ed per angler (in one day). The data are limited to only six species^[Acronyms are how the species appear in the data.] -- Walleye (`WAE`), Largemouth Bass (`LMB`), Northern Pike (`NOP`), `Crappie`s (Black, White, and hybrids combined), `Sunfish` (Bluegill, Pumpkinseed, etc.), and Yellow Perch (`YEP`).
+
+The following daily bag limits were in place during the study:
+
+* **6** Walleye
+* **6** Largemouth Bass
+* **3** Northern Pike
+* **15** Crappies
+* **30** Sunfish
+* **100** Yellow Perch
+
+&nbsp;
+
+# Expectations
+
+:::{.callout-warning appearance="simple"}
+## Answer Before Continuing:
+Please answer the following questions before continuing to the next section. These questions are to "get you thinking" about the topic, there is no right or wrong answer to these at this point.
+:::
+
+1. What would you expect harvest frequency^[Number of anglers harvesting a certain number of fish; see sample graph below.] to look like if there was a 10 bag limit in the following two situations.
+    a. Fish are relatively difficult to catch (e.g., fish species that are widely dispersed or "shy").
+    a. Fish are relatively easy to catch (e.g., fish species that congregate in accessible areas or are aggressive).
+
+```{r}
+#| echo: false
+ggplot(data=data.frame(x=as.factor(0:10),y=-1),mapping=aes(x=x,y=y)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(name="% of Anglers",limits=c(0,100)) +
+  scale_x_discrete(name="Number of Fish Harvested") +
+  theme(axis.text.y=element_blank())
+```
+
+&nbsp;
+
+2. In general,^[Not specific to the previous two situations.] what percentage of anglers do you think would be impacted (i.e., would have to harvest fewer fish) if the bag limit was cut in half (*e.g., from 30 to 15 fish, or 6 to 3 fish*)?
+1. In general, how much do you think the bag limit would need to be reduced (in percentage) to result in a 50% reduction in harvest? [*e.g., a 20% reduction in the bag limit would be from 30 to 24 fish, or 5 to 4 fish.*]
+
+&nbsp;
+
+&nbsp;
+
+# Harvest Summaries
+
+```{r}
+#| label: waesum
+#| echo: false
+waesum <- CreelMN |>
+  filter(species=="WAE") |>
+  mutate(fharvest=as.factor(harvest)) |>
+  count(fharvest) |>
+  mutate(perc=n/sum(n)*100,
+         rperc=FSA::rcumsum(perc),
+         perclbl=paste0(formatC(perc,format="f",digits=1),"%"),
+         rperclbl=paste0(formatC(rperc,format="f",digits=1),"%"))
+```
+
+The data were summarized by species to provide the frequency and percentage of anglers that harvested a certain number of fish. For example, in @tbl-waesum, `r waesum$n[2]` or `r formatC(waesum$perc[2],format="f",digits=1)`% of anglers harvested one Walleye. In addition, the reverse cumulative sum of the percent (i.e., the percent of anglers that harvested that many fish *or more*) was calculated. For example, `r formatC(waesum$rperc[2],format="f",digits=1)`% of anglers harvested one *or more* Walleye.
+
+```{r}
+#| label: tbl-waesum
+#| echo: false
+#| tbl-cap: Frequency, percent, and reverse cumulative sum of percent of anglers by number of Walleye harvested.
+waesum |>
+  select(-perc,-rperc) |>
+  rename('Harvested'=fharvest,'Frequency'=n,
+         '%'=perclbl,'Reverse Cum %'=rperclbl) |>
+  knitr::kable(align=c("c","r","r","r")) |>
+  kableExtra::kable_styling(full_width=FALSE) |>
+  kableExtra::column_spec(1:4,width="25%")
+```
+
+&nbsp;
+
+The results from @tbl-waesum are also shown visually in @fig-waesum.
+
+```{r}
+#| label: fig-waesum
+#| echo: false
+#| fig-cap: The percentage (left) and reverse cumulative percentage (right) of anglers by number of Walleye harvested.
+#| fig-width: 8
+#| fig-height: 4
+p <- ggplot(data=waesum,mapping=aes(x=fharvest,y=perc)) +
+  geom_bar(stat="identity",color="black",fill="gray25") +
+  geom_text(mapping=aes(label=perclbl),vjust=0,nudge_y=2,size=3) +
+  scale_y_continuous(name="% of Anglers",
+                     expand=expansion(mult=c(0,0.05))) +
+  scale_x_discrete(name="Number of Walleye Harvested")
+r <- ggplot(data=waesum,mapping=aes(x=fharvest,y=rperc)) +
+  geom_bar(stat="identity",color="black",fill="gray75") +
+  geom_text(mapping=aes(label=rperclbl),vjust=0,nudge_y=2,size=3) +
+  scale_y_continuous(name="% of Anglers",
+                     expand=expansion(mult=c(0,0.05))) +
+  scale_x_discrete(name="Minimum Number of Walleye Harvested")
+p+r
+```
+
+&nbsp;
+
+# Analysis Questions
+
+:::{.callout-note appearance="simple"}
+## Need from Instructor
+Your instructor will assign you two species to work with below. Summaries like that above for each species -- [Walleye](../../resources/WAEsum.html), [Largemouth Bass](../../resources/LMBsum.html), [Northern Pike](../../resources/NOPsum.html), [Crappie](../../resources/Crappiesum.html), [Sunfish](../../resources/Sunfishsum.html), and [Yellow Perch](../../resources/YEPsum.html). Use the results to answer the following questions for **each** of your species (*calculations can be made with a calculator or in R*).
+:::
+
+&nbsp;
+
+4. In a sentence or two, describe angler harvest patterns for the species.
+1. What percent of anglers would be affected if bag limits were reduced (*to 3 for Walleye and Largemouth Bass, 2 for Northern Pike, 12 for sunfish, 5 for crappies, and 50 for Yellow Perch*).
+1. What percent of fish would be “saved from harvest” if bag limits were reduced (*under the same bag limit reductions*)?
+1. What bag limit would be required to reduce harvest by at least 50%?
+
+&nbsp;
+
+:::{.callout-note appearance="simple"}
+## Need from Instructor
+Your instructor will provide a way for you to share the results for your species with your class colleagues.
+:::
+
+&nbsp;
+
+&nbsp;
+
+# Wrap-up Questions
+
+8. What assumptions did you make (implicitly or explicitly) in your calculations? Are these assumptions likely to be true? How will "violations" of these assumptions (likely) change your results?
+1. How will (or did) the shape of the harvest frequency plot impact your findings?
+1. Are bag limits an effective tool for reducing fish harvest? What else do you need to consider to use this tool as a method to reduce fish harvest?
+
+&nbsp;
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(ggplot2)
+
+# Load data
+crMN <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/CreelMN.csv")
+head(crMN)
+
+# !!! Set the species of interest
+spec <- "WAE"
+
+# Get just that species data
+df <- crMN |>
+  filter(species==spec)
+
+# Find the total number of WAE anglers and WAE harvest
+ttls <- df |>
+  summarize(ttl_anglers=n(),
+            harvested=sum(harvest))
+ttls
+
+# Calculated affected anglers and number of saved fish
+##  !!! if the bag was set at lmt
+lmt <- 1
+##  Find saved fish for each angler (if under lmt, make NA ... none saved)
+sum <- df |>
+  mutate(svd=harvest-lmt,
+         svd=ifelse(svd>0,svd,NA)) |>
+##  get rid of records where no fish were saved
+  filter(!is.na(svd)) |>
+##  how many anglers would have to throw fish back ... by # thrown back
+  count(svd) |>
+##  count how many fish would be thrown back ... by # thrown back
+  mutate(fishsvd=svd*n) |>
+##  sum across # thrown back to get total anglers affected and fish saved
+  summarize(anglers_effected=sum(n),
+            ttl_fish_saved=sum(fishsvd))
+sum
+## Compute percentage anglers effected
+sum$anglers_effected/ttls$ttl_anglers*100
+## Compute percent of harvested fish saved
+sum$ttl_fish_saved/ttls$harvested*100
+
+#### Go back and change lmt, run code after that, see percents change
+
+#### Go back and change spec (and lmt) for other species
+```

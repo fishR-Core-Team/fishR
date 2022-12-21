@@ -8,7 +8,7 @@ categories:
   - "  Case Study"
   - " Size Structure"
   - " Length Frequency"
-  - "Bluegill"
+  - "Bluegill/Sunfish"
 ---
 
 :::{.callout-warning appearance="simple"}
