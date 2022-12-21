@@ -7,6 +7,7 @@ image: ../../../helpers/img/casestudy.png
 categories:
   - "  Case Study"
   - " Size Structure"
+  - " Length Frequency"
   - "Salmon/Trout"
 ---
 
@@ -93,7 +94,7 @@ Available upon request to students not in a class. Contact fishR maintainers.
 library(ggplot2)
 
 # Load data
-wc <- read.csv("https://raw.githubusercontent.com/droglenc/NCNRS349/gh-pages/modules/CE/Whittlesey2011.csv")
+wc <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/fishR/main/teaching/posts/2022-12-20_SizeStrux_Whittlesey/Whittlesey2011.csv")
 str(wc)
 
 # helpers

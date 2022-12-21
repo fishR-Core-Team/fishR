@@ -5,7 +5,7 @@ author: AUTHOR HERE
 date: MM/DD/20YY
 image: ../../../helpers/img/casestudy.png
 categories:
-  - " Case Study"
+  - "  Case Study"
   - 
 ---
 
