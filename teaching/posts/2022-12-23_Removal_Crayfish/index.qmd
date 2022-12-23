@@ -1,0 +1,50 @@
+---
+title: Abundance from Removal Data
+subtitle: Chequamegon Bay Ruffe
+description: Estimate abundance of Signal Crayfish in Bookill Gill Beck captured with an experimental method.
+author: Derek H. Ogle
+date: 12/23/2022
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Depletion/Removal"
+  - " Abundance"
+  - "Invertebrates"
+  - "Invasive Species"
+---
+
+@chadwick_novel_2021 examined a novel method to determine the abundance of [Signal Crayfish](https://en.wikipedia.org/wiki/Signal_crayfish) (*Pacifastacus leniusculus*) in an isolated portion of a stream. At one experimental location their novel method resulted in the removal of 1477, 133, and 46 crayfish in three successive samplings. Use these data to answer the following questions.
+
+1. What is the best estimate and 95% confidence interval for the population size?
+1. What is the best estimate and 95% confidence interval for the probability of capture for each sampling period.
+1. Is there evidence that the probability of capture differed after the first pass?
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+
+# Make data
+cray <- c(1477,133,46)
+
+# Compute estimates
+rmvl <- removal(cray)
+(res2 <- cbind(Est=summary(rmvl),confint(rmvl)) )
+
+# Test change in probability of capture
+rmvlm <- removal(cray,method="Moran")
+rmvls <- removal(cray,method="Schnute")
+teststat <- 2*(rmvlm$min.nlogLH-rmvls$min.nlogLH)     # Moran - Schnute
+( pvalue <- pchisq(teststat,df=1,lower.tail=FALSE) )
+```

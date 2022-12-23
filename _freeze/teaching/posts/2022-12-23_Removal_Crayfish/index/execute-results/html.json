@@ -1,0 +1,16 @@
+{
+  "hash": "ca193787d15c38b154362d5c0d63c027",
+  "result": {
+    "markdown": "---\ntitle: Abundance from Removal Data\nsubtitle: Chequamegon Bay Ruffe\ndescription: Estimate abundance of Signal Crayfish in Bookill Gill Beck captured with an experimental method.\nauthor: Derek H. Ogle\ndate: 12/23/2022\nimage: ../../../helpers/img/exercise.png\ncategories:\n  - \"  Exercise\"\n  - \" Depletion/Removal\"\n  - \" Abundance\"\n  - \"Invertebrates\"\n  - \"Invasive Species\"\n---\n\n\n@chadwick_novel_2021 examined a novel method to determine the abundance of [Signal Crayfish](https://en.wikipedia.org/wiki/Signal_crayfish) (*Pacifastacus leniusculus*) in an isolated portion of a stream. At one experimental location their novel method resulted in the removal of 1477, 133, and 46 crayfish in three successive samplings. Use these data to answer the following questions.\n\n1. What is the best estimate and 95% confidence interval for the population size?\n1. What is the best estimate and 95% confidence interval for the probability of capture for each sampling period.\n1. Is there evidence that the probability of capture differed after the first pass?\n\n&nbsp;\n\n:::{.callout-important appearance=\"simple\"}\n## Solution Code:\nAvailable upon request to students not in a class. Contact fishR maintainers.\n:::\n\n\n::: {.cell layout-align=\"center\"}\n\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
