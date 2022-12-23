@@ -1,6 +1,6 @@
 ---
 title: AFS Style in ggplot2 Figures
-description: Modifying the Glassic et al. (2019) process for modifying ggplot2 graphs to match the AFS Style Guide.
+description: Suggestions for the Glassic et al. (2019) process for modifying ggplot2 graphs to match the AFS Style Guide.
 author: Derek H. Ogle
 date: 12/22/2022
 image: preview.png
