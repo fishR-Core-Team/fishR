@@ -18,26 +18,25 @@ categories:
 ```
 Sample    1    2    3    4    5    6    7    8    9   10
 --------------------------------------------------------
-Catch   282  346   37    4    9   27    4    0    1    0
+Catch   282  346   27    4    9   27    4    0    1    0
 Effort 19.0 30.0 31.0 20.0 29.5 42.5 34.5 36.0 27.0 25.0 
 ```
 
 &nbsp;
 
 1. Enter the catch and effort data into separate R vectors and create a vector that represents CPE in each sampling period. Carefully interpret the meaning of the first value in the CPE vector.
-1. What is the best estimate and 95% confidence interval for the initial population size?
+1. What is the best estimate and 95% confidence interval for the initial population size?^[Note that @czypinski_evaluating_2011 used the Ricker modified formula.]
 1. What is the best estimate and 95% confidence interval for the catchability coefficient? Very carefully interpret what this estimate means relative to the capture of Ruffe at this site.
 
 &nbsp;
 
-4. Convert the effort vector to hours of effort and calculate a new CPE vector. Carefully interpret the meaning of the first value in the CPE vector.
+4. Suppose that 5 minutes of trawling was considered to be one unit of effort. Convert the effort vector accordingly and calculate a new CPE vector. Carefully interpret the meaning of the first value in the CPE vector.
 1. What is the best estimate and 95% confidence interval for the initial population size? How does this estimate compare to the same estimate from using the original effort data? What does this mean?
 1. What is the best estimate and 95% confidence interval for the catchability coefficient? How does this compare to the same estimate from using the original effort data? What does this mean?
-1. Convert the estimate of catchability to a quantity that is more easily interpretible. Interpret that quantity.
 
 &nbsp;
 
-8. What is the best estimate for the percentage of the Ruffe population that was removed in all trawling efforts at this site?
+7. What is the best estimate for the percentage of the Ruffe population that was removed in all trawling efforts at this site?
 
 &nbsp;
 
@@ -56,26 +55,25 @@ Available upon request to students not in a class. Contact fishR maintainers.
 library(FSA)
 
 # Make data
-ct <- c( 282, 346,  37,   4,   9,  27,   4,   0,   1,   0)
+ct <- c( 282, 346,  27,   4,   9,  27,   4,   0,   1,   0)
 ft <- c(19.0,30.0,31.0,20.0,29.5,42.5,34.5,36.0,27.0,25.0)
 cpet <- ct/ft
 cbind(ct,ft,cpet)
 
 # Compute estimates
-res1 <- depletion(ct,ft)
+res1 <- depletion(ct,ft,Ricker.mod=TRUE)
 cbind(summary(res1),confint(res1))
 plot(res1)
 
 # change effort to hours and start over
-ft2 <- ft/60
+ft2 <- ft/5
 cpet2 <- ct/ft2
 cbind(ct,ft2,cpet2)
 
-res2 <- depletion(ct,ft2)
+res2 <- depletion(ct,ft2,Ricker.mod=TRUE)
 cbind(summary(res2),confint(res2))
 plot(res2)
 
-# More interpretible result (b/c q was large)
-( q2 <- res2$est["q","Estimate"] )
-1-exp(-q2)  # est proportion of popn removed with one unit of effort
+# percentage removed
+sum(ct)/res1$est["No","Estimate"]*100
 ```

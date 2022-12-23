@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2022-12-23T12:54:12.022Z</lastmod>
+    <lastmod>2022-12-23T20:27:56.121Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -118,7 +118,7 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/index.html</loc>
-    <lastmod>2022-12-23T17:09:41.785Z</lastmod>
+    <lastmod>2022-12-23T20:29:44.979Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2016-6-12_Halflife_of_K/index.html</loc>
@@ -198,10 +198,14 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-23_Depletion_Ruffe/index.html</loc>
-    <lastmod>2022-12-23T17:09:37.532Z</lastmod>
+    <lastmod>2022-12-23T20:29:53.334Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-23_Removal_Crayfish/index.html</loc>
     <lastmod>2022-12-23T17:07:54.832Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/teaching/posts/2022-12-23_Catchability/index.html</loc>
+    <lastmod>2022-12-23T20:26:19.073Z</lastmod>
   </url>
 </urlset>

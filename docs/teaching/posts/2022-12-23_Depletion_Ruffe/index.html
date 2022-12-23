@@ -257,7 +257,7 @@ div.csl-indent {
         
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
 
 
@@ -265,23 +265,22 @@ div.csl-indent {
 <p><span class="citation" data-cites="czypinski_evaluating_2011">Czypinski and Ogle (<a href="#ref-czypinski_evaluating_2011" role="doc-biblioref">2011</a>)</span> performed an experiment to determine if a population of invasive <a href="https://en.wikipedia.org/wiki/Ruffe">Ruffe</a> (<em>Gymnocephalus cernuus</em>) could be significantly reduced by sequential removal of Ruffe with bottom trawls. The following catches of Ruffe were made at the <a href="https://www.wisconsinwetlands.org/wp-content/uploads/2015/06/Kakagon-Bad-River-Sloughs.pdf">Kakagon River</a> location with the corresponding minutes of trawling effort.</p>
 <pre><code>Sample    1    2    3    4    5    6    7    8    9   10
 --------------------------------------------------------
-Catch   282  346   37    4    9   27    4    0    1    0
+Catch   282  346   27    4    9   27    4    0    1    0
 Effort 19.0 30.0 31.0 20.0 29.5 42.5 34.5 36.0 27.0 25.0 </code></pre>
 <p>&nbsp;</p>
 <ol type="1">
 <li>Enter the catch and effort data into separate R vectors and create a vector that represents CPE in each sampling period. Carefully interpret the meaning of the first value in the CPE vector.</li>
-<li>What is the best estimate and 95% confidence interval for the initial population size?</li>
+<li>What is the best estimate and 95% confidence interval for the initial population size?<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
 <li>What is the best estimate and 95% confidence interval for the catchability coefficient? Very carefully interpret what this estimate means relative to the capture of Ruffe at this site.</li>
 </ol>
-<p>&nbsp;</p>
+<div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;Note that <span class="citation" data-cites="czypinski_evaluating_2011">Czypinski and Ogle (<a href="#ref-czypinski_evaluating_2011" role="doc-biblioref">2011</a>)</span> used the Ricker modified formula.</p></li></div><p>&nbsp;</p>
 <ol start="4" type="1">
-<li>Convert the effort vector to hours of effort and calculate a new CPE vector. Carefully interpret the meaning of the first value in the CPE vector.</li>
+<li>Suppose that 5 minutes of trawling was considered to be one unit of effort. Convert the effort vector accordingly and calculate a new CPE vector. Carefully interpret the meaning of the first value in the CPE vector.</li>
 <li>What is the best estimate and 95% confidence interval for the initial population size? How does this estimate compare to the same estimate from using the original effort data? What does this mean?</li>
 <li>What is the best estimate and 95% confidence interval for the catchability coefficient? How does this compare to the same estimate from using the original effort data? What does this mean?</li>
-<li>Convert the estimate of catchability to a quantity that is more easily interpretible. Interpret that quantity.</li>
 </ol>
 <p>&nbsp;</p>
-<ol start="8" type="1">
+<ol start="7" type="1">
 <li>What is the best estimate for the percentage of the Ruffe population that was removed in all trawling efforts at this site?</li>
 </ol>
 <p>&nbsp;</p>
@@ -301,6 +300,7 @@ Solution Code:
 <div class="cell" data-layout-align="center">
 
 </div>
+
 
 
 
