@@ -1,0 +1,14 @@
+{
+  "hash": "cf399e21c4a854ea21c59c233b140014",
+  "result": {
+    "markdown": "---\ntitle: Abundance from Mark-Recapture Data\nsubtitle: Indian Creek Tan Riffleshell\ndescription: Use multiple census mark-recapture techniques to estimate abundance of Tan Riffleshell mussels in Indian Creek (VA).\nauthor: Derek H. Ogle\ndate: 3/8/2019\nimage: ../../../helpers/img/exercise.png\ncategories:\n  - \"  Exercise\"\n  - \" Mark-Recapture\"\n  - \" Abundance\"\n  - \"Invertebrates\"\n---\n\n\n@rogers_population_1999 studied the endangered freshwater mussel [Tan Riffleshell](http://ecos.fws.gov/speciesProfile/profile/speciesProfile.action?spcode=F010) (*Epioblasma florentina walkeri*) in [Indian Creek, Virginia](https://en.wikipedia.org/wiki/Indian_Creek_%28New_River_tributary%29). Part of the study included a detailed analysis of the population dynamics of mussels in a 100 m stretch of stream. In this stream, mussels were captured by teams of snorkelers on six occasions (June 1996; August 1996; June 1997; October 1998; May 1999; and June 1999).  Mussels were tagged by attaching a numbered tag to the left valve of the mussel. The number of mussels captured, the number of marked mussels observed, and the number of tagged mussels returned to the population were recorded for each sample time. These data are in [Riffleshell](https://fishr-core-team.github.io/FSAdata/reference/Riffleshell.html).^[See “CSV file” link in “Source” section of linked page.]. Use these data to answer the following questions.\n\n1. What is the only method that can be used to estimate abundance given the way these data were collected? Comment on the validity of the assumptions for this method for these data.\n1. Regardless of your thoughts on the validity of the assumptions, use your chosen method to estimate the number, with 95% confidence interval, of Tan Riffleshell mussels in the population at the beginning of the study. Carefully interpret the result.\n\n:::{.callout-important appearance=\"simple\"}\n## Solution Code:\nAvailable upon request to students not in a class. Contact fishR maintainers.\n:::\n\n\n::: {.cell layout-align=\"center\"}\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

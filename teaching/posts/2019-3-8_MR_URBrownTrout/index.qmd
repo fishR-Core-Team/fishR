@@ -1,0 +1,37 @@
+---
+title: Abundance from Mark-Recapture Data
+subtitle: Ugly River Brown Trout
+description: Use single census mark-recapture techniques to estimate abundance of Brown Trout in a stretch of the Ugly River (New Zealand).
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Mark-Recapture"
+  - " Abundance"
+  - "Salmon/Trout"
+---
+
+@young_assessing_2001 described a study where [Brown Trout](https://en.wikipedia.org/wiki/Brown_trout) (*Salmo trutta*) in several rivers were captured by experienced fly fishers, tagged at the base of the dorsal fin with a colored dart tag, and then observed by divers drifting through the sample area two days later. In the [Ugly River](https://nzfishing.com/west-coast/where-to-fish/ugly-river/), 43 trout were marked, 123 fish were observed by the divers, and 16 fish observed by the divers were tagged.
+
+1. Assign one of these symbols ($N$, $M$, $n$, $m$) to each of the numerical results from this study.^[Symbols are as used in @ogleIntroductoryFisheriesAnalyses2016.]
+1. Construct a population estimate, with 95% confidence interval, for the Brown Trout in this section of the Ugly River. Carefully interpret the results.
+1. Which method did you use to construct the confidence interval? Explain why you chose that method.
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+
+pe1 <- mrClosed(M=43,n=123,m=16,method="Chapman")
+cbind(summary(pe1),confint(pe1,verbose=TRUE))
+```
