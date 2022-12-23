@@ -1,0 +1,45 @@
+---
+title: Abundance from Depletion Data
+subtitle: European Bullhead in England
+description: Estimate abundance of European Bullhead in a headwater stream in England.
+author: Derek H. Ogle
+date: 12/23/2022
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Depletion/Removal"
+  - " Abundance"
+---
+
+@pritchard_assessing_2021 used three methods to determine the abundance of benthic [European Bullhead](https://en.wikipedia.org/wiki/European_bullhead) (*Cottus gobio*) in a stony headwater stream in [Northern Yorkshire, England](https://en.wikipedia.org/wiki/North_Yorkshire). In one part of their study they set block nets at the up- and down-stream ends of a site called "Footbridge." The researchers then used a backpack electrofishing unit deployed from the lower to the upper limit of the site to capture and remove all Bullheads from the site (the removed fish were placed downstream below the lower block net). After a short break, this process was repeated two more times. A total of 138, 55, and 48 Bullheads were removed on the successive electrofishing passes. Use this information to answer the questions below.
+
+1. What is the best estimate and 95% confidence interval for the population size? How does your estimate compare to the estimate published in @pritchard_assessing_2021?
+1. What is the best estimate and 95% confidence interval for the probability of capture during each electrofishing pass.
+1. @pritchard_assessing_2021 estimated a "capture efficiency." Use your results to show and then describe what they mean by this.
+1. Is there evidence that the probability of capture differed after the first pass?
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+
+# Make data
+ct <- c(138,55,48)
+rem1 <- removal(ct)
+cbind(summary(rem1),confint(rem1))
+M1 <- removal(ct,method="Moran")
+S1 <- removal(ct,method="Schnute")
+teststat <- 2*(M1$min.nlogLH-S1$min.nlogLH)
+( pvalue <- pchisq(teststat,df=1,lower.tail=FALSE) )
+```
