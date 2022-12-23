@@ -146,9 +146,9 @@ ggsave(ggplot_figure, file = "ggplot_figure.tiff",
 &nbsp;
 
 # Issues that Must be Addressed
-When I first ran the author's code I received an error about a missing font. I followed the advice in [this guide](https://github.com/wch/extrafont#using-extrafont) from the `extrafont` package but that did not seem to fix the issue. This is likely an issue with my system and something I need to look into further.
-
 More recent versions of `ggplot2` use `linewidth=` rather than `size=` in all line-related elements. This needs to be changed in the authors' use of `axis.tick.y=`, `axis.tick.x=`, and `axis.line=`.
+
+When I first ran the author's code I received an error about a missing font. I followed the advice in [this guide](https://github.com/wch/extrafont#using-extrafont) from the `extrafont` package, which mostly fixed the issue.^[I still receive a font-based warning when rendering the Quarto document.]
 
 &nbsp;
 

@@ -292,7 +292,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 22, 2022</p>
+        <p class="date-modified">Dec 23, 2022</p>
       </div>
     </div>
       
@@ -458,10 +458,10 @@ Note
 </div>
 <p>&nbsp;</p>
 </section>
-<section id="issues-that-must-be-addressed" class="level1">
+<section id="issues-that-must-be-addressed" class="level1 page-columns page-full">
 <h1>Issues that Must be Addressed</h1>
-<p>When I first ran the author’s code I received an error about a missing font. I followed the advice in <a href="https://github.com/wch/extrafont#using-extrafont">this guide</a> from the <code>extrafont</code> package but that did not seem to fix the issue. This is likely an issue with my system and something I need to look into further.</p>
 <p>More recent versions of <code>ggplot2</code> use <code>linewidth=</code> rather than <code>size=</code> in all line-related elements. This needs to be changed in the authors’ use of <code>axis.tick.y=</code>, <code>axis.tick.x=</code>, and <code>axis.line=</code>.</p>
+<div class="page-columns page-full"><p>When I first ran the author’s code I received an error about a missing font. I followed the advice in <a href="https://github.com/wch/extrafont#using-extrafont">this guide</a> from the <code>extrafont</code> package, which mostly fixed the issue.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;I still receive a font-based warning when rendering the Quarto document.</p></li></div></div>
 <p>&nbsp;</p>
 </section>
 <section id="suggested-adjustments" class="level1 page-columns page-full">
@@ -587,7 +587,7 @@ Hint
 </section>
 <section id="using-patchwork-to-position-plots" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="using-patchwork-to-position-plots">Using <code>patchwork</code> to Position Plots</h2>
-<div class="page-columns page-full"><p>The <code>patchwork</code> package provides simple but extensive tools for combining multiple plots. Two plots can simply be “added” together to place them side-by-side (<a href="#fig-modplot">Figure&nbsp;2</a>). <code>plot_annotation()</code> is used to add letters to the two panels.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;See the excellent <a href="https://patchwork.data-imaginist.com/index.html">documentation for <code>patchwork</code></a> to better understand what this package can do.</p></li></div></div>
+<div class="page-columns page-full"><p>The <code>patchwork</code> package provides simple but extensive tools for combining multiple plots. Two plots can simply be “added” together to place them side-by-side (<a href="#fig-modplot">Figure&nbsp;2</a>). <code>plot_annotation()</code> is used to add letters to the two panels.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;See the excellent <a href="https://patchwork.data-imaginist.com/index.html">documentation for <code>patchwork</code></a> to better understand what this package can do.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>len_wt_afs1 <span class="sc">+</span> len_wt_afs2 <span class="sc">+</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels=</span><span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -618,7 +618,7 @@ Hint
 </section>
 <section id="conclusion" class="level1 page-columns page-full">
 <h1>Conclusion</h1>
-<div class="page-columns page-full"><p><span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> provided an excellent example and script for how to use <code>ggplot2</code> in R to make figures that adhere to the AFS Style Guidelines. Here I provide some suggestions to update their script for recent changes to <code>ggplot2</code>. More importantly their suggestions were put into a custom theme that can be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, <code>theme_AFS()</code> is applied to a <code>ggplot2</code> length frequency histogram below (<a href="#fig-bghist">Figure&nbsp;3</a>).<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;This uses the <code>BluegillLM</code> data from the <code>FSAdata</code> package; thus, you must have <code>FSAdata</code> installed.</p></li></div></div>
+<div class="page-columns page-full"><p><span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> provided an excellent example and script for how to use <code>ggplot2</code> in R to make figures that adhere to the AFS Style Guidelines. Here I provide some suggestions to update their script for recent changes to <code>ggplot2</code>. More importantly their suggestions were put into a custom theme that can be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, <code>theme_AFS()</code> is applied to a <code>ggplot2</code> length frequency histogram below (<a href="#fig-bghist">Figure&nbsp;3</a>).<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;This uses the <code>BluegillLM</code> data from the <code>FSAdata</code> package; thus, you must have <code>FSAdata</code> installed.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(BluegillLM,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>BluegillLM,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
