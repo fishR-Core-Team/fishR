@@ -182,7 +182,7 @@ div.csl-indent {
 <meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10;,citation_cover_date=2015-10;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;">
 <meta name="citation_reference" content="citation_title=Thin plate regression splines;,citation_author=Simon N. Wood;,citation_publication_date=2003;,citation_cover_date=2003;,citation_year=2003;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00374;,citation_issue=1;,citation_doi=10.1111/1467-9868.00374;,citation_issn=1467-9868;,citation_volume=65;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
 <meta name="citation_reference" content="citation_title=Generalized Additive Models: An Introduction with R;,citation_author=Simon N. Wood;,citation_publication_date=2017-05;,citation_cover_date=2017-05;,citation_year=2017;,citation_fulltext_html_url=https://www.taylorfrancis.com/books/mono/10.1201/9781315370279/generalized-additive-models-simon-wood;,citation_doi=10.1201/9781315370279;,citation_isbn=978-1-315-37027-9;">
-<meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_issue=11;,citation_doi=10.1002/fsh.10272;,citation_issn=0363-2415, 1548-8446;,citation_volume=44;,citation_journal_title=Fisheries;">
+<meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_volume=44;,citation_journal_title=Fisheries;">
 <meta name="citation_reference" content="citation_title=ggplot2: Elegant Graphics for Data Analysis;,citation_author=Hadley Wickham;,citation_author=Danielle Navarro;,citation_author=Thomas Lin Pedersen;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://ggplot2-book.org/index.html;">
 </head>
 
@@ -346,8 +346,8 @@ Note
 <p>&nbsp;</p>
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
-<div class="page-columns page-full"><p><span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> showed how to modify default <code>ggplot2</code> graphics to meet American Fisheries Society (AFS) Style Guide requirements.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> They provided an example with accompanying script to help users implement their suggestions.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Since their publication <code>ggplot2</code> has been updated, which did not break their code but leads to some warnings of changed arguments. In this post, I update their script and provide a mechanism that I think will allow their recommendations to be more easily implemented.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;They also did the same for base R graphics.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;The <code>ggplot2</code> script is available <a href="https://github.com/CGuyMSU/AFS-figures/blob/master/ggplot2_figure.r">here</a>.</p></li></div></div>
-<div class="page-columns page-full"><p>The first part of the authors’ script<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> creates a simple data frame, called <code>length_weight_data</code>, of simple weight and length data for two species (<code>lmb</code> and <code>cat</code>).</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Which is not shown here as I want to focus on graphing.</p></li></div></div>
+<div class="page-columns page-full"><p><span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> showed how to modify default <code>ggplot2</code> graphics to meet American Fisheries Society (AFS) Style Guide requirements.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> They provided an example with accompanying script to help users implement their suggestions.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Since their publication, <code>ggplot2</code> has been updated, which did not break their code but leads to some warnings of changed arguments. In this post, I update their script and provide some suggestions that I think will allow their recommendations to be more easily implemented.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;They also did the same for base R graphics.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;The <code>ggplot2</code> script is available <a href="https://github.com/CGuyMSU/AFS-figures/blob/master/ggplot2_figure.r">here</a>.</p></li></div></div>
+<div class="page-columns page-full"><p>The first part of their script<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> creates a data frame called <code>length_weight_data</code> with simple weight and length data for two species (<code>lmb</code> and <code>cat</code>).</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Which is not shown here as I want to focus on graphing.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 
 </div>
@@ -375,7 +375,7 @@ Note
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>They then modified this plot to fit the AFS Style Guide requirements (<a href="#fig-glassic">Figure&nbsp;1</a> (B)).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;I modified their <code>legend.position</code> slightly due to website size constraints.</p></li></div></div>
+<div class="page-columns page-full"><p>They then modified this plot to fit the AFS Style Guide requirements (<a href="#fig-glassic">Figure&nbsp;1</a> (B)).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;I modified their <code>legend.position=</code> slightly due to website size constraints.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>len_wt_afs <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> length_weight_data,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">aes</span>(<span class="at">x =</span> length, <span class="at">y =</span> weight, <span class="at">fill =</span> species)) <span class="sc">+</span></span>
@@ -437,7 +437,7 @@ Note
 <span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        <span class="co">#set the axis size, color, and end shape</span></span>
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">lineend =</span> <span class="st">"square"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>They then arranged the two plots side-by-side.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;I used <code>gridExtra::</code> here so as not to have to load the entire package.</p></li></div></div>
+<div class="page-columns page-full"><p>They then arranged the two plots side-by-side.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;I used <code>gridExtra::</code> here so as not to load the entire package.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ggplot_figure <span class="ot">&lt;-</span> gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(len_wt_default, len_wt_afs, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ggplot_figure</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -451,7 +451,7 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<p>Finally, <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> demonstrated how to save the plot with a custom width and height (holding a specific aspect ratio) and resolution.</p>
+<p>Finally, <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> demonstrated how to save the plot with a custom width, height (holding a specific aspect ratio), and resolution.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(ggplot_figure, <span class="at">file =</span> <span class="st">"ggplot_figure.tiff"</span>, </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="fl">20.32</span>, <span class="at">height =</span> <span class="fl">7.62</span>, <span class="at">units =</span> <span class="st">"cm"</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -460,24 +460,25 @@ Note
 </section>
 <section id="issues-that-must-be-addressed" class="level1">
 <h1>Issues that Must be Addressed</h1>
-<p>When I first ran the author’s code I received an error about a missing font. I followed the advice in <a href="https://github.com/wch/extrafont#using-extrafont">this guide</a> from the <code>extrafont</code> package and that seemed to have cleared up the issue.</p>
-<p>More recent versions of <code>ggplot2</code> use <code>linewidth=</code> rather than <code>size=</code> in all line-related elements. This needs to be changed in the authors’ use of <code>axis.tick.x=</code>, <code>axis.tick.y=</code>, and <code>axis.line</code>.</p>
+<p>When I first ran the author’s code I received an error about a missing font. I followed the advice in <a href="https://github.com/wch/extrafont#using-extrafont">this guide</a> from the <code>extrafont</code> package but that did not seem to fix the issue. This is likely an issue with my system and something I need to look into further.</p>
+<p>More recent versions of <code>ggplot2</code> use <code>linewidth=</code> rather than <code>size=</code> in all line-related elements. This needs to be changed in the authors’ use of <code>axis.tick.y=</code>, <code>axis.tick.x=</code>, and <code>axis.line=</code>.</p>
 <p>&nbsp;</p>
 </section>
 <section id="suggested-adjustments" class="level1 page-columns page-full">
 <h1>Suggested Adjustments</h1>
-<p>I separate the construction of the plot by <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> into two parts. The first part consists of items that are specific to the plot and that cannot be set globally for use in other plots. These are items likes <code>data=</code>, <code>aes()</code>, <code>geom()</code>s, <code>scale()</code>s, and labels. The second part consists of items that will likely need to be held constant across different plots. These are items like font size, tick lengths, margins, etc. These are largely the items that <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> adjust with <code>theme()</code>. Below I explain some suggested modifications to the plot specific items. I then show how to move most of the elements that will be common across plots into a custom theme that can be easily applied to any plot. Finally, I demonstrate using <code>patchwork</code> rather than <code>gridExtra</code> to place plots next to each other.</p>
+<p>I separate the construction of the plot by <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> into three parts. The first part consists of items that are specific to the plot and that cannot be set globally for use in other plots. These are items likes <code>data=</code>, <code>aes()</code>, <code>geom()</code>s, <code>scale()</code>s, and labels. The second part consists of items that will likely need to be held constant across different plots. These are items like font size, tick lengths, margins, etc. These are largely the items that <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> adjust with <code>theme()</code>. THe third part is positioning two plots side-by-side as one overall figure.</p>
+<p>Below I explain some suggested modifications to the plot specific items. I then show how to move most of the elements that will be common across plots into a custom theme that can be easily applied to any plot. Finally, I demonstrate using <code>patchwork</code> rather than <code>gridExtra</code> to place plots next to each other.</p>
 <section id="plot-specific-elements" class="level2">
 <h2 class="anchored" data-anchor-id="plot-specific-elements">Plot-Specific Elements</h2>
-<p>I suggest the following changes to the plot-specific elements which result in <a href="#fig-modplot">Figure&nbsp;2</a> (A).</p>
+<p>I suggest the following changes to the plot-specific elements. Implementing these suggestions will result in <a href="#fig-modplot">Figure&nbsp;2</a> (A).</p>
 <ul>
-<li>I named the second argument to <code>ggplot()</code> with <code>mapping=</code>. <code>ggplot()</code> is smart enough to figure this argument out but I think it is awkward to name the first argument (i.e., <code>data=</code>) but not the second.</li>
+<li>Name the second argument to <code>ggplot()</code> (i.e., <code>mapping=</code>). <code>ggplot()</code> is smart enough to figure this out but I think it is awkward to name the first argument (i.e., <code>data=</code>) but not the second.</li>
 <li>I moved the text for the axis labels (i.e., titles) into <code>scale_y_continuous()</code> and <code>scale_x_continuous()</code> for simplicity (and thus removed <code>ylab()</code> and <code>xlab()</code>).</li>
-<li>I changed <code>expand=c(0,0)</code> in <code>scale_y_continuous()</code> and <code>scale_x_continuous()</code> to <code>expand=expansion(mult=c(0,0))</code> to follow more recent <code>ggplot2</code> conventions. This still results in not scale expansion at the top or bottom of axis.</li>
-<li>I removed <code>limits=</code> in <code>scale_fill_manual()</code> and used a named vector in <code>values=</code> to accomplish the same task. I think this makes it easier to see which category is going to get which color.</li>
-<li>I removed <code>ggtitle()</code> as I am going to accomplish that same task with <code>patchwork</code> as shown where I put the two plots together.</li>
+<li>I changed <code>expand=c(0,0)</code> in <code>scale_y_continuous()</code> and <code>scale_x_continuous()</code> to <code>expand=expansion(mult=c(0,0))</code> to follow more recent <code>ggplot2</code> conventions. This still results in no scale expansion at the top or bottom of axis.</li>
+<li>I removed <code>limits=</code> in <code>scale_fill_manual()</code> and used a named vector in <code>values=</code> to accomplish the same task. I think this makes it easier to see which category gets which color.</li>
+<li>I removed <code>ggtitle()</code> as I am going to accomplish that same task with <code>patchwork</code> as shown below (i.e., where the two plots are place side-by-side).</li>
 <li>I used <code>legend.title=element_blank()</code> in <code>theme()</code> rather than <code>labs(fill="")</code> to remove to legend title. I think(?) this handles the freed up space better.</li>
-<li>I included <code>legend.position=</code> here because <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., in a “white area”).</li>
+<li>I included <code>legend.position=</code> in <code>theme()</code> here because <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., will need to manually find a “white area”).</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>len_wt_afs1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>length_weight_data,</span>
@@ -503,7 +504,7 @@ Note
 </section>
 <section id="custom-theme-for-all-plots" class="level2">
 <h2 class="anchored" data-anchor-id="custom-theme-for-all-plots">Custom Theme for All Plots</h2>
-<p>Theme elements that will be consistent across plots can be put into a custom theme that can then be easily applied to any plot. The code below, for example, shows the start of a new theme called <code>theme_AFS()</code> that has <code>theme_classic()</code> as its base but will have several elements replaced. <code>theme_AFS()</code> will use a base font size of 14 and Times New Roman as defaults, which will minimize some of the authors code.</p>
+<p>Theme elements that will be consistent across plots can be put into a custom theme that can then be easily applied to any plot. The code below, for example, shows the start of a new theme called <code>theme_AFS()</code> that has <code>theme_classic()</code> as its base but will have several elements replaced. <code>theme_AFS()</code> will use a base font size of 14 and Times New Roman as defaults, which will minimize some of the authors’ code (as described below).</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>theme_AFS <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">base_size=</span><span class="dv">14</span>,<span class="at">base_family=</span><span class="st">"Times New Roman"</span>) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size=</span>base_size,<span class="at">base_family=</span>base_family) <span class="sc">+</span></span>
@@ -512,12 +513,12 @@ Note
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Within <code>theme()</code> of the code above I am going to add <em>nearly</em> all of the elements that <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> included, though I reordered the items in a way that makes sense to me (e.g., axis title then axis tick labels then axis ticks then axis line). Other adjustments to note are:</p>
+<p>Within <code>theme()</code> I add <em>nearly</em> all of the elements that <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> included, though I reordered the items in a way that makes sense to me (e.g., axis title then axis tick labels then axis ticks then axis line). Other adjustments are:</p>
 <ul>
-<li>I removed the <code>text=</code> because the font family was already set with <code>base_family=</code>.</li>
-<li>I removed <code>legend.position=</code> because <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., in a “white area”).</li>
+<li>I removed <code>text=</code> because the font family was already set with <code>base_family=</code>.</li>
+<li>I removed <code>legend.position=</code> because, as described above, <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> positioned the legend within the plot area.</li>
 <li>I removed <code>size=14</code> from <code>axis.title.y=</code>, <code>axis.title.x=</code>, <code>axis.text.y=</code>, and <code>axis.text.x=</code> because that was set with <code>base_size=</code>.</li>
-<li>I replaced <code>axis.ticks.y=</code> and <code>axis.ticks.x=</code> with <code>axis.ticks=</code> because their elements were the same and this will set both at the same time.</li>
+<li>I replaced <code>axis.ticks.y=</code> and <code>axis.ticks.x=</code> with <code>axis.ticks=</code> because their elements were the same and using <code>axis.ticks=</code> will set both at the same time.</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>theme_AFS <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">base_size=</span><span class="dv">14</span>,<span class="at">base_family=</span><span class="st">"Times New Roman"</span>) {</span>
@@ -546,7 +547,7 @@ Note
 <span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This can then be “added” to any plot to apply the theme. For example, it is applied to the code from above that produced <a href="#fig-modplot">Figure&nbsp;2</a> (A) to make <a href="#fig-modplot">Figure&nbsp;2</a> (B). It is important, however, to make sure that the plot-specific <code>theme()</code> elements are applied <strong>after</strong> the custom theme.</p>
+<p><code>theme_AFS()</code> can then be “added” to any plot to apply its elements. For example, applying <code>theme_AFS()</code> to the code that produced <a href="#fig-modplot">Figure&nbsp;2</a> (A) will produce <a href="#fig-modplot">Figure&nbsp;2</a> (B). It is important, however, to make sure that the plot-specific <code>theme()</code> elements are applied <strong>after</strong> the custom theme.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>len_wt_afs2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>length_weight_data,</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>length,<span class="at">y=</span>weight,<span class="at">fill=</span>species)) <span class="sc">+</span></span>
@@ -580,13 +581,13 @@ Hint
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>See the <a href="https://ggplot2-book.org/polishing.html#themes">“Themes” chapter of <span class="citation" data-cites="wickham_ggplot2_2022">Wickham et al. (</span></a><a href="#ref-wickham_ggplot2_2022" role="doc-biblioref">2022</a>) for an excellent description of using themes in <code>ggplot2</code> graphics.</p>
+<p>See the <a href="https://ggplot2-book.org/polishing.html">“Themes” chapter of <span class="citation" data-cites="wickham_ggplot2_2022">Wickham et al. (</span></a><a href="#ref-wickham_ggplot2_2022" role="doc-biblioref">2022</a>) for an excellent description of using themes in <code>ggplot2</code> graphics.</p>
 </div>
 </div>
 </section>
 <section id="using-patchwork-to-position-plots" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="using-patchwork-to-position-plots">Using <code>patchwork</code> to Position Plots</h2>
-<p>The <code>patchwork</code> package provides a simple but extensive environment for combining multiple plots. In the simple case here where we want two plots side-by-side we simply need to “add” them together as shown below. <code>plot_annotation()</code> can be used to add letters to the two panels. The <a href="https://patchwork.data-imaginist.com/index.html">documentation for <code>patchwork</code></a> is excellent for better understanding what this package can do.</p>
+<div class="page-columns page-full"><p>The <code>patchwork</code> package provides simple but extensive tools for combining multiple plots. Two plots can simply be “added” together to place them side-by-side (<a href="#fig-modplot">Figure&nbsp;2</a>). <code>plot_annotation()</code> is used to add letters to the two panels.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;See the excellent <a href="https://patchwork.data-imaginist.com/index.html">documentation for <code>patchwork</code></a> to better understand what this package can do.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>len_wt_afs1 <span class="sc">+</span> len_wt_afs2 <span class="sc">+</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels=</span><span class="st">"A"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -609,7 +610,7 @@ Hint
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Annotating the plots with <code>patchwork</code> will place the annotations on the very edge of the figure panel. Use <code>ggtitle()</code> to move them more to the right as <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> had them.</p>
+<p>Annotating plots with <code>patchwork</code> will place the annotations on the very edge of the figure panel. Use <code>ggtitle()</code> to move them more to the right as <span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> had them.</p>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -617,28 +618,18 @@ Hint
 </section>
 <section id="conclusion" class="level1 page-columns page-full">
 <h1>Conclusion</h1>
-<p><span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> provided an excellent example and script for how to use <code>ggplot2</code> in R to make figures that adhere to the AFS Style Guidelines. Since their paper was published a few items in <code>ggplot2</code> have changed and, thus, their script needed to be updated to reflect those changes as described above. More importantly their suggestions could be put into a custom theme so that they could be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, <code>theme_AFS()</code> is applied to a <code>ggplot2</code> length frequency histogram below (<a href="#fig-bghist">Figure&nbsp;3</a>).</p>
+<div class="page-columns page-full"><p><span class="citation" data-cites="glassic_creating_2019">Glassic et al. (<a href="#ref-glassic_creating_2019" role="doc-biblioref">2019</a>)</span> provided an excellent example and script for how to use <code>ggplot2</code> in R to make figures that adhere to the AFS Style Guidelines. Here I provide some suggestions to update their script for recent changes to <code>ggplot2</code>. More importantly their suggestions were put into a custom theme that can be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, <code>theme_AFS()</code> is applied to a <code>ggplot2</code> length frequency histogram below (<a href="#fig-bghist">Figure&nbsp;3</a>).<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;This uses the <code>BluegillLM</code> data from the <code>FSAdata</code> package; thus, you must have <code>FSAdata</code> installed.</p></li></div></div>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(BluegillLM,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(BluegillLM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    sernum  sl  fl  tl wght
-#R|  1    100 126 152 157   92
-#R|  2    110 124 150 153   88
-#R|  3    120 118 140 149   77
-#R|  4    130 136 163 172  130
-#R|  5    140 191 144 150   86
-#R|  6    150 121 149 155   90</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>BluegillLM,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray25"</span>) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Number of Bluegill"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">25</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">25</span>,<span class="dv">5</span>),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))) <span class="sc">+</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">250</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">250</span>,<span class="dv">25</span>),</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))) <span class="sc">+</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_AFS</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>BluegillLM,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray25"</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Number of Bluegill"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">25</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">25</span>,<span class="dv">5</span>),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">250</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">250</span>,<span class="dv">25</span>),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_AFS</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
 <div id="fig-bghist" class="quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="figure page-columns page-full">
@@ -648,23 +639,36 @@ Hint
 </div>
 </div>
 </div>
-<p>&nbsp;</p>
-<p>Moreover, if you are working on a project where you will use <code>theme_AFS()</code> for all figures then you can set it as the default theme at the beginning of our script with <code>theme_set()</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_AFS</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>With this <a href="#fig-bglw">Figure&nbsp;4</a> automatically has <code>theme_AFS()</code> applied.</p>
+<div class="callout-caption-container flex-fill">
+Hint
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="../2019-12-28_Length_Frequency_Histograms/">This post</a> describes how to make length frequency histograms in <code>ggplot2</code>.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>Moreover, if you are working on a project where you will use <code>theme_AFS()</code> for all figures then you can set it as the default theme at the beginning of your script with <code>theme_set()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_AFS</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With this, <a href="#fig-bglw">Figure&nbsp;4</a> automatically has <code>theme_AFS()</code> applied.</p>
 <div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>BluegillLM,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl,<span class="at">y=</span>wght)) <span class="sc">+</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Weight (g)"</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">300</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">300</span>),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="fl">0.01</span>,<span class="dv">0</span>)),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans=</span><span class="st">"log10"</span>) <span class="sc">+</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">250</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">60</span>,<span class="dv">75</span>,<span class="dv">100</span>,<span class="dv">125</span>,<span class="dv">150</span>,<span class="dv">200</span>,<span class="dv">250</span>),</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="fl">0.01</span>,<span class="dv">0</span>)),</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans=</span><span class="st">"log10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>BluegillLM,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl,<span class="at">y=</span>wght)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Weight (g)"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">300</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">300</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="fl">0.01</span>,<span class="dv">0</span>)),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans=</span><span class="st">"log10"</span>) <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">250</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">60</span>,<span class="dv">75</span>,<span class="dv">100</span>,<span class="dv">125</span>,<span class="dv">150</span>,<span class="dv">200</span>,<span class="dv">250</span>),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="fl">0.01</span>,<span class="dv">0</span>)),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans=</span><span class="st">"log10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
 <div id="fig-bglw" class="quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="figure page-columns page-full">
@@ -686,7 +690,7 @@ Hint
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-glassic_creating_2019" class="csl-entry" role="doc-biblioentry">
-Glassic, H. C., K. C. Heim, and C. S. Guy. 2019. <a href="https://doi.org/10.1002/fsh.10272">Creating figures in r that meet the afs style guide: Standardization and supporting script</a>. Fisheries 44(11):539–544.
+Glassic, H. C., K. C. Heim, and C. S. Guy. 2019. <a href="http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf">Creating figures in r that meet the afs style guide: Standardization and supporting script</a>. Fisheries 44:539–544.
 </div>
 <div id="ref-wickham_ggplot2_2022" class="csl-entry" role="doc-biblioentry">
 Wickham, H., D. Navarro, and T. L. Pedersen. 2022. <a href="https://ggplot2-book.org/index.html">ggplot2: <span>Elegant</span> <span>Graphics</span> for <span>Data</span> <span>Analysis</span></a>Third. Springer.

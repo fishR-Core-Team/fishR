@@ -6,7 +6,6 @@ date: 12/22/2022
 image: preview.png
 categories:
   - ggplot2
-draft: true
 ---
 
 :::{.callout-note}
@@ -21,9 +20,9 @@ library(patchwork)  # for positioning multiple plots
 &nbsp;
 
 # Introduction
-@glassic_creating_2019 showed how to modify default `ggplot2` graphics to meet American Fisheries Society (AFS) Style Guide requirements.^[They also did the same for base R graphics.] They provided an example with accompanying script to help users implement their suggestions.^[The `ggplot2` script is available [here](https://github.com/CGuyMSU/AFS-figures/blob/master/ggplot2_figure.r).] Since their publication `ggplot2` has been updated, which did not break their code but leads to some warnings of changed arguments. In this post, I update their script and provide a mechanism that I think will allow their recommendations to be more easily implemented.
+@glassic_creating_2019 showed how to modify default `ggplot2` graphics to meet American Fisheries Society (AFS) Style Guide requirements.^[They also did the same for base R graphics.] They provided an example with accompanying script to help users implement their suggestions.^[The `ggplot2` script is available [here](https://github.com/CGuyMSU/AFS-figures/blob/master/ggplot2_figure.r).] Since their publication, `ggplot2` has been updated, which did not break their code but leads to some warnings of changed arguments. In this post, I update their script and provide some suggestions that I think will allow their recommendations to be more easily implemented.
 
-The first part of the authors' script^[Which is not shown here as I want to focus on graphing.] creates a simple data frame, called `length_weight_data`, of simple weight and length data for two species (`lmb` and `cat`).
+The first part of their script^[Which is not shown here as I want to focus on graphing.] creates a data frame called `length_weight_data` with simple weight and length data for two species (`lmb` and `cat`).
 
 ```{r}
 #| label: glassic_data
@@ -58,7 +57,7 @@ len_wt_default <- ggplot(data = length_weight_data,
   labs(title = "A")
 ```
 
-They then modified this plot to fit the AFS Style Guide requirements (@fig-glassic (B)).^[I modified their `legend.position` slightly due to website size constraints.]
+They then modified this plot to fit the AFS Style Guide requirements (@fig-glassic (B)).^[I modified their `legend.position=` slightly due to website size constraints.]
 
 ```{r}
 len_wt_afs <- ggplot(data = length_weight_data,
@@ -122,7 +121,7 @@ len_wt_afs <- ggplot(data = length_weight_data,
         axis.line = element_line(colour = "black", size = 0.5, lineend = "square"))
 ```
 
-They then arranged the two plots side-by-side.^[I used `gridExtra::` here so as not to have to load the entire package.]
+They then arranged the two plots side-by-side.^[I used `gridExtra::` here so as not to load the entire package.]
 
 ```{r}
 #| label: fig-glassic
@@ -136,7 +135,7 @@ ggplot_figure
 
 &nbsp;
 
-Finally, @glassic_creating_2019 demonstrated how to save the plot with a custom width and height (holding a specific aspect ratio) and resolution.
+Finally, @glassic_creating_2019 demonstrated how to save the plot with a custom width, height (holding a specific aspect ratio), and resolution.
 
 ```{r}
 #| eval: false
@@ -147,25 +146,27 @@ ggsave(ggplot_figure, file = "ggplot_figure.tiff",
 &nbsp;
 
 # Issues that Must be Addressed
-When I first ran the author's code I received an error about a missing font. I followed the advice in [this guide](https://github.com/wch/extrafont#using-extrafont) from the `extrafont` package and that seemed to have cleared up the issue.
+When I first ran the author's code I received an error about a missing font. I followed the advice in [this guide](https://github.com/wch/extrafont#using-extrafont) from the `extrafont` package but that did not seem to fix the issue. This is likely an issue with my system and something I need to look into further.
 
-More recent versions of `ggplot2` use `linewidth=` rather than `size=` in all line-related elements. This needs to be changed in the authors' use of `axis.tick.x=`, `axis.tick.y=`, and `axis.line`.
+More recent versions of `ggplot2` use `linewidth=` rather than `size=` in all line-related elements. This needs to be changed in the authors' use of `axis.tick.y=`, `axis.tick.x=`, and `axis.line=`.
 
 &nbsp;
 
 # Suggested Adjustments
-I separate the construction of the plot by @glassic_creating_2019 into two parts. The first part consists of items that are specific to the plot and that cannot be set globally for use in other plots. These are items likes `data=`, `aes()`, `geom()`s, `scale()`s, and labels. The second part consists of items that will likely need to be held constant across different plots. These are items like font size, tick lengths, margins, etc. These are largely the items that @glassic_creating_2019 adjust with `theme()`. Below I explain some suggested modifications to the plot specific items. I then show how to move most of the elements that will be common across plots into a custom theme that can be easily applied to any plot. Finally, I demonstrate using `patchwork` rather than `gridExtra` to place plots next to each other.
+I separate the construction of the plot by @glassic_creating_2019 into three parts. The first part consists of items that are specific to the plot and that cannot be set globally for use in other plots. These are items likes `data=`, `aes()`, `geom()`s, `scale()`s, and labels. The second part consists of items that will likely need to be held constant across different plots. These are items like font size, tick lengths, margins, etc. These are largely the items that @glassic_creating_2019 adjust with `theme()`. THe third part is positioning two plots side-by-side as one overall figure.
+
+Below I explain some suggested modifications to the plot specific items. I then show how to move most of the elements that will be common across plots into a custom theme that can be easily applied to any plot. Finally, I demonstrate using `patchwork` rather than `gridExtra` to place plots next to each other.
 
 ## Plot-Specific Elements
-I suggest the following changes to the plot-specific elements which result in @fig-modplot (A).
+I suggest the following changes to the plot-specific elements. Implementing these suggestions will result in @fig-modplot (A).
 
-* I named the second argument to `ggplot()` with `mapping=`. `ggplot()` is smart enough to figure this argument out but I think it is awkward to name the first argument (i.e., `data=`) but not the second.
+* Name the second argument to `ggplot()` (i.e., `mapping=`). `ggplot()` is smart enough to figure this out but I think it is awkward to name the first argument (i.e., `data=`) but not the second.
 * I moved the text for the axis labels (i.e., titles) into `scale_y_continuous()` and `scale_x_continuous()` for simplicity (and thus removed `ylab()` and `xlab()`).
-* I changed `expand=c(0,0)` in `scale_y_continuous()` and `scale_x_continuous()` to `expand=expansion(mult=c(0,0))` to follow more recent `ggplot2` conventions. This still results in not scale expansion at the top or bottom of axis.
-* I removed `limits=` in `scale_fill_manual()` and used a named vector in `values=` to accomplish the same task. I think this makes it easier to see which category is going to get which color.
-* I removed `ggtitle()` as I am going to accomplish that same task with `patchwork` as shown where I put the two plots together.
+* I changed `expand=c(0,0)` in `scale_y_continuous()` and `scale_x_continuous()` to `expand=expansion(mult=c(0,0))` to follow more recent `ggplot2` conventions. This still results in no scale expansion at the top or bottom of axis.
+* I removed `limits=` in `scale_fill_manual()` and used a named vector in `values=` to accomplish the same task. I think this makes it easier to see which category gets which color.
+* I removed `ggtitle()` as I am going to accomplish that same task with `patchwork` as shown below (i.e., where the two plots are place side-by-side).
 * I used `legend.title=element_blank()` in `theme()` rather than `labs(fill="")` to remove to legend title. I think(?) this handles the freed up space better.
-* I included `legend.position=` here because @glassic_creating_2019 positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., in a "white area").
+* I included `legend.position=` in `theme()` here because @glassic_creating_2019 positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., will need to manually find a "white area").
 
 ```{r}
 len_wt_afs1 <- ggplot(data=length_weight_data,
@@ -190,7 +191,7 @@ len_wt_afs1 <- ggplot(data=length_weight_data,
 ```
 
 ## Custom Theme for All Plots
-Theme elements that will be consistent across plots can be put into a custom theme that can then be easily applied to any plot. The code below, for example, shows the start of a new theme called `theme_AFS()` that has `theme_classic()` as its base but will have several elements replaced. `theme_AFS()` will use a base font size of 14 and Times New Roman as defaults, which will minimize some of the authors code.
+Theme elements that will be consistent across plots can be put into a custom theme that can then be easily applied to any plot. The code below, for example, shows the start of a new theme called `theme_AFS()` that has `theme_classic()` as its base but will have several elements replaced. `theme_AFS()` will use a base font size of 14 and Times New Roman as defaults, which will minimize some of the authors' code (as described below).
 
 ```{r}
 #| eval: false
@@ -202,12 +203,12 @@ theme_AFS <- function(base_size=14,base_family="Times New Roman") {
 }
 ```
 
-Within `theme()` of the code above I am going to add *nearly* all of the elements that @glassic_creating_2019 included, though I reordered the items in a way that makes sense to me (e.g., axis title then axis tick labels then axis ticks then axis line). Other adjustments to note are:
+Within `theme()` I add *nearly* all of the elements that @glassic_creating_2019 included, though I reordered the items in a way that makes sense to me (e.g., axis title then axis tick labels then axis ticks then axis line). Other adjustments are:
 
-* I removed the `text=` because the font family was already set with `base_family=`.
-* I removed `legend.position=` because @glassic_creating_2019 positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., in a "white area").
+* I removed `text=` because the font family was already set with `base_family=`.
+* I removed `legend.position=` because, as described above, @glassic_creating_2019 positioned the legend within the plot area.
 * I removed `size=14` from `axis.title.y=`, `axis.title.x=`, `axis.text.y=`, and `axis.text.x=` because that was set with `base_size=`.
-* I replaced `axis.ticks.y=` and `axis.ticks.x=` with `axis.ticks=` because their elements were the same and this will set both at the same time.
+* I replaced `axis.ticks.y=` and `axis.ticks.x=` with `axis.ticks=` because their elements were the same and using `axis.ticks=` will set both at the same time.
 
 ```{r}
 theme_AFS <- function(base_size=14,base_family="Times New Roman") {
@@ -237,7 +238,7 @@ theme_AFS <- function(base_size=14,base_family="Times New Roman") {
 }
 ```
 
-This can then be "added" to any plot to apply the theme. For example, it is applied to the code from above that produced @fig-modplot (A) to make @fig-modplot (B). It is important, however, to make sure that the plot-specific `theme()` elements are applied **after** the custom theme.
+`theme_AFS()` can then be "added" to any plot to apply its elements. For example, applying `theme_AFS()` to the code that produced @fig-modplot (A) will produce @fig-modplot (B). It is important, however, to make sure that the plot-specific `theme()` elements are applied **after** the custom theme.
 
 ```{r}
 len_wt_afs2 <- ggplot(data=length_weight_data,
@@ -265,11 +266,11 @@ len_wt_afs2 <- ggplot(data=length_weight_data,
 
 :::{.callout-note appearance="simple"}
 ## Hint
-See the ["Themes" chapter of @wickham_ggplot2_2022](https://ggplot2-book.org/polishing.html#themes) for an excellent description of using themes in `ggplot2` graphics.
+See the ["Themes" chapter of @wickham_ggplot2_2022](https://ggplot2-book.org/polishing.html) for an excellent description of using themes in `ggplot2` graphics.
 :::
 
 ## Using `patchwork` to Position Plots
-The `patchwork` package provides a simple but extensive environment for combining multiple plots. In the simple case here where we want two plots side-by-side we simply need to "add" them together as shown below. `plot_annotation()` can be used to add letters to the two panels. The [documentation for `patchwork`](https://patchwork.data-imaginist.com/index.html) is excellent for better understanding what this package can do.
+The `patchwork` package provides simple but extensive tools for combining multiple plots. Two plots can simply be "added" together to place them side-by-side (@fig-modplot). `plot_annotation()` is used to add letters to the two panels.^[See the excellent [documentation for `patchwork`](https://patchwork.data-imaginist.com/index.html) to better understand what this package can do.]
 
 ```{r}
 #| label: fig-modplot
@@ -282,13 +283,13 @@ len_wt_afs1 + len_wt_afs2 +
 
 :::{.callout-note appearance="simple"}
 ## Hint
-Annotating the plots with `patchwork` will place the annotations on the very edge of the figure panel. Use `ggtitle()` to move them more to the right as @glassic_creating_2019 had them.
+Annotating plots with `patchwork` will place the annotations on the very edge of the figure panel. Use `ggtitle()` to move them more to the right as @glassic_creating_2019 had them.
 :::
 
 &nbsp;
 
 # Conclusion
-@glassic_creating_2019 provided an excellent example and script for how to use `ggplot2` in R to make figures that adhere to the AFS Style Guidelines. Since their paper was published a few items in `ggplot2` have changed and, thus, their script needed to be updated to reflect those changes as described above. More importantly their suggestions could be put into a custom theme so that they could be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, `theme_AFS()` is applied to a `ggplot2` length frequency histogram below (@fig-bghist).
+@glassic_creating_2019 provided an excellent example and script for how to use `ggplot2` in R to make figures that adhere to the AFS Style Guidelines. Here I provide some suggestions to update their script for recent changes to `ggplot2`. More importantly their suggestions were put into a custom theme that can be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, `theme_AFS()` is applied to a `ggplot2` length frequency histogram below (@fig-bghist).^[This uses the `BluegillLM` data from the `FSAdata` package; thus, you must have `FSAdata` installed.]
 
 ```{r}
 #| label: fig-bghist
@@ -296,8 +297,6 @@ Annotating the plots with `patchwork` will place the annotations on the very edg
 #| fig-width: 4
 #| fig-height: 4
 data(BluegillLM,package="FSAdata")
-head(BluegillLM)
-
 ggplot(data=BluegillLM,mapping=aes(x=tl)) +
   geom_histogram(binwidth=10,boundary=0,color="black",fill="gray25") +
   scale_y_continuous(name="Number of Bluegill",
@@ -309,15 +308,20 @@ ggplot(data=BluegillLM,mapping=aes(x=tl)) +
   theme_AFS()
 ```
 
+:::{.callout-note appearance="simple"}
+## Hint
+[This post](../2019-12-28_Length_Frequency_Histograms/) describes how to make length frequency histograms in `ggplot2`.
+:::
+
 &nbsp;
 
-Moreover, if you are working on a project where you will use `theme_AFS()` for all figures then you can set it as the default theme at the beginning of our script with `theme_set()`.
+Moreover, if you are working on a project where you will use `theme_AFS()` for all figures then you can set it as the default theme at the beginning of your script with `theme_set()`.
 
 ```{r}
 theme_set(theme_AFS())
 ```
 
-With this @fig-bglw automatically has `theme_AFS()` applied.
+With this, @fig-bglw automatically has `theme_AFS()` applied.
 
 ```{r}
 #| label: fig-bglw

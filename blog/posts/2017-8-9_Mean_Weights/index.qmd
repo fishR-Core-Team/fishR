@@ -6,7 +6,7 @@ date: 8/9/2017
 image: preview.png
 categories:
   - Weight-Length
-  - Biomasss
+  - Biomass
 knitr: 
   opts_chunk:
     cache: true
