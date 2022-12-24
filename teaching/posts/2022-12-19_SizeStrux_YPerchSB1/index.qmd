@@ -1,5 +1,5 @@
 ---
-title: Exercise - Size Structure
+title: Size Structure
 subtitle: Saginaw Bay Yellow Perch
 description: Estimate size structure statistics and compare them among groups of Yellow Perch from Saginaw Bay, Lake Huron (MI).
 author: Derek H. Ogle
