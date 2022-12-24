@@ -1,0 +1,72 @@
+---
+title: Size Structure
+subtitle: Trout Lake Yellow Perch
+description: Estimate size structure statistics and compare them among groups of Yellow Perch from Trout Lake (WI).
+author: Derek H. Ogle
+date: 3/19/2022
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Size Structure"
+  - "Yellow Perch"
+---
+
+Researchers for the [North Temperate Lakes Long-Term Ecological Research](https://lter.limnology.wisc.edu/) program have collected fish from a number of lakes in Wisconsin since 1981. The total lengths and weights of [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) captured from [Trout Lake](https://lter.limnology.wisc.edu/researchsite/trout-lake) from 1981-2006 are recorded in [YPerchTL](https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html).^[See "CSV file" link in "Source" section of linked page.]. Restrict these data to only fish captured in 2000. Use these data to answer the following questions.
+
+
+1. Describe the distribution of lengths for Yellow Perch captured in **fyke nets** in 1997 using both a histogram and frequency table with 10 mm length categories.
+1. Repeat the previous question with Yellow Perch captured with **beach seines**.
+1. *Statistically* compare the length frequency distributions between Yellow Perch captured with a beach seine and in fyke nets in 2000.
+1. Write a short paragraph describing what you learned about the size structure of Trout Lake Yellow Perch, with specific comments about the two gears examined.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(dplyr)
+library(Matching)
+
+# Load data
+YPerchTL <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/YPerchTL.csv") |>
+  mutate(lcat10=lencat(length,w=10),
+         psdcat=lencat(length,breaks=psdVal("Yellow Perch"),use.names=TRUE)) |>
+  dplyr::select(-lakeid,-sampledate) |>
+  filter(year4==2000)
+headtail(YPerchTL)
+
+# Fyke Nets
+fn <- YPerchTL |>
+  filter(gearid=="FYKNET")
+
+hist(~length,data=fn,w=10)
+round(prop.table(xtabs(~lcat10,data=fn))*100,1)
+
+# Beach Seine
+bs <- YPerchTL |>
+  filter(gearid=="BSEINE")
+
+hist(~length,data=bs,w=10)
+round(prop.table(xtabs(~lcat10,data=bs))*100,1)
+
+# Compare Fyke Net and Beach Seines Length Frequency
+clr <- c("black","gray50")
+plot(ecdf(fn$length),xlab="Total Length (mm)",
+     do.points=FALSE,verticals=TRUE,main="",col.01line=NULL)
+plot(ecdf(bs$length),add=TRUE,do.points=FALSE,
+     verticals=TRUE,col=clr[2],col.01line=NULL)
+legend("bottomright",c("Fyke Net","Beach Seine"),col=clr,lty=1,bty="n",cex=0.75)
+
+ks.test(fn$length,bs$length)
+summary(ks.boot(bs$length,fn$length,nboots=5000))
+```
