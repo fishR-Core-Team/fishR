@@ -1,0 +1,94 @@
+---
+title: Mortality
+subtitle: Keewenaw Bay (Lake Superior) Lake Trout
+description: Use catch curve methods to estimate mortality of a population of Lake Superior Lake Trout.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Mortality"
+  - " Catch Curve"
+  - "Salmon/Trout"
+---
+
+The population biology of Lake Superior [Lake Trout](https://en.wikipedia.org/wiki/Lake_trout) (*Salvelinus namaycush*) prior to 1950 was examined in detail by @sakagawa_population_1971. In Table 1 of their paper, they presented the number of Lake Trout by age (from scales) collected in 4.5-inch mesh gillnets that were set between the [Keweenaw Peninsula](https://en.wikipedia.org/wiki/Keweenaw_Peninsula) and [Munising, MI](https://en.wikipedia.org/wiki/Munising,_Michigan) in 1948. The numbers of Lake Trout caught for ages 3 to 14 were 5, 18, 21, 10, 45, 109, 95, 63, 42, 25, 13, and 4. Use these data to answer the questions below. 
+
+1. Is this an example of a cross-sectional or longitudinal catch curve?
+1. Plot log(catch) versus age.  Which ages best represent the descending portion of the catch curve?  Explain.
+1. Using the *unweighted* regression method, find the following (with 95% confidence intervals):
+    a. Instantaneous total mortality rate.
+    a. Annual total mortality rate.
+    a. Annual survival rate.
+1. Repeat the previous question using the *weighted* regression method.
+1. Repeat the previous question using the Chapman-Robson method.
+1. Mathematically show how to convert the instantaneous mortality rate to an annual mortality rate.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(ggplot2)
+
+# make data
+d <- data.frame(age=3:14,ct=c(5,18,21,10,45,109,95,63,42,25,13,4))
+
+# plot catch curve (roughly)
+ggplot(data=d,mapping=aes(x=age,y=ct)) +
+  geom_point() +
+  scale_y_continuous(trans="log",breaks=c(2,5,10,20,50,100)) +
+  scale_x_continuous(breaks=2:15) +
+  theme_bw()
+
+# Calculations
+## With 9-13
+au <- 9:13
+cc1 <- catchCurve(ct~age,data=d,ages2use=au)
+sum1 <- cbind(summary(cc1),confint(cc1))
+plot(cc1)
+cc1w <- catchCurve(ct~age,data=d,ages2use=au,weighted=TRUE)
+sum1w <- cbind(summary(cc1w),confint(cc1w))
+cr1 <- chapmanRobson(ct~age,data=d,ages2use=au)
+sum1cr <- cbind(summary(cr1),confint(cr1))
+
+## With 8-13
+au <- 8:13
+cc2 <- catchCurve(ct~age,data=d,ages2use=au)
+sum2 <- cbind(summary(cc2),confint(cc2))
+plot(cc2)
+cc2w <- catchCurve(ct~age,data=d,ages2use=au,weighted=TRUE)
+sum2w <- cbind(summary(cc2w),confint(cc2w))
+cr2 <- chapmanRobson(ct~age,data=d,ages2use=au)
+sum2cr <- cbind(summary(cr2),confint(cr2))
+
+## With 9-14
+au <- 9:14
+cc3 <- catchCurve(ct~age,data=d,ages2use=au)
+sum3 <- cbind(summary(cc3),confint(cc3))
+plot(cc3)
+cc3w <- catchCurve(ct~age,data=d,ages2use=au,weighted=TRUE)
+sum3w <- cbind(summary(cc3w),confint(cc3w))
+cr3 <- chapmanRobson(ct~age,data=d,ages2use=au)
+sum3cr <- cbind(summary(cr3),confint(cr3))
+
+## With 8-14
+au <- 8:14
+cc4 <- catchCurve(ct~age,data=d,ages2use=au)
+sum4 <- cbind(summary(cc4),confint(cc4))
+plot(cc4)
+cc4w <- catchCurve(ct~age,data=d,ages2use=au,weighted=TRUE)
+sum4w <- cbind(summary(cc4w),confint(cc4w))
+cr4 <- chapmanRobson(ct~age,data=d,ages2use=au)
+sum4cr <- cbind(summary(cr4),confint(cr4))
+```

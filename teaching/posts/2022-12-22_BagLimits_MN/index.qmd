@@ -42,7 +42,7 @@ knitr::include_graphics("Bluegill_Catch.png")
 In this exercise, you will examine creel data (i.e., number of fish harvested by anglers) to determine how reducing the daily bag limit effects overall fish harvest.
 
 ## Data
-The Minnesota Department of Natural Resources (MnDNR) conducted statewide creel surveys over a 17 year period.^[See [Cook *et al.* (2001)](https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change).] The data, available in [CreelMN](https://fishr-core-team.github.io/FSAdata/reference/CreelMN.html)^[See "CSV file" link in "Source" section of linked page.] records the `species` and number of fish `harvest`ed per angler (in one day). The data are limited to only six species^[Acronyms are how the species appear in the data.] -- Walleye (`WAE`), Largemouth Bass (`LMB`), Northern Pike (`NOP`), `Crappie`s (Black, White, and hybrids combined), `Sunfish` (Bluegill, Pumpkinseed, etc.), and Yellow Perch (`YEP`).
+The Minnesota Department of Natural Resources (MnDNR) conducted statewide creel surveys over a 17 year period [@cook_creel_2001]. The data, available in [CreelMN](https://fishr-core-team.github.io/FSAdata/reference/CreelMN.html)^[See "CSV file" link in "Source" section of linked page.] records the `species` and number of fish `harvest`ed per angler (in one day). The data are limited to only six species^[Acronyms are how the species appear in the data.] -- Walleye (`WAE`), Largemouth Bass (`LMB`), Northern Pike (`NOP`), `Crappie`s (Black, White, and hybrids combined), `Sunfish` (Bluegill, Pumpkinseed, etc.), and Yellow Perch (`YEP`).
 
 The following daily bag limits were in place during the study:
 

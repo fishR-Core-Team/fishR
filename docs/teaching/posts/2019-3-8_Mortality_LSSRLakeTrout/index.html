@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Use creel data to assess the impact of bag limits on reducing harvest of freshwater fish.">
+<meta name="description" content="Use catch curve methods to estimate mortality of a population of Lake Superior Lake Trout.">
 
-<title>fishR - Bag Limits in Minnesota</title>
+<title>fishR - Mortality</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -83,24 +83,21 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-<script src="../../../site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="../../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Bag Limits in Minnesota">
-<meta property="og:description" content="Use creel data to assess the impact of bag limits on reducing harvest of freshwater fish.">
+<meta property="og:title" content="fishR - Mortality">
+<meta property="og:description" content="Use catch curve methods to estimate mortality of a population of Lake Superior Lake Trout.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\exercise.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="768">
 <meta property="og:image:width" content="1024">
-<meta name="citation_title" content="Bag Limits in Minnesota">
+<meta name="citation_title" content="Mortality">
 <meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2022-12-21">
-<meta name="citation_cover_date" content="2022-12-21">
-<meta name="citation_year" content="2022">
-<meta name="citation_online_date" content="2022-12-21">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-22_BagLimits_MN">
+<meta name="citation_publication_date" content="2019-03-08">
+<meta name="citation_cover_date" content="2019-03-08">
+<meta name="citation_year" content="2019">
+<meta name="citation_online_date" content="2019-03-08">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Mortality_LSSRLakeTrout">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -135,9 +132,6 @@ div.csl-indent {
 <meta name="citation_reference" content="citation_title=A novel “triple drawdown” method highlights deficiencies in invasive alien crayfish survey and control techniques;,citation_author=Daniel D. A. Chadwick;,citation_author=Eleri G. Pritchard;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Michael A. Chadwick;,citation_author=Lawrence J. B. Eagle;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/1365-2664.13758;,citation_doi=10.1111/1365-2664.13758;,citation_issn=1365-2664;,citation_volume=58;,citation_journal_title=Journal of Applied Ecology;">
 <meta name="citation_reference" content="citation_title=Assessing methods to improve benthic fish sampling in a stony headwater stream;,citation_author=Eleri G. Pritchard;,citation_author=Daniel D. A. Chadwick;,citation_author=Michael A. Chadwick;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/2688-8319.12111;,citation_issue=4;,citation_doi=10.1002/2688-8319.12111;,citation_issn=2688-8319;,citation_volume=2;,citation_journal_title=Ecological Solutions and Evidence;">
 <meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_journal_title=Journal of Great Lakes Research;">
-<meta name="citation_reference" content="citation_title=A comparison of methods for estimating ages of unexploited Walleyes;,citation_author=Patrick M. Kocovsky;,citation_author=Robert F. Carline;,citation_publication_date=2000-11;,citation_cover_date=2000-11;,citation_year=2000;,citation_fulltext_html_url=https://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2;,citation_doi=10.1577/1548-8675(2000)020&amp;amp;amp;lt;1044:ACOMFE&amp;gt;2.0.CO;2;,citation_issn=0275-5947;,citation_volume=20;,citation_journal_title=North American Journal of Fisheries Management;">
-<meta name="citation_reference" content="citation_title=Energy storage, growth, and maturation of Yellow Perch from different locations in Saginaw Bay, Michigan;,citation_author=James S. Diana;,citation_author=Ronald Salz;,citation_publication_date=1990-11;,citation_cover_date=1990-11;,citation_year=1990;,citation_fulltext_html_url=https://deepblue.lib.umich.edu/bitstream/handle/2027.42/142193/tafs0976.pdf?sequence=1;,citation_volume=119;,citation_journal_title=Transactions of the American Fisheries Society;">
-<meta name="citation_reference" content="citation_title=Creel limits in Minnesota: A proposal for change;,citation_author=Mark Cook;,citation_author=Timothy Goeman;,citation_author=Paul Radomski;,citation_author=Jerry Younk;,citation_author=Peter Jacobson;,citation_publication_date=2001-05;,citation_cover_date=2001-05;,citation_year=2001;,citation_fulltext_html_url=https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change;,citation_volume=26;,citation_journal_title=Fisheries;">
 </head>
 
 <body class="nav-fixed">
@@ -214,21 +208,18 @@ div.csl-indent {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Bag Limits in Minnesota</h1>
+      <h1 class="title">Mortality</h1>
+            <p class="subtitle lead">Stannard Rock (Lake Superior) Lake Trout</p>
                   <div>
         <div class="description">
-          Use creel data to assess the impact of bag limits on reducing harvest of freshwater fish.
+          Use catch curve methods to estimate mortality of a population of Lake Superior Lake Trout.
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">Exercise</div>
-                <div class="quarto-category">Bag/Creel Limits</div>
-                <div class="quarto-category">Management</div>
-                <div class="quarto-category">Walleye</div>
-                <div class="quarto-category">Bass</div>
-                <div class="quarto-category">Bluegill/Sunfish</div>
-                <div class="quarto-category">Yellow Perch</div>
-                <div class="quarto-category">Pike/Muskellunge</div>
+                <div class="quarto-category">Mortality</div>
+                <div class="quarto-category">Catch Curve</div>
+                <div class="quarto-category">Salmon/Trout</div>
               </div>
                   </div>
   </div>
@@ -246,7 +237,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Dec 21, 2022</p>
+        <p class="date">Mar 8, 2019</p>
       </div>
     </div>
     
@@ -264,229 +255,270 @@ div.csl-indent {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a>
-  <ul class="collapse">
-  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
-  </ul></li>
-  <li><a href="#expectations" id="toc-expectations" class="nav-link" data-scroll-target="#expectations">Expectations</a></li>
-  <li><a href="#harvest-summaries" id="toc-harvest-summaries" class="nav-link" data-scroll-target="#harvest-summaries">Harvest Summaries</a></li>
-  <li><a href="#analysis-questions" id="toc-analysis-questions" class="nav-link" data-scroll-target="#analysis-questions">Analysis Questions</a></li>
-  <li><a href="#wrap-up-questions" id="toc-wrap-up-questions" class="nav-link" data-scroll-target="#wrap-up-questions">Wrap-up Questions</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/teaching/posts/2022-12-22_BagLimits_MN/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+        
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="background" class="level1 page-columns page-full">
-<h1>Background</h1>
-<section id="motivation" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
-<p>Daily bag or creel limits are the maximum number of fish an angler is allowed to harvest on a daily basis. For example, a bag limit of six Walleye would limit an angler to six or fewer harvested Walleye on a given day. Bag limits are a common management tool in many fisheries, especially in inland freshwater fisheries.</p>
-<p>Restrictive bag limits may be implemented for a variety of reasons. Most commonly it is thought that limiting the maximum number of fish an angler can harvest will reduce harvest, lower fishing mortality, and prevent over-exploitation of the fish population. However, bag limits have also been implemented to attempt to equitably distribute harvest among more anglers, provide anglers the satisfaction of reaching a goal (e.g., “I got my limit”), and to remind anglers that fish populations are a finite resource.</p>
-<div class="cell page-columns page-full" data-layout-align="center" data-fig.responsive="true">
-<div class="cell-output-display page-columns page-full">
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="Bluegill_Catch.png" class="img-fluid figure-img" width="500"></p>
-<p></p><figcaption class="figure-caption margin-caption">An angler’s harvest of Bluegill.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>In this exercise, you will examine creel data (i.e., number of fish harvested by anglers) to determine how reducing the daily bag limit effects overall fish harvest.</p>
-</section>
-<section id="data" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="data">Data</h2>
-<div class="page-columns page-full"><p>The Minnesota Department of Natural Resources (MnDNR) conducted statewide creel surveys over a 17 year period <span class="citation" data-cites="cook_creel_2001">(<a href="#ref-cook_creel_2001" role="doc-biblioref">Cook et al. 2001</a>)</span>. The data, available in <a href="https://fishr-core-team.github.io/FSAdata/reference/CreelMN.html">CreelMN</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> records the <code>species</code> and number of fish <code>harvest</code>ed per angler (in one day). The data are limited to only six species<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> – Walleye (<code>WAE</code>), Largemouth Bass (<code>LMB</code>), Northern Pike (<code>NOP</code>), <code>Crappie</code>s (Black, White, and hybrids combined), <code>Sunfish</code> (Bluegill, Pumpkinseed, etc.), and Yellow Perch (<code>YEP</code>).</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See “CSV file” link in “Source” section of linked page.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;Acronyms are how the species appear in the data.</p></li></div></div>
-<p>The following daily bag limits were in place during the study:</p>
-<ul>
-<li><strong>6</strong> Walleye</li>
-<li><strong>6</strong> Largemouth Bass</li>
-<li><strong>3</strong> Northern Pike</li>
-<li><strong>15</strong> Crappies</li>
-<li><strong>30</strong> Sunfish</li>
-<li><strong>100</strong> Yellow Perch</li>
-</ul>
+<p><span class="citation" data-cites="curtis_recovery_1990">Curtis (<a href="#ref-curtis_recovery_1990" role="doc-biblioref">1990</a>)</span> examined the population dynamics related to the recovery of an offshore <a href="https://en.wikipedia.org/wiki/Lake_trout">Lake Trout</a> population near <a href="https://en.wikipedia.org/wiki/Stannard_Rock_Light">Stannard Rock</a>, <a href="https://en.wikipedia.org/wiki/Lake_Superior">Lake Superior</a>. As part of this study, mortality rates were estimated from the relative abundance of Lake Trout longer than 43.2 cm. Relative abundance was recorded as the catch-per-unit-effort (CPE) of each age group in each year expressed as the number of fish caught per 50,000 m of 114.3 mm mesh gillnet. The results are shown in the table below. [Note: (1) the values in the table have been rounded to integers; (2) values recorded as “tr” in the original paper were recorded as “0.5” in this table; and (3) the years of capture are not contiguous (there is a break between 1959 and 1963 and again between 1969 and 1973).]</p>
 <p>&nbsp;</p>
-</section>
-</section>
-<section id="expectations" class="level1 page-columns page-full">
-<h1>Expectations</h1>
-<div class="callout-warning callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Answer Before Continuing:
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Please answer the following questions before continuing to the next section. These questions are to “get you thinking” about the topic, there is no right or wrong answer to these at this point.</p>
-</div>
-</div>
-<ol type="1">
-<li>What would you expect harvest frequency<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> to look like if there was a 10 bag limit in the following two situations.
-<ol type="a">
-<li>Fish are relatively difficult to catch (e.g., fish species that are widely dispersed or “shy”).</li>
-<li>Fish are relatively easy to catch (e.g., fish species that congregate in accessible areas or are aggressive).</li>
-</ol></li>
-</ol>
-<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Number of anglers harvesting a certain number of fish; see sample graph below.</p></li></div><div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="336"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-<ol start="2" type="1">
-<li>In general,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> what percentage of anglers do you think would be impacted (i.e., would have to harvest fewer fish) if the bag limit was cut in half (<em>e.g., from 30 to 15 fish, or 6 to 3 fish</em>)?</li>
-<li>In general, how much do you think the bag limit would need to be reduced (in percentage) to result in a 50% reduction in harvest? [<em>e.g., a 20% reduction in the bag limit would be from 30 to 24 fish, or 5 to 4 fish.</em>]</li>
-</ol>
-<div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;Not specific to the previous two situations.</p></li></div><p>&nbsp;</p>
-<p>&nbsp;</p>
-</section>
-<section id="harvest-summaries" class="level1 page-columns page-full">
-<h1>Harvest Summaries</h1>
-<div class="cell" data-layout-align="center">
-
-</div>
-<p>The data were summarized by species to provide the frequency and percentage of anglers that harvested a certain number of fish. For example, in <a href="#tbl-waesum">Table&nbsp;1</a>, 1112 or 16.7% of anglers harvested one Walleye. In addition, the reverse cumulative sum of the percent (i.e., the percent of anglers that harvested that many fish <em>or more</em>) was calculated. For example, 27.1% of anglers harvested one <em>or more</em> Walleye.</p>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="cell-output-display page-columns page-full">
-<div id="tbl-waesum" class="anchored page-columns page-full">
-
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:center;"> Harvested </th>
-   <th style="text-align:right;"> Frequency </th>
-   <th style="text-align:right;"> % </th>
-   <th style="text-align:right;"> Reverse Cum % </th>
-  </tr>
- </thead>
+<table class="table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Year</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VI</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VII</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;VIII</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IX</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XI</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XII</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;XIII</th>
+<th style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XIV</th>
+</tr>
+</thead>
 <tbody>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 0 </td>
-   <td style="text-align:right;width: 25%; "> 4848 </td>
-   <td style="text-align:right;width: 25%; "> 72.9% </td>
-   <td style="text-align:right;width: 25%; "> 100.0% </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 1 </td>
-   <td style="text-align:right;width: 25%; "> 1112 </td>
-   <td style="text-align:right;width: 25%; "> 16.7% </td>
-   <td style="text-align:right;width: 25%; "> 27.1% </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 2 </td>
-   <td style="text-align:right;width: 25%; "> 433 </td>
-   <td style="text-align:right;width: 25%; "> 6.5% </td>
-   <td style="text-align:right;width: 25%; "> 10.4% </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 3 </td>
-   <td style="text-align:right;width: 25%; "> 133 </td>
-   <td style="text-align:right;width: 25%; "> 2.0% </td>
-   <td style="text-align:right;width: 25%; "> 3.9% </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 4 </td>
-   <td style="text-align:right;width: 25%; "> 67 </td>
-   <td style="text-align:right;width: 25%; "> 1.0% </td>
-   <td style="text-align:right;width: 25%; "> 1.9% </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 5 </td>
-   <td style="text-align:right;width: 25%; "> 33 </td>
-   <td style="text-align:right;width: 25%; "> 0.5% </td>
-   <td style="text-align:right;width: 25%; "> 0.9% </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;width: 25%; "> 6 </td>
-   <td style="text-align:right;width: 25%; "> 27 </td>
-   <td style="text-align:right;width: 25%; "> 0.4% </td>
-   <td style="text-align:right;width: 25%; "> 0.4% </td>
-  </tr>
+<tr class="odd">
+<td style="text-align: center;">1959</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">219</td>
+<td style="text-align: right;">241</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">….</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1963</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: right;">339</td>
+<td style="text-align: right;">331</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1964</td>
+<td style="text-align: right;">149</td>
+<td style="text-align: right;">524</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">201</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1965</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">379</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">328</td>
+<td style="text-align: right;">133</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1966</td>
+<td style="text-align: right;">149</td>
+<td style="text-align: right;">488</td>
+<td style="text-align: right;">459</td>
+<td style="text-align: right;">172</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1967</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">368</td>
+<td style="text-align: right;">287</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1968</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">259</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1969</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">153</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">….</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+<td style="text-align: right;">.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1973</td>
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">759</td>
+<td style="text-align: right;">1268</td>
+<td style="text-align: right;">1116</td>
+<td style="text-align: right;">491</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1974</td>
+<td style="text-align: right;">151</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">1114</td>
+<td style="text-align: right;">1092</td>
+<td style="text-align: right;">571</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1975</td>
+<td style="text-align: right;">109</td>
+<td style="text-align: right;">901</td>
+<td style="text-align: right;">1517</td>
+<td style="text-align: right;">1606</td>
+<td style="text-align: right;">1076</td>
+<td style="text-align: right;">342</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1976</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">604</td>
+<td style="text-align: right;">1204</td>
+<td style="text-align: right;">1560</td>
+<td style="text-align: right;">1146</td>
+<td style="text-align: right;">396</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1977</td>
+<td style="text-align: right;">157</td>
+<td style="text-align: right;">867</td>
+<td style="text-align: right;">1343</td>
+<td style="text-align: right;">1410</td>
+<td style="text-align: right;">1031</td>
+<td style="text-align: right;">417</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1978</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">735</td>
+<td style="text-align: right;">1307</td>
+<td style="text-align: right;">1623</td>
+<td style="text-align: right;">1150</td>
+<td style="text-align: right;">445</td>
+<td style="text-align: right;">198</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1979</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">299</td>
+<td style="text-align: right;">718</td>
+<td style="text-align: right;">1268</td>
+<td style="text-align: right;">1195</td>
+<td style="text-align: right;">585</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">14</td>
+</tr>
 </tbody>
 </table>
-
-<div class="quarto-table-caption margin-caption">Table&nbsp;1:  Frequency, percent, and reverse cumulative sum of percent of anglers by number of Walleye harvested. </div></div>
-</div>
-</div>
 <p>&nbsp;</p>
-<p>The results from <a href="#tbl-waesum">Table&nbsp;1</a> are also shown visually in <a href="#fig-waesum">Figure&nbsp;1</a>.</p>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="cell-output-display page-columns page-full">
-<div id="fig-waesum" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-waesum-1.png" class="img-fluid figure-img" width="768"></p>
-<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: The percentage (left) and reverse cumulative percentage (right) of anglers by number of Walleye harvested.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="analysis-questions" class="level1">
-<h1>Analysis Questions</h1>
-<div class="callout-note callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Need from Instructor
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Your instructor will assign you two species to work with below. Summaries like that above for each species – <a href="../../resources/WAEsum.html">Walleye</a>, <a href="../../resources/LMBsum.html">Largemouth Bass</a>, <a href="../../resources/NOPsum.html">Northern Pike</a>, <a href="../../resources/Crappiesum.html">Crappie</a>, <a href="../../resources/Sunfishsum.html">Sunfish</a>, and <a href="../../resources/YEPsum.html">Yellow Perch</a>. Use the results to answer the following questions for <strong>each</strong> of your species (<em>calculations can be made with a calculator or in R</em>).</p>
-</div>
-</div>
-<p>&nbsp;</p>
-<ol start="4" type="1">
-<li>In a sentence or two, describe angler harvest patterns for the species.</li>
-<li>What percent of anglers would be affected if bag limits were reduced (<em>to 3 for Walleye and Largemouth Bass, 2 for Northern Pike, 12 for sunfish, 5 for crappies, and 50 for Yellow Perch</em>).</li>
-<li>What percent of fish would be “saved from harvest” if bag limits were reduced (<em>under the same bag limit reductions</em>)?</li>
-<li>What bag limit would be required to reduce harvest by at least 50%?</li>
+<p>Use these results to answer the following questions.</p>
+<ol type="1">
+<li>What year-class of fish is represented by the 339 age-VII fish caught in 1963?</li>
+<li>Show the data frame of catches and corresponding ages for the following groups of fish.
+<ol type="a">
+<li>For fish captured in 1963.</li>
+<li>For fish of the 1963 year-class.</li>
+<li>The <em>earliest</em> year-class that is <strong>fully</strong> represented for ages IX through XII.</li>
+<li>The <em>latest</em> year-class that is <strong>fully</strong> represented for ages IX through XII.</li>
+</ol></li>
+<li>For each data frame created above, identify whether the data represent a cross-sectional or longitudinal catch curve.</li>
+<li>For the third data frame created above (<em>earliest</em> year class).
+<ol type="a">
+<li>Estimate, with 95% confidence interval, the <strong>instantaneous</strong> total mortality rate using the catch-curve regression method for ages IX through XII.</li>
+<li>Estimate, with 95% confidence interval, the <strong>annual</strong> total mortality rate using the catch-curve regression method for ages IX through XII. Carefully interpret this result.</li>
+</ol></li>
+<li>Repeat the previous question for the last data frame created above (<em>latest</em> year class).</li>
+<li>Determine if the instantaneous mortality rate is significantly different between the earliest and latest year-classes that are fully represented for ages IX through XII.</li>
 </ol>
-<p>&nbsp;</p>
-<div class="callout-note callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Need from Instructor
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Your instructor will provide a way for you to share the results for your species with your class colleagues.</p>
-</div>
-</div>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-</section>
-<section id="wrap-up-questions" class="level1">
-<h1>Wrap-up Questions</h1>
-<ol start="8" type="1">
-<li>What assumptions did you make (implicitly or explicitly) in your calculations? Are these assumptions likely to be true? How will “violations” of these assumptions (likely) change your results?</li>
-<li>How will (or did) the shape of the harvest frequency plot impact your findings?</li>
-<li>Are bag limits an effective tool for reducing fish harvest? What else do you need to consider to use this tool as a method to reduce fish harvest?</li>
-</ol>
-<p>&nbsp;</p>
 <p>&nbsp;</p>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -507,23 +539,20 @@ Solution Code:
 
 
 
-</section>
-
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-cook_creel_2001" class="csl-entry" role="doc-biblioentry">
-Cook, M., T. Goeman, P. Radomski, J. Younk, and P. Jacobson. 2001. <a href="https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change">Creel limits in <span>Minnesota</span>: <span>A</span> proposal for change</a>. Fisheries 26:19–26.
+<div id="ref-curtis_recovery_1990" class="csl-entry" role="doc-biblioentry">
+Curtis, G. L. 1990. <a href="https://doi.org/10.1016/S0380-1330(90)71421-9">Recovery of an <span>Offshore</span> <span>Lake</span> <span>Trout</span> (<em><span>Salvelinus</span> <span>Namaycush</span></em>) population in eastern <span>Lake</span> <span>Superior</span></a>. Journal of Great Lakes Research 16(2):279–287.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2022,
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2019,
   author = {Derek H. Ogle},
-  title = {Bag {Limits} in {Minnesota}},
-  date = {2022-12-21},
-  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-22_BagLimits_MN},
+  title = {Mortality},
+  date = {2019-03-08},
+  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Mortality_LSSRLakeTrout},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2022, December 21. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-22_BagLimits_MN">Bag
-Limits in Minnesota</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2019" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2019, March 8. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Mortality_LSSRLakeTrout">Mortality</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

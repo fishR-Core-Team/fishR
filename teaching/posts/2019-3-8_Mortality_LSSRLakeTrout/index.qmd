@@ -1,0 +1,113 @@
+---
+title: Mortality
+subtitle: Stannard Rock (Lake Superior) Lake Trout
+description: Use catch curve methods to estimate mortality of a population of Lake Superior Lake Trout.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Mortality"
+  - " Catch Curve"
+  - "Salmon/Trout"
+---
+
+@curtis_recovery_1990 examined the population dynamics related to the recovery of an offshore [Lake Trout](https://en.wikipedia.org/wiki/Lake_trout) population near [Stannard Rock](https://en.wikipedia.org/wiki/Stannard_Rock_Light), [Lake Superior](https://en.wikipedia.org/wiki/Lake_Superior). As part of this study, mortality rates were estimated from the relative abundance of Lake Trout longer than 43.2 cm. Relative abundance was recorded as the catch-per-unit-effort (CPE) of each age group in each year expressed as the number of fish caught per 50,000 m of 114.3 mm mesh gillnet. The results are shown in the table below. [Note: (1) the values in the table have been rounded to integers; (2) values recorded as "tr" in the original paper were recorded as "0.5" in this table; and (3) the years of capture are not contiguous (there is a break between 1959 and 1963 and again between 1969 and 1973).]
+
+&nbsp;
+
+| Year | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VI | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VII | &nbsp;&nbsp;&nbsp;&nbsp;VIII | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IX | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XI | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XII | &nbsp;&nbsp;&nbsp;&nbsp;XIII | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XIV |
+|:----:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1959 | 64 | 219 | 241 | 121 | 33 | 9 | 1 | 0.5 | 1 |
+| .... | . | . | . | . | . | . | . | . | . |
+| 1963 | 129 | 339 | 331 | 192 | 70 | 16 | 0.5 | 0.5 | 0.5 |
+| 1964 | 149 | 524 | 515 | 201 | 63 | 18 | 2 | 0.5 | 0.5 |
+| 1965 | 75 | 379 | 501 | 328 | 133 | 39 | 11 | 1 | 0.5 |
+| 1966 | 149 | 488 | 459 | 172 | 64 | 22 | 5 | 0.5 | 0.5 |
+| 1967 | 63 | 368 | 287 | 130 | 55 | 19 | 6 | 0.5 | 0.5 |
+| 1968 | 50 | 215 | 259 | 141 | 55 | 18 | 5 | 1 | 0.5 |
+| 1969 | 45 | 150 | 153 | 76 | 23 | 6 | 0.5 | 0.5 | 0.5 |
+| .... | . | . | . | . | . | . | . | . | . |
+| 1973 | 101 | 759 | 1268 | 1116 | 491 | 141 | 40 | 4 | 0.5 |
+| 1974 | 151 | 733 | 1114 | 1092 | 571 | 163 | 50 | 9 | 5 |
+| 1975 | 109 | 901 | 1517 | 1606 | 1076 | 342 | 117 | 12 | 7 |
+| 1976 | 53 | 604 | 1204 | 1560 | 1146 | 396 | 156 | 18 | 10 |
+| 1977 | 157 | 867 | 1343 | 1410 | 1031 | 417 | 192 | 17 | 7 |
+| 1978 | 89 | 735 | 1307 | 1623 | 1150 | 445 | 198 | 18 | 14 |
+| 1979 | 29 | 299 | 718 | 1268 | 1195 | 585 | 300 | 36 | 14 |
+
+&nbsp;
+
+Use these results to answer the following questions.
+  
+1. What year-class of fish is represented by the 339 age-VII fish caught in 1963?
+1. Show the data frame of catches and corresponding ages for the following groups of fish.
+    a. For fish captured in 1963.
+    a. For fish of the 1963 year-class.
+    a. The *earliest* year-class that is **fully** represented for ages IX through XII.
+    a. The *latest* year-class that is **fully** represented for ages IX through XII.
+1. For each data frame created above, identify whether the data represent a cross-sectional or longitudinal catch curve.
+1. For the third data frame created above (*earliest* year class).
+    a. Estimate, with 95% confidence interval, the **instantaneous** total mortality rate using the catch-curve regression method for ages IX through XII.
+    a. Estimate, with 95% confidence interval, the **annual** total mortality rate using the catch-curve regression method for ages IX through XII. Carefully interpret this result.
+1. Repeat the previous question for the last data frame created above (*latest* year class).
+1. Determine if the instantaneous mortality rate is significantly different between the earliest and latest year-classes that are fully represented for ages IX through XII.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(ggplot2)
+
+# make data
+d <- data.frame(age=6:14,
+                yr63=c(129,339, 331, 192,  70, 16,0.5,0.5, 0.5),
+                yc63=c( 45, NA,  NA,  NA, 491,163,117, 18,   7),
+                yc54=c( NA, NA,  NA, 192,  63, 39,  5,0.5, 0.5),
+                yc67=c(101,733,1517,1560,1031,445,300, NA, NA))
+d
+## 1963 Capture year
+cc63 <- catchCurve(yr63~age,data=d,ages2use=8:11,weighted=TRUE)
+sum63 <- cbind(summary(cc63),confint(cc63))
+plot(cc63)
+## 1963 Year-Class
+cc63yc <- catchCurve(yc63~age,data=d,ages2use=10:14,weighted=TRUE)
+sum63yc <- cbind(summary(cc63yc),confint(cc63yc))
+plot(cc63yc)
+## 1954 Year-Class
+cc54yc <- catchCurve(yc54~age,data=d,ages2use=9:12,weighted=TRUE)
+sum54yc <- cbind(summary(cc54yc),confint(cc54yc))
+plot(cc54yc)
+## 1967 Year-Class
+cc67yc <- catchCurve(yc67~age,data=d,ages2use=9:12,weighted=TRUE)
+sum67yc <- cbind(summary(cc67yc),confint(cc67yc))
+plot(cc67yc)
+
+## Statistical comparison
+d2 <- d |>
+  dplyr::select(age,yc54,yc67) |>
+  tidyr::pivot_longer(cols=yc54:yc67,
+                      names_to="year_class",values_to="ct") |>
+  dplyr::filter(age>=9,age<=12) |>
+  dplyr::mutate(logct=log(ct))
+d2
+
+ivr <- lm(logct~age+year_class+age:year_class,data=d2)
+anova(ivr)
+
+ggplot(data=d2,mapping=aes(x=age,y=logct,color=year_class)) +
+  geom_point() +
+  geom_smooth(method="lm") +
+  theme_bw()
+```
