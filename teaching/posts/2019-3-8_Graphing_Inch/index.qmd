@@ -1,0 +1,149 @@
+---
+title: Graphing
+subtitle: Inch Lake
+description: Practice graphing skills for the Inch Lake data set.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Graphing"
+  - "Bluegill"
+  - "Largemouth Bass"
+---
+
+:::{.callout-warning appearance="simple"}
+## Continuation
+This exercise is a continuation of [this data wrangling exercise](../2019-3-8_Wrangling_Inch/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the Bluegill, Largemouth Bass, and non-game species only data frames.
+:::
+
+&nbsp;
+
+1. Describe the following from plots constructed with the [Bluegill](https://en.wikipedia.org/wiki/Bluegill) only data.frame.
+    a. The distribution of lengths.
+    a. The distribution of weights.
+    a. The distribution of lengths separately for each year (*without creating separate data frames for each year*).
+    a. The relationship between weight and length.
+    a. The relationship between the natural logs of weight and length.
+    a. The relationship between the natural logs of weight and length (*without creating separate data frames for each year*).
+    a. The difference in mean lengths between the two years (*plot should include confidence intervals*).
+1. Repeat the previous question but using [Largemouth Bass](https://en.wikipedia.org/wiki/Largemouth_bass).
+1. Describe the species distribution of (only) non-game species.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(dplyr)
+library(ggplot2)
+
+# Load data
+InchLake2 <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/InchLake2.csv")
+str(InchLake2)
+unique(InchLake2$species)
+
+# New variable with length in mm, and remove netID and fishID
+InchLake2 <- InchLake2 |>
+  mutate(lengthmm=length*25.4) |>
+  select(-netID,-fishID)
+
+# New data frames from wrangling exercise ...
+bg <- InchLake2 |>
+  filter(species=="Bluegill") |>
+  rename(wt=weight,tl=lengthmm) |>
+  mutate(logwt=log10(wt),logtl=log10(tl),
+         GHlen=FSA::psdAdd(tl,species))
+lmb <- InchLake2 |>
+  filter(species=="Largemouth Bass") |>
+  rename(wt=weight,tl=lengthmm) |>
+  mutate(logwt=log10(wt),logtl=log10(tl),
+         GHlen=FSA::psdAdd(tl,species))
+ngame <- InchLake2 |>
+  filter(species %in% c("Iowa Darter","Bluntnose Minnow","Tadpole Madtom",
+                        "Black Crappie","Fathead Minnow")) |>
+  arrange(year,species,length)
+
+# Bluegill Plots
+theme_set(theme_bw())
+## Length frequency
+ggplot(data=bg,mapping=aes(x=tl)) +
+  geom_histogram(binwidth=10,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.03)))
+## Weight frequency
+ggplot(data=bg,mapping=aes(x=wt)) +
+  geom_histogram(binwidth=20,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Weight (g)") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.03)))
+## Length frequency separated by year
+ggplot(data=bg,mapping=aes(x=tl)) +
+  geom_histogram(binwidth=10,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.03))) +
+  facet_wrap(vars(year))
+## W-L relationship
+ggplot(data=bg,mapping=aes(x=tl,y=wt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01))
+## logW-logL relationship
+ggplot(data=bg,mapping=aes(x=tl,y=wt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01),
+                     trans="log",breaks=c(30,50,100,200,250)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01),
+                     trans="log",breaks=c(0.3,1,5,10,50,100,200))
+## logW-logL relationship by year
+ggplot(data=bg,mapping=aes(x=tl,y=wt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01),
+                     trans="log",breaks=c(30,50,100,200,250)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01),
+                     trans="log",breaks=c(0.3,1,5,10,50,100,200)) +
+  facet_wrap(vars(year))
+## Mean lengths
+### Summarize first
+sumbg <- bg |>
+  group_by(year) |>
+  summarize(n=n(),
+            mn=mean(tl,na.rm=TRUE),
+            sd=sd(tl,na.rm=TRUE),
+            se=FSA::se(tl,na.rm=TRUE),
+            LCI=mn+qt(0.025,df=n-1)*se,
+            UCI=mn+qt(0.975,df=n-1)*se)
+sumbg
+
+## then plot
+ggplot() +
+  geom_point(data=sumbg,mapping=aes(x=year,y=mn),size=3) +
+  geom_line(data=sumbg,mapping=aes(x=year,y=mn),linewidth=1) +
+  geom_errorbar(data=sumbg,mapping=aes(x=year,ymin=LCI,ymax=UCI),
+                linewidth=1,width=0.025) +
+  geom_jitter(data=bg,mapping=aes(x=year,y=tl),
+              width=0.01,shape=21,color="black",fill="gray50",alpha=0.2) +
+  scale_x_continuous(name="Sample Year",breaks=c(2007,2008)) +
+  scale_y_continuous(name="Mean Total Length (mm)",limits=c(0,NA),
+                     expand=expansion(mult=c(0,0.05)))
+
+## non-games species distribution
+sumng <- ngame |>
+  group_by(species) |>
+  summarize(n=n())
+sumng
+
+ggplot(data=sumng,mapping=aes(x=species,y=n)) +
+  geom_bar(stat="identity",color="black",fill="gray50") +
+  scale_x_discrete(name="Non-Game Species") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.05)))
+
+```

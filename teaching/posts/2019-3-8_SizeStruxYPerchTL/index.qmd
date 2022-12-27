@@ -11,7 +11,7 @@ categories:
   - "Yellow Perch"
 ---
 
-Researchers for the [North Temperate Lakes Long-Term Ecological Research](https://lter.limnology.wisc.edu/) program have collected fish from a number of lakes in Wisconsin since 1981. The total lengths and weights of [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) captured from [Trout Lake](https://lter.limnology.wisc.edu/researchsite/trout-lake) from 1981-2006 are recorded in [YPerchTL](https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html).^[See "CSV file" link in "Source" section of linked page.]. Restrict these data to only fish captured in 2000. Use these data to answer the following questions.
+Researchers for the [North Temperate Lakes Long-Term Ecological Research](https://lter.limnology.wisc.edu/) program have collected fish from a number of lakes in Wisconsin since 1981. The total lengths and weights of [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) captured from [Trout Lake](https://lter.limnology.wisc.edu/researchsite/trout-lake) from 1981-2006 are recorded in [YPerchTL](https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html).^[See "CSV file" link in "Source" section of linked page.] Restrict these data to only fish captured in 2000. Use these data to answer the following questions.
 
 
 1. Describe the distribution of lengths for Yellow Perch captured in **fyke nets** in 1997 using both a histogram and frequency table with 10 mm length categories.

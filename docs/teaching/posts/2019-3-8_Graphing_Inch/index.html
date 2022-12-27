@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Estimate size structure statistics and compare them among groups of Yellow Perch from Trout Lake (WI).">
+<meta name="description" content="Practice graphing skills for the Inch Lake data set.">
 
-<title>fishR - Size Structure</title>
+<title>fishR - Graphing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,19 +66,19 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Size Structure">
-<meta property="og:description" content="Estimate size structure statistics and compare them among groups of Yellow Perch from Trout Lake (WI).">
+<meta property="og:title" content="fishR - Graphing">
+<meta property="og:description" content="Practice graphing skills for the Inch Lake data set.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\exercise.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="768">
 <meta property="og:image:width" content="1024">
-<meta name="citation_title" content="Size Structure">
+<meta name="citation_title" content="Graphing">
 <meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2022-03-19">
-<meta name="citation_cover_date" content="2022-03-19">
-<meta name="citation_year" content="2022">
-<meta name="citation_online_date" content="2022-03-19">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_SizeStruxYPerchTL">
+<meta name="citation_publication_date" content="2019-03-08">
+<meta name="citation_cover_date" content="2019-03-08">
+<meta name="citation_year" content="2019">
+<meta name="citation_online_date" content="2019-03-08">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Graphing_Inch">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -192,17 +192,18 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Size Structure</h1>
-            <p class="subtitle lead">Trout Lake Yellow Perch</p>
+      <h1 class="title">Graphing</h1>
+            <p class="subtitle lead">Inch Lake</p>
                   <div>
         <div class="description">
-          Estimate size structure statistics and compare them among groups of Yellow Perch from Trout Lake (WI).
+          Practice graphing skills for the Inch Lake data set.
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">Exercise</div>
-                <div class="quarto-category">Size Structure</div>
-                <div class="quarto-category">Yellow Perch</div>
+                <div class="quarto-category">Graphing</div>
+                <div class="quarto-category">Bluegill</div>
+                <div class="quarto-category">Largemouth Bass</div>
               </div>
                   </div>
   </div>
@@ -220,7 +221,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Mar 19, 2022</p>
+        <p class="date">Mar 8, 2019</p>
       </div>
     </div>
     
@@ -241,17 +242,38 @@ ul.task-list li input[type="checkbox"] {
         
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="page-columns page-full"><p>Researchers for the <a href="https://lter.limnology.wisc.edu/">North Temperate Lakes Long-Term Ecological Research</a> program have collected fish from a number of lakes in Wisconsin since 1981. The total lengths and weights of <a href="https://en.wikipedia.org/wiki/Yellow_perch">Yellow Perch</a> (<em>Perca flavescens</em>) captured from <a href="https://lter.limnology.wisc.edu/researchsite/trout-lake">Trout Lake</a> from 1981-2006 are recorded in <a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html">YPerchTL</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Restrict these data to only fish captured in 2000. Use these data to answer the following questions.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See “CSV file” link in “Source” section of linked page.</p></li></div></div>
+<div class="callout-warning callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Continuation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This exercise is a continuation of <a href="../2019-3-8_Wrangling_Inch/">this data wrangling exercise</a> and, thus, depends on data frames constructed there. Please load/run your script from that excercise to access the Bluegill, Largemouth Bass, and non-game species only data frames.</p>
+</div>
+</div>
+<p>&nbsp;</p>
 <ol type="1">
-<li>Describe the distribution of lengths for Yellow Perch captured in <strong>fyke nets</strong> in 1997 using both a histogram and frequency table with 10 mm length categories.</li>
-<li>Repeat the previous question with Yellow Perch captured with <strong>beach seines</strong>.</li>
-<li><em>Statistically</em> compare the length frequency distributions between Yellow Perch captured with a beach seine and in fyke nets in 2000.</li>
-<li>Write a short paragraph describing what you learned about the size structure of Trout Lake Yellow Perch, with specific comments about the two gears examined.</li>
+<li>Describe the following from plots constructed with the <a href="https://en.wikipedia.org/wiki/Bluegill">Bluegill</a> only data.frame.
+<ol type="a">
+<li>The distribution of lengths.</li>
+<li>The distribution of weights.</li>
+<li>The distribution of lengths separately for each year (<em>without creating separate data frames for each year</em>).</li>
+<li>The relationship between weight and length.</li>
+<li>The relationship between the natural logs of weight and length.</li>
+<li>The relationship between the natural logs of weight and length (<em>without creating separate data frames for each year</em>).</li>
+<li>The difference in mean lengths between the two years (<em>plot should include confidence intervals</em>).</li>
+</ol></li>
+<li>Repeat the previous question but using <a href="https://en.wikipedia.org/wiki/Largemouth_bass">Largemouth Bass</a>.</li>
+<li>Describe the species distribution of (only) non-game species.</li>
 </ol>
 <p>&nbsp;</p>
 <div class="callout-important callout callout-style-simple callout-captioned">
@@ -273,17 +295,15 @@ Solution Code:
 
 
 
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2022,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2019,
   author = {Derek H. Ogle},
-  title = {Size {Structure}},
-  date = {2022-03-19},
-  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_SizeStruxYPerchTL},
+  title = {Graphing},
+  date = {2019-03-08},
+  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Graphing_Inch},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2022, March 19. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_SizeStruxYPerchTL">Size
-Structure</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2019" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2019, March 8. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Graphing_Inch">Graphing</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

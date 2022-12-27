@@ -1,0 +1,14 @@
+{
+  "hash": "08410512d592947f4de38a9f05154420",
+  "result": {
+    "markdown": "---\ntitle: Data Wrangling\nsubtitle: Inch Lake\ndescription: Practice data wrangling skills for the Inch Lake data set.\nauthor: Derek H. Ogle\ndate: 3/8/2019\nimage: ../../../helpers/img/exercise.png\ncategories:\n  - \"  Exercise\"\n  - \" Data Wrangling\"\n  - \"Bluegill\"\n  - \"Largemouth Bass\"\n---\n\n\n[Inch Lake](http://dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=2764300&page=facts) is a 12.5 ha inland lake in northern Wisconsin that has been managed as catch-and-release for all species since 2006. Researchers at [Northland College](http://www.northland.edu/) have monitored fish populations in Inch Lake since 2007. The total lengths (inches) and weights (g) for subsamples of several species of fish collected from Inch Lake in May of 2007 and 2008 are recorded in [InchLake2](https://fishr-core-team.github.io/FSAdata/reference/InchLake2.html).^[See \"CSV file\" link in \"Source\" section of linked page.] Use these data to answer the following questions.\n\n1. Create a new variable that contains lengths in millimeters.\n1. Remove the `netID` and `fishID` variables.\n1. Create a new data frame of just [Bluegill](https://en.wikipedia.org/wiki/Bluegill).\n1. Create a new data frame of just [Largemouth Bass](https://en.wikipedia.org/wiki/Largemouth_bass).\n1. Create a new data frame of non-game species ([Bluntnose Minnow](https://en.wikipedia.org/wiki/Bluntnose_minnow), [Fathead Minnow](https://en.wikipedia.org/wiki/Fathead_minnow), [Iowa Darter](https://en.wikipedia.org/wiki/Iowa_darter), and [Tadpole Madtom](https://en.wikipedia.org/wiki/Tadpole_madtom)).\n1. For the non-game species data frame ...\n    a. Sort by species.\n    a. Sort by length within species within year.\n1. For both the Bluegill and Largemouth Bass only data frames ...\n    a. Change the names of the `weight` variable to `wt` and the length in millimeters variable to `tl` (if you did not call it that above).\n    a. Create two new variables that are the [common logarithms](https://en.wikipedia.org/wiki/Common_logarithm) of the lengths (in mm) and weights.\n    a. Add appropriate five-cell Gabelhouse length categories.\n\n:::{.callout-warning appearance=\"simple\"}\n## Save Your Script\nThe data frames created here will be used in [this graphing](../2019-3-8_Plotting_Inch/), [this weight-length relationhip](../2019-3-8_WLBuegill/), and [this condition](../2019-3-8_ConditionBluegill/) exercises.\n:::\n\n&nbsp;\n\n:::{.callout-important appearance=\"simple\"}\n## Solution Code:\nAvailable upon request to students not in a class. Contact fishR maintainers.\n:::\n\n\n::: {.cell layout-align=\"center\"}\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
