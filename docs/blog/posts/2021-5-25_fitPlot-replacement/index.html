@@ -265,6 +265,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
                           <div class="quarto-categories">
                 <div class="quarto-category">FSA</div>
                 <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">emmeans</div>
               </div>
                   </div>
   </div>
@@ -289,7 +290,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 14, 2022</p>
+        <p class="date-modified">Dec 27, 2022</p>
       </div>
     </div>
       
@@ -322,6 +323,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#using-manually-predicted-values-i" id="toc-using-manually-predicted-values-i" class="nav-link" data-scroll-target="#using-manually-predicted-values-i">Using Manually Predicted Values I</a></li>
   <li><a href="#using-manually-predicted-values-ii" id="toc-using-manually-predicted-values-ii" class="nav-link" data-scroll-target="#using-manually-predicted-values-ii">Using Manually Predicted Values II</a></li>
   <li><a href="#using-a-built-in-function" id="toc-using-a-built-in-function" class="nav-link" data-scroll-target="#using-a-built-in-function">Using A Built-In Function</a></li>
+  </ul></li>
   <li><a href="#indicator-variable-regression" id="toc-indicator-variable-regression" class="nav-link" data-scroll-target="#indicator-variable-regression">Indicator Variable Regression</a>
   <ul class="collapse">
   <li><a href="#using-manually-predicted-values" id="toc-using-manually-predicted-values" class="nav-link" data-scroll-target="#using-manually-predicted-values">Using Manually Predicted Values</a></li>
@@ -339,7 +341,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul></li>
   <li><a href="#nonlinear-regression" id="toc-nonlinear-regression" class="nav-link" data-scroll-target="#nonlinear-regression">Nonlinear Regression</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/blog/posts/2021-5-25_fitPlot-replacement/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -369,13 +370,13 @@ Note
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -627,7 +628,7 @@ Note
 <p>&nbsp;</p>
 </section>
 </section>
-<section id="simple-linear-regression" class="level1 page-columns page-full">
+<section id="simple-linear-regression" class="level1">
 <h1>Simple Linear Regression</h1>
 <p>The code below fits a simple linear regression for examining the relationship between mirex concentration and salmon weight.</p>
 <div class="cell" data-layout-align="center">
@@ -741,8 +742,9 @@ Note
 </div>
 <p>&nbsp;</p>
 </section>
-<section id="indicator-variable-regression" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="indicator-variable-regression">Indicator Variable Regression</h2>
+</section>
+<section id="indicator-variable-regression" class="level1 page-columns page-full">
+<h1>Indicator Variable Regression</h1>
 <p>The code below fits an indicator variable regression to examine if the relationship between mirex concentration and salmon weight differs betwen species.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ivr <span class="ot">&lt;-</span> <span class="fu">lm</span>(mirex<span class="sc">~</span>weight<span class="sc">*</span>species,<span class="at">data=</span>Mirex)</span>
@@ -825,8 +827,8 @@ Note
 <p>&nbsp;</p>
 </section>
 </section>
-<section id="logistic-regression" class="level2">
-<h2 class="anchored" data-anchor-id="logistic-regression">Logistic Regression</h2>
+<section id="logistic-regression" class="level1">
+<h1>Logistic Regression</h1>
 <p>The code below fits a logistic regression to examine the relationship between the probability that mirex concentration is greater than 0.2 and salmon weight.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>logreg <span class="ot">&lt;-</span> <span class="fu">glm</span>(gt2<span class="sc">~</span>weight,<span class="at">data=</span>Mirex,<span class="at">family=</span><span class="st">"binomial"</span>)</span>
@@ -936,8 +938,8 @@ Note
 <p>&nbsp;</p>
 </section>
 </section>
-<section id="polynomial-regression" class="level2">
-<h2 class="anchored" data-anchor-id="polynomial-regression">Polynomial Regression</h2>
+<section id="polynomial-regression" class="level1">
+<h1>Polynomial Regression</h1>
 <p>The code below fits a quadratic (second degree polynomial) regression for the relationship between mirex concentration and salmon weight.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>poly2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mirex<span class="sc">~</span>weight<span class="sc">+</span><span class="fu">I</span>(weight<span class="sc">^</span><span class="dv">2</span>),<span class="at">data=</span>Mirex)</span>
@@ -1015,13 +1017,13 @@ Note
 <p>&nbsp;</p>
 </section>
 </section>
-<section id="nonlinear-regression" class="level2">
-<h2 class="anchored" data-anchor-id="nonlinear-regression">Nonlinear Regression</h2>
+<section id="nonlinear-regression" class="level1">
+<h1>Nonlinear Regression</h1>
 <p>The concepts about producing a fitted line plot for a non-linear regression in <code>ggplot</code> is described in detail, with respect to a von Bertalanffy growth function, in <a href="../2019-12-31_vonB_plots_1/">this post</a> and <a href="../2020-1-2_vonB_plots_2/">this post</a>.</p>
 <p>&nbsp;</p>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
 <p><code>fitPlot()</code> in <code>FSA</code> was removed in early 2022. This post describes a more transparent (i.e., not a “black box”) and flexible set of methods for constructing similar plots using <code>ggplot2</code> for those who will need to transition away from using <code>fitPlot()</code>.</p>
 <p>As mentioned in the examples above, each plot can be modified further using typical methods for <code>ggplot2</code>. These changes were not illustrated above to minimize the amount of code shown in this post. However, as an example, the code below shows a possible modification of the IVR plot shown above.</p>
 <div class="cell" data-layout-align="center">
@@ -1056,7 +1058,6 @@ Note
 </div>
 
 
-</section>
 </section>
 
 

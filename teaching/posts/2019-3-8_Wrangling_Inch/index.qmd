@@ -8,8 +8,8 @@ image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Data Wrangling"
-  - "Bluegill"
-  - "Largemouth Bass"
+  - "Bluegill/Sunfish"
+  - "Bass"
 ---
 
 [Inch Lake](http://dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=2764300&page=facts) is a 12.5 ha inland lake in northern Wisconsin that has been managed as catch-and-release for all species since 2006. Researchers at [Northland College](http://www.northland.edu/) have monitored fish populations in Inch Lake since 2007. The total lengths (inches) and weights (g) for subsamples of several species of fish collected from Inch Lake in May of 2007 and 2008 are recorded in [InchLake2](https://fishr-core-team.github.io/FSAdata/reference/InchLake2.html).^[See "CSV file" link in "Source" section of linked page.] Use these data to answer the following questions.

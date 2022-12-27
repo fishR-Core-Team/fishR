@@ -276,7 +276,7 @@ ggplot(data=Mirex,mapping=aes(x=weight,y=mirex)) +
 
 &nbsp;
 
-## Indicator Variable Regression
+# Indicator Variable Regression
 The code below fits an indicator variable regression to examine if the relationship between mirex concentration and salmon weight differs betwen species.
 
 ```{r}
@@ -333,7 +333,7 @@ ggplot(data=Mirex,mapping=aes(x=weight,y=mirex,color=species,fill=species)) +
 
 &nbsp;
 
-## Logistic Regression
+# Logistic Regression
 The code below fits a logistic regression to examine the relationship between the probability that mirex concentration is greater than 0.2 and salmon weight.
 
 ```{r}
@@ -399,7 +399,7 @@ ggplot(data=Mirex,mapping=aes(x=weight,y=gt2,color=species,fill=species)) +
 
 &nbsp;
 
-## Polynomial Regression
+# Polynomial Regression
 The code below fits a quadratic (second degree polynomial) regression for the relationship between mirex concentration and salmon weight.
 
 ```{r}
@@ -446,12 +446,12 @@ ggplot(data=Mirex,mapping=aes(x=weight,y=mirex)) +
 
 &nbsp;
 
-## Nonlinear Regression
+# Nonlinear Regression
 The concepts about producing a fitted line plot for a non-linear regression in `ggplot` is described in detail, with respect to a von Bertalanffy growth function, in [this post](../2019-12-31_vonB_plots_1/) and [this post](../2020-1-2_vonB_plots_2/).
 
 &nbsp;
 
-## Conclusion
+# Conclusion
 `fitPlot()` in `FSA` was removed in early 2022. This post describes a more transparent (i.e., not a "black box") and flexible set of methods for constructing similar plots using `ggplot2` for those who will need to transition away from using `fitPlot()`.
 
 As mentioned in the examples above, each plot can be modified further using typical methods for `ggplot2`. These changes were not illustrated above to minimize the amount of code shown in this post. However, as an example, the code below shows a possible modification of the IVR plot shown above.

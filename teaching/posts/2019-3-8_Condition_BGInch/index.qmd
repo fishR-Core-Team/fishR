@@ -1,0 +1,106 @@
+---
+title: Condition
+subtitle: Inch Lake
+description: Examine relative weight as a measure of condition for Inch Lake Bluegill.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Condition"
+  - " Relative Weight"
+  - "Bluegill/Sunfish"
+---
+
+:::{.callout-warning appearance="simple"}
+## Continuation
+This exercise is a continuation of [this data wrangling exercise](../2019-3-8_Wrangling_Inch/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the Bluegill only data frames.
+:::
+
+&nbsp;
+
+# Basic Analysis I
+Further prepare the Bluegill only data frame for computation of relative weights by adding a relative weight variable and reducing the data frame to only fish with lengths for which a standard weight should be computed.
+
+1. For Bluegills captured only in **2007** ...
+    a. Compute the number of observations and mean, standard deviation, and standard error of relative weight for each Gabelhouse length category.
+    a. Determine if the mean relative weight differs among Gabelhouse length categories.
+    a. Construct a plot, with confidence intervals and appropriate significance letters, that depict your results.
+
+&nbsp;
+
+# Basic Analysis II
+4. Repeat the previous question for Bluegills captured only in **2008**.
+1. Empirically compare your results between years.  Provide at least three observations from your findings and at least two plausible explanations for what you observed.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(dplyr)
+library(ggplot2)
+
+# Load data
+InchLake2 <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/InchLake2.csv")
+str(InchLake2)
+unique(InchLake2$species)
+
+# New variables, and remove netID and fishID
+InchLake2 <- InchLake2 |>
+  mutate(tl=length*25.4) |>
+  rename(wt=weight) |>
+  mutate(GHlen=FSA::psdAdd(tl,species),
+         wr=FSA::wrAdd(wt,tl,species)) |>
+  select(-netID,-fishID)
+FSA::peek(InchLake2)
+
+# Just Bluegill from 2007 for which wr could be calculated ...
+bg07 <- InchLake2 |>
+  filter(species=="Bluegill",
+         year==2007,
+         !is.na(wr))
+FSA::peek(bg07)
+
+# summary stats
+sum07 <- bg07 |>
+  group_by(GHlen) |>
+  summarize(n=n(),mn=mean(wr),sd=sd(wr),se=FSA::se(wr))
+sum07
+
+# ANOVA to assess differences
+aov07 <- lm(wr~GHlen,data=bg07)
+anova(aov07)
+
+# marginal means for plot
+mm07 <- emmeans::emmeans(aov07,specs=pairwise~GHlen)
+mms07 <- summary(mm07)
+mms07$contrasts
+mms07$emmeans <- mms07$emmeans |>
+  mutate(lets=c("a","b","b"))
+
+# Plots
+theme_set(theme_bw())
+
+ggplot() +
+  geom_errorbar(data=mms07$emmeans,
+                mapping=aes(x=GHlen,ymin=lower.CL,ymax=upper.CL),
+                width=0.1,linewidth=1) +
+  geom_line(data=mms07$emmeans,mapping=aes(x=GHlen,y=emmean,group=1),
+            linewidth=1) +
+  geom_point(data=mms07$emmeans,mapping=aes(x=GHlen,y=emmean)) +
+  geom_jitter(data=bg07,mapping=aes(x=GHlen,y=wr),width=0.025,alpha=0.1) +
+  geom_text(data=mms07$emmeans,mapping=aes(x=GHlen,y=upper.CL,label=lets),
+            size=5,vjust=0,nudge_y=1) +
+  scale_x_discrete(name="Length Category") +
+  scale_y_continuous(name="Mean Relative Weight")
+```

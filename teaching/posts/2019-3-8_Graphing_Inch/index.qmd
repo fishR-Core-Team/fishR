@@ -8,8 +8,8 @@ image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Graphing"
-  - "Bluegill"
-  - "Largemouth Bass"
+  - "Bluegill/Sunfish"
+  - "Bass"
 ---
 
 :::{.callout-warning appearance="simple"}

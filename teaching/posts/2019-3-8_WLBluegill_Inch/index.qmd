@@ -8,12 +8,12 @@ image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Weight-Length"
-  - "Bluegill"
+  - "Bluegill/Sunfish"
 ---
 
 :::{.callout-warning appearance="simple"}
 ## Continuation
-This exercise is a continuation of [this data wrangling exercise](../2019-3-8_Wrangling_Inch/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the Bluegill, species only data frames.
+This exercise is a continuation of [this data wrangling exercise](../2019-3-8_Wrangling_Inch/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the Bluegill only data frames.
 :::
 
 &nbsp;
@@ -34,12 +34,12 @@ This exercise is a continuation of [this data wrangling exercise](../2019-3-8_Wr
 &nbsp;
 
 # Basic Analysis II
-3. Recompute the weight-length relationship using the original length in inches.  How do the slope and y-intercept from this model compare to the results from the previous question?
+4. Recompute the weight-length relationship using the original length in inches.  How do the slope and y-intercept from this model compare to the results from the previous question?
 
 &nbsp;
 
 # Extended Analysis
-4. Construct a plot that allows you to qualitatively assess if the weight-length (*in mm here and throughout*) relationship differs between the two years.
+5. Construct a plot that allows you to qualitatively assess if the weight-length (*in mm here and throughout*) relationship differs between the two years.
 1. Fit a model that allows you to determine if there is a statistically significant difference in the weight-length relationship between the two years.
     a. Construct a residual plot for this model.^[[This post](../../../blog/posts/2021-6-1_residPlot-replacement/) may be useful.] Comment.
     a. Is there a statistically significant difference in the weight-length relationship between the two years? Provide evidence for your findings and be very specific with your conclusions.
@@ -68,17 +68,15 @@ InchLake2 <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata
 str(InchLake2)
 unique(InchLake2$species)
 
-# New variable with length in mm, and remove netID and fishID
+# New variables, and remove netID and fishID
 InchLake2 <- InchLake2 |>
-  mutate(lengthmm=length*25.4) |>
+  rename(wt=weight) |>
+  mutate(tl=length*25.4,logwt=log10(wt),logtl=log10(tl),
+         GHlen=FSA::psdAdd(tl,species)) |>
   select(-netID,-fishID)
 
-# New data frames from wrangling exercise ...
 bg <- InchLake2 |>
-  filter(species=="Bluegill") |>
-  rename(wt=weight,tl=lengthmm) |>
-  mutate(logwt=log10(wt),logtl=log10(tl),
-         GHlen=FSA::psdAdd(tl,species))
+  filter(species=="Bluegill")
 
 # Plots
 theme_set(theme_bw())
@@ -108,12 +106,10 @@ bgpred <- data.frame(predtl=seq(min(bg$tl,na.rm=TRUE),
                                 max(bg$tl,na.rm=TRUE),
                                 length.out=199)) |>
   mutate(predlogtl=log10(predtl))
-
 bgpred <- cbind(bgpred,predict(bglw1,data.frame(logtl=bgpred$predlogtl),
                                interval="confidence")) |>
-  mutate(predwt=10^fit,
-         predwtlwr=10^lwr,
-         predwtupr=10^upr)
+  rename(predlogwt=fit,predlogwtlwr=lwr,predlogwtupr=upr) |>
+  mutate(predwt=10^predlogwt,predwtlwr=10^predlogwtlwr,predwtupr=10^predlogwtupr)
 head(bgpred)
 ## fit plots
 ggplot() +
@@ -121,9 +117,10 @@ ggplot() +
              shape=21,color="black",fill="gray50") +
   scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
   scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01)) +
-  geom_ribbon(data=bgpred,mapping=aes(x=predlogtl,ymax=upr,ymin=lwr),
+  geom_ribbon(data=bgpred,mapping=aes(x=predlogtl,
+                                      ymax=predlogwtupr,ymin=predlogwtlwr),
               color="blue",alpha=0.2) +
-  geom_line(data=bgpred,mapping=aes(x=predlogtl,y=fit),
+  geom_line(data=bgpred,mapping=aes(x=predlogtl,y=predlogwt),
             linewidth=1,color="blue")
 ggplot() +
   geom_point(data=bg,mapping=aes(x=tl,y=wt),
@@ -191,16 +188,19 @@ for (i in 1:nrow(bgsum)) {
                            interval="confidence"))
   bgpred <- rbind(bgpred,tmp)
 }
-bgpred
+bgpred <- bgpred |>
+  rename(predlogwt=fit,predlogwtlwr=lwr,predlogwtupr=upr)
+
 
 ggplot() +
   geom_point(data=bg,mapping=aes(x=logtl,y=logwt,fill=fyear),
              shape=21,color="black") +
   scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
   scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01)) +
-    geom_ribbon(data=bgpred,mapping=aes(x=logpredtl,ymax=upr,ymin=lwr,fill=fyear),
+    geom_ribbon(data=bgpred,mapping=aes(x=logpredtl,
+                                        ymax=predlogwtupr,ymin=predlogwtlwr,
+                                        fill=fyear),
               alpha=0.2) +
-  geom_line(data=bgpred,mapping=aes(x=logpredtl,y=fit,color=fyear),
+  geom_line(data=bgpred,mapping=aes(x=logpredtl,y=predlogwt,color=fyear),
             linewidth=1)
-
 ```

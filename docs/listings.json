@@ -2,6 +2,7 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/2021-5-25_fitPlot-replacement/index.html",
       "/blog/posts/2022-12-22_AFS_Style_Figures/index.html",
       "/blog/posts/2017-8-9_Mean_Weights/index.html",
       "/blog/posts/2021-5-26_filterD-replacement/index.html",
@@ -14,7 +15,6 @@
       "/blog/posts/2017-4-20_BlandAltman/index.html",
       "/blog/posts/2017-12-12_StockRecruit_Graph_Questions/index.html",
       "/blog/posts/2021-6-1_residPlot-replacement/index.html",
-      "/blog/posts/2021-5-25_fitPlot-replacement/index.html",
       "/blog/posts/2020-1-2_vonB_plots_2/index.html",
       "/blog/posts/2019-12-31_vonB_plots_1/index.html",
       "/blog/posts/2016-11-11_Pauly-VBModel/index.html",
@@ -38,6 +38,7 @@
       "/teaching/posts/2022-12-19_AgeComp_WalleyePS/index.html",
       "/teaching/posts/2022-12-19_Using_fishR_Data/index.html",
       "/teaching/posts/2019-3-8_SizeStruxYPerchTL/index.html",
+      "/teaching/posts/2019-3-8_Condition_BGInch/index.html",
       "/teaching/posts/2019-3-8_Depletion_LGLargemouth/index.html",
       "/teaching/posts/2019-3-8_Graphing_Inch/index.html",
       "/teaching/posts/2019-3-8_Mortality_LSKBLakeTrout/index.html",
@@ -47,6 +48,7 @@
       "/teaching/posts/2019-3-8_MR_URBrownTrout/index.html",
       "/teaching/posts/2019-3-8_MR_WIYOYWalleye/index.html",
       "/teaching/posts/2019-3-8_WLBluegill_Inch/index.html",
+      "/teaching/posts/2019-3-8_WLLMB_Inch/index.html",
       "/teaching/posts/2019-3-8_Wrangling_Inch/index.html",
       "/teaching/posts/2018-4-19_Adding_Zero_Catches/index.html",
       "/teaching/posts/2016-6-12_Halflife_of_K/index.html"

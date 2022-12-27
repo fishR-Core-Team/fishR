@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Practice graphing skills for the Inch Lake data set.">
+<meta name="description" content="Examine relative weight as a measure of condition for Inch Lake Bluegill.">
 
-<title>fishR - Graphing</title>
+<title>fishR - Condition</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,19 +66,19 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Graphing">
-<meta property="og:description" content="Practice graphing skills for the Inch Lake data set.">
+<meta property="og:title" content="fishR - Condition">
+<meta property="og:description" content="Examine relative weight as a measure of condition for Inch Lake Bluegill.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\exercise.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="768">
 <meta property="og:image:width" content="1024">
-<meta name="citation_title" content="Graphing">
+<meta name="citation_title" content="Condition">
 <meta name="citation_author" content="Derek H. Ogle">
 <meta name="citation_publication_date" content="2019-03-08">
 <meta name="citation_cover_date" content="2019-03-08">
 <meta name="citation_year" content="2019">
 <meta name="citation_online_date" content="2019-03-08">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Graphing_Inch">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Condition_BGInch">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -192,18 +192,18 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Graphing</h1>
+      <h1 class="title">Condition</h1>
             <p class="subtitle lead">Inch Lake</p>
                   <div>
         <div class="description">
-          Practice graphing skills for the Inch Lake data set.
+          Examine relative weight as a measure of condition for Inch Lake Bluegill.
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">Exercise</div>
-                <div class="quarto-category">Graphing</div>
-                <div class="quarto-category">Bluegill</div>
-                <div class="quarto-category">Largemouth Bass</div>
+                <div class="quarto-category">Condition</div>
+                <div class="quarto-category">Relative Weight</div>
+                <div class="quarto-category">Bluegill/Sunfish</div>
               </div>
                   </div>
   </div>
@@ -239,7 +239,14 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#basic-analysis-i" id="toc-basic-analysis-i" class="nav-link active" data-scroll-target="#basic-analysis-i">Basic Analysis I</a></li>
+  <li><a href="#basic-analysis-ii" id="toc-basic-analysis-ii" class="nav-link" data-scroll-target="#basic-analysis-ii">Basic Analysis II</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/teaching/posts/2019-3-8_Condition_BGInch/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -257,23 +264,28 @@ Continuation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This exercise is a continuation of <a href="../2019-3-8_Wrangling_Inch/">this data wrangling exercise</a> and, thus, depends on data frames constructed there. Please load/run your script from that excercise to access the Bluegill, Largemouth Bass, and non-game species only data frames.</p>
+<p>This exercise is a continuation of <a href="../2019-3-8_Wrangling_Inch/">this data wrangling exercise</a> and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the Bluegill only data frames.</p>
 </div>
 </div>
 <p>&nbsp;</p>
+<section id="basic-analysis-i" class="level1">
+<h1>Basic Analysis I</h1>
+<p>Further prepare the Bluegill only data frame for computation of relative weights by adding a relative weight variable and reducing the data frame to only fish with lengths for which a standard weight should be computed.</p>
 <ol type="1">
-<li>Describe the following from plots constructed with the <a href="https://en.wikipedia.org/wiki/Bluegill">Bluegill</a> only data.frame.
+<li>For Bluegills captured only in <strong>2007</strong> …
 <ol type="a">
-<li>The distribution of lengths.</li>
-<li>The distribution of weights.</li>
-<li>The distribution of lengths separately for each year (<em>without creating separate data frames for each year</em>).</li>
-<li>The relationship between weight and length.</li>
-<li>The relationship between the natural logs of weight and length.</li>
-<li>The relationship between the natural logs of weight and length (<em>without creating separate data frames for each year</em>).</li>
-<li>The difference in mean lengths between the two years (<em>plot should include confidence intervals</em>).</li>
+<li>Compute the number of observations and mean, standard deviation, and standard error of relative weight for each Gabelhouse length category.</li>
+<li>Determine if the mean relative weight differs among Gabelhouse length categories.</li>
+<li>Construct a plot, with confidence intervals and appropriate significance letters, that depict your results.</li>
 </ol></li>
-<li>Repeat the previous question but using <a href="https://en.wikipedia.org/wiki/Largemouth_bass">Largemouth Bass</a>.</li>
-<li>Describe the species distribution of (only) non-game species.</li>
+</ol>
+<p>&nbsp;</p>
+</section>
+<section id="basic-analysis-ii" class="level1">
+<h1>Basic Analysis II</h1>
+<ol start="4" type="1">
+<li>Repeat the previous question for Bluegills captured only in <strong>2008</strong>.</li>
+<li>Empirically compare your results between years. Provide at least three observations from your findings and at least two plausible explanations for what you observed.</li>
 </ol>
 <p>&nbsp;</p>
 <div class="callout-important callout callout-style-simple callout-captioned">
@@ -294,16 +306,17 @@ Solution Code:
 </div>
 
 
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2019,
   author = {Derek H. Ogle},
-  title = {Graphing},
+  title = {Condition},
   date = {2019-03-08},
-  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Graphing_Inch},
+  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Condition_BGInch},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2019" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2019, March 8. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Graphing_Inch">Graphing</a>.
+Derek H. Ogle. 2019, March 8. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Condition_BGInch">Condition</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
