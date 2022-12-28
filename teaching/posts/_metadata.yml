@@ -13,8 +13,6 @@ license: "CC BY"
 image: preview.png
 
 # set the citation use
-citation: 
-  type: post-weblog
 google-scholar: true
 
 # set bibliograhy and style

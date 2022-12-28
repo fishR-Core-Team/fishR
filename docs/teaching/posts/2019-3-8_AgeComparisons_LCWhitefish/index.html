@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Add zeroes for species not caught so that CPE calculations are correct">
+<meta name="description" content="Compare age estimates between two readers or from two structures taken from Lake Champlain (VT) Lake Whitefish.">
 
-<title>fishR - Adding Zero Catches</title>
+<title>fishR - Age Comparisons</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,69 +22,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -129,19 +85,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Adding Zero Catches">
-<meta property="og:description" content="Add zeroes for species not caught so that CPE calculations are correct">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\explanation.png">
+<meta property="og:title" content="fishR - Age Comparisons">
+<meta property="og:description" content="Compare age estimates between two readers or from two structures taken from Lake Champlain (VT) Lake Whitefish.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\exercise.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="767">
+<meta property="og:image:height" content="768">
 <meta property="og:image:width" content="1024">
-<meta name="citation_title" content="Adding Zero Catches">
+<meta name="citation_title" content="Age Comparisons">
 <meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2018-04-19">
-<meta name="citation_cover_date" content="2018-04-19">
-<meta name="citation_year" content="2018">
-<meta name="citation_online_date" content="2018-04-19">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2018-4-19_Adding_Zero_Catches">
+<meta name="citation_publication_date" content="2022-12-19">
+<meta name="citation_cover_date" content="2022-12-19">
+<meta name="citation_year" content="2022">
+<meta name="citation_online_date" content="2022-12-19">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_AgeComparisons_LCWhitefish">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -256,16 +212,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Adding Zero Catches</h1>
+      <h1 class="title">Age Comparisons</h1>
+            <p class="subtitle lead">Lake Champlain Lake Whitefish</p>
                   <div>
         <div class="description">
-          Add zeroes for species not caught so that CPE calculations are correct
+          Compare age estimates between two readers or from two structures taken from Lake Champlain (VT) Lake Whitefish.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">Explanation</div>
-                <div class="quarto-category">Data Wrangling</div>
-                <div class="quarto-category">CPE</div>
+                <div class="quarto-category">Exercise</div>
+                <div class="quarto-category">Age Comparisons</div>
+                <div class="quarto-category">Whitefish</div>
               </div>
                   </div>
   </div>
@@ -283,14 +240,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Apr 19, 2018</p>
+        <p class="date">Dec 19, 2022</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 20, 2022</p>
+        <p class="date-modified">Dec 28, 2022</p>
       </div>
     </div>
       
@@ -305,13 +262,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#simple-data" id="toc-simple-data" class="nav-link" data-scroll-target="#simple-data">Simple Data</a></li>
-  <li><a href="#multiple-values-to-receive-zeroes" id="toc-multiple-values-to-receive-zeroes" class="nav-link" data-scroll-target="#multiple-values-to-receive-zeroes">Multiple Values to Receive Zeroes</a></li>
-  <li><a href="#more-information-that-does-not-get-zeroes" id="toc-more-information-that-does-not-get-zeroes" class="nav-link" data-scroll-target="#more-information-that-does-not-get-zeroes">More Information that Does Not Get Zeroes</a></li>
-  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts">Final Thoughts</a></li>
+  <li><a href="#version-a---otoliths" id="toc-version-a---otoliths" class="nav-link active" data-scroll-target="#version-a---otoliths">Version A - Otoliths</a></li>
+  <li><a href="#version-b---scales" id="toc-version-b---scales" class="nav-link" data-scroll-target="#version-b---scales">Version B - Scales</a></li>
+  <li><a href="#version-c---fin-rays" id="toc-version-c---fin-rays" class="nav-link" data-scroll-target="#version-c---fin-rays">Version C - Fin Rays</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/teaching/posts/2018-4-19_Adding_Zero_Catches/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/teaching/posts/2019-3-8_AgeComparisons_LCWhitefish/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
@@ -319,356 +274,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="page-columns page-full"><p><span class="citation" data-cites="herbst_comparison_2011">Herbst and Marsden (<a href="#ref-herbst_comparison_2011" role="doc-biblioref">2011</a>)</span> compared the precision, bias, and reader uncertainty of ages estimated from the <a href="https://en.wikipedia.org/wiki/Fish_scale">scales</a>, dorsal fin rays, and <a href="https://en.wikipedia.org/wiki/Otolith">otoliths</a> of 151 <a href="https://en.wikipedia.org/wiki/Lake_whitefish">Lake Whitefish</a> (<em>Coregonus clupeaformis</em>) captured from <a href="https://en.wikipedia.org/wiki/Lake_Champlain">Lake Champlain</a> in 2009. The initial age estimates from two readers and a consensus age between the two readers from each of the three structures (variables are the structure name with a “1” or “2” appended to denote the reader or “C” for the consensus age) are in <a href="https://fishr-core-team.github.io/FSAdata/reference/WhitefishLC.html">WhitefishLC</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See “CSV file” link in “Source” section of linked page.</p></li></div></div>
+<p>&nbsp;</p>
+<section id="version-a---otoliths" class="level2">
+<h2 class="anchored" data-anchor-id="version-a---otoliths">Version A - Otoliths</h2>
+<ol type="1">
+<li>Use tabular, graphical, and statistical methods to describe any apparent bias in age estimates from <em>otoliths</em> between the two readers.</li>
+<li>Describe precision in age estimates between the two readers for <em>otoliths</em>.</li>
+<li>Describe any apparent bias between the <em>consensus</em> age estimates from <em>otoliths</em> and <em>scales</em>.</li>
+</ol>
+<p>&nbsp;</p>
+</section>
+<section id="version-b---scales" class="level2">
+<h2 class="anchored" data-anchor-id="version-b---scales">Version B - Scales</h2>
+<ol type="1">
+<li>Use tabular, graphical, and statistical methods to describe any apparent bias in age estimates from <em>scales</em> between the two readers.</li>
+<li>Describe precision in age estimates between the two readers for <em>scales</em>.</li>
+<li>Describe any apparent bias between the <em>consensus</em> age estimates from <em>scales</em> and <em>fin rays</em>.</li>
+</ol>
+<p>&nbsp;</p>
+</section>
+<section id="version-c---fin-rays" class="level2">
+<h2 class="anchored" data-anchor-id="version-c---fin-rays">Version C - Fin Rays</h2>
+<ol type="1">
+<li>Use tabular, graphical, and statistical methods to describe any apparent bias in age estimates from <em>fin rays</em> between the two readers.</li>
+<li>Describe precision in age estimates between the two readers for <em>fin rays</em>.</li>
+<li>Describe any apparent bias between the <em>consensus</em> age estimates from <em>fin rays</em> and <em>otoliths</em>.</li>
+</ol>
+<p>&nbsp;</p>
+<div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Solution Code:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The following packages are loaded for use below. I also set the random number seed for reproducibility of the randomly generated sample data below.</p>
+<p>Available upon request to students not in a class. Contact fishR maintainers.</p>
 </div>
 </div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)    <span class="co"># for group_by(), summarize(), mutate(), right_join()</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)    <span class="co"># for complete(), nesting()</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">678394</span>)  <span class="co"># for reproducibility of randomly created data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>&nbsp;</p>
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>Much of my work is with undergraduates who are first learning to analyze fisheries data. A common “learning opportunity” occurs when students are asked to compute the mean catch (or CPE), along with a standard deviation (SD), across multiple gear sets for each species. The learning opportunity occurs because some species will invariably not be caught in some gear sets. When the students summarize the number of fish caught for each species in each gear set those species not caught in a particular gear set will not “appear” in their data. Thus, when calculating the mean, the student will get the correct numerator (sum of catch across all gear sets) but not denominator (they use number of catches summed rather than total number of gear sets), which inflates (over-estimates) the mean catch and (usually) deflates (under-estimates) the SD of catches. Once confronted with this issue, they easily realize how to correct the mean calculation, but calculating the standard deviation is still an issue. These problems are exacerbated when using software to compute these summary statistics across many individual gear sets.</p>
-<p>In software, the “trick” is to add a zero for each species not caught in a specific gear set that was caught in at least one gear set. For example, if Bluegill were caught in at least one gear set but not in the third gear set, then a zero must be added as the catch of Bluegill in the third gear set. The <code>addZeroCatch()</code> function in the <code>FSA</code> package was an attempt to efficiently add these zeroes. This function has proven useful over the years, but I have become dissatisfied with its clunkiness. Additionally, I recently became aware of the <code>complete()</code> function in the <code>tidyr</code> package which holds promise for handling the same task. In this post, I explore the use of <code>complete()</code> for handling this issue.</p>
-<p>&nbsp;</p>
-</section>
-<section id="simple-data" class="level1 page-columns page-full">
-<h1>Simple Data</h1>
-<p>In this first example, the data consists of <code>species</code> and <code>length</code> recorded for each captured fish organized by the gear set identification number (<code>ID</code>) and held in the <code>fishdat</code> data.frame.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    ID species  tl
-#R|  1  1     BLG 148
-#R|  2  1     BLG 153
-#R|  3  1     BLG 147
-#R|  4  1     BLG 149
-#R|  5  1     BLG 144
-#R|  6  1     BLG 145</code></pre>
-</div>
-</div>
-<div class="page-columns page-full"><p>The catch of each species in each gear set may be found using <code>group_by()</code> and <code>summarize()</code> with <code>n()</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp; I find the <code>tibble</code> structure returned by <code>group_by()</code> to be annoying with simple data frames like this. Thus, I usually use <code>as.data.frame()</code> to remove it.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>catch <span class="ot">&lt;-</span> fishdat <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID,species) <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>catch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID species num
-#R|  1   1     BLG  10
-#R|  2   1     LMB   5
-#R|  3   1     YEP   5
-#R|  4   2     LMB   9
-#R|  5   2     YEP   7
-#R|  6   3     BLG  12
-#R|  7   3     YEP   7
-#R|  8   4     BLG   1
-#R|  9   4     LMB  11
-#R|  10  4     YEP  11
-#R|  11  5     BLG   9</code></pre>
-</div>
-</div>
-<p>From this it is seen that three species (“BLG”, “LMB”, and “YEP”) were captured across all nets, but that “BLG” were not captured in “ID=2”, “LMB” were not captured in “ID=3”, and “LMB” and “YEP” were not captured in “ID=5”. The sample size, mean, and SD of catches per species from these data may be found by again using <code>group_by()</code> and <code>summarize()</code>. However, these calculations are <strong>INCORRECT</strong> because they do not include the zero catches of “BLG” in “ID=2”, “LMB” in “ID=3”, and “LMB” and “YEP” in “ID=5”. The problem is most evident in the sample sizes, which should be five (gear sets) for each species.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Example of INCORRECT summaries because not using zeroes</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>catch <span class="sc">|&gt;</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),<span class="at">mn=</span><span class="fu">mean</span>(num),<span class="at">sd=</span><span class="fu">sd</span>(num)) <span class="sc">|&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    species n       mn       sd
-#R|  1     BLG 4 8.000000 4.830459
-#R|  2     LMB 3 8.333333 3.055050
-#R|  3     YEP 4 7.500000 2.516611</code></pre>
-</div>
-</div>
-<p>The <code>complete()</code> function can be used to add rows to a data frame for variables (or combinations of variables) that should be present in the data frame (relative to other values that are present) but are not. The <code>complete()</code> function takes a data frame as its first argument (but will be “piped” in below with <code>|&gt;</code>) and the variable or variables that will be used to identify which items are missing. For example, with these data, a zero should be added to <code>num</code> for missing combinations defined by <code>ID</code> and <code>species</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Example of default complete ... see below to add zeroes, not NAs</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>catch <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species) <span class="sc">|&gt;</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID species num
-#R|  1   1     BLG  10
-#R|  2   1     LMB   5
-#R|  3   1     YEP   5
-#R|  4   2     BLG  NA
-#R|  5   2     LMB   9
-#R|  6   2     YEP   7
-#R|  7   3     BLG  12
-#R|  8   3     LMB  NA
-#R|  9   3     YEP   7
-#R|  10  4     BLG   1
-#R|  11  4     LMB  11
-#R|  12  4     YEP  11
-#R|  13  5     BLG   9
-#R|  14  5     LMB  NA
-#R|  15  5     YEP  NA</code></pre>
-</div>
-</div>
-<div class="page-columns page-full"><p>From this result, it is seen that <code>complete()</code> added a row for “BLG” in “ID=2”, “LMB” in “ID=3”, and “LMB” and “YEP” in “ID=5” as we had hoped. However, <code>complete()</code> adds <code>NA</code>s by default. The value to add can be changed with <code>fill=</code>, which takes a list that includes the name of the variable to which the <code>NA</code>s were added (<code>num</code> in this case) set equal to the value to be added (<code>0</code> in this case).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;Here the result is saved into the <code>catch</code> data frame, thus modifying the original data frame with the addition of the zeroes.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>catch <span class="ot">&lt;-</span> catch <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species,<span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>catch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID species num
-#R|  1   1     BLG  10
-#R|  2   1     LMB   5
-#R|  3   1     YEP   5
-#R|  4   2     BLG   0
-#R|  5   2     LMB   9
-#R|  6   2     YEP   7
-#R|  7   3     BLG  12
-#R|  8   3     LMB   0
-#R|  9   3     YEP   7
-#R|  10  4     BLG   1
-#R|  11  4     LMB  11
-#R|  12  4     YEP  11
-#R|  13  5     BLG   9
-#R|  14  5     LMB   0
-#R|  15  5     YEP   0</code></pre>
-</div>
-</div>
-<p>These correct catch data can then be summarized as above to show the correct sample size, mean, and SD of catches per species.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>catch <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),<span class="at">mn=</span><span class="fu">mean</span>(num),<span class="at">sd=</span><span class="fu">sd</span>(num)) <span class="sc">|&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    species n  mn       sd
-#R|  1     BLG 5 6.4 5.504544
-#R|  2     LMB 5 5.0 5.049752
-#R|  3     YEP 5 6.0 4.000000</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="multiple-values-to-receive-zeroes" class="level1">
-<h1>Multiple Values to Receive Zeroes</h1>
-<p>Suppose that the fish data included a column that indicates whether the fish was marked and returned to the waterbody or not.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    ID species  tl marked
-#R|  1  1     BLG 148    YES
-#R|  2  1     BLG 153    YES
-#R|  3  1     BLG 147    YES
-#R|  4  1     BLG 149    YES
-#R|  5  1     BLG 144    YES
-#R|  6  1     BLG 145    YES</code></pre>
-</div>
-</div>
-<p>The catch and number of fish marked and returned per gear set ID and species may again be computed with <code>group_by()</code> and <code>summarize()</code>. Note, however, the use of <code>ifelse()</code> to use a <code>1</code> if the fish was marked and a <code>0</code> if it was not. Summing these values returns the number of fish that were marked. Giving this data frame to <code>complete()</code> as before will add zeroes for both the <code>num</code> and <code>nmarked</code> variables as long as both are included in the list given to <code>fill=</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>catch2 <span class="ot">&lt;-</span> fishdat2 <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID,species) <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num=</span><span class="fu">n</span>(),</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">nmarked=</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(marked<span class="sc">==</span><span class="st">"YES"</span>,<span class="dv">1</span>,<span class="dv">0</span>)))</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>catch2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  # A tibble: 11 × 4
-#R|  # Groups:   ID [5]
-#R|        ID species   num nmarked
-#R|     &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;   &lt;dbl&gt;
-#R|   1     1 BLG        10       8
-#R|   2     1 LMB         5       2
-#R|   3     1 YEP         5       2
-#R|   4     2 LMB         9       5
-#R|   5     2 YEP         7       2
-#R|   6     3 BLG        12       3
-#R|   7     3 YEP         7       4
-#R|   8     4 BLG         1       0
-#R|   9     4 LMB        11       4
-#R|  10     4 YEP        11       7
-#R|  11     5 BLG         9       6</code></pre>
-</div>
-</div>
-<p>There are two things to note in this output. First, that there are no zeroes for <code>num</code> and <code>nmarked</code> for the same species and gear sets as before. Second, the summarization was across two groups but <code>summarize()</code> only removes one of the <code>group_by()</code> variables. Thus, this result is still grouped by <code>ID</code> as shown above, which will interfere with using <code>complete()</code> to add the zeroes. This grouping can be removed with <code>ungroup()</code> as shown below before using <code>complete()</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>catch2 <span class="ot">&lt;-</span> catch2 <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(ID,species,<span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>catch2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID species num nmarked
-#R|  1   1     BLG  10       8
-#R|  2   1     LMB   5       2
-#R|  3   1     YEP   5       2
-#R|  4   2     BLG   0       0
-#R|  5   2     LMB   9       5
-#R|  6   2     YEP   7       2
-#R|  7   3     BLG  12       3
-#R|  8   3     LMB   0       0
-#R|  9   3     YEP   7       4
-#R|  10  4     BLG   1       0
-#R|  11  4     LMB  11       4
-#R|  12  4     YEP  11       7
-#R|  13  5     BLG   9       6
-#R|  14  5     LMB   0       0
-#R|  15  5     YEP   0       0</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="more-information-that-does-not-get-zeroes" class="level1">
-<h1>More Information that Does Not Get Zeroes</h1>
-<p>Suppose there is a data frame called <code>geardat</code> that contains information specific to each gear set.</p>
 <div class="cell" data-layout-align="center">
 
 </div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>geardat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    ID mon year  lake run effort
-#R|  1  1 May 2018 round   1   1.34
-#R|  2  2 May 2018 round   2   1.87
-#R|  3  3 May 2018 round   3   1.56
-#R|  4  4 May 2018  twin   1   0.92
-#R|  5  5 May 2018  twin   2   0.67</code></pre>
-</div>
-</div>
-<p>And, for the purposes of this example, suppose that we have summarized catch data WITHOUT the zeroes having been added.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="ot">&lt;-</span> fishdat2 <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID,species) <span class="sc">|&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">num=</span><span class="fu">n</span>(),</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">nmarked=</span><span class="fu">sum</span>(<span class="fu">ifelse</span>(marked<span class="sc">==</span><span class="st">"YES"</span>,<span class="dv">1</span>,<span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>catch3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID species num nmarked
-#R|  1   1     BLG  10       8
-#R|  2   1     LMB   5       2
-#R|  3   1     YEP   5       2
-#R|  4   2     LMB   9       5
-#R|  5   2     YEP   7       2
-#R|  6   3     BLG  12       3
-#R|  7   3     YEP   7       4
-#R|  8   4     BLG   1       0
-#R|  9   4     LMB  11       4
-#R|  10  4     YEP  11       7
-#R|  11  5     BLG   9       6</code></pre>
-</div>
-</div>
-<p>Finally, suppose that these summarized catch data are joined with the gear data such that the gear set specific information is shown with each catch.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="ot">&lt;-</span> <span class="fu">right_join</span>(geardat,catch3,<span class="at">by=</span><span class="st">"ID"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>catch3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID mon year  lake run effort species num nmarked
-#R|  1   1 May 2018 round   1   1.34     BLG  10       8
-#R|  2   1 May 2018 round   1   1.34     LMB   5       2
-#R|  3   1 May 2018 round   1   1.34     YEP   5       2
-#R|  4   2 May 2018 round   2   1.87     LMB   9       5
-#R|  5   2 May 2018 round   2   1.87     YEP   7       2
-#R|  6   3 May 2018 round   3   1.56     BLG  12       3
-#R|  7   3 May 2018 round   3   1.56     YEP   7       4
-#R|  8   4 May 2018  twin   1   0.92     BLG   1       0
-#R|  9   4 May 2018  twin   1   0.92     LMB  11       4
-#R|  10  4 May 2018  twin   1   0.92     YEP  11       7
-#R|  11  5 May 2018  twin   2   0.67     BLG   9       6</code></pre>
-</div>
-</div>
-<p>These data simulate what might be seen from a flat database.</p>
-<p>With these data, zeroes still need to be added as defined by missing combinations of <code>ID</code> and <code>species</code>. However, if only these two variables are included in <code>complete()</code> then zeroes will be added for <code>mon</code>, <code>year</code>, <code>lake</code>, <code>run</code>, and <code>effort</code>, which is not desired. These five variables are connected to or “nested” with the <code>ID</code> variable (i.e., if you know <code>ID</code> then you know the values of these other variables) and should be treated as a group. Nesting of variables can be handled in <code>complete()</code> by including the names of all the connected variables in <code>nesting()</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>catch3 <span class="sc">|&gt;</span> <span class="fu">complete</span>(<span class="fu">nesting</span>(ID,mon,year,lake,run,effort),species,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID mon year  lake run effort species num nmarked
-#R|  1   1 May 2018 round   1   1.34     BLG  10       8
-#R|  2   1 May 2018 round   1   1.34     LMB   5       2
-#R|  3   1 May 2018 round   1   1.34     YEP   5       2
-#R|  4   2 May 2018 round   2   1.87     BLG   0       0
-#R|  5   2 May 2018 round   2   1.87     LMB   9       5
-#R|  6   2 May 2018 round   2   1.87     YEP   7       2
-#R|  7   3 May 2018 round   3   1.56     BLG  12       3
-#R|  8   3 May 2018 round   3   1.56     LMB   0       0
-#R|  9   3 May 2018 round   3   1.56     YEP   7       4
-#R|  10  4 May 2018  twin   1   0.92     BLG   1       0
-#R|  11  4 May 2018  twin   1   0.92     LMB  11       4
-#R|  12  4 May 2018  twin   1   0.92     YEP  11       7
-#R|  13  5 May 2018  twin   2   0.67     BLG   9       6
-#R|  14  5 May 2018  twin   2   0.67     LMB   0       0
-#R|  15  5 May 2018  twin   2   0.67     YEP   0       0</code></pre>
-</div>
-</div>
-<p>It is possible to have nesting with <code>species</code> as well. Suppose, for example, that the scientific name for the species was included in the original <code>fishdata2</code> that was summarized (using a combination of the examples from above, but not shown here) to <code>catch4</code>.</p>
-<div class="cell" data-layout-align="center">
 
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>catch4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID species                spsci num nmarked mon year  lake run effort
-#R|  1   1     BLG  Lepomis macrochirus  10       8 May 2018 round   1   1.34
-#R|  2   1     LMB Micropterus dolomieu   5       2 May 2018 round   1   1.34
-#R|  3   1     YEP     Perca flavescens   5       2 May 2018 round   1   1.34
-#R|  4   2     LMB Micropterus dolomieu   9       5 May 2018 round   2   1.87
-#R|  5   2     YEP     Perca flavescens   7       2 May 2018 round   2   1.87
-#R|  6   3     BLG  Lepomis macrochirus  12       3 May 2018 round   3   1.56
-#R|  7   3     YEP     Perca flavescens   7       4 May 2018 round   3   1.56
-#R|  8   4     BLG  Lepomis macrochirus   1       0 May 2018  twin   1   0.92
-#R|  9   4     LMB Micropterus dolomieu  11       4 May 2018  twin   1   0.92
-#R|  10  4     YEP     Perca flavescens  11       7 May 2018  twin   1   0.92
-#R|  11  5     BLG  Lepomis macrochirus   9       6 May 2018  twin   2   0.67</code></pre>
-</div>
-</div>
-<p>The zeroes are then added to this data.frame making sure to note the nesting of <code>species</code> and <code>spsci</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>catch4 <span class="sc">|&gt;</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(<span class="fu">nesting</span>(ID,mon,year,lake,run,effort),</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">nesting</span>(species,spsci),</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill=</span><span class="fu">list</span>(<span class="at">num=</span><span class="dv">0</span>,<span class="at">nmarked=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     ID mon year  lake run effort species                spsci num nmarked
-#R|  1   1 May 2018 round   1   1.34     BLG  Lepomis macrochirus  10       8
-#R|  2   1 May 2018 round   1   1.34     LMB Micropterus dolomieu   5       2
-#R|  3   1 May 2018 round   1   1.34     YEP     Perca flavescens   5       2
-#R|  4   2 May 2018 round   2   1.87     BLG  Lepomis macrochirus   0       0
-#R|  5   2 May 2018 round   2   1.87     LMB Micropterus dolomieu   9       5
-#R|  6   2 May 2018 round   2   1.87     YEP     Perca flavescens   7       2
-#R|  7   3 May 2018 round   3   1.56     BLG  Lepomis macrochirus  12       3
-#R|  8   3 May 2018 round   3   1.56     LMB Micropterus dolomieu   0       0
-#R|  9   3 May 2018 round   3   1.56     YEP     Perca flavescens   7       4
-#R|  10  4 May 2018  twin   1   0.92     BLG  Lepomis macrochirus   1       0
-#R|  11  4 May 2018  twin   1   0.92     LMB Micropterus dolomieu  11       4
-#R|  12  4 May 2018  twin   1   0.92     YEP     Perca flavescens  11       7
-#R|  13  5 May 2018  twin   2   0.67     BLG  Lepomis macrochirus   9       6
-#R|  14  5 May 2018  twin   2   0.67     LMB Micropterus dolomieu   0       0
-#R|  15  5 May 2018  twin   2   0.67     YEP     Perca flavescens   0       0</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="final-thoughts" class="level1">
-<h1>Final Thoughts</h1>
-<p>This is my first exploration with <code>complete()</code> and it looks promising for this task of adding zeroes to data frames of catch by gear set for gear sets in which a species was not caught. I will be curious to hear what others think of this function and how it might fit in their workflow.</p>
-<p>&nbsp;</p>
 
 
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section></div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-herbst_comparison_2011" class="csl-entry" role="doc-biblioentry">
+Herbst, S. J., and J. E. Marsden. 2011. <a href="https://doi.org/10.1016/j.jglr.2011.02.001">Comparison of precision and bias of scale, fin ray, and otolith age estimates for <span>Lake</span> <span>Whitefish</span> (<em><span>Coregonus</span> clupeaformis</em>) in <span>Lake</span> <span>Champlain</span></a>. Journal of Great Lakes Research 37:386–389.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
