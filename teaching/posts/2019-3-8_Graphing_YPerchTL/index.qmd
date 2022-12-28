@@ -1,0 +1,131 @@
+---
+title: Graphing
+subtitle: Trout Lake Yellow Perch
+description: Practice graphing skills for the Trout Lake Yellow Perch data set.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Graphing"
+  - "Yellow Perch"
+---
+
+:::{.callout-warning appearance="simple"}
+## Continuation
+This exercise is a continuation of this [data wrangling exercise](../2019-3-8_Wrangling_YPerchTL/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the data frames required below.
+:::
+
+&nbsp;
+
+1. Describe the following from plots constructed with the Yellow Perch captured in fyke nets in 2005 data frame.
+    a. The distribution of lengths.
+    a. The distribution of weights.
+    a. The relationship between weight and length.
+    a. The relationship between the natural logs of weight and length.
+1. Describe the following from plots constructed with the Yellow Perch captured in the 1990s data frame.
+    a. The distribution of lengths separately for each gear (*without using separate data frames for each gear*).
+    a. The relationship between the natural logs of weight and length separately for each gear (*without using separate data frames for each gear*).
+    a. The difference in mean lengths among the gears (*plot should include confidence intervals*).
+    a. Describe the difference in numbers caught among the gears.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(dplyr)
+library(ggplot2)
+
+# Load data
+YPerchTL <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/YPerchTL.csv") |>
+  dplyr::select(-lakeid,-spname) |>
+  filter(gearid %in% c("BSEINE","ELFISH","FYKNET")) |>
+  rename(tl=length,wt=weight) |>
+  mutate(logtl=log10(tl),logwt=log10(wt))
+
+fn05 <- YPerchTL |> 
+  filter(gearid=="FYKNET",year4==2005)
+
+yp90s <- YPerchTL |> 
+  filter(year4>=1990,year4<=1999)
+
+# Fykenets 2005 Plots
+theme_set(theme_bw())
+## Length frequency
+ggplot(data=fn05,mapping=aes(x=tl)) +
+  geom_histogram(binwidth=5,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.03)))
+## Weight frequency
+ggplot(data=fn05,mapping=aes(x=wt)) +
+  geom_histogram(binwidth=2,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Weight (g)") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.03)))
+## W-L relationship
+ggplot(data=fn05,mapping=aes(x=tl,y=wt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01))
+## logW-logL relationship
+ggplot(data=fn05,mapping=aes(x=tl,y=wt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01),
+                     trans="log",breaks=seq(40,160,20)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01),
+                     trans="log",breaks=c(0.6,1,2,5,10,20,30))
+
+# Yellow Perch 1990s Plots
+## length frequency separated
+ggplot(data=yp90s,mapping=aes(x=tl)) +
+  geom_histogram(binwidth=5,boundary=0,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)") +
+  scale_y_continuous(name="Frequency",expand=expansion(mult=c(0,0.03))) +
+  facet_wrap(vars(gearid))
+## logW-logL relationship separated
+ggplot(data=yp90s,mapping=aes(x=tl,y=wt,fill=gearid)) +
+  geom_point(shape=21,color="black") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01),
+                     trans="log",breaks=seq(40,160,20)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01),
+                     trans="log",breaks=c(0.6,1,2,5,10,20,30))
+## Mean Lengths by gear
+### Summarize first
+sum90s <- yp90s |>
+  group_by(gearid) |>
+  summarize(n=n(),
+            mn=mean(tl,na.rm=TRUE),
+            sd=sd(tl,na.rm=TRUE),
+            se=FSA::se(tl,na.rm=TRUE),
+            LCI=mn+qt(0.025,df=n-1)*se,
+            UCI=mn+qt(0.975,df=n-1)*se)
+sum90s
+
+## then plot
+ggplot() +
+  geom_line(data=sum90s,mapping=aes(x=gearid,y=mn,group=1),linewidth=1) +
+  geom_errorbar(data=sum90s,mapping=aes(x=gearid,ymin=LCI,ymax=UCI),
+                linewidth=1,width=0.05) +
+  geom_point(data=sum90s,mapping=aes(x=gearid,y=mn),shape=21,size=2,
+             color="black",fill="white") +
+  scale_x_discrete(name="Sample Gear") +
+  scale_y_continuous(name="Mean Total Length (mm)",limits=c(0,NA),
+                     expand=expansion(mult=c(0,0.05)))
+
+## gear catch distribution
+ggplot(data=sum90s,mapping=aes(x=gearid,y=n)) +
+  geom_bar(stat="identity",color="black",fill="gray50") +
+  scale_x_discrete(name="Sample Gear") +
+  scale_y_continuous(name="Total Fish Caught",expand=expansion(mult=c(0,0.05)))
+
+
+```

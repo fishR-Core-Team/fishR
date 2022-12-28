@@ -1,0 +1,78 @@
+---
+title: Size Structure
+subtitle: Trout Lake Yellow Perch
+description: Estimate size structure statistics and compare them among groups of Yellow Perch from Trout Lake (WI).
+author: Derek H. Ogle
+date: 3/19/2022
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Size Structure"
+  - "Yellow Perch"
+---
+
+
+:::{.callout-warning appearance="simple"}
+## Continuation
+This exercise is a continuation of this [data wrangling exercise](../2019-3-8_Wrangling_YPerchTL/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the data frame of Yellow Perch captured in beach seines and fyke nets in 2000.
+:::
+
+1. Describe the distribution of lengths for Yellow Perch captured in **fyke nets** in 2000 using both a histogram and frequency table with 10 mm length categories.
+1. Repeat the previous question with Yellow Perch captured with **beach seines**.
+1. *Statistically* compare the length frequency distributions between Yellow Perch captured with a beach seine and in fyke nets in 2000.
+1. Write a short paragraph describing what you learned about the size structure of Trout Lake Yellow Perch, with specific comments about the two gears examined.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(dplyr)
+library(Matching)
+
+# Load data
+YPTL00 <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/YPerchTL.csv") |>
+  filter(gearid %in% c("BSEINE","FYKNET"),year4==2000) |>
+  dplyr::select(-lakeid,-spname) |>
+  rename(tl=length,wt=weight) |>
+  mutate(logtl=log10(tl),
+         logwt=log10(wt),
+         lcat10=FSA::lencat(tl,w=10),
+         gcat=FSA::psdAdd(tl,species="Yellow Perch")) |>
+  arrange(year4,tl)
+
+# Fyke Nets
+fn <- YPTL00 |>
+  filter(gearid=="FYKNET")
+
+hist(~tl,data=fn,w=10)
+round(prop.table(xtabs(~lcat10,data=fn))*100,1)
+
+# Beach Seine
+bs <- YPTL00 |>
+  filter(gearid=="BSEINE")
+
+hist(~tl,data=bs,w=10)
+round(prop.table(xtabs(~lcat10,data=bs))*100,1)
+
+# Compare Fyke Net and Beach Seines Length Frequency
+clr <- c("black","gray50")
+plot(ecdf(fn$tl),xlab="Total Length (mm)",
+     do.points=FALSE,verticals=TRUE,main="",col.01line=NULL)
+plot(ecdf(bs$tl),add=TRUE,do.points=FALSE,
+     verticals=TRUE,col=clr[2],col.01line=NULL)
+legend("bottomright",c("Fyke Net","Beach Seine"),col=clr,lty=1,bty="n",cex=0.75)
+
+ks.test(fn$tl,bs$tl)
+summary(ks.boot(fn$tl,bs$tl,nboots=5000))
+```

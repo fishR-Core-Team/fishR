@@ -1,0 +1,16 @@
+{
+  "hash": "5a9bb90c7ce7e9b6a2ac19f548cb8e88",
+  "result": {
+    "markdown": "---\ntitle: Size Structure\nsubtitle: Trout Lake Yellow Perch\ndescription: Estimate size structure statistics and compare them among groups of Yellow Perch from Trout Lake (WI).\nauthor: Derek H. Ogle\ndate: 3/19/2022\nimage: ../../../helpers/img/exercise.png\ncategories:\n  - \"  Exercise\"\n  - \" Size Structure\"\n  - \"Yellow Perch\"\n---\n\n\n\n:::{.callout-warning appearance=\"simple\"}\n## Continuation\nThis exercise is a continuation of this [data wrangling exercise](../2019-3-8_Wrangling_YPerchTL/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the data frame of Yellow Perch captured in beach seines and fyke nets in 2000.\n:::\n\n1. Describe the distribution of lengths for Yellow Perch captured in **fyke nets** in 2000 using both a histogram and frequency table with 10 mm length categories.\n1. Repeat the previous question with Yellow Perch captured with **beach seines**.\n1. *Statistically* compare the length frequency distributions between Yellow Perch captured with a beach seine and in fyke nets in 2000.\n1. Write a short paragraph describing what you learned about the size structure of Trout Lake Yellow Perch, with specific comments about the two gears examined.\n\n&nbsp;\n\n:::{.callout-important appearance=\"simple\"}\n## Solution Code:\nAvailable upon request to students not in a class. Contact fishR maintainers.\n:::\n\n\n::: {.cell layout-align=\"center\"}\n\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

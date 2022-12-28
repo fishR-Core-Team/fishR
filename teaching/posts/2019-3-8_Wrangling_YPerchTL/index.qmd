@@ -1,0 +1,83 @@
+---
+title: Data Wrangling
+subtitle: Trout Lake Yellow Perch
+description: Practice data wrangling skills with the Trouit Lake Yellow Perch data set.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Data Wrangling"
+  - "Yellow Perch"
+---
+
+Researchers for the [North Temperate Lakes Long-Term Ecological Research](https://lter.limnology.wisc.edu/) program have collected fish from a number of lakes in Wisconsin since 1981. The total lengths and weights of [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) captured from [Trout Lake](https://lter.limnology.wisc.edu/researchsite/trout-lake) from 1981-2006 are recorded in [YPerchTL](https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html).^[See "CSV file" link in "Source" section of linked page.] Use these data to answer the following questions.
+
+1. Remove the `lakeid` and `spname` variables from the data frame as these variables are constant for all records.
+1. Remove all records for which the `gearid` is "CRAYTR", "FYKNED", "FYKNEL", "MINNOW", "TRAMML", or any of "VGN0XX", as very few Yellow Perch were captured in these gears.^[It may be eaiser to look at the list of `gearid` values and keep the ones that are not listed here.] [*Use this data frame for the remaining questions.*]
+1. Create a new data frame of Yellow Perch captured in just fyke nets.
+1. Create a new data frame of Yellow Perch captured in fyke nets and beach seines.
+1. Create a new data frame of Yellow Perch captured in 1998.
+1. Create a new data frame of Yellow Perch captured after 1999.
+1. Create a new data frame of Yellow Perch captured in the 1990s.
+1. Create a new data frame of Yellow Perch captured with only fyke nets in 2005.
+1. Create a new data frame of Yellow Perch captured with only beach seines and fyke nets in 2000.
+1. Make the following changes to the data frame of Yellow Perch captured in fyke nets and beach seines in 2000.
+    a. Change the name of the `length` and `weight` variables to `tl` and `wt`, respectively.
+    a. Create a new variable that is the total length in inches.
+    a. Create two new variables that are the [common logarithms](https://en.wikipedia.org/wiki/Common_logarithm) of the lengths (in mm) and weights.
+    a. Add a variable that contains 10 mm wide length categories.
+    a. Add a variable that contains the appropriate five-cell Gabelhouse length categories.
+    a. Sort the data by total length within capture year.
+
+:::{.callout-warning appearance="simple"}
+## Save Your Script
+Some of these data frames will be used in this [graphing](../2019-3-8_Plotting_YPerchTL/), this [size structure](../2019-3-8_SizeStrux_YPerchTL/), and this [weight-length relationhip](../2019-3-8_WL_YPerchTL/) exercises.
+:::
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(dplyr)
+
+# Load data
+YPerchTL <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/YPerchTL.csv")
+str(YPerchTL)
+
+# Remove variables and gears
+YPerchTL <- YPerchTL |>
+  select(-lakeid,-spname) |>
+  filter(gearid %in% c("BSEINE","ELFISH","FYKNET"))
+
+# Set of filtering questions
+YPerchTL |> filter(gearid=="FYKNET")
+YPerchTL |> filter(gearid %in% c("BSEINE","FYKNET"))
+YPerchTL |> filter(year4==1998)
+YPerchTL |> filter(year4>1999)
+YPerchTL |> filter(year4>=1990,year4<=1999)
+YPerchTL |> filter(gearid=="FYKNET",year4==2005)
+YPTL00 <- YPerchTL |>
+  filter(gearid %in% c("BSEINE","FYKNET"),year4==2000)
+
+# Final data set
+YPTL00 <- YPTL00 |>
+  rename(tl=length,wt=weight) |>
+  mutate(tlin=tl/25.4,
+         logtl=log10(tl),
+         logwt=log10(wt),
+         lcat10=FSA::lencat(tl,w=10),
+         gcat=FSA::psdAdd(tl,species="Yellow Perch")) |>
+  arrange(year4,tl)
+FSA::peek(YPTL00)
+```

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Derek H. Ogle">
-<meta name="description" content="Thoughts on how best to use R package data with students.">
+<meta name="description" content="Practice data wrangling skills with the Trouit Lake Yellow Perch data set.">
 
-<title>fishR - Using fishR Data with Students</title>
+<title>fishR - Data Wrangling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,69 +22,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -129,19 +66,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <link rel="stylesheet" href="../../../css/styles.css">
-<meta property="og:title" content="fishR - Using fishR Data with Students">
-<meta property="og:description" content="Thoughts on how best to use R package data with students.">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\data.png">
+<meta property="og:title" content="fishR - Data Wrangling">
+<meta property="og:description" content="Practice data wrangling skills with the Trouit Lake Yellow Perch data set.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/helpers\img\exercise.png">
 <meta property="og:site-name" content="fishR">
-<meta property="og:image:height" content="745">
-<meta property="og:image:width" content="1000">
-<meta name="citation_title" content="Using fishR Data with Students">
+<meta property="og:image:height" content="768">
+<meta property="og:image:width" content="1024">
+<meta name="citation_title" content="Data Wrangling">
 <meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2022-12-19">
-<meta name="citation_cover_date" content="2022-12-19">
-<meta name="citation_year" content="2022">
-<meta name="citation_online_date" content="2022-12-19">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-19_Using_fishR_Data">
+<meta name="citation_publication_date" content="2019-03-08">
+<meta name="citation_cover_date" content="2019-03-08">
+<meta name="citation_year" content="2019">
+<meta name="citation_online_date" content="2019-03-08">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Wrangling_YPerchTL">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/book/;">
@@ -255,14 +192,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Using fishR Data with Students</h1>
+      <h1 class="title">Data Wrangling</h1>
+            <p class="subtitle lead">Trout Lake Yellow Perch</p>
                   <div>
         <div class="description">
-          Thoughts on how best to use R package data with students.
+          Practice data wrangling skills with the Trouit Lake Yellow Perch data set.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">Data</div>
+                <div class="quarto-category">Exercise</div>
+                <div class="quarto-category">Data Wrangling</div>
+                <div class="quarto-category">Yellow Perch</div>
               </div>
                   </div>
   </div>
@@ -280,14 +220,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Dec 19, 2022</p>
+        <p class="date">Mar 8, 2019</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Dec 20, 2022</p>
+        <p class="date-modified">Dec 28, 2022</p>
       </div>
     </div>
       
@@ -298,15 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#using-csv-files" id="toc-using-csv-files" class="nav-link" data-scroll-target="#using-csv-files">Using CSV Files</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-git"></i></div><div class="action-links"><p><a href="https://fishr-core-team.github.io/fishR/edit/main/teaching/posts/2022-12-19_Using_fishR_Data/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://fishr-core-team.github.io/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+        
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
@@ -314,94 +246,71 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="page-columns page-full"><p>Researchers for the <a href="https://lter.limnology.wisc.edu/">North Temperate Lakes Long-Term Ecological Research</a> program have collected fish from a number of lakes in Wisconsin since 1981. The total lengths and weights of <a href="https://en.wikipedia.org/wiki/Yellow_perch">Yellow Perch</a> (<em>Perca flavescens</em>) captured from <a href="https://lter.limnology.wisc.edu/researchsite/trout-lake">Trout Lake</a> from 1981-2006 are recorded in <a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html">YPerchTL</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Use these data to answer the following questions.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See “CSV file” link in “Source” section of linked page.</p></li></div></div>
+<ol type="1">
+<li>Remove the <code>lakeid</code> and <code>spname</code> variables from the data frame as these variables are constant for all records.</li>
+<li>Remove all records for which the <code>gearid</code> is “CRAYTR”, “FYKNED”, “FYKNEL”, “MINNOW”, “TRAMML”, or any of “VGN0XX”, as very few Yellow Perch were captured in these gears.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> [<em>Use this data frame for the remaining questions.</em>]</li>
+<li>Create a new data frame of Yellow Perch captured in just fyke nets.</li>
+<li>Create a new data frame of Yellow Perch captured in fyke nets and beach seines.</li>
+<li>Create a new data frame of Yellow Perch captured in 1998.</li>
+<li>Create a new data frame of Yellow Perch captured after 1999.</li>
+<li>Create a new data frame of Yellow Perch captured in the 1990s.</li>
+<li>Create a new data frame of Yellow Perch captured with only fyke nets in 2005.</li>
+<li>Create a new data frame of Yellow Perch captured with only beach seines and fyke nets in 2000.</li>
+<li>Make the following changes to the data frame of Yellow Perch captured in fyke nets and beach seines in 2000.
+<ol type="a">
+<li>Change the name of the <code>length</code> and <code>weight</code> variables to <code>tl</code> and <code>wt</code>, respectively.</li>
+<li>Create a new variable that is the total length in inches.</li>
+<li>Create two new variables that are the <a href="https://en.wikipedia.org/wiki/Common_logarithm">common logarithms</a> of the lengths (in mm) and weights.</li>
+<li>Add a variable that contains 10 mm wide length categories.</li>
+<li>Add a variable that contains the appropriate five-cell Gabelhouse length categories.</li>
+<li>Sort the data by total length within capture year.</li>
+</ol></li>
+</ol>
+<div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;It may be eaiser to look at the list of <code>gearid</code> values and keep the ones that are not listed here.</p></li></div><div class="callout-warning callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Save Your Script
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>No special packages are loaded for use in this post.</p>
+<p>Some of these data frames will be used in this <a href="../2019-3-8_Plotting_YPerchTL/">graphing</a>, this <a href="../2019-3-8_SizeStrux_YPerchTL/">size structure</a>, and this <a href="../2019-3-8_WL_YPerchTL/">weight-length relationhip</a> exercises.</p>
 </div>
 </div>
 <p>&nbsp;</p>
-<section id="introduction" class="level1 page-columns page-full">
-<h1>Introduction</h1>
-<div class="page-columns page-full"><p>A large number and variety of data sets are provided in the <code>FSA</code> and <code>FSAdata</code> packages, which I collectively call here the “fishR data.” Lists of the data available in these packages are available <a href="../../../pages/data_fishR_alpha.html">alphabetically ordered</a> or <a href="../../../pages/data_fishR_byTopic.html">arranged by fisheries topic</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Items on those lists are linked to a documentation file where the origin of the data, its variables, and other items are described. This is a rich source of open-source data that can be used for teaching purposes.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;A more comprehensive list of fisheries data in all CRAN packages is <a href="../../../pages/data_Comp_byPackage.html">here</a>.</p></li></div></div>
-<p>Data sets in <code>FSA</code> and <code>FSAdata</code> can be, as with data in all packages, accessed with <code>data()</code> by including the name of the data as the first argument and the package name in <code>package=</code>. For example, the <code>WalleyeErie2</code> data from <code>FSAdata</code> are loaded below.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(WalleyeErie2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|      setID loc grid year  tl   w  sex    mat age
-#R|  1 2003001   1  940 2003 360 460 male mature   2
-#R|  2 2003001   1  940 2003 371 571 male mature   2
-#R|  3 2003001   1  940 2003 375 507 male mature   2
-#R|  4 2003001   1  940 2003 375 584 male mature   2
-#R|  5 2003001   1  940 2003 375 537 male mature   2
-#R|  6 2003001   1  940 2003 376 553 male mature   2</code></pre>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Solution Code:
 </div>
 </div>
-<p>&nbsp;</p>
-<div class="page-columns page-full"><p>While this method for accessing these data is efficient, I don’t like to use it with students because in the “real world” they will not be accessing data from an R package, rather they will be using their own data stored in some other format. With students just learning R I usually have them load CSV files that I either provide for them or they produce themselves.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> They then load the data with <code>read.csv()</code> from base R.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;We also discuss the advantages of CSV files – lightweight, not proprietary, etc.</p></li><li id="fn3"><p><sup>3</sup>&nbsp;For more advanced students I will use <code>read_csv()</code> from <code>readr</code>.</p></li></div></div>
-<p>&nbsp;</p>
-</section>
-<section id="using-csv-files" class="level1 page-columns page-full">
-<h1>Using CSV Files</h1>
-<div class="page-columns page-full"><p>To aid use of the fishR data as CSV files we have provided links to the raw CSV files in the R documentation,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> in the <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">on-line documentation</a>, or in the <a href="https://cran.r-project.org/web/packages/FSAdata/FSAdata.pdf">PDF documentation on CRAN</a>. In all instances you will see a highlighted “CSV file” link at the end of the description in the “source” section of documentation (<a href="#fig-exCSVlink">Figure&nbsp;1</a>). Pressing this link will bring up the raw CSV file which can then be saved to your personal computer.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;For example, (e.g., try <code>?FSAdata::WalleyeErie2</code>.</p></li><li id="fn5"><p><sup>5</sup>&nbsp;Alternatively, right-click on the CSV link to save the file.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="cell-output-display page-columns page-full">
-<div id="fig-exCSVlink" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="exCSVlink.png" class="img-fluid figure-img" width="650"></p>
-<p></p><figcaption class="figure-caption margin-caption">Figure&nbsp;1: Partial view of the online documentation for <code>WalleyeErie2</code> data set in <code>FSAdata</code> showing the “CSV file” link.</figcaption><p></p>
-</figure>
+<div class="callout-body-container callout-body">
+<p>Available upon request to students not in a class. Contact fishR maintainers.</p>
 </div>
 </div>
-</div>
-<p>&nbsp;</p>
-<p>Students can link directly to URL for the CSV file but this requires a connection to the internet (each time the data is loaded) and does not help students learn how to organize data on their own computers.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>WalleyeErie2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/WalleyeErie2.csv"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(WalleyeErie2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|      setID loc grid year  tl   w  sex    mat age
-#R|  1 2003001   1  940 2003 360 460 male mature   2
-#R|  2 2003001   1  940 2003 371 571 male mature   2
-#R|  3 2003001   1  940 2003 375 507 male mature   2
-#R|  4 2003001   1  940 2003 375 584 male mature   2
-#R|  5 2003001   1  940 2003 375 537 male mature   2
-#R|  6 2003001   1  940 2003 376 553 male mature   2</code></pre>
-</div>
-</div>
-<p>However, this last example also demonstrates how an instructor could link directly to the CSV file in the resources they provide the student.</p>
-<p>&nbsp;</p>
-</section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
-<p>In summary, we hope you will take advantage of the data resources provided in the <code>FSA</code> and <code>FSAdata</code> packages. However, we encourage you <strong>not</strong> to have students access the data through <code>data()</code> but instead to use the CSV files linked to in the documentation as described above.</p>
-<p>&nbsp;</p>
 <div class="cell" data-layout-align="center">
 
 </div>
 
 
-</section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2022,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2019,
   author = {Derek H. Ogle},
-  title = {Using {fishR} {Data} with {Students}},
-  date = {2022-12-19},
-  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-19_Using_fishR_Data},
+  title = {Data {Wrangling}},
+  date = {2019-03-08},
+  url = {https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Wrangling_YPerchTL},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2022, December 19. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2022-12-19_Using_fishR_Data">Using
-fishR Data with Students</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2019" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2019, March 8. <a href="https://fishr-core-team.github.io/fishR//teaching/posts/2019-3-8_Wrangling_YPerchTL">Data
+Wrangling</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

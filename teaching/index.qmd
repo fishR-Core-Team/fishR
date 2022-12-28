@@ -5,8 +5,8 @@ listing:
   contents: posts
   type: grid
   fields: [image,title,description,date,file-modified,author]
-  sort: date desc
-  sort-ui: [date,author,file-modified]
+  sort: file-modified desc
+  sort-ui: [file-modified,date,author]
   categories: true
   table-hover: true
   field-display-names: 

@@ -1,0 +1,205 @@
+---
+title: Weight-Length Relationship
+subtitle: Trout Lake Yellow Perch
+description: Fit a weight-length relationsip for Trout Lake Yellow Perch.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Weight-Length"
+  - "Yellow Perch"
+---
+
+:::{.callout-warning appearance="simple"}
+## Continuation
+This exercise is a continuation of [this data wrangling exercise](../2019-3-8_Wrangling_YPerchTL/) and, thus, depends on data frames constructed there. Please load/run your script from that exercise to access the Yellow Perch captured in the 1990s data frame.
+:::
+
+&nbsp;
+
+# Basic Analysis I
+1. Construct graphs appropriate to answer the following questions.^[If you completed [this graphing exercise](../2019-3-8_Graphing_Inch) then you created the necessary graphs there.]
+    a. Describe the relationship between weight and length (in mm here and throughout).
+    a. Describe the relationship between log-transformed weight and length.
+1. From the plots above there is a clear minimum length for which the weights were precisely obtained. What is that length? [**Reduce the data frame to fish greater than this minimum length for the questions below. You should also remove all fish for which a weight was not recorded.**]^[There are several outliers in this data that should be corrected or removed. For simplicity, leave them in the data for this exercise.]
+1. Compute the weight-length relationship with an appropriate linear regression.
+    a. Plot the results (data and the fitted relationship) on both the transformed and raw scales.^[[This post](../../../blog/posts/2021-5-25_fitPlot-replacement/) may be useful.] Comment on the fit.
+    a. Construct a residual plot.^[[This post](../../../blog/posts/2021-6-1_residPlot-replacement/) may be useful.] Comment.
+    a. Express your results as an equation on the transformed scale.
+    a. Express your results as an equation on the raw scale.
+    a. Carefully interpret the meaning of the slope of the weight-length relationship.
+    a. Is there statistical evidence for isometric or allometric growth?
+
+&nbsp;
+
+# Basic Analysis II
+4. Recompute the weight-length relationship using the original length in inches. How do the slope and y-intercept from this model compare to the results from the previous question?
+
+&nbsp;
+
+# Extended Analysis
+5. Construct a plot that allows you to qualitatively assess if the weight-length (*in mm here and throughout*) relationship differs between the three gears.
+1. Fit a model that allows you to determine if there is a statistically significant difference in the weight-length relationship between the three gears.
+    a. Construct a residual plot for this model.^[[This post](../../../blog/posts/2021-6-1_residPlot-replacement/) may be useful.] Comment.
+    a. Is there a statistically significant difference in the weight-length relationship between the three gears? Provide evidence for your findings and be very specific with your conclusions.
+    a. Without fitting separate regressions for the three gears express the weight-length relationships on the raw scale for all gears (i.e., write three specific equations).
+    a. Construct a plot that illustrates your findings.^[[This post](../../../blog/posts/2021-5-25_fitPlot-replacement/) may be useful.]
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(dplyr)
+library(ggplot2)
+
+YPerchTL <- read.csv("https://raw.githubusercontent.com/fishR-Core-Team/FSAdata/main/data-raw/YPerchTL.csv") |>
+  dplyr::select(-lakeid,-spname) |>
+  filter(gearid %in% c("BSEINE","ELFISH","FYKNET")) |>
+  rename(tl=length,wt=weight) |>
+  mutate(logtl=log10(tl),logwt=log10(wt))
+
+yp90s <- YPerchTL |> 
+  filter(year4>=1990,year4<=1999)
+
+# Plots
+theme_set(theme_bw())
+## W-L relationship
+## W-L relationship
+ggplot(data=yp90s,mapping=aes(x=tl,y=wt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01))
+## logW-logL relationship
+ggplot(data=yp90s,mapping=aes(x=logtl,y=logwt)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01))
+
+# Reduce to fish that were reliably weighed (>80 mm)
+yp90s <- yp90s |>
+  filter(tl>75) |>
+  filter(!is.na(wt))
+
+
+# Regression
+yplw1 <- lm(logwt~logtl,data=yp90s)
+## Add fitted values and residuals for residual plot
+yp90s <- yp90s |>
+  mutate(fitlogwt=fitted(yplw1),
+         resids=residuals(yplw1))
+## Make predicted values for showing best-fit line
+yppred <- data.frame(predtl=seq(min(yp90s$tl,na.rm=TRUE),
+                                max(yp90s$tl,na.rm=TRUE),
+                                length.out=199)) |>
+  mutate(predlogtl=log10(predtl))
+yppred <- cbind(yppred,predict(yplw1,data.frame(logtl=yppred$predlogtl),
+                               interval="confidence")) |>
+  rename(predlogwt=fit,predlogwtlwr=lwr,predlogwtupr=upr) |>
+  mutate(predwt=10^predlogwt,predwtlwr=10^predlogwtlwr,predwtupr=10^predlogwtupr)
+head(yppred)
+## fit plots
+ggplot() +
+  geom_point(data=yp90s,mapping=aes(x=logtl,y=logwt),
+             shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01)) +
+  geom_ribbon(data=yppred,mapping=aes(x=predlogtl,
+                                      ymax=predlogwtupr,ymin=predlogwtlwr),
+              color="blue",alpha=0.2) +
+  geom_line(data=yppred,mapping=aes(x=predlogtl,y=predlogwt),
+            linewidth=1,color="blue")
+ggplot() +
+  geom_point(data=yp90s,mapping=aes(x=tl,y=wt),
+             shape=21,color="black",fill="gray50") +
+  scale_x_continuous(name="Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="Weight (g)",expand=expansion(mult=0.01)) +
+  geom_ribbon(data=yppred,mapping=aes(x=predtl,ymax=predwtupr,ymin=predwtlwr),
+              color="blue",alpha=0.2) +
+  geom_line(data=yppred,mapping=aes(x=predtl,y=predwt),
+            linewidth=1,color="blue")
+## residual plot
+ggplot(data=yp90s,mapping=aes(x=fitlogwt,y=resids)) +
+  geom_point(shape=21,color="black",fill="gray50") +
+  geom_hline(yintercept=0,linewidth=1,linetype="dashed") +
+  scale_x_continuous(name="Fitted Values",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="Residuals",expand=expansion(mult=0.01))
+
+## Summary stats
+cbind(Est=coef(yplw1),confint(yplw1))
+
+## results using length in inches
+yp90s <- yp90s |>
+  mutate(tlin=tl/25.4,
+         logtlin=log10(tlin))
+yplw1a <- lm(logwt~logtlin,data=yp90s)
+cbind(Est=coef(yplw1a),confint(yplw1a))
+
+# By gear
+yp90s <- yp90s |>
+  mutate(fgearid=as.factor(gearid))
+
+## qualitative plot
+ggplot(data=yp90s,mapping=aes(x=logtl,y=logwt,fill=fgearid)) +
+  geom_point(shape=21,color="black") +
+  scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01))
+
+## fit the model
+yplw2 <- lm(logwt~logtl+fgearid+logtl:fgearid,data=yp90s)
+anova(yplw2)
+cbind(Est=coef(yplw2),confint(yplw2))
+
+## residual plot
+yp90s <- yp90s |>
+  mutate(fitlogwt2=fitted(yplw2),
+         resids2=residuals(yplw2))
+ggplot(data=yp90s,mapping=aes(x=fitlogwt2,y=resids2,fill=fgearid)) +
+  geom_point(shape=21,color="black") +
+  geom_hline(yintercept=0,linewidth=1,linetype="dashed") +
+  scale_x_continuous(name="Fitted Values",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="Residuals",expand=expansion(mult=0.01))
+
+## fit plot
+yp90sum <- yp90s |>
+  group_by(fgearid) |>
+  summarize(mintl=min(tl,na.rm=TRUE),
+            maxtl=max(tl,na.rm=TRUE))
+yp90sum
+
+yppred <- NULL
+for (i in 1:nrow(yp90sum)) {
+  tmp <- data.frame(predtl=seq(yp90sum$mintl[i],yp90sum$maxtl[i],length.out=199)) |>
+    mutate(fgearid=yp90sum$fgearid[i],
+           logpredtl=log10(predtl))
+  tmp <- cbind(tmp,predict(yplw2,data.frame(fgearid=tmp$fgearid,
+                                            logtl=tmp$logpredtl),
+                           interval="confidence"))
+  yppred <- rbind(yppred,tmp)
+}
+yppred <- yppred |>
+  rename(predlogwt=fit,predlogwtlwr=lwr,predlogwtupr=upr)
+
+
+ggplot() +
+  geom_point(data=yp90s,mapping=aes(x=logtl,y=logwt,fill=fgearid),
+             shape=21,color="black") +
+  scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
+  scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01)) +
+  geom_ribbon(data=yppred,mapping=aes(x=logpredtl,
+                                      ymax=predlogwtupr,ymin=predlogwtlwr,
+                                      fill=fgearid),
+              alpha=0.2) +
+  geom_line(data=yppred,mapping=aes(x=logpredtl,y=predlogwt,color=fgearid),
+            linewidth=1)
+```
