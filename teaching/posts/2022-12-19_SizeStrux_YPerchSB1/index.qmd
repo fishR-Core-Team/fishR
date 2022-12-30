@@ -8,7 +8,7 @@ image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Size Structure"
-  - "Yellow Perch"
+  - "Perch"
 ---
 
 @diana_energy_1990 examined the growth and maturity of [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) captured from  multiple sites at two locations (`inner` and `outer`) within [Saginaw Bay](https://en.wikipedia.org/wiki/Saginaw_Bay), [Lake Huron](https://en.wikipedia.org/wiki/Lake_Huron) (MI) from 1983-1985. The primary goal of this research was to determine if the growth and maturation of Yellow Perch showed evidence of stunting. The total lengths and location of capture for this study are in [YPerchSB1](https://fishr-core-team.github.io/FSAdata/reference/YPerchSB1.html).^[See "CSV file" link in "Source" section of linked page.]. Use these data to answer the following questions.

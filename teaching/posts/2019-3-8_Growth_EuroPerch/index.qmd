@@ -1,0 +1,213 @@
+---
+title: Individual Growth
+subtitle: Lake Tjeukemeer Perch
+description: Compare a von Bertalanffy growth function among sexes of Lake Tjeukemeer European Perch.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Growth"
+  - " von Bertalanffy"
+  - "Perch"
+---
+
+@mooij_analysis_1999 examined length-at-age data of [European Perch](https://en.wikipedia.org/wiki/European_perch) (*Perca fluviatilis*) from [Lake Tjeukemeer](http://wldb.ilec.or.jp/data/databook_html/eur/eur-01.html) (The Netherlands) to identify possible sexual dimorphism in growth trajectories.  Their data consisted of fork length (FL; cm), ages (yrs) from otoliths, and sex from 69 fish and are recorded in [EuroPerchTJ](https://fishr-core-team.github.io/FSAdata/reference/EuroPerchTJ.html).^[See "CSV file" link in "Source" section of linked page.]
+
+&nbsp;
+
+1. Plot FL versus age with different symbols for each sex.
+    a. Do you foresee any model fitting problems with these data?
+    a. Do you observe any possible differences in growth between the sexes?
+1. Fit the typical VBGF with additive errors separately to both sexes.
+    a. Describe any problems that you encountered in the model fitting.
+    a. Compute point and bootstrapped 95% confidence interval estimates for each parameter in the separate models.
+    a. Do you see any issues with the confidence intervals? If so, describe.
+1. Fit the typical VBGF with additive errors where all parameters differ by sex.
+    a. Describe any problems that you encountered.
+    a. Assess the assumptions from this model fit.
+    a. Compute point estimates for each parameter in this model.
+    a. How do the point estimates from this model compare to the point estimates from the separate models fit in #2 above?
+1. Find the most parsimonious model that is a subset of the model fit above.
+    a. Use the extra sums-of-squares test. 
+    a. Using the likelihood ratio test.
+    a. Using the $AICc$ criterion.
+    a. Summarize (in words) the results of the most parsimonious model identified with the extra sums-of-squares test.
+1. Construct a summary graphic that shows the growth trajectories superimposed on the observed data for both sexes.^[See [this post](../../../blog/posts/2020-1-2_vonB_plots_2/#model-fit-with-confidence-band).]
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(dplyr)
+library(ggplot2)
+
+# Construct and apply ALK
+## Load data (and add 10-mm length categories)
+ep <- read.csv("https://raw.githubusercontent.com/droglenc/FSAdata/master/data-raw/EuroPerchTJ.csv")
+str(ep)
+
+# Plot
+ggplot(data=ep,aes(x=age,y=fl,fill=sex)) +
+  geom_point(size=2,shape=21,color="black",alpha=0.5) +
+  scale_y_continuous(name="Total Length (mm)",limits=c(0,50)) +
+  scale_x_continuous(name="Age (years)",breaks=1:8) +
+  theme(panel.grid.minor.x=element_blank())
+
+# Separate by sex
+ep <- ep |>
+  mutate(sex=as.factor(sex))
+epF <- ep |>
+  filter(sex=="female")
+epM <- ep |>
+  filter(sex=="male")
+
+# Fit Traditional VBGF
+vbTyp <- vbFuns("Typical")
+## female
+svTypF <- vbStarts(fl~age,data=epF,type="Typical")
+fitTypF <- nls(fl~vbTyp(age,Linf,K,t0),data=epF,start=svTypF)
+bootTypF <- nlstools::nlsBoot(fitTypF)
+cbind(Est=coef(fitTypF),confint(bootTypF))
+
+## male
+svTypM <- vbStarts(fl~age,data=epM,type="Typical")
+fitTypM <- nls(fl~vbTyp(age,Linf,K,t0),data=epM,start=svTypM)
+bootTypM <- nlstools::nlsBoot(fitTypM)
+cbind(Est=coef(fitTypM),confint(bootTypM))
+
+## Sexes together, most complex model
+vbLKt <- fl~Linf[sex]*(1-exp(-K[sex]*(age-t0[sex])))
+( svO <- vbStarts(fl~age,data=ep) )
+( svLKt <- Map(rep,svO,c(2,2,2)) )
+fitLKt <- nls(vbLKt,data=ep,start=svLKt)
+coef(fitLKt)
+
+## Most parsimonious model
+vbLK  <- fl~Linf[sex]*(1-exp(-K[sex]*(age-t0)))
+vbLt  <- fl~Linf[sex]*(1-exp(-K*(age-t0[sex])))
+vbKt  <- fl~Linf*(1-exp(-K[sex]*(age-t0[sex])))
+vbL   <- fl~Linf[sex]*(1-exp(-K*(age-t0)))
+vbK   <- fl~Linf*(1-exp(-K[sex]*(age-t0)))
+vbt   <- fl~Linf*(1-exp(-K*(age-t0[sex])))
+vbO   <- fl~Linf*(1-exp(-K*(age-t0)))
+
+fitO <- nls(vbO,data=ep,start=svO)
+
+extraSS(fitO,com=fitLKt,com.name="All pars diff",
+    sim.names="No pars diff")
+lrt(fitO,com=fitLKt,com.name="All pars differ",
+    sim.names="No pars differ")
+
+svLK <- Map(rep,svO,c(2,2,1))
+svLt <- Map(rep,svO,c(2,1,2))
+svKt <- Map(rep,svO,c(1,2,2))
+
+fitLK <- nls(vbLK,data=ep,start=svLK)
+fitLt <- nls(vbLt,data=ep,start=svLt)
+fitKt <- nls(vbKt,data=ep,start=svKt)
+
+extraSS(fitLK,fitLt,fitKt,com=fitLKt,com.name="All pars diff",
+        sim.names=c("Linf,K diff","Linf,t0 diff","K,t0 diff"))
+lrt(fitLK,fitLt,fitKt,com=fitLKt,com.name="All pars diff",
+    sim.names=c("Linf,K diff","Linf,t0 diff","K,t0 diff"))
+
+svL <- Map(rep,svO,c(2,1,1))
+svt <- Map(rep,svO,c(1,1,2))
+fitL <- nls(vbL,data=ep,start=svL)
+fitt <- nls(vbt,data=ep,start=svt)
+
+extraSS(fitL,fitt,com=fitLt,com.name="Linf,t0 dif",
+        sim.names=c("Linf dif","t0 dif"))
+lrt(fitL,fitt,com=fitLt,com.name="Linf,t0 dif",
+    sim.names=c("Linf dif","t0 dif"))
+
+extraSS(fitO,com=fitL,com.name="Linf dif",
+        sim.names=c("All pars same"))
+lrt(fitO,com=fitL,com.name="Linf dif",
+    sim.names=c("All pars same"))
+
+svK <- Map(rep,svO,c(1,2,1))
+fitK <- nls(vbK,data=ep,start=svK)
+
+cbind(AIC(fitLKt,fitLK,fitLt,fitKt,fitL,fitK,fitt,fitO),
+      BIC(fitLKt,fitLK,fitLt,fitKt,fitL,fitK,fitt,fitO))
+
+## Graph ... following https://fishr-core-team.github.io/fishR/blog/posts/2020-1-2_vonB_plots_2/#model-fit-with-confidence-band
+
+obsagerng <- ep |>
+  group_by(sex) |>
+  summarize(min=min(age),
+            max=max(age)) |>
+  as.data.frame()
+obsagerng
+
+ages <- seq(0,9,length.out=101)
+
+( grps <- unique(ep$sex) )
+( ngrps <- length(grps) )
+
+( svLKt <- data.frame(sex=grps,
+                      Map(rep,svO,c(ngrps,ngrps,ngrps))) )
+
+vbLOOP1 <- function(grp,dat,svs,oagerng,eagerng,interval="confidence") {
+  ## !! This requires a 'sex', 'tl', and 'age' variable in data frames !!
+  ## !!   Otherwise need to change 'sex', 'tl', and 'age' below
+  ## !!   Everything else can stay as is
+  
+  ## Loop notification (for peace of mind)
+  cat(grp,"Loop\n")
+  ## Isolate group's data, starting values, and age range
+  dat1 <- dplyr::filter(dat,sex==grp)
+  sv1 <- svs |>
+    filter(sex==grp) |>
+    dplyr::select(-sex) |>
+    as.list()
+  oagerng1 <- filter(oagerng,sex==grp)
+  ## Make ages for predictions
+  ages <- seq(min(eagerng),max(eagerng),length.out=101)
+  ## Fit von B to that group
+  fit1 <- nls(fl~vbTyp(age,Linf,K,t0),data=dat1,start=sv1)
+  ## Make data frame of predicted mean lengths at age with CIs
+  preds1 <- data.frame(sex=grp,
+                       age=ages,
+                       fit=investr::predFit(fit1,data.frame(age=ages),
+                                            interval=interval)) |>
+    mutate(inrng=age>=oagerng1$min & age<=oagerng1$max) |>
+    as.data.frame()
+  ## Rename variables
+  names(preds1) <- c("sex","age","fit","lwr","upr","inrng")
+  ## Return data frame
+  preds1
+}
+
+preds <-  NULL
+for (i in grps) preds <- rbind(preds,vbLOOP1(i,ep,svLKt,obsagerng,range(ages)))
+
+ggplot() +
+  geom_ribbon(data=preds,aes(x=age,ymin=lwr,ymax=upr,fill=sex),alpha=0.25) +
+  geom_point(data=ep,aes(x=age,y=fl,color=sex),
+             size=2,alpha=0.3) +
+  geom_line(data=preds,aes(x=age,y=fit,color=sex),
+              linewidth=1,linetype="dashed") +
+  geom_line(data=filter(preds,inrng),aes(x=age,y=fit,color=sex),
+              linewidth=1) +
+  scale_y_continuous(name="Fork Length (mm)",limits=c(0,45)) +
+  scale_x_continuous(name="Age (years)",breaks=0:9) +
+  scale_color_manual(values=c("male"="darkblue","female"="darkred"),
+                     aesthetics=c("color","fill")) +
+  theme(panel.grid.minor.x=element_blank(),
+        legend.position=c(0.8,0.2),
+        legend.title=element_blank())
+```

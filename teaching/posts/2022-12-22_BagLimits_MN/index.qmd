@@ -11,7 +11,7 @@ categories:
   - "Walleye"
   - "Bass"
   - "Bluegill/Sunfish"
-  - "Yellow Perch"
+  - "Perch"
   - "Pike/Muskellunge"
 ---
 

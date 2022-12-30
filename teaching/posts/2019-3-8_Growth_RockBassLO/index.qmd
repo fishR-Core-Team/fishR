@@ -40,7 +40,7 @@ This exercise requires the data frame that contains length and ages, both estima
 
 # Alternative Parameterization
 
-3. Fit the Gallucci and Quinn (1979) parameterization.^[See `growthFunShow("vonBertalanffy",param="GQ",plot=TRUE)`)]
+3. Fit the Gallucci and Quinn (1979) parameterization.^[See `growthFunShow("vonBertalanffy",param="GQ",plot=TRUE)`) and [this](https://derekogle.com/IFAR/supplements/growth/OtherVBGFParams.html).]
     a. Interpret the interval estimate for the $\omega$ parameter.
     a. Write the Gallucci and Quinn VBGF with parameters replaced by their estimated values.
     a. Construct 95% bootstrapped confidence intervals for each parameter. Comment on the widths of these confidence intervals. What explains this?
@@ -101,7 +101,7 @@ ggplot(data=rbamod,aes(x=age,y=tl)) +
   geom_point(size=2,alpha=0.1) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,300)) +
   scale_x_continuous(name="Age (years)",breaks=3:11) +
-  stat_function(fun=vbTyp,args=list(Linf=coef(fitTyp)),linewidth=1)
+  stat_function(fun=vbTyp,args=list(Linf=coef(fitTyp)),linewidth=1) +
   theme(panel.grid.minor.x=element_blank())
 
 ggplot(data=data.frame(fits=fitted(fitTyp),
@@ -125,7 +125,7 @@ ggplot(data=rbamod,aes(x=age,y=tl)) +
   scale_y_continuous(name="Total Length (mm)",limits=c(0,300)) +
   scale_x_continuous(name="Age (years)",breaks=3:11) +
   stat_function(fun=vbGQ,args=list(omega=coef(fitGQ)),linewidth=3) +
-  stat_function(fun=vbTyp,args=list(Linf=coef(fitTyp)),linewidth=1,color="blue")
+  stat_function(fun=vbTyp,args=list(Linf=coef(fitTyp)),linewidth=1,color="blue") +
   theme(panel.grid.minor.x=element_blank())
 
 ```

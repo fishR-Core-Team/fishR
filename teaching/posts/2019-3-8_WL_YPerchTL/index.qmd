@@ -8,7 +8,7 @@ image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Weight-Length"
-  - "Yellow Perch"
+  - "Perch"
 ---
 
 :::{.callout-warning appearance="simple"}

@@ -8,7 +8,7 @@ image: ../../../helpers/img/exercise.png
 categories:
   - "  Exercise"
   - " Size Structure"
-  - "Yellow Perch"
+  - "Perch"
 ---
 
 
