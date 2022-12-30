@@ -1,0 +1,155 @@
+---
+title: Age-Length Key
+subtitle: Atlantic Ocean Striped Bass
+description: Construct and apply an age-length key for Striped Bass from Virginia waters of the Atlantic Ocean.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Age-Length Key"
+  - "Bass"
+---
+
+# Background
+
+Researchers at the [Center for Quantitative Fisheries Ecology at Old Dominion University](https://ww1.odu.edu/sci/research/cqfe) in collaboration with the [Virginia Marine Resources Commission](https://mrc.virginia.gov/index.shtm) annually collect [Striped Bass](https://en.wikipedia.org/wiki/Striped_bass) (*Morone saxatilis*) from Virginia waters of the Atlantic Ocean for age assessments.  The total lengths of 1201 Stiped Bass collected in 2003 and the ages estimated from [otoliths](https://en.wikipedia.org/wiki/Otolith) for as many as 10 fish per 1 inch length interval are recorded in [StripedBass3](https://fishr-core-team.github.io/FSAdata/reference/StripedBass3).^[See "CSV file" link in "Source" section of linked page.]
+
+&nbsp;
+
+# Construct an ALK
+
+1. Add a variable to the data frame that contains the 1 in TL categories and then separate the observed data into age- and length-samples. How many fish are in each sample?
+1. Construct a table of the **number** (not proportion) of fish in each age and 1 inch TL category in the age-sample.  From these results, compute each of the following *by hand* (i.e., not using R, but you may use a calculator).
+    a. How many fish are in the 30 in TL category?
+    a. How many fish are age 10?
+    a. What proportion of fish in the 35 in TL category are age 9?
+    a. What proportion of fish in the 31 in TL category are age 11?
+1. Construct an **observed** age-length key from the table above (using R).  From these results answer the following questions.
+    a. What proportion of fish in the 30 in TL category should be assigned age 10?
+    a. How many of forty fish in the 25 mm TL category should be assigned age 5?
+    a. Construct a plot of the **observed** age-length key.  Are there any potential anomalies in the plot that would suggest that a smoothed age-length key could be appropriate?
+1. Construct a **smoothed** age-length key.  From these results answer the following questions.
+    a. What proportion of fish in the 30 in TL category should be assigned age 10?
+    a. How many of fourty fish in the 25 mm TL category should be assigned age 5?
+
+&nbsp;
+
+# Apply an ALK I
+
+Continue with the age- and length-sample data frames and the **observed** age-length key from the previous section.
+
+5. Use the semi-random age assignment technique from @isermann_computer_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample.  Combine the age-sample and the age-assigned length-sample into a single data frame and answer the following questions.
+    a. How many fish are estimated to be age 8?
+    a. How many fish are estimated to be age 14?
+    a. Plot the age distribution for all fish.
+    a. How many fish are in the 30 in TL interval?
+    a. What is the mean TL of age-9 fish?
+    a. Plot the length-at-age with the mean length-at-age superimposed for all fish.
+1. Compare your results from the previous question to someone else's results (or repeat the previous question).  Did you both get the *exact* same results? Why or why not?  If not, how different were they?
+
+&nbsp;
+
+# Apply an ALK II
+
+7. Use the "classical" method to estimate the age distribution (with standard errors) for all sampled fish.
+    a. How many fish are estimated to be age 8?
+    a. How many fish are estimated to be age 14?
+    a. Plot the age distribution for all fish.
+1. Use the "classical" method to estimate the mean length-at-age (with standard deviations) for all sampled fish.
+    a. What is the mean TL of age-9 fish?
+    a. Plot the length-at-age with the mean length-at-age superimposed for all fish.
+1. Compare your results to someone else's results (or repeat the steps above).  Did you both get the *exact* same results?  Why or why not?  If not, how different were they?
+1. Compare your results using the "classical" method here to your results from using the @isermann_computer_2005 method in the previous section.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(dplyr)
+library(ggplot2)
+
+# Construct ALK
+## Load data (and add 10-mm length categories)
+sb <- read.csv("https://raw.githubusercontent.com/droglenc/FSAdata/master/data-raw/StripedBass3.csv") |>
+  mutate(lcat1=lencat(tl,w=1))
+
+## Construct age and length samples
+sba <- sb |> filter(!is.na(age))
+sbl <- sb |> filter(is.na(age))
+
+## Summary tables for aged sample
+xtabs(~lcat1,data=sba)
+xtabs(~age,data=sba)
+
+## Make observed ALK (and plot)
+( agelendist <- xtabs(~lcat1+age,data=sba) )
+( alk <- prop.table(agelendist ,margin=1) )
+alkPlot(alk)
+
+## Make smoothed ALK
+tmp <- nnet::multinom(age~lcat1,data=sba,maxit=500)
+lens <- seq(18,47,1)
+alksm <- predict(tmp,data.frame(lcat1=lens),type="probs")
+row.names(alksm) <- lens
+round(alksm,3)
+alkPlot(alksm)
+
+# Apply the ALK I
+sblmod <- alkIndivAge(alk,age~tl,data=sbl)
+headtail(sbl)
+headtail(sblmod)
+
+## Combine two dfs with ages and compute some summaries
+sbamod <- rbind(sba,sblmod)
+(agedist <- xtabs(~age,data=sbamod))
+(lendist <- xtabs(~lcat1,data=sbamod))
+lenatage <- sbamod |>
+  group_by(age) |>
+  summarize(n=n(),
+            mntl=mean(tl),
+            sdtl=sd(tl))
+lenatage
+
+ggplot(data=sbamod,mapping=aes(x=age)) +
+  geom_bar() +
+  scale_x_continuous(name="Age",breaks=2:19) +
+  scale_y_continuous(name="Frequency of Fish",expand=expansion(c(0,0.05))) +
+  theme_bw()
+
+ggplot() +
+  geom_point(data=sbamod,mapping=aes(x=age,y=tl),color=col2rgbt("black",1/10)) +
+  geom_line(data=lenatage,mapping=aes(x=age,y=mntl),color="blue",size=1) +
+  scale_x_continuous(name="Age",breaks=2:19) +
+  scale_y_continuous(name="Total length (mm)") +
+  theme_bw()
+
+# Apply the ALK II
+( len.n <- xtabs(~lcat1,data=sb) )
+( agedist2 <- alkAgeDist(alk,lenA.n=rowSums(agelendist),len.n=len.n) )
+( lenatage2 <- alkMeanVar(alk,tl~lcat1+age,data=sba,len.n=len.n) )
+
+ggplot(data=agedist2,mapping=aes(x=age,y=prop)) +
+  geom_bar(stat="identity") +
+  scale_x_continuous(name="Age",breaks=2:19) +
+  scale_y_continuous(name="Proportion of Fish",expand=expansion(c(0,0.05))) +
+  theme_bw()
+
+ggplot() +
+  geom_line(data=lenatage2,mapping=aes(x=age,y=mean),color="blue",size=3) +
+  geom_line(data=lenatage,mapping=aes(x=age,y=mntl),color="red",size=1) +
+  scale_x_continuous(name="Age",breaks=2:19) +
+  scale_y_continuous(name="Mean Toal length (mm)") +
+  theme_bw()
+```
