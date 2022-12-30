@@ -1,0 +1,131 @@
+---
+title: Individual Growth
+subtitle: Lake Ontario Rock Bass
+description: Fit a von Bertalanffy growth function to age-length data from Lake Ontario Rock Bass.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Growth"
+  - " von Bertalanffy"
+  - "Bass"
+---
+
+# Background
+
+@wolfert_age_1980 measured the total length (TL) of 1288 [Rock Bass](https://en.wikipedia.org/wiki/Rock_bass) (*Ambloplites rupestris*) from Eastern [Lake Ontario](https://en.wikipedia.org/wiki/Lake_Ontario) in the late 1970s. In addition, [scales](https://en.wikipedia.org/wiki/Fish_scale) were removed for age estimation from as many as 10 specimens from each 10 mm length interval. All data are recorded in [RockBassLO2](https://fishr-core-team.github.io/FSAdata/reference/RockBassLO2).^[See "CSV file" link in "Source" section of linked page. Also note that the filename contains an "oh" not a "zero."]
+
+:::{.callout-warning appearance="simple"}
+## Continuation
+This exercise requires the data frame that contains length and ages, both estimated and assigned from an age-length-key, for all sampled fish. This data frame was constructed in [this age-length key exercise](../2019-3-8_ALK_RockBassLO/). Please load/run your script from that exercise that produces the data frame with ages for all sampled fish.
+:::
+
+&nbsp;
+
+# Fit Traditional VBGF
+
+1. Examine the plot of TL versus age.^[This plot was made in [this exercise](../2019-3-8_ALK_RockBassLO/).] Make observations regarding the "shape" of the data (do the results look linear or like a von Bertalanffy growth curve, is there an obvious asymptote, are young fish well represented, how variable are lengths within ages).
+1. Fit the typical parameterization of the von Bertalanffy growth function (VBGF).
+    a. How realistic do the point estimates of $L_{\infty}$, $K$, and $t_{0}$ seem?
+    a. Write the typical VBGF with parameters replaced by their estimated values.
+    a. Carefully interpret the meaning of each parameter.
+    a. Construct 95% bootstrapped confidence intervals for each parameter. Comment on the widths of these confidence intervals. What explains this?
+    a. Predict the mean TL, with 95% confidence interval, for an age-6 Rock Bass. Comment on the width of this confidence interval. What explains this?
+    a. Plot TL versus age and superimpose the best-fit VBGF.^[[This post](../../../blog/posts/2019-12-31_vonB_plots_1/) may be useful.] Comment on model fit.
+    a. Construct a residual plot. Comment on model fit.
+    a. Compute the correlation between parameter values. Comment.
+
+&nbsp;
+
+# Alternative Parameterization
+
+3. Fit the Gallucci and Quinn (1979) parameterization.^[See `growthFunShow("vonBertalanffy",param="GQ",plot=TRUE)`)]
+    a. Interpret the interval estimate for the $\omega$ parameter.
+    a. Write the Gallucci and Quinn VBGF with parameters replaced by their estimated values.
+    a. Construct 95% bootstrapped confidence intervals for each parameter. Comment on the widths of these confidence intervals. What explains this?
+    a. Predict the mean TL, with 95% confidence interval, for an age-6 Rock Bass. Comment on the width of this confidence interval. What explains this?
+    a. Plot TL versus age and superimpose the best-fit VBGF. Comment on model fit.
+    a. Compute the correlation between parameter values. Comment
+    a. How does the estimate of $K$ from fitting this parameterization compare to that from the typical VBGF fit above. Explain your observation.
+
+&nbsp;
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+# Load packages
+library(FSA)
+library(dplyr)
+library(ggplot2)
+
+# Construct and apply ALK
+## Load data (and add 10-mm length categories)
+rb <- read.csv("https://raw.githubusercontent.com/droglenc/FSAdata/master/data-raw/RockBassLO2.csv") |>
+  mutate(lcat10=lencat(tl,w=10))
+
+## Construct age and length samples
+rba <- rb |> filter(!is.na(age))
+rbl <- rb |> filter(is.na(age))
+
+## Make observed ALK (and plot)
+( agelendist <- xtabs(~lcat10+age,data=rba) )
+( alk <- prop.table(agelendist ,margin=1) )
+alkPlot(alk)
+
+## Apply the ALK I
+rblmod <- alkIndivAge(alk,age~tl,data=rbl)
+
+## Combine two dfs with ages and compute some summaries
+rbamod <- rbind(rba,rblmod)
+
+# Fit Traditional VBGF
+vbTyp <- vbFuns("Typical")
+svTyp <- vbStarts(tl~age,data=rbamod,type="Typical")
+fitTyp <- nls(tl~vbTyp(age,Linf,K,t0),data=rbamod,start=svTyp)
+bootTyp <- nlstools::nlsBoot(fitTyp)
+cbind(Est=coef(fitTyp),confint(bootTyp))
+p6Typ <- apply(bootTyp$coefboot,MARGIN=1,FUN=vbTyp,t=6)
+c(Est=vbTyp(6,coef(fitTyp)),quantile(p6Typ,c(0.025,0.975)))
+summary(fitTyp,correlation=TRUE)
+
+ggplot(data=rbamod,aes(x=age,y=tl)) +
+  geom_point(size=2,alpha=0.1) +
+  scale_y_continuous(name="Total Length (mm)",limits=c(0,300)) +
+  scale_x_continuous(name="Age (years)",breaks=3:11) +
+  stat_function(fun=vbTyp,args=list(Linf=coef(fitTyp)),linewidth=1)
+  theme(panel.grid.minor.x=element_blank())
+
+ggplot(data=data.frame(fits=fitted(fitTyp),
+                       resids=residuals(fitTyp)),
+       mapping=aes(x=fits,y=resids)) +
+  geom_point() +
+  geom_hline(yintercept=0,linetype="dashed")
+
+# Fit G-Q VBGF
+vbGQ <- vbFuns("GQ")
+svGQ <- vbStarts(tl~age,data=rbamod,type="GQ")
+fitGQ <- nls(tl~vbGQ(age,omega,K,t0),data=rbamod,start=svGQ)
+bootGQ <- nlstools::nlsBoot(fitGQ)
+cbind(Est=coef(fitGQ),confint(bootGQ))
+p6GQ <- apply(bootGQ$coefboot,MARGIN=1,FUN=vbGQ,t=6)
+c(Est=vbGQ(6,coef(fitGQ)),quantile(p6GQ,c(0.025,0.975)))
+summary(fitGQ,correlation=TRUE)
+
+ggplot(data=rbamod,aes(x=age,y=tl)) +
+  geom_point(size=2,alpha=0.1) +
+  scale_y_continuous(name="Total Length (mm)",limits=c(0,300)) +
+  scale_x_continuous(name="Age (years)",breaks=3:11) +
+  stat_function(fun=vbGQ,args=list(omega=coef(fitGQ)),linewidth=3) +
+  stat_function(fun=vbTyp,args=list(Linf=coef(fitTyp)),linewidth=1,color="blue")
+  theme(panel.grid.minor.x=element_blank())
+
+```
