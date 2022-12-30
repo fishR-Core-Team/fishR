@@ -1,0 +1,164 @@
+---
+title: Stock-Recruitment
+subtitle: Escanaba Lake Walleye
+description: Fit stock-recruitment models to Escanaba Lake (WI) Walleye data.
+author: Derek H. Ogle
+date: 3/8/2019
+image: ../../../helpers/img/exercise.png
+categories:
+  - "  Exercise"
+  - " Stock-Recruitment"
+  - "Walleye"
+---
+
+# Background
+
+@hansen_factors_1998 modeled recruitment variation of age-0 [Walleye](https://en.wikipedia.org/wiki/Walleye) (*Sander vitreus*) in [Escanaba Lake](http://dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=2339900&page=facts) (Wisconsin) to determine factors regulating their abundance. Specifically, they examined the abundance of age-5 and older Walleye (spawning population), variation in May water temperatures, and abundance of 152.4 mm total length and longer [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) on the abundance of age-0 Walleye. These data are available in [WalleyeEL](https://fishr-core-team.github.io/FSAdata/reference/WalleyeEL.html).^[See "CSV file" link in "Source" section of linked page.]
+
+:::{.callout-warning appearnace="simple"}
+## Beware
+If you want to compare your results below to those in @hansen_factors_1998, note that they used what is called the second paramterization of the Ricker function in `FSA` and that they restricted their data to the year-classes prior to 1992 for "model construction."
+:::
+
+&nbsp;
+
+# Basic Analysis
+
+1. Which variable should be considered the "recruits" and which variable should be considered the "spawning stock?" Explain.
+1. From an appropriate plot, describe the relationship between "recruits" and "stock." Do you expect a stock-recruitment model to fit these data well?
+1. Fit the density-independent recruitment function to these data, assuming a multiplicative error structure. Show your results by expressing the equation of the recruitment function with the parameters replaced by their estimated values.
+1. Repeat the previous question but using the Ricker recruitment function.
+1. Determine if the density-dependent parameter is statistically significant in the Ricker model.
+1. Describe what proportion of variability in recruitment is explained by the Ricker model.
+1. Construct a single plot that shows how well each recruitment function fits these data. Show confidence bands for the Ricker recruitment function.^[[This](../../../blog/posts/2017-12-12_StockRecruit_Graph_Questions/) may be useful.]
+1. Estimate recruitment for the mean stock level with each recruitment function. How variable are the results among models?
+
+&nbsp;
+
+# Extended Analysis
+
+9. Determine if adding the variation in May water temperatures or the abundance of Yellow Perch significantly improves the predictive power of the Ricker model.
+1. If either of these two variables improved the predictive power of the model then ....
+    a. Express the best model by replacing parameters with their estimated values.
+    a. Specifically describe the effect of the other variables on the recruitment of age-0 Walleye.
+    a. Do you feel that this model provides a clear explanation for the variability in recruitment of age-0 Walleye in Escanaba Lake? Explain.
+
+&nbsp;
+
+
+:::{.callout-important appearance="simple"}
+## Solution Code:
+Available upon request to students not in a class. Contact fishR maintainers.
+:::
+
+```{r}
+#| label: solution 
+#| echo: false
+#| results: hide
+#| fig.show: hide
+
+library(FSA)
+library(dplyr)
+library(ggplot2)
+theme_set(theme_bw())
+
+# Load data (and add 10-mm length categories)
+wae <- read.csv("https://raw.githubusercontent.com/droglenc/FSAdata/master/data-raw/WalleyeEL.csv") |>
+  mutate(log.age0=log(age0))
+str(wae)
+
+## Plot
+ggplot(data=wae,mapping=aes(x=age5,y=age0)) +
+  geom_point() +
+  scale_x_continuous(name="Age-5 Abundance",limits=c(0,NA),
+                     expand=expansion(mult=c(0,0.03))) +
+  scale_y_continuous(name="Age-0 Abundance",limits=c(0,NA),
+                     expand=expansion(mult=c(0,0.03)))
+
+## Multiplicative Independence Model
+ind <- srFuns(type="independence")
+svI <- srStarts(age0~age5,data=wae,type="independence")
+srI <- nls(log.age0~log(ind(age5,a)),data=wae,start=svI)
+c(Est=coef(srI),confint(srI))
+( predMeanI <- ind(mean(wae$age5),a=coef(srI)) )
+
+## Multiplicative Ricker Model
+rckr <- srFuns(type="Ricker")
+svR <- srStarts(age0~age5,data=wae,type="Ricker")
+srR <- nls(log.age0~log(rckr(age5,a,b)),data=wae,start=svR)
+bootR <- nlstools::nlsBoot(srR)
+cbind(estimates=coef(srR),confint(bootR))
+( predMeanR <- rckr(mean(wae$age5),a=coef(srR)) )
+cor(rckr(wae$age5,a=coef(srR)),wae$age0)^2
+
+## Test density-dependent term
+( test <- extraSS(srI,com=srR) )
+
+## Plot
+x <- seq(0,3000,length.out=199)     # many S for prediction
+pRR <- rckr(x,a=coef(srR))          # predicted mean R (for Ricker)
+LCI <- UCI <- numeric(length(x))
+prI <- ind(x,a=coef(srI))           # predicted mean R (for Independence)
+
+for(i in 1:length(x)) {             # CIs for mean R @ each S
+  tmp <- apply(bootR$coefboot,MARGIN=1,FUN=rckr,S=x[i])
+  LCI[i] <- quantile(tmp,0.025)
+  UCI[i] <- quantile(tmp,0.975)
+}
+preds <- data.frame(age5=x,page0R=pRR,LCI=LCI,UCI=UCI,page0I=prI)
+
+ggplot() +
+  geom_ribbon(data=preds,mapping=aes(x=age5,ymin=LCI,ymax=UCI),
+              fill="gray50",alpha=0.5) +
+  geom_line(data=preds,mapping=aes(x=age5,y=page0R),linewidth=1) +
+  geom_line(data=preds,mapping=aes(x=age5,y=page0I),linewidth=1,color="red") +
+  geom_point(data=wae,mapping=aes(x=age5,y=age0)) +
+  scale_x_continuous(name="Age-5 Abundance",limits=c(0,NA),
+                     expand=expansion(mult=c(0,0.03))) +
+  scale_y_continuous(name="Age-0 Abundance",limits=c(0,NA),
+                     expand=expansion(mult=c(0,0.03)))
+
+
+# Extended analysis
+## New Ricker function
+rckr2 <- function(S,X,a,b=NULL,c=NULL) {
+  if (length(a)>1) { # all values in a argument
+    c <- a[3]
+    b <- a[2]
+    a <- a[1]
+  }
+  a*S*exp(-b*S+c*X)
+}
+
+## add yep
+( tmp <- coef(lm(log(age0/age5)~age5+yep,data=wae)) )
+svR2 <- list(a=exp(tmp[[1]]),b=-tmp[[2]],c=tmp[[3]])
+srR2 <- nls(log.age0~log(rckr2(age5,yep,a,b,c)),data=wae,start=svR2)
+extraSS(srR,com=srR2)
+
+## add maycv
+( tmp <- coef(lm(log(age0/age5)~age5+maycv,data=wae)) )
+svR3 <- list(a=exp(tmp[[1]]),b=-tmp[[2]],c=tmp[[3]])
+srR3 <- nls(log.age0~log(rckr2(age5,maycv,a,b,c)),data=wae,start=svR3)
+extraSS(srR,com=srR3)
+
+## add yep after maycv
+rckr3 <- function(S,X1,X2,a,b=NULL,c=NULL,d=NULL) {
+  if (length(a)>1) { # all values in a argument
+    d <- a[4]
+    c <- a[3]
+    b <- a[2]
+    a <- a[1]
+  }
+  a*S*exp(-b*S+c*X1+d*X2)
+}
+
+( tmp <- coef(lm(log(age0/age5)~age5+maycv+yep,data=wae)) )
+svR4 <- list(a=exp(tmp[[1]]),b=-tmp[[2]],c=tmp[[3]],d=tmp[[4]])
+srR4 <- nls(log.age0~log(rckr3(age5,maycv,yep,a,b,c,d)),data=wae,start=svR4)
+extraSS(srR,srR3,com=srR4)
+
+coef(srR3)
+cor(rckr2(wae$age5,wae$maycv,a=coef(srR3)),wae$age0)^2
+
+```
