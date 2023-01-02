@@ -2,16 +2,16 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/2017-11-7_BackCalculationPlot/index.html",
+      "/blog/posts/2021-5-11_compSlopes-replacement/index.html",
+      "/blog/posts/2021-5-12_compIntercepts-replacement/index.html",
       "/blog/posts/2021-5-25_fitPlot-replacement/index.html",
       "/blog/posts/2022-12-22_AFS_Style_Figures/index.html",
       "/blog/posts/2017-8-9_Mean_Weights/index.html",
       "/blog/posts/2021-5-26_filterD-replacement/index.html",
-      "/blog/posts/2021-5-12_compIntercepts-replacement/index.html",
-      "/blog/posts/2021-5-11_compSlopes-replacement/index.html",
       "/blog/posts/2018-3-30_Collapsing_Categories_or_Values/index.html",
       "/blog/posts/2016-12-9_PSD_SE/index.html",
       "/blog/posts/2015-9-6_Cumulative_Sums/index.html",
-      "/blog/posts/2017-11-7_BackCalculationPlot/index.html",
       "/blog/posts/2017-4-20_BlandAltman/index.html",
       "/blog/posts/2017-12-12_StockRecruit_Graph_Questions/index.html",
       "/blog/posts/2021-6-1_residPlot-replacement/index.html",
@@ -27,6 +27,8 @@
   {
     "listing": "/teaching/index.html",
     "items": [
+      "/teaching/posts/2019-3-8_Growth_Sculpin/index.html",
+      "/teaching/posts/2019-3-8_Growth_RockBassLO/index.html",
       "/teaching/posts/2019-3-8_Recruitment_WalleyeEL/index.html",
       "/teaching/posts/2022-12-22_BagLimits_MN/index.html",
       "/teaching/posts/2022-12-19_SizeStrux_YPerchSB1/index.html",
@@ -35,8 +37,6 @@
       "/teaching/posts/2019-3-8_SizeStrux_YPerchTL/index.html",
       "/teaching/posts/2019-3-8_Graphing_YPerchTL/index.html",
       "/teaching/posts/2019-3-8_Growth_EuroPerch/index.html",
-      "/teaching/posts/2019-3-8_Growth_Sculpin/index.html",
-      "/teaching/posts/2019-3-8_Growth_RockBassLO/index.html",
       "/teaching/posts/2019-3-8_ALK_StripedBass/index.html",
       "/teaching/posts/2019-3-8_ALK_FWDrumLE/index.html",
       "/teaching/posts/2019-3-8_ALK_RockBassLO/index.html",

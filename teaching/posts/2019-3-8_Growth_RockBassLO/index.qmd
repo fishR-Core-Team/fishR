@@ -40,7 +40,7 @@ This exercise requires the data frame that contains length and ages, both estima
 
 # Alternative Parameterization
 
-3. Fit the Gallucci and Quinn (1979) parameterization.^[See `growthFunShow("vonBertalanffy",param="GQ",plot=TRUE)`) and [this](https://derekogle.com/IFAR/supplements/growth/OtherVBGFParams.html).]
+3. Fit the Gallucci and Quinn (1979) parameterization.^[See `growthFunShow("vonBertalanffy",param="GQ",plot=TRUE)`) and [this](https://derekogle.com/IFAR/supplements/otherVBGFParams.html).]
     a. Interpret the interval estimate for the $\omega$ parameter.
     a. Write the Gallucci and Quinn VBGF with parameters replaced by their estimated values.
     a. Construct 95% bootstrapped confidence intervals for each parameter. Comment on the widths of these confidence intervals. What explains this?

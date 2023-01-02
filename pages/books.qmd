@@ -50,8 +50,8 @@ You may submit additions or corrections by using the links at the bottom of the 
 <td style="vertical-align: top;">
 * **Author**: Derek H. Ogle
 * **Year**: 2015
-* [**Book Webpage**](http://derekogle.com/IFAR/book/) 
-* **R Resources**: [Chapter Scripts](http://derekogle.com/IFAR/scripts/), [Supplements](http://derekogle.com/IFAR/supplements/), [related package](https://fishr-core-team.github.io/FSA/)
+* [**Book Webpage**](http://derekogle.com/IFAR/)
+* **R Resources**: within book link and [related package](https://fishr-core-team.github.io/FSA/)
 * **Reviews**: [Here (paywall)](https://onlinelibrary.wiley.com/doi/10.1111/jfb.13153)
 </td></tr></table>
 

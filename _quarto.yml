@@ -4,9 +4,9 @@ project:
 
 website:
   title: "fishR"
-  favicon: /img/fishRlogo_Tight_Dark_trans.png
+  favicon: /img/fishRlogo_Tight_Light_trans.png
   site-url: https://fishr-core-team.github.io/fishR/
-  repo-url: https://fishr-core-team.github.io/fishR
+  repo-url: https://github.com/fishR-Core-Team/fishR
   repo-actions: [edit, issue]
   navbar:
     title: false
@@ -49,9 +49,9 @@ website:
 format:
   html:
     theme: 
-      light: [flatly, css/light.scss]
-      dark: [darkly, css/dark.scss]
-    css: css/styles.css
+      light: [flatly, helpers/light.scss]
+      dark: [darkly, helpers/dark.scss]
+    css: helpers/styles.css
     toc: true
     link-external-icon: true
     link-external-newwindow: true

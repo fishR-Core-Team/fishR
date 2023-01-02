@@ -35,7 +35,7 @@ The total length (mm) and otolith age of [Slimy Sculpin](https://en.wikipedia.or
 
 # Alternative Parameterization
 
-3. Fit the von Bertalanffy's original parameterization.^[See `growthFunShow("vonBertalanffy",param="original",plot=TRUE)`) and [this](https://derekogle.com/IFAR/supplements/growth/OtherVBGFParams.html).]
+3. Fit the von Bertalanffy's original parameterization.^[See `growthFunShow("vonBertalanffy",param="original",plot=TRUE)`) and [this](https://derekogle.com/IFAR/supplements/otherVBGFParams.html).]
     a. Interpret the interval estimate for the $L_{0}$ parameter.
     a. Write the VBGF with parameters replaced by their estimated values.
     a. Construct 95% bootstrapped confidence intervals for each parameter. Comment on the widths of these confidence intervals. What explains this?

@@ -36,7 +36,7 @@ This post represents my initial attempts to visualize back-calculated lengths at
 &nbsp;
 
 # Data
-In this post, I examine back-calculated lengths (mm) at age for Walleye (*Sander vitreus*) captured from Lake Mille Lacs, Minnesota in late fall (September-October).^[More details [are here](http://derekogle.com/fishR/data/data-html/WalleyeML.html).] These data were kindly provided by the Minnesota Department of Natural Resources, are available in `FSAData`, and were used extensively in @ogle_growth_2017. For simplicity of presentation here, these data were reduced (with `filter()`) to a single year and sex, several unneeded variables were removed (with `select()`, a new factored version of the estimated age variable was created (with `mutate()`), and the data were ordered by estimated, fish identification number, and back-calculated age.
+In this post, I examine back-calculated lengths (mm) at age for Walleye (*Sander vitreus*) captured from Lake Mille Lacs, Minnesota in late fall (September-October).^[More details [are here](https://fishr-core-team.github.io/FSAdata/reference/WalleyeML.html).] These data were kindly provided by the Minnesota Department of Natural Resources, are available in `FSAData`, and were used extensively in @ogle_growth_2017. For simplicity of presentation here, these data were reduced (with `filter()`) to a single year and sex, several unneeded variables were removed (with `select()`, a new factored version of the estimated age variable was created (with `mutate()`), and the data were ordered by estimated, fish identification number, and back-calculated age.
 
 ```{r}
 ## Get data

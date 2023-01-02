@@ -65,7 +65,7 @@ lm1_noint <- lm(mirex~weight+year,data=Mirex)
 &nbsp;
 
 # What `compIntercepts()` Did
-The procedure used by `compSlopes()` to compare intercepts is described in more detail [here](http://derekogle.com/IFAR/supplements/weightlength/index.html#pinpointing-specific-differences-among-intercepts). `compIntercepts()` was simple in that it only required the saved `lm()` object as an argument. Its returned results should be assigned to an object for further examination.^[`compIntercepts()` had a `print()` function for nicely printing the results. However, here we will look at each component separately to ease comparison with the `emmeans()` results.]
+`compIntercepts()` was simple in that it only required the saved `lm()` object as an argument. Its returned results should be assigned to an object for further examination.^[`compIntercepts()` had a `print()` function for nicely printing the results. However, here we will look at each component separately to ease comparison with the `emmeans()` results.]
 
 ```{r}
 cifsa <- FSAmisc::compIntercepts(lm1_noint)
@@ -148,7 +148,7 @@ cis3$emmeans
 In a [previous post](../2021-5-11_compSlopes-replacement/) I demonstrated how to use `emtrends()` from `emmeans` to replace `compSlopes()`, which was also removed from `FSA`.
 
 :::{.callout-note}
-This change to `FSA` does not affect anything in @ogleIntroductoryFisheriesAnalyses2016. However, the use of `compSlopes()` in [this supplement](http://derekogle.com/IFAR/supplements/weightlength/index.html) to @ogleIntroductoryFisheriesAnalyses2016 will no longer work as described and will need to use `emmeans()` instead.
+This change to `FSA` does not affect anything in @ogleIntroductoryFisheriesAnalyses2016.
 :::
 
 &nbsp;
