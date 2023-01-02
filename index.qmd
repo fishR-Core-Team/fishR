@@ -7,9 +7,9 @@ comments: false
 :::
 
 ::: main-logo-light
-![](img/fishRlogo_Tight_Dark_trans.png){fig-alt="fishR logo" }
+![](helpers/img/fishRlogo_Tight_Dark_trans.png){fig-alt="fishR logo" }
 :::
 
 ::: main-logo-dark
-![](img/fishRlogo_Tight_Light_trans.png)
+![](helpers/img/fishRlogo_Tight_Light_trans.png)
 :::

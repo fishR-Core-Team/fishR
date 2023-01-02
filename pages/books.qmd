@@ -14,7 +14,7 @@ You may submit additions or corrections by using the links at the bottom of the 
 # Age and Growth of Fish: Principles and Techniques
 </td></tr>
 <tr>
-<td style="width:15%"><img src="../img/Age-and-Growth-Cover.webp" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="width:15%"><img src="../helpers/img/Age-and-Growth-Cover.webp" style="max-height: auto; width: 100%;" align="left"></td>
 <td style="vertical-align: top;">
 * **Editors**: Michael Quist and Daniel Isermann
 * **Year**: 2017
@@ -30,7 +30,7 @@ You may submit additions or corrections by using the links at the bottom of the 
 # Analysis and Interpretation of Freshwater Fisheries Data I
 </td></tr>
 <tr>
-<td style="width:15%"><img src="../img/AIFFD1_cover.webp" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="width:15%"><img src="../helpers/img/AIFFD1_cover.webp" style="max-height: auto; width: 100%;" align="left"></td>
 <td style="vertical-align: top;">
 * **Editors**: Christopher Guy and Michael Brown
 * **Year**: 2007
@@ -46,7 +46,7 @@ You may submit additions or corrections by using the links at the bottom of the 
 # Introductory Fisheries Analyses with R
 </td></tr>
 <tr>
-<td style="width:15%"><img src="../img/IFARCover_large.JPG" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="width:15%"><img src="../helpers/img/IFARCover_large.JPG" style="max-height: auto; width: 100%;" align="left"></td>
 <td style="vertical-align: top;">
 * **Author**: Derek H. Ogle
 * **Year**: 2015
@@ -62,7 +62,7 @@ You may submit additions or corrections by using the links at the bottom of the 
 # Using R for Modelling and Quantitative Methods in Fisheries
 </td></tr>
 <tr>
-<td style="width:15%"><img src="../img/URMQMF_cover.png" style="max-height: auto; width: 100%;" align="left"></td>
+<td style="width:15%"><img src="../helpers/img/URMQMF_cover.png" style="max-height: auto; width: 100%;" align="left"></td>
 <td style="vertical-align: top;">
 * **Author**: Malcolm Haddon
 * **Year**: 2020
