@@ -13,7 +13,7 @@ categories:
   - "Invasive Species"
 ---
 
-@chadwick_novel_2021 examined a novel method to determine the abundance of [Signal Crayfish](https://en.wikipedia.org/wiki/Signal_crayfish) (*Pacifastacus leniusculus*) in an isolated portion of a stream. At one experimental location their novel method resulted in the removal of 1477, 133, and 46 crayfish in three successive samplings. Use these data to answer the following questions.
+@chadwicketal_2021 examined a novel method to determine the abundance of [Signal Crayfish](https://en.wikipedia.org/wiki/Signal_crayfish) (*Pacifastacus leniusculus*) in an isolated portion of a stream. At one experimental location their novel method resulted in the removal of 1477, 133, and 46 crayfish in three successive samplings. Use these data to answer the following questions.
 
 1. What is the best estimate and 95% confidence interval for the population size?
 1. What is the best estimate and 95% confidence interval for the probability of capture for each sampling period.

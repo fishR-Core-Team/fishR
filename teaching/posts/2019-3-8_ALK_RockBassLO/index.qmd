@@ -13,7 +13,7 @@ categories:
 
 # Background
 
-@wolfert_age_1980 measured the total length (TL) of 1288 [Rock Bass](https://en.wikipedia.org/wiki/Rock_bass) (*Ambloplites rupestris*) from Eastern [Lake Ontario](https://en.wikipedia.org/wiki/Lake_Ontario) in the late 1970s. In addition, [scales](https://en.wikipedia.org/wiki/Fish_scale) were removed for age estimation from as many as 10 specimens from each 10 mm length interval. All data are recorded in [RockBassLO2](https://fishr-core-team.github.io/FSAdata/reference/RockBassLO2).^[See "CSV file" link in "Source" section of linked page. Also note that the filename contains an "oh" not a "zero."]
+@wolfert_1980 measured the total length (TL) of 1288 [Rock Bass](https://en.wikipedia.org/wiki/Rock_bass) (*Ambloplites rupestris*) from Eastern [Lake Ontario](https://en.wikipedia.org/wiki/Lake_Ontario) in the late 1970s. In addition, [scales](https://en.wikipedia.org/wiki/Fish_scale) were removed for age estimation from as many as 10 specimens from each 10 mm length interval. All data are recorded in [RockBassLO2](https://fishr-core-team.github.io/FSAdata/reference/RockBassLO2).^[See "CSV file" link in "Source" section of linked page. Also note that the filename contains an "oh" not a "zero."]
 
 &nbsp;
 
@@ -39,7 +39,7 @@ categories:
 
 Continue with the age- and length-sample data frames and the **observed** age-length key from the previous section.
 
-5. Use the semi-random age assignment technique from @isermann_computer_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample. Combine the age-sample and the age-assigned length-sample into a single data frame to answer the following questions.
+5. Use the semi-random age assignment technique from @isermannknight_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample. Combine the age-sample and the age-assigned length-sample into a single data frame to answer the following questions.
     a. How many fish are estimated to be age 5?
     a. How many fish are estimated to be age 11?
     a. Plot the age distribution for all fish.
@@ -67,7 +67,7 @@ Continue with the age- and length-sample data frames and the **observed** age-le
     a. What is the mean TL of age-5 fish?
     a. Plot the mean length-at-age.
 1. Compare your results to someone else's results (or repeat the steps above). Did you both get the *exact* same results?  Why or why not? If not, how different were they?
-1. Compare your results using the "classical" method here to your results from using the @isermann_computer_2005 method in the previous section.
+1. Compare your results using the "classical" method here to your results from using the @isermannknight_2005 method in the previous section.
 
 &nbsp;
 

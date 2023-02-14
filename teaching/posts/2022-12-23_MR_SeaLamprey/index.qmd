@@ -12,7 +12,7 @@ categories:
   - "Lamprey"
 ---
 
-@bergstedt_reduction_2003 used the Petersen (with the Chapman modification) mark-recapture method to estimate the population size of parasitic Sea Lamprey (*Petromyzon marinus*) in Lake Huron. Use their results^[Follow link in citation below.] from "**Pre**" period and the **1991** parasitic feeding year in **Table 3** (use the M, C, and R rows) to confirm the population estimate (in the first row of the table) and, hopefully, the confidence interval (in the second and third rows of the table). Show your work and write a formal statement about how your results compare to those in the paper.
+@bergstedtetal_2003 used the Petersen (with the Chapman modification) mark-recapture method to estimate the population size of parasitic Sea Lamprey (*Petromyzon marinus*) in Lake Huron. Use their results^[Follow link in citation below.] from "**Pre**" period and the **1991** parasitic feeding year in **Table 3** (use the M, C, and R rows) to confirm the population estimate (in the first row of the table) and, hopefully, the confidence interval (in the second and third rows of the table). Show your work and write a formal statement about how your results compare to those in the paper.
 
 :::{.callout-important appearance="simple"}
 ## Solution Code:

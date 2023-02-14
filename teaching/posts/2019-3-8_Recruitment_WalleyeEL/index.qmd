@@ -13,11 +13,11 @@ categories:
 
 # Background
 
-@hansen_factors_1998 modeled recruitment variation of age-0 [Walleye](https://en.wikipedia.org/wiki/Walleye) (*Sander vitreus*) in [Escanaba Lake](http://dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=2339900&page=facts) (Wisconsin) to determine factors regulating their abundance. Specifically, they examined the abundance of age-5 and older Walleye (spawning population), variation in May water temperatures, and abundance of 152.4 mm total length and longer [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) on the abundance of age-0 Walleye. These data are available in [WalleyeEL](https://fishr-core-team.github.io/FSAdata/reference/WalleyeEL.html).^[See "CSV file" link in "Source" section of linked page.]
+@hansenetal_1998 modeled recruitment variation of age-0 [Walleye](https://en.wikipedia.org/wiki/Walleye) (*Sander vitreus*) in [Escanaba Lake](http://dnr.wi.gov/lakes/lakepages/LakeDetail.aspx?wbic=2339900&page=facts) (Wisconsin) to determine factors regulating their abundance. Specifically, they examined the abundance of age-5 and older Walleye (spawning population), variation in May water temperatures, and abundance of 152.4 mm total length and longer [Yellow Perch](https://en.wikipedia.org/wiki/Yellow_perch) (*Perca flavescens*) on the abundance of age-0 Walleye. These data are available in [WalleyeEL](https://fishr-core-team.github.io/FSAdata/reference/WalleyeEL.html).^[See "CSV file" link in "Source" section of linked page.]
 
 :::{.callout-warning appearnace="simple"}
 ## Beware
-If you want to compare your results below to those in @hansen_factors_1998, note that they used what is called the second paramterization of the Ricker function in `FSA` and that they restricted their data to the year-classes prior to 1992 for "model construction."
+If you want to compare your results below to those in @hansenetal_1998, note that they used what is called the second parameterization of the Ricker function in `FSA` and that they restricted their data to the year-classes prior to 1992 for "model construction."
 :::
 
 &nbsp;

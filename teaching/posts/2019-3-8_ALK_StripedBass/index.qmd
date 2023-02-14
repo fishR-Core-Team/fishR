@@ -39,7 +39,7 @@ Researchers at the [Center for Quantitative Fisheries Ecology at Old Dominion Un
 
 Continue with the age- and length-sample data frames and the **observed** age-length key from the previous section.
 
-5. Use the semi-random age assignment technique from @isermann_computer_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample.  Combine the age-sample and the age-assigned length-sample into a single data frame and answer the following questions.
+5. Use the semi-random age assignment technique from @isermannknight_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample.  Combine the age-sample and the age-assigned length-sample into a single data frame and answer the following questions.
     a. How many fish are estimated to be age 8?
     a. How many fish are estimated to be age 14?
     a. Plot the age distribution for all fish.
@@ -60,7 +60,7 @@ Continue with the age- and length-sample data frames and the **observed** age-le
     a. What is the mean TL of age-9 fish?
     a. Plot the length-at-age with the mean length-at-age superimposed for all fish.
 1. Compare your results to someone else's results (or repeat the steps above).  Did you both get the *exact* same results?  Why or why not?  If not, how different were they?
-1. Compare your results using the "classical" method here to your results from using the @isermann_computer_2005 method in the previous section.
+1. Compare your results using the "classical" method here to your results from using the @isermannknight_2005 method in the previous section.
 
 &nbsp;
 

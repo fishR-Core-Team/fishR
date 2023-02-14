@@ -20,7 +20,7 @@ library(patchwork)  # for positioning multiple plots
 &nbsp;
 
 # Introduction
-@glassic_creating_2019 showed how to modify default `ggplot2` graphics to meet American Fisheries Society (AFS) Style Guide requirements.^[They also did the same for base R graphics.] They provided an example with accompanying script to help users implement their suggestions.^[The `ggplot2` script is available [here](https://github.com/CGuyMSU/AFS-figures/blob/master/ggplot2_figure.r).] Since their publication, `ggplot2` has been updated, which did not break their code but leads to some warnings of changed arguments. In this post, I update their script and provide some suggestions that I think will allow their recommendations to be more easily implemented.
+@glassicetal_2019 showed how to modify default `ggplot2` graphics to meet American Fisheries Society (AFS) Style Guide requirements.^[They also did the same for base R graphics.] They provided an example with accompanying script to help users implement their suggestions.^[The `ggplot2` script is available [here](https://github.com/CGuyMSU/AFS-figures/blob/master/ggplot2_figure.r).] Since their publication, `ggplot2` has been updated, which did not break their code but leads to some warnings of changed arguments. In this post, I update their script and provide some suggestions that I think will allow their recommendations to be more easily implemented.
 
 The first part of their script^[Which is not shown here as I want to focus on graphing.] creates a data frame called `length_weight_data` with simple weight and length data for two species (`lmb` and `cat`).
 
@@ -47,8 +47,8 @@ FSA::peek(length_weight_data,n=6)
 
 &nbsp;
 
-# @glassic_creating_2019 Figures
-@glassic_creating_2019 first demonstrated a default `ggplot2` plot (@fig-glassic (A)).^[This is their code exactly, except that I added indentations for easier reading.]
+# @glassicetal_2019 Figures
+@glassicetal_2019 first demonstrated a default `ggplot2` plot (@fig-glassic (A)).^[This is their code exactly, except that I added indentations for easier reading.]
 
 ```{r}
 len_wt_default <- ggplot(data = length_weight_data,
@@ -125,7 +125,7 @@ They then arranged the two plots side-by-side.^[I used `gridExtra::` here so as 
 
 ```{r}
 #| label: fig-glassic
-#| fig-cap: Figures made with `ggplot2` including one with (A) default values and (B) a custom figure that adheres to American Fisheries Society guidelines for authors. This reproduces Figure 2 in @glassic_creating_2019.
+#| fig-cap: Figures made with `ggplot2` including one with (A) default values and (B) a custom figure that adheres to American Fisheries Society guidelines for authors. This reproduces Figure 2 in @glassicetal_2019.
 #| fig-width: 8
 #| fig-height: 4
 #| results: hide
@@ -135,7 +135,7 @@ ggplot_figure
 
 &nbsp;
 
-Finally, @glassic_creating_2019 demonstrated how to save the plot with a custom width, height (holding a specific aspect ratio), and resolution.
+Finally, @glassicetal_2019 demonstrated how to save the plot with a custom width, height (holding a specific aspect ratio), and resolution.
 
 ```{r}
 #| eval: false
@@ -153,7 +153,7 @@ When I first ran the author's code I received an error about a missing font. I f
 &nbsp;
 
 # Suggested Adjustments
-I separate the construction of the plot by @glassic_creating_2019 into three parts. The first part consists of items that are specific to the plot and that cannot be set globally for use in other plots. These are items likes `data=`, `aes()`, `geom()`s, `scale()`s, and labels. The second part consists of items that will likely need to be held constant across different plots. These are items like font size, tick lengths, margins, etc. These are largely the items that @glassic_creating_2019 adjust with `theme()`. THe third part is positioning two plots side-by-side as one overall figure.
+I separate the construction of the plot by @glassicetal_2019 into three parts. The first part consists of items that are specific to the plot and that cannot be set globally for use in other plots. These are items likes `data=`, `aes()`, `geom()`s, `scale()`s, and labels. The second part consists of items that will likely need to be held constant across different plots. These are items like font size, tick lengths, margins, etc. These are largely the items that @glassicetal_2019 adjust with `theme()`. THe third part is positioning two plots side-by-side as one overall figure.
 
 Below I explain some suggested modifications to the plot specific items. I then show how to move most of the elements that will be common across plots into a custom theme that can be easily applied to any plot. Finally, I demonstrate using `patchwork` rather than `gridExtra` to place plots next to each other.
 
@@ -166,7 +166,7 @@ I suggest the following changes to the plot-specific elements. Implementing thes
 * I removed `limits=` in `scale_fill_manual()` and used a named vector in `values=` to accomplish the same task. I think this makes it easier to see which category gets which color.
 * I removed `ggtitle()` as I am going to accomplish that same task with `patchwork` as shown below (i.e., where the two plots are place side-by-side).
 * I used `legend.title=element_blank()` in `theme()` rather than `labs(fill="")` to remove to legend title. I think(?) this handles the freed up space better.
-* I included `legend.position=` in `theme()` here because @glassic_creating_2019 positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., will need to manually find a "white area").
+* I included `legend.position=` in `theme()` here because @glassicetal_2019 positioned the legend within the plot area and, thus, will need to be set specific to each plot (i.e., will need to manually find a "white area").
 
 ```{r}
 len_wt_afs1 <- ggplot(data=length_weight_data,
@@ -203,10 +203,10 @@ theme_AFS <- function(base_size=14,base_family="Times New Roman") {
 }
 ```
 
-Within `theme()` I add *nearly* all of the elements that @glassic_creating_2019 included, though I reordered the items in a way that makes sense to me (e.g., axis title then axis tick labels then axis ticks then axis line). Other adjustments are:
+Within `theme()` I add *nearly* all of the elements that @glassicetal_2019 included, though I reordered the items in a way that makes sense to me (e.g., axis title then axis tick labels then axis ticks then axis line). Other adjustments are:
 
 * I removed `text=` because the font family was already set with `base_family=`.
-* I removed `legend.position=` because, as described above, @glassic_creating_2019 positioned the legend within the plot area.
+* I removed `legend.position=` because, as described above, @glassicetal_2019 positioned the legend within the plot area.
 * I removed `size=14` from `axis.title.y=`, `axis.title.x=`, `axis.text.y=`, and `axis.text.x=` because that was set with `base_size=`.
 * I replaced `axis.ticks.y=` and `axis.ticks.x=` with `axis.ticks=` because their elements were the same and using `axis.ticks=` will set both at the same time.
 
@@ -266,7 +266,7 @@ len_wt_afs2 <- ggplot(data=length_weight_data,
 
 :::{.callout-note appearance="simple"}
 ## Hint
-See the ["Themes" chapter of @wickham_ggplot2_2022](https://ggplot2-book.org/polishing.html) for an excellent description of using themes in `ggplot2` graphics.
+See the ["Themes" chapter of @wickhametal_2022](https://ggplot2-book.org/polishing.html) for an excellent description of using themes in `ggplot2` graphics.
 :::
 
 ## Using `patchwork` to Position Plots
@@ -274,7 +274,7 @@ The `patchwork` package provides simple but extensive tools for combining multip
 
 ```{r}
 #| label: fig-modplot
-#| fig-cap: Figures made with `ggplot2` including one with (A) only plot-specific modifications to default values and (B) with plot specific modifications and a custom theme that adheres to American Fisheries Society guidelines for authors. Panel B reproduces panel B in Figure 1 above and Figure 2 in @glassic_creating_2019.
+#| fig-cap: Figures made with `ggplot2` including one with (A) only plot-specific modifications to default values and (B) with plot specific modifications and a custom theme that adheres to American Fisheries Society guidelines for authors. Panel B reproduces panel B in Figure 1 above and Figure 2 in @glassicetal_2019.
 #| fig-width: 8
 #| fig-height: 4
 len_wt_afs1 + len_wt_afs2 +
@@ -283,13 +283,13 @@ len_wt_afs1 + len_wt_afs2 +
 
 :::{.callout-note appearance="simple"}
 ## Hint
-Annotating plots with `patchwork` will place the annotations on the very edge of the figure panel. Use `ggtitle()` to move them more to the right as @glassic_creating_2019 had them.
+Annotating plots with `patchwork` will place the annotations on the very edge of the figure panel. Use `ggtitle()` to move them more to the right as @glassicetal_2019 had them.
 :::
 
 &nbsp;
 
 # Conclusion
-@glassic_creating_2019 provided an excellent example and script for how to use `ggplot2` in R to make figures that adhere to the AFS Style Guidelines. Here I provide some suggestions to update their script for recent changes to `ggplot2`. More importantly their suggestions were put into a custom theme that can be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, `theme_AFS()` is applied to a `ggplot2` length frequency histogram below (@fig-bghist).^[This uses the `BluegillLM` data from the `FSAdata` package; thus, you must have `FSAdata` installed.]
+@glassicetal_2019 provided an excellent example and script for how to use `ggplot2` in R to make figures that adhere to the AFS Style Guidelines. Here I provide some suggestions to update their script for recent changes to `ggplot2`. More importantly their suggestions were put into a custom theme that can be easily applied to other figures to ensure consistency (and adherence to the AFS Style Guide). As an example, `theme_AFS()` is applied to a `ggplot2` length frequency histogram below (@fig-bghist).^[This uses the `BluegillLM` data from the `FSAdata` package; thus, you must have `FSAdata` installed.]
 
 ```{r}
 #| label: fig-bghist

@@ -31,7 +31,7 @@ theme_set(theme_bw())
 # Introduction
 In [a previous post](../2019-12-31_vonB_plots_1/index.html) I demonstrated how to plot the fit of a von Bertalanffy growth function (VBGF) for a single group of observed data. In this post, I explore methods to do the same for multiple groups of observed data (e.g., multiple sexes, locations, years).
 
-I will again use the lengths and ages of Lake Erie Walleye (*Sander vitreus*) captured during October-November, 2003-2014 available in [`FSAdata`](https://fishr-core-team.github.io/FSAdata/). These data formed many of the examples in @ogle_growth_2017. My primary interest here is in the `tl` (total length in mm), `age`, and `sex` variables.^[See [more details about the data](https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html).] I initially focus on Walleye from location "1" captured in 2014 in this example.^[For succinctness, I removed `year` as it only had one level after filtering and three variables related to the `loc`ation of capture.]
+I will again use the lengths and ages of Lake Erie Walleye (*Sander vitreus*) captured during October-November, 2003-2014 available in [`FSAdata`](https://fishr-core-team.github.io/FSAdata/). These data formed many of the examples in @ogleetal_2017. My primary interest here is in the `tl` (total length in mm), `age`, and `sex` variables.^[See [more details about the data](https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html).] I initially focus on Walleye from location "1" captured in 2014 in this example.^[For succinctness, I removed `year` as it only had one level after filtering and three variables related to the `loc`ation of capture.]
 
 ```{r data}
 #| label: data
@@ -99,9 +99,9 @@ ggplot(data=w14T,aes(x=age,y=tl,color=sex)) +
 &nbsp;
 
 # Fitting the VBGF to Multiple Groups
-Methods for fitting a von Bertalanfy growth function (VBGF) to multiple groups are detailed in @ogleIntroductoryFisheriesAnalyses2016 and @ogle_growth_2017. Thus, this methodology will only be briefly explained here.
+Methods for fitting a von Bertalanfy growth function (VBGF) to multiple groups are detailed in @ogleIntroductoryFisheriesAnalyses2016 and @ogleetal_2017. Thus, this methodology will only be briefly explained here.
 
-Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., `tl` and `age`) and assuming different parameters should be estimated for each group.^[See @ogleIntroductoryFisheriesAnalyses2016 and @ogle_growth_2017 for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.] Identifying the different groups is accomplished here by appending `[group]`, where `group` is replaced with the specific variable name that identifies the groups (i.e., `sex` here). The expression is assigned to an object name (i.e., `vbLKt` here).
+Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., `tl` and `age`) and assuming different parameters should be estimated for each group.^[See @ogleIntroductoryFisheriesAnalyses2016 and @ogleetal_2017 for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.] Identifying the different groups is accomplished here by appending `[group]`, where `group` is replaced with the specific variable name that identifies the groups (i.e., `sex` here). The expression is assigned to an object name (i.e., `vbLKt` here).
 
 ```{r}
 vbLKt <- tl~Linf[sex]*(1-exp(-K[sex]*(age-t0[sex])))
@@ -118,7 +118,7 @@ I created vectors of group names (with `unique()`) and the number of groups (wit
 
 &nbsp;
 
-This model has six parameters -- $L_{\infty}$, $K$, and $t_{0}$ for each of the two groups (male and female Walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using `vbStarts()` as described in the [previous post](../2019-12-31_vonB_plots_1/index.html)) and replicate those starting values for both groups.^[In some instances using the same starting values for both groups will not result in model convergence. See @ogleIntroductoryFisheriesAnalyses2016 and @ogle_growth_2017 for suggestions for handling those cases.]
+This model has six parameters -- $L_{\infty}$, $K$, and $t_{0}$ for each of the two groups (male and female Walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using `vbStarts()` as described in the [previous post](../2019-12-31_vonB_plots_1/index.html)) and replicate those starting values for both groups.^[In some instances using the same starting values for both groups will not result in model convergence. See @ogleIntroductoryFisheriesAnalyses2016 and @ogleetal_2017 for suggestions for handling those cases.]
 
 ```{r}
 ( sv0 <- vbStarts(tl~age,data=w14T) )
@@ -232,7 +232,7 @@ As before, starting values are needed for each group. Here, however, I place the
                       Map(rep,sv0,c(ngrps,ngrps,ngrps))) )
 ```
 
-The starting values created here are the same for each group. This will likely work in most cases (of fish growth data) but likely not all. Starting values can be entered into the data frame manually as shown below.^[@ogleIntroductoryFisheriesAnalyses2016 and @ogle_growth_2017 discuss alternative methods of finding starting values. But note that this may take some work if there are many groups.]
+The starting values created here are the same for each group. This will likely work in most cases (of fish growth data) but likely not all. Starting values can be entered into the data frame manually as shown below.^[@ogleIntroductoryFisheriesAnalyses2016 and @ogleetal_2017 discuss alternative methods of finding starting values. But note that this may take some work if there are many groups.]
 
 ```{r}
 #| eval: false

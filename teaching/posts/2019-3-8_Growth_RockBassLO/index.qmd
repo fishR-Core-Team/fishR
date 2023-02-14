@@ -14,7 +14,7 @@ categories:
 
 # Background
 
-@wolfert_age_1980 measured the total length (TL) of 1288 [Rock Bass](https://en.wikipedia.org/wiki/Rock_bass) (*Ambloplites rupestris*) from Eastern [Lake Ontario](https://en.wikipedia.org/wiki/Lake_Ontario) in the late 1970s. In addition, [scales](https://en.wikipedia.org/wiki/Fish_scale) were removed for age estimation from as many as 10 specimens from each 10 mm length interval. All data are recorded in [RockBassLO2](https://fishr-core-team.github.io/FSAdata/reference/RockBassLO2).^[See "CSV file" link in "Source" section of linked page. Also note that the filename contains an "oh" not a "zero."]
+@wolfert_1980 measured the total length (TL) of 1288 [Rock Bass](https://en.wikipedia.org/wiki/Rock_bass) (*Ambloplites rupestris*) from Eastern [Lake Ontario](https://en.wikipedia.org/wiki/Lake_Ontario) in the late 1970s. In addition, [scales](https://en.wikipedia.org/wiki/Fish_scale) were removed for age estimation from as many as 10 specimens from each 10 mm length interval. All data are recorded in [RockBassLO2](https://fishr-core-team.github.io/FSAdata/reference/RockBassLO2).^[See "CSV file" link in "Source" section of linked page. Also note that the filename contains an "oh" not a "zero."]
 
 :::{.callout-warning appearance="simple"}
 ## Continuation

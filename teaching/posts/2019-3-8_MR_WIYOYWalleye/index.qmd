@@ -21,7 +21,7 @@ dat <- data.frame(Sample=1:5,
                   Returned=c(321,412,178,415, NA))
 ```
 
-@mraz_recruitment_1968 examined the population dynamics of young-of-the-year (YOY) [walleye](https://en.wikipedia.org/wiki/Walleye) (*Sander vitreus*) in Pine Lake, an inland lake in Wisconsin. In fall 1962, YOY walleye were captured, marked, and returned to the lake on five sampling dates. On each date, the number of fish caught, the number of caught fish that were previously marked, and the number of marked fish returned to the lake were recorded. The results from these sampling efforts are shown in the table below.
+@mraz_1968 examined the population dynamics of young-of-the-year (YOY) [walleye](https://en.wikipedia.org/wiki/Walleye) (*Sander vitreus*) in Pine Lake, an inland lake in Wisconsin. In fall 1962, YOY walleye were captured, marked, and returned to the lake on five sampling dates. On each date, the number of fish caught, the number of caught fish that were previously marked, and the number of marked fish returned to the lake were recorded. The results from these sampling efforts are shown in the table below.
 
 ```{r}
 #| label: data_table

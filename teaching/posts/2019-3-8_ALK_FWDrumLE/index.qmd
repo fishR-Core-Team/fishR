@@ -13,7 +13,7 @@ categories:
 
 # Background
 
-@bur_growth_1984 examined the population dynamics of [Freshwater Drum](https://en.wikipedia.org/wiki/Freshwater_drum) (*Aplodinotus grunniens*) in  [Lake Erie](https://en.wikipedia.org/wiki/Lake_Erie) in the late 1970s. In one part of his study, he measured the total length (TL) of all 1577 drum sampled and extracted [scales](https://en.wikipedia.org/wiki/Fish_scale) for age estimation from a proportionate sample from each 10 mm length interval. The length and age data are recorded in [FWDrumLE2](https://fishr-core-team.github.io/FSAdata/reference/FWDrumLE2).^[See "CSV file" link in "Source" section of linked page.]
+@bur_1984 examined the population dynamics of [Freshwater Drum](https://en.wikipedia.org/wiki/Freshwater_drum) (*Aplodinotus grunniens*) in  [Lake Erie](https://en.wikipedia.org/wiki/Lake_Erie) in the late 1970s. In one part of his study, he measured the total length (TL) of all 1577 drum sampled and extracted [scales](https://en.wikipedia.org/wiki/Fish_scale) for age estimation from a proportionate sample from each 10 mm length interval. The length and age data are recorded in [FWDrumLE2](https://fishr-core-team.github.io/FSAdata/reference/FWDrumLE2).^[See "CSV file" link in "Source" section of linked page.]
 
 &nbsp;
 
@@ -39,7 +39,7 @@ categories:
 
 Continue with the age- and length-sample data frames and the **observed** age-length key from the previous section.
 
-5. Use the semi-random age assignment technique from @isermann_computer_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample. Combine the age-sample and the age-assigned length-sample into a single data frame to answer the following questions.
+5. Use the semi-random age assignment technique from @isermannknight_2005 and the **observed** age-length key to assign ages to the unaged fish in the length-sample. Combine the age-sample and the age-assigned length-sample into a single data frame to answer the following questions.
     a. How many fish are estimated to be age 3?
     a. How many fish are estimated to be age 8?
     a. Plot the age distribution for all fish.
@@ -62,7 +62,7 @@ Continue with the age- and length-sample data frames and the **observed** age-le
     a. What is the mean TL of age-4 fish?
     a. Plot the length-at-age with the mean length-at-age superimposed for all fish.
 1. Compare your results to someone else's results (or repeat the steps above). Did you both get the *exact* same results?  Why or why not?  If not, how different were they?
-1. Compare your results using the "classical" method here to your results from using the @isermann_computer_2005 method in the previous section.
+1. Compare your results using the "classical" method here to your results from using the @isermannknight_2005 method in the previous section.
 
 &nbsp;
 

@@ -12,7 +12,7 @@ categories:
   - "Perch"
 ---
 
-@mooij_analysis_1999 examined length-at-age data of [European Perch](https://en.wikipedia.org/wiki/European_perch) (*Perca fluviatilis*) from [Lake Tjeukemeer](http://wldb.ilec.or.jp/data/databook_html/eur/eur-01.html) (The Netherlands) to identify possible sexual dimorphism in growth trajectories.  Their data consisted of fork length (FL; cm), ages (yrs) from otoliths, and sex from 69 fish and are recorded in [EuroPerchTJ](https://fishr-core-team.github.io/FSAdata/reference/EuroPerchTJ.html).^[See "CSV file" link in "Source" section of linked page.]
+@mooijetal_1999 examined length-at-age data of [European Perch](https://en.wikipedia.org/wiki/European_perch) (*Perca fluviatilis*) from [Lake Tjeukemeer](http://wldb.ilec.or.jp/data/databook_html/eur/eur-01.html) (The Netherlands) to identify possible sexual dimorphism in growth trajectories.  Their data consisted of fork length (FL; cm), ages (yrs) from otoliths, and sex from 69 fish and are recorded in [EuroPerchTJ](https://fishr-core-team.github.io/FSAdata/reference/EuroPerchTJ.html).^[See "CSV file" link in "Source" section of linked page.]
 
 &nbsp;
 

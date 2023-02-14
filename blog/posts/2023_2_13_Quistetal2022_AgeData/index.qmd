@@ -1,0 +1,359 @@
+---
+title: Quist et al. (2022) Age Comparison Figures
+description: Using ggplot2 to recreate the age comparison figures in Quist et al. (2022).
+author: Derek H. Ogle
+date: 2/13/2023
+image: preview.png
+categories:
+  - ggplot2
+  - Age Comparisons
+---
+
+# Introduction
+@quistetal_2022 examined three structures (scales, sectioned otoliths, and whole otoliths) to estimate age of Yellowstone Cutthroat Trout (*Oncorhynchus clarkii bouvieri*). Their published paper included a supplement with the data they used to estimate age precision and bias between readers and between structures.
+
+A [previous post](../2021-3-15-AgeBiasPlots/) demonstrated my preferred methods for displaying such data. Here, as I continue to hone my `ggplot2` skills, I did not follow my preferences but rather tried to recreate Figures 1 and 2 in @quistetal_2022. My process is described below.
+
+&nbsp;
+
+# Getting Setup
+The following packages are loaded for use below.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2, stringr packages
+library(patchwork)  # for positioning multiple plots
+```
+
+The following `ggplot2` theme was used below.^[See [this post](../2022-12-22_AFS_Style_Figures/) for more information on creating and using `ggplot2` themes.]
+
+```{r}
+#| label: make_theme
+theme_q <- function(base_size=14) {
+  theme_bw(base_size=base_size) +
+    theme(
+      # margin for the plot
+      plot.margin=unit(c(0.5,0.5,0.5,0.5),"cm"),
+      # set axis label (i.e., title) colors and margins
+      axis.title.y=element_text(colour="black",margin=margin(t=0,r=10,b=0,l=0)),
+      axis.title.x=element_text(colour="black",margin=margin(t=10,r=0,b=0,l=0)),
+      # set tick label color, margin, and position and orientation
+      axis.text.y=element_text(colour="black",margin=margin(t=0,r=5,b=0,l=0),
+                               vjust=0.5,hjust=1),
+      axis.text.x=element_text(colour="black",margin=margin(t=5,r=0,b=0,l=0),
+                               vjust=0,hjust=0.5,),
+      # set size of the tick marks for y- and x-axis
+      axis.ticks=element_line(linewidth=0.5),
+      # adjust length of the tick marks
+      axis.ticks.length=unit(0.2,"cm"),
+      # set the axis size,color,and end shape
+      axis.line=element_line(colour="black",linewidth=0.5,lineend="square"),
+      # adjust size of text for legend
+      legend.text=element_text(size=12),
+      # remove grid
+      panel.grid=element_blank()
+    )
+}
+```
+
+&nbsp;
+
+# Data
+I downloaded the Excel file provided as [a supplement to the published paper](https://meridian.allenpress.com/jfwm/article/13/2/544/483421/Comparison-of-Structures-Used-to-Estimate-Age-and#supplementary-data) to my local drive and named it "quistetal_2022.xlsx". The authors used "." for missing data which I addressed with `na=` in `read_excel()` below. The authors also recorded "confidence" values for each age assignment but those were not used in any analysis here so I removed them. Names for the remaining variables were long and somewhat inconsistent so I renamed those to be shorter and consistent.^[Note that `as.data.frame()` is used to remove the `tibble` class returned from `read_excel()` that I don't prefer.]
+
+```{r}
+#| label: data-prep
+df <- readxl::read_excel("quist_etal_2022.xlsx",na=c("",".")) |>
+  select(-contains("Confidence")) |>
+  rename(scale_r1=`Reader_1_Scale_age`,
+         scale_r2=`Reader_2_Scale_age`,
+         scale_age=`Consensus_scale_age`,
+         soto_r1=`Reader_1_Sectioned_Otolith_age`,
+         soto_r2=`Reader_2_Sectioned_Otolith_age`,
+         soto_age=`Consensus_Sectioned_Otolith_Age`,
+         woto_r1=`Reader_1_Whole_Otolith_age`,
+         woto_r2=`Reader_2_Whole_Otolith_age`,
+         woto_age=`Consensus_Whole_Otolith`) |>
+  as.data.frame()
+head(df)
+```
+
+Figures 1 and 2 in @quistetal_2022 each used axis labels that ranged from 0 to 12 and were only shown for even values. Those limits and labels are set here for ease and consistency below.
+
+```{r}
+#| label: set-constants
+axlbls <- seq(0,12,2)
+axlmts <- range(axlbls)
+```
+
+&nbsp;
+
+# Plot One Structure
+I begin by showing how to create one panel (i.e., for estimate age between readers for one structure) of Figure 1.
+
+I first created a summary data frame that has the number of observations for each combination of age estimates by each reader. For example, there were three instances where each reader assigned an age of 1 and two instances where reader 1 assigned an age of 1 but reader 2 assigned and age of 2.
+
+```{r}
+df_wo <- df |>
+  group_by(woto_r1,woto_r2) |>
+  summarize(freq=n()) |>
+  as.data.frame()
+head(df_wo)
+```
+
+`agePrecision()` from `FSA` was then used to compute a variety of age precision statistics between the two readers. For these purposes, note that exact percent agreement is returned in `$PercAgree` and the average coefficient of variation is returned in `$ACV` of the object saved from `agePrecision()`.
+
+```{r}
+ap_wo <- FSA::agePrecision(woto_r2~woto_r1,data=df)
+str(ap_wo)
+```
+
+@quistetal_2022 also reported "PA-1" (i.e., the percent agreement within one age), which is not returned by `agePrecision()`. This value can, however, be calculated by summing the first two values in `$absDiff` (these are the counts of perfect agreement and agreement within one age) and dividing by the total number of paired assignments in `$validn`.
+
+```{r}
+sum(ap_wo$absdiff[1:2])/ap_wo$validn*100
+```
+
+@quistetal_2022 annotated their plots with these three summary values. Below I use `str_glue()` to concatenate together these values into a single string that will be added to the plots below. In the use of `str_glue()` below the three summary measures are assigned to objects named `PA`, `PA1`, and `CV` (*last three lines*) and those values are then inserted into the string (*first four lines*) within the `{}` delimiters. I also used `formatC()` is used to format the string to one decimal place and that `\n` is a "carriage return" that starts a new line in the string.
+
+```{r}
+lbl_wo <- str_glue("Whole Otoliths\n",
+                   "PA = {PA}%\n",
+                   "PA-1 = {PA1}%\n",
+                   "CV = {CV}",
+                   PA=formatC(ap_wo$PercAgree,format='f',digits=1),
+                   PA1=formatC(sum(ap_wo$absdiff[1:2])/ap_wo$validn*100,format='f',digits=1),
+                   CV=formatC(ap_wo$ACV,format='f',digits=1))
+lbl_wo
+```
+
+Finally, the plot is made by first^[So that it appears behind the numbers.] adding the 1:1 reference line with `geom_a line()`, the frequency of age estimates with `geom_label()`, and the summary results as text with `annotate()`. The arguments in `geom_label()` remove the rounded edges of the boxes (i.e., `label.r`) and attempt to make the boxes larger to more closely abut as in @quistetal_2022. The arguments in `annotate()` put the label at the minimum x and maximum y values, then vertically and horizontally adjust that text box so that the upper-left corner is just inside the upper-left corner of the plot. Finally, the expansion factors are removed from both axes and both axes are limited to and labeled with the limits and labels set above.
+
+```{r}
+#| label: figure-rs_wo
+#| fig-width: 5
+#| fig-height: 5
+rs_wo <- ggplot(data=df_wo,mapping=aes(x=woto_r1,y=woto_r2,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  annotate(geom="text",label=lbl_wo,
+           x=0,y=12,hjust=-0.1,vjust=1.1,size=4) +
+  scale_x_continuous(name="Reader 1",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Reader 2",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q()
+rs_wo
+```
+
+&nbsp;
+
+:::{.callout-note}
+- I did not find a good way to make the boxes around each value the same size as in @quistetal_2022.
+- Also, I think that graphs with the same rnge of values on both axes should be presented as a square, rather than as the rectangle used by @quistetal_2022.
+:::
+
+&nbsp;
+
+# Recreating Figure 1
+The code described above can largely be repeated for scales and sectioned otoliths, which I did without showing the code but saving the results in `ggplot2` objects called `rs_sc` and `rs_so`.
+
+```{r}
+#| label: figure-rs_so
+#| echo: false
+df_so <- df |>
+  group_by(soto_r1,soto_r2) |>
+  summarize(freq=n()) |>
+  as.data.frame()
+
+ap_so <- FSA::agePrecision(soto_r2~soto_r1,data=df)
+
+lbl_so <- str_glue("Sectioned Otoliths\n",
+                   "PA = {PA}%\n",
+                   "PA-1 = {PA1}%\n",
+                   "CV = {CV}",
+                   PA=formatC(ap_so$PercAgree,format='f',digits=1),
+                   PA1=formatC(sum(ap_so$absdiff[1:2])/ap_so$validn*100,format='f',digits=1),
+                   CV=formatC(ap_so$ACV,format='f',digits=1))
+
+rs_so <- ggplot(data=df_so,mapping=aes(x=soto_r1,y=soto_r2,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  annotate(geom="text",label=lbl_so,
+           x=0,y=12,hjust=-0.1,vjust=1.1,size=4) +
+  scale_x_continuous(name="Reader 1",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Reader 2",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q()
+```
+
+```{r}
+#| label: figure-rs_sc
+#| echo: false
+df_sc <- df |>
+  group_by(scale_r1,scale_r2) |>
+  summarize(freq=n()) |>
+  as.data.frame()
+
+ap_sc <- FSA::agePrecision(scale_r2~scale_r1,data=df)
+
+lbl_sc <- str_glue("Scales\n",
+                   "PA = {PA}%\n",
+                   "PA-1 = {PA1}%\n",
+                   "CV = {CV}",
+                   PA=formatC(ap_sc$PercAgree,format='f',digits=1),
+                   PA1=formatC(sum(ap_sc$absdiff[1:2])/ap_sc$validn*100,format='f',digits=1),
+                   CV=formatC(ap_sc$ACV,format='f',digits=1))
+
+rs_sc <- ggplot(data=df_sc,mapping=aes(x=scale_r1,y=scale_r2,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  annotate(geom="text",label=lbl_sc,
+           x=0,y=12,hjust=-0.1,vjust=1.1,size=4) +
+  scale_x_continuous(name="Reader 1",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Reader 2",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q()
+```
+
+However, when these two objects are combined together with `rs_wo` to form Figure 1, they should not have a title or labels for the x-axis. The x-axis title and labels are removed by setting `axis.title.x=` and `axis.text.x=` in `theme()` to `element_blank()` and appending this to each object.^[Note that each object is modified and then saved to the same name here.]
+
+```{r}
+#| label: modify-xaxis-labels
+rs_so <- rs_so +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank())
+rs_sc <- rs_sc +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank())
+```
+
+Finally, the three plots can be stacked on top of each other using `patchwork` as shown below.^[Use smaller values in `plot.margin=` in `theme_q` to more closely resemble how close the panels are in @quistetal_2022.]
+
+```{r}
+#| label: figure1
+#| fig-width: 5
+#| fig-height: 13
+rs_sc + rs_so + rs_wo +
+  plot_layout(ncol=1)
+```
+
+&nbsp;
+
+# Recreating Figure 2
+Figure 2 would follow the same general process as Figure 1 except that the summary results annotation would only have the results and not a "title" and each panel in the figure would have the x-axis title and labels.
+
+```{r}
+#| label: figure2
+#| fig-width: 5
+#| fig-height: 14
+#| echo: false
+df_scso <- df |>
+  group_by(scale_age,soto_age) |>
+  summarize(freq=n()) |>
+  as.data.frame()
+
+ap_scso <- FSA::agePrecision(scale_age~soto_age,data=df)
+
+lbl_scso <- str_glue("PA = {PA}%\n",
+                     "PA-1 = {PA1}%\n",
+                     "CV = {CV}",
+                     PA=formatC(ap_scso$PercAgree,format='f',digits=1),
+                     PA1=formatC(sum(ap_scso$absdiff[1:2])/ap_scso$validn*100,format='f',digits=1),
+                     CV=formatC(ap_scso$ACV,format='f',digits=1))
+
+scso <- ggplot(data=df_scso,
+                  mapping=aes(x=soto_age,y=scale_age,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  annotate(geom="text",label=lbl_scso,
+           x=0,y=12,hjust=-0.1,vjust=1.1,size=4) +
+  scale_x_continuous(name="Sectioned otolith",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Scales",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q()
+
+
+df_scwo <- df |>
+  group_by(scale_age,woto_age) |>
+  summarize(freq=n()) |>
+  as.data.frame()
+
+ap_scwo <- FSA::agePrecision(scale_age~woto_age,data=df)
+
+lbl_scwo <- str_glue("PA = {PA}%\n",
+                     "PA-1 = {PA1}%\n",
+                     "CV = {CV}",
+                     PA=formatC(ap_scwo$PercAgree,format='f',digits=1),
+                     PA1=formatC(sum(ap_scwo$absdiff[1:2])/ap_scwo$validn*100,format='f',digits=1),
+                     CV=formatC(ap_scwo$ACV,format='f',digits=1))
+
+scwo <- ggplot(data=df_scwo,
+                  mapping=aes(x=woto_age,y=scale_age,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  annotate(geom="text",label=lbl_scwo,
+           x=0,y=12,hjust=-0.1,vjust=1.1,size=4) +
+  scale_x_continuous(name="Whole otolith",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Scales",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q()
+
+
+df_sowo <- df |>
+  group_by(soto_age,woto_age) |>
+  summarize(freq=n()) |>
+  as.data.frame()
+
+ap_sowo <- FSA::agePrecision(woto_age~soto_age,data=df)
+
+lbl_sowo <- str_glue("PA = {PA}%\n",
+                     "PA-1 = {PA1}%\n",
+                     "CV = {CV}",
+                     PA=formatC(ap_sowo$PercAgree,format='f',digits=1),
+                     PA1=formatC(sum(ap_sowo$absdiff[1:2])/ap_sowo$validn*100,format='f',digits=1),
+                     CV=formatC(ap_sowo$ACV,format='f',digits=1))
+
+sowo <- ggplot(data=df_sowo,
+                  mapping=aes(x=soto_age,y=woto_age,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  annotate(geom="text",label=lbl_sowo,
+           x=0,y=12,hjust=-0.1,vjust=1.1,size=4) +
+  scale_x_continuous(name="Sectioned otolith",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Whole otolith",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q()
+
+
+scso + scwo + sowo +
+  plot_layout(ncol=1)
+```
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot(data=df_sowo,mapping=aes(x=soto_age,y=woto_age,label=freq)) +
+  geom_abline(slope=1,intercept=0) +
+  geom_label(label.r=unit(0,"lines"),label.padding=unit(0.3,"lines")) +
+  scale_x_continuous(name="Sectioned otolith",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  scale_y_continuous(name="Whole otolith",expand=expansion(mult=0),
+                     limits=axlmts,breaks=axlbls) +
+  theme_q(base_size=10) +
+  theme(aspect.ratio=1)
+dev.off()
+```

@@ -109,9 +109,10 @@ ggplot() +
              shape=21,color="black",fill="gray50") +
   scale_x_continuous(name="log10 Total Length (mm)",expand=expansion(mult=0.01)) +
   scale_y_continuous(name="log10 Weight (g)",expand=expansion(mult=0.01)) +
-  geom_ribbon(data=lmbpred,mapping=aes(x=predlogtl,ymax=upr,ymin=lwr),
+  geom_ribbon(data=lmbpred,mapping=aes(x=predlogtl,
+                                       ymax=predlogwtupr,ymin=predlogwtlwr),
               color="blue",alpha=0.2) +
-  geom_line(data=lmbpred,mapping=aes(x=predlogtl,y=fit),
+  geom_line(data=lmbpred,mapping=aes(x=predlogtl,y=predlogwt),
             linewidth=1,color="blue")
 ggplot() +
   geom_point(data=lmb,mapping=aes(x=tl,y=wt),

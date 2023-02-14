@@ -201,6 +201,15 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>&nbsp;</p>
+<pre><code>#&gt; Warning in right_join(tmp$Base, tmp$Keywords, by = "ID"): Each row in `x` is expected to match at most 1 row in `y`.
+#&gt; ℹ Row 24 of `x` matches multiple rows.
+#&gt; ℹ If multiple matches are expected, set `multiple = "all"` to silence this
+#&gt;   warning.
+#&gt; Warning in right_join(., tmp$Concept, by = "ID"): Each row in `x` is expected to match at most 1 row in `y`.
+#&gt; Each row in `x` is expected to match at most 1 row in `y`.
+#&gt; ℹ Row 1 of `x` matches multiple rows.
+#&gt; ℹ If multiple matches are expected, set `multiple = "all"` to silence this
+#&gt;   warning.</code></pre>
 <section id="length-expansion" class="level1">
 <h1>Length Expansion</h1>
 <table class="table">
@@ -358,52 +367,52 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::alkdata</td>
-<td style="text-align: left;">Age-length key (summarized form) for Gulf of Hauraki snapper shown in Table 8.3 of Quinn and Deriso (1999)</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/CreekChub.html">CreekChub</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Creek Chub.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/FWDrumLE2.html">FWDrumLE2</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Freshwater Drum from Lake Erie.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Jonubi2.html">Jonubi2</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) of Jonubi.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Morwong4a.html">Morwong4a</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Morwong from Morwong4.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RockBassLO2.html">RockBassLO2</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Rock Bass from Lake Ontario.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SiscowetMI2004.html">SiscowetMI2004</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for male and female Siscowet Lake Trout captured at four locations in Michigan waters of Lake Superior.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SnapperHG1.html">SnapperHG1</a></td>
 <td style="text-align: left;">Age (subsample) and length (all fish) of Snapper from two survey locations.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SnapperHG2.html">SnapperHG2</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Snapper.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SpotVA2.html">SpotVA2</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Spot.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/StripedBass3.html">StripedBass3</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Striped Bass.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/WR79.html">WR79</a></td>
 <td style="text-align: left;">Ages and lengths for a hypothetical sample from Westerheim and Ricker (1979).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::alkdata</td>
+<td style="text-align: left;">Age-length key (summarized form) for Gulf of Hauraki snapper shown in Table 8.3 of Quinn and Deriso (1999)</td>
 </tr>
 </tbody>
 </table>
@@ -446,28 +455,20 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">TropFishR::alba</td>
-<td style="text-align: left;">Length-frequency data of the clam Abra alba as presented by Brey et al.&nbsp;(1988)</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BluegillLM.html">BluegillLM</a></td>
 <td style="text-align: left;">Lengths and weights for Bluegill from Lake Mary, MN.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BluntnoseIL1.html">BluntnoseIL1</a></td>
 <td style="text-align: left;">Subampled lengths of Bluntnose Minnows from Inch Lake, WI.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BullTroutRML1.html">BullTroutRML1</a></td>
 <td style="text-align: left;">Lengths and weights for Bull Trout from two Rocky Mountain lakes and two eras.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/CiscoTL.html">CiscoTL</a></td>
 <td style="text-align: left;">Lengths, weights, and sex of Cisco from Trout Lake, WI.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">CatDyn::gayhakelm</td>
-<td style="text-align: left;">Length and Month data of Chilean hake from Artisanal Fishery</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Herman.html">Herman</a></td>
@@ -482,16 +483,16 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Lengths and weights for fish captured in Inch Lake</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutALTER.html">LakeTroutALTER</a></td>
-<td style="text-align: left;">Biological data for Lake Trout from the Arctic LTER (AK).</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LMBassBL.html">LMBassBL</a></td>
 <td style="text-align: left;">Lengths for Largemouth Bass from Boomer Lake, OK.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LMBassLCB.html">LMBassLCB</a></td>
 <td style="text-align: left;">Lengths for Largemouth Bass from Lake Carl Blackwell, OK.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutALTER.html">LakeTroutALTER</a></td>
+<td style="text-align: left;">Biological data for Lake Trout from the Arctic LTER (AK).</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/PygmyWFBC.html">PygmyWFBC</a></td>
@@ -510,44 +511,52 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Lengths of Ruffe captured from the St.&nbsp;Louis River in July, 1989.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::sblen</td>
-<td style="text-align: left;">Total length (inches) of striped bass collected by Massachusetts volunteer anglers in 2014</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SculpinALTER.html">SculpinALTER</a></td>
 <td style="text-align: left;">Biological data for Slimy Sculpin from the Arctic LTER (AK).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">fishmethods::Shepherd</td>
 <td style="text-align: left;">Seasonal length frequency data of Raja clavata</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Snapper.html">Snapper</a></td>
 <td style="text-align: left;">Lengths for Snapper from Australia.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/TroutperchLM2.html">TroutperchLM2</a></td>
 <td style="text-align: left;">Lengths for Troutperch from Lake Michigan, 1977.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/TroutperchLM3.html">TroutperchLM3</a></td>
 <td style="text-align: left;">Subsampled lengths of Troutperch from Lake Michigan, 1977.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">WalleyeErie2</a></td>
 <td style="text-align: left;">Biological data for Walleye from Lake Erie, 2003-2014.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchGL.html">YPerchGL</a></td>
 <td style="text-align: left;">Lengths and weights of Yellow Perch from Grafton Lake (ME) by year.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchSB1.html">YPerchSB1</a></td>
 <td style="text-align: left;">Lengths for Yellow Perch from two locations in Saginaw Bay, Lake Michigan.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html">YPerchTL</a></td>
 <td style="text-align: left;">Lengths and weights for Yellow Perch from Trout Lake, WI.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TropFishR::alba</td>
+<td style="text-align: left;">Length-frequency data of the clam Abra alba as presented by Brey et al.&nbsp;(1988)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CatDyn::gayhakelm</td>
+<td style="text-align: left;">Length and Month data of Chilean hake from Artisanal Fishery</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::sblen</td>
+<td style="text-align: left;">Total length (inches) of striped bass collected by Massachusetts volunteer anglers in 2014</td>
 </tr>
 </tbody>
 </table>
@@ -580,16 +589,16 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Lengths for all fish captured in Inch Lake, WI, in two years</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutALTER.html">LakeTroutALTER</a></td>
-<td style="text-align: left;">Biological data for Lake Trout from the Arctic LTER (AK).</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LMBassBL.html">LMBassBL</a></td>
 <td style="text-align: left;">Lengths for Largemouth Bass from Boomer Lake, OK.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LMBassLCB.html">LMBassLCB</a></td>
 <td style="text-align: left;">Lengths for Largemouth Bass from Lake Carl Blackwell, OK.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutALTER.html">LakeTroutALTER</a></td>
+<td style="text-align: left;">Biological data for Lake Trout from the Arctic LTER (AK).</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/PSDlit.html">PSDlit</a></td>
@@ -670,14 +679,6 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Lengths, weights, and sex of Cisco from Trout Lake, WI.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">fishkirkko2015::fishkirkkojarvi2015</td>
-<td style="text-align: left;">Weight-length data for six freshwater species from Lake Kirkkojarvi, Finland</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">CatDyn::gayhakelw</td>
-<td style="text-align: left;">Length and Weight data of Chilean hake from Artisanal Fishery</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/InchLake2.html">InchLake2</a></td>
 <td style="text-align: left;">Lengths and weights for fish captured in Inch Lake</td>
 </tr>
@@ -713,6 +714,14 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchTL.html">YPerchTL</a></td>
 <td style="text-align: left;">Lengths and weights for Yellow Perch from Trout Lake, WI.</td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;">fishkirkko2015::fishkirkkojarvi2015</td>
+<td style="text-align: left;">Weight-length data for six freshwater species from Lake Kirkkojarvi, Finland</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CatDyn::gayhakelw</td>
+<td style="text-align: left;">Length and Weight data of Chilean hake from Artisanal Fishery</td>
+</tr>
 </tbody>
 </table>
 <p>&nbsp;</p>
@@ -736,40 +745,40 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Catch and effort data for male Blue Crabs.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">fishmethods::darter</td>
-<td style="text-align: left;">Sequence of catch data for the faintail darter from removal experiments by Mahon</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/DarterMahon.html">DarterMahon</a></td>
 <td style="text-align: left;">Catch and effort data for Fantail Darter.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/JobfishSIO.html">JobfishSIO</a></td>
 <td style="text-align: left;">Catch and effort data for South Indian Ocean Jobfish.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LobsterHI.html">LobsterHI</a></td>
 <td style="text-align: left;">Catch and effort data for Hawaiian Islands Slipper Lobster.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LobsterPEI.html">LobsterPEI</a></td>
 <td style="text-align: left;">Catch and effort data for Prince Edward Island Lobster.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Pathfinder.html">Pathfinder</a></td>
 <td style="text-align: left;">Catch and effort for three Snapper species in a depletion experiment.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/PikeIL.html">PikeIL</a></td>
 <td style="text-align: left;">Catch and effort data for Northern Pike from Island Lake, NB.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/SMBassLS.html">SMBassLS</a></td>
+<td style="text-align: left;">Catch-effort data for Little Silver Lake (Ont) Smallmouth Bass.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/ShrimpGuam.html">ShrimpGuam</a></td>
 <td style="text-align: left;">Catch and effort data for Deepwater Caridean Shrimp.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/SMBassLS.html">SMBassLS</a></td>
-<td style="text-align: left;">Catch-effort data for Little Silver Lake (Ont) Smallmouth Bass.</td>
+<td style="text-align: left;">fishmethods::darter</td>
+<td style="text-align: left;">Sequence of catch data for the faintail darter from removal experiments by Mahon</td>
 </tr>
 </tbody>
 </table>
@@ -958,14 +967,6 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Catch-at-age of Flathead Catfish from three Atlantic rivers.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">TropFishR::goatfish</td>
-<td style="text-align: left;">Data of Yellowstriped goatfish (Upeneus vittatus) from Manila Bay, Philippines. Can be used for the estimation of the instantaneous mortality rate (Z)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fishmethods::goosefish</td>
-<td style="text-align: left;">The mean lengths by year and number of observations for length&gt;=smallest length at first capture (Lc) for northern goosefish used in Gedamke and Hoenig (2006)</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">fishmethods::Jensen</td>
 <td style="text-align: left;">The age data are from reconstructed catches of lake whitefish reported by Jensen (1996) in Table 1 and were expanded to individual observations from the age frequency table</td>
 </tr>
@@ -974,48 +975,56 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Catch-at-age for Gulf Menhaden, 1964-2004.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::rockbass</td>
-<td style="text-align: left;">Age data from a sample of rock bass trap-netted from Cayuga Lake, New York</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RockBassCL.html">RockBassCL</a></td>
 <td style="text-align: left;">Catch-at-age of Cayuga Lake Rock Bass.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SunfishLP.html">SunfishLP</a></td>
 <td style="text-align: left;">Catch-at-age for Bluegill and Redear Sunfish in Florida.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">WalleyeErie2</a></td>
 <td style="text-align: left;">Biological data for Walleye from Lake Erie, 2003-2014.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeKS.html">WalleyeKS</a></td>
 <td style="text-align: left;">Catch-at-age for Walleye from eight Kansas reservoirs.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeMN06a.html">WalleyeMN06a</a></td>
 <td style="text-align: left;">Catch-at-age for Walleye.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeWad.html">WalleyeWad</a></td>
 <td style="text-align: left;">Catches-at-age for male and female Walleye from Lake Winnebago, WI, 2010.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WhitefishGSL.html">WhitefishGSL</a></td>
-<td style="text-align: left;">Catch-at-age of Great Slave Lake Whitefish (commercial) by area.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WhiteGrunt1.html">WhiteGrunt1</a></td>
 <td style="text-align: left;">Catch-at-age for White Grunt.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">TropFishR::whiting</td>
-<td style="text-align: left;">Dataset of North Sea whiting Merlangius merlangus caught during the period 1974-1980</td>
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WhitefishGSL.html">WhitefishGSL</a></td>
+<td style="text-align: left;">Catch-at-age of Great Slave Lake Whitefish (commercial) by area.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchCB1.html">YPerchCB1</a></td>
 <td style="text-align: left;">Catch-at-age for Yellow Perch from Chequamegon Bay, Lake Superior.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TropFishR::goatfish</td>
+<td style="text-align: left;">Data of Yellowstriped goatfish (Upeneus vittatus) from Manila Bay, Philippines. Can be used for the estimation of the instantaneous mortality rate (Z)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fishmethods::goosefish</td>
+<td style="text-align: left;">The mean lengths by year and number of observations for length&gt;=smallest length at first capture (Lc) for northern goosefish used in Gedamke and Hoenig (2006)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::rockbass</td>
+<td style="text-align: left;">Age data from a sample of rock bass trap-netted from Cayuga Lake, New York</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TropFishR::whiting</td>
+<td style="text-align: left;">Dataset of North Sea whiting Merlangius merlangus caught during the period 1974-1980</td>
 </tr>
 </tbody>
 </table>
@@ -1036,16 +1045,8 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">TropFishR::alba</td>
-<td style="text-align: left;">Length-frequency data of the clam Abra alba as presented by Brey et al.&nbsp;(1988)</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BlackDrum2001.html">BlackDrum2001</a></td>
 <td style="text-align: left;">Biological data for Black Drum from Virginia waters of the Atlantic Ocean, 2001.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">MQMF::blackisland</td>
-<td style="text-align: left;">Length from tagging data for blacklip abalone at the Black Island site, Tasmania</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BlueCatfish.html">BlueCatfish</a></td>
@@ -1056,40 +1057,32 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Length-at-marking and recapture and time-at-large of Bluegill.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">fishmethods::bonito</td>
-<td style="text-align: left;">Growth increment data derived from tagging experiments on Pacific bonito (Sarda chiliensis)</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BullTroutRML2.html">BullTroutRML2</a></td>
 <td style="text-align: left;">Ages and lengths of Bull Trout from two Rocky Mountain lakes at two times.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Cabezon.html">Cabezon</a></td>
 <td style="text-align: left;">Ages, lengths, and maturity for female Cabezon from Oregon.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/CreekChub.html">CreekChub</a></td>
 <td style="text-align: left;">Ages (subsample) and lengths (all fish) for Creek Chub.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Croaker2.html">Croaker2</a></td>
 <td style="text-align: left;">Ages, lengths, and sexes of Atlantic Croaker by sex.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/DarterOnt.html">DarterOnt</a></td>
 <td style="text-align: left;">Ages and lengths of Channel Darters from two locations.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/EuroPerchTJ.html">EuroPerchTJ</a></td>
 <td style="text-align: left;">Ages, lengths, and sexes of European Perch.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/FWDrumLE1.html">FWDrumLE1</a></td>
 <td style="text-align: left;">Ages and lengths of Lake Erie Freshwater Drum.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">AquaticLifeHistory::growth_data</td>
-<td style="text-align: left;">Length-at-age data for common blacktip sharks (Carcharhinus limbatus) from Indonesia</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Jonubi1.html">Jonubi1</a></td>
@@ -1100,8 +1093,8 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Length and age data for male and female Pacific Hake</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">alr3::lakemary</td>
-<td style="text-align: left;">Age and length of Bluegill from Lake Mary, MN</td>
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LJCisco.html">LJCisco</a></td>
+<td style="text-align: left;">Ages and lengths of Longjaw Cisco from two locations in Lake Michigan.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutALTER.html">LakeTroutALTER</a></td>
@@ -1112,14 +1105,6 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Simulated age data for redfish from eastern Australia in the 1990s</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LJCisco.html">LJCisco</a></td>
-<td style="text-align: left;">Ages and lengths of Longjaw Cisco from two locations in Lake Michigan.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">MQMF::minnow</td>
-<td style="text-align: left;">Weekly length measurements of a minnow for use with seasonal growth curves</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Morwong4.html">Morwong4</a></td>
 <td style="text-align: left;">Ages and lengths of Morwong.</td>
 </tr>
@@ -1128,20 +1113,20 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Growth increment data derived from a tagging experiment on Paphis donacina</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">fishmethods::pinfish</td>
-<td style="text-align: left;">Length, age and sex data for pinfish (Lagodon rhomboides) from Tampa Bay, Florida</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RBTroutKenai.html">RBTroutKenai</a></td>
 <td style="text-align: left;">Length-at-marking and recapture and time-at-large of Rainbow Trout.</td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RWhitefishAI.html">RWhitefishAI</a></td>
+<td style="text-align: left;">Ages and lengths of Round Whitefish.</td>
+</tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RedDrum.html">RedDrum</a></td>
-<td style="text-align: left;">Ages and lengths for Red Drum from the Atlantic Coast.</td>
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RWhitefishIR.html">RWhitefishIR</a></td>
+<td style="text-align: left;">Ages and lengths of Round Whitefish.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::rig</td>
-<td style="text-align: left;">Tagging growth increment data for New Zealand rig (Mustelus lenticulatus), after removal of outliers</td>
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RedDrum.html">RedDrum</a></td>
+<td style="text-align: left;">Ages and lengths for Red Drum from the Atlantic Coast.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RockBassLO1.html">RockBassLO1</a></td>
@@ -1152,64 +1137,48 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Biological data for Ruffe captured from the St.&nbsp;Louis River in 1992.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RWhitefishAI.html">RWhitefishAI</a></td>
-<td style="text-align: left;">Ages and lengths of Round Whitefish.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RWhitefishIR.html">RWhitefishIR</a></td>
-<td style="text-align: left;">Ages and lengths of Round Whitefish.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SardineChile.html">SardineChile</a></td>
-<td style="text-align: left;">Ages and lengths of two year-classes of Sardine from Chilean waters.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SardineLK.html">SardineLK</a></td>
-<td style="text-align: left;">Ages and lengths of larval Lake Tanganyika Sardine.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SculpinALTER.html">SculpinALTER</a></td>
-<td style="text-align: left;">Biological data for Slimy Sculpin from the Arctic LTER (AK).</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fishmethods::Shepherd</td>
-<td style="text-align: left;">Seasonal length frequency data of Raja clavata</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SiscowetMI2004.html">SiscowetMI2004</a></td>
-<td style="text-align: left;">Ages (subsample) and lengths (all fish) for male and female Siscowet Lake Trout captured at four locations in Michigan waters of Lake Superior.</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/SMBassWB.html">SMBassWB</a></td>
 <td style="text-align: left;">Growth increment data for West Bearskin Lake, MN, Smallmouth Bass.</td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SardineChile.html">SardineChile</a></td>
+<td style="text-align: left;">Ages and lengths of two year-classes of Sardine from Chilean waters.</td>
+</tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SpottedSucker1.html">SpottedSucker1</a></td>
-<td style="text-align: left;">Ages and lengths of Spotted Sucker.</td>
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SardineLK.html">SardineLK</a></td>
+<td style="text-align: left;">Ages and lengths of larval Lake Tanganyika Sardine.</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SculpinALTER.html">SculpinALTER</a></td>
+<td style="text-align: left;">Biological data for Slimy Sculpin from the Arctic LTER (AK).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::Shepherd</td>
+<td style="text-align: left;">Seasonal length frequency data of Raja clavata</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SiscowetMI2004.html">SiscowetMI2004</a></td>
+<td style="text-align: left;">Ages (subsample) and lengths (all fish) for male and female Siscowet Lake Trout captured at four locations in Michigan waters of Lake Superior.</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/SpotVA1.html">SpotVA1</a></td>
 <td style="text-align: left;">Age and length of spot.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SpottedSucker1.html">SpottedSucker1</a></td>
+<td style="text-align: left;">Ages and lengths of Spotted Sucker.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/StripedBass2.html">StripedBass2</a></td>
 <td style="text-align: left;">Ages and lengths of Atlantic Ocean Striped Bass.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::trout</td>
-<td style="text-align: left;">Release lengths, recapture lengths and times-at-large for trout in the Kenai River</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/TroutBR.html">TroutBR</a></td>
 <td style="text-align: left;">Ages and lengths of migratory Brown and Rainbow Trout.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/TroutperchLM1.html">TroutperchLM1</a></td>
 <td style="text-align: left;">Ages, lengths, and sexes of Troutperch.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">alr3::walleye</td>
-<td style="text-align: left;">Age and length of Walleye from Butternut Lake, WI in 3 different management periods</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">WalleyeErie2</a></td>
@@ -1224,20 +1193,60 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Growth increment data for Red Lakes Walleye.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">alr3::wblake</td>
-<td style="text-align: left;">Age and length of Smallmouth Bass from West Bearsking Lake, MN (exclude age-9 and older)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">alr3::wblake2</td>
-<td style="text-align: left;">Age and length of Smallmouth Bass from West Bearsking Lake, MN (all fish)</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WhiteGrunt2.html">WhiteGrunt2</a></td>
 <td style="text-align: left;">Ages, lengths, and sexes of White Grunt.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YERockfish.html">YERockfish</a></td>
 <td style="text-align: left;">Ages, lengths, and maturity for Yelloweye Rockfish.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TropFishR::alba</td>
+<td style="text-align: left;">Length-frequency data of the clam Abra alba as presented by Brey et al.&nbsp;(1988)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MQMF::blackisland</td>
+<td style="text-align: left;">Length from tagging data for blacklip abalone at the Black Island site, Tasmania</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::bonito</td>
+<td style="text-align: left;">Growth increment data derived from tagging experiments on Pacific bonito (Sarda chiliensis)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AquaticLifeHistory::growth_data</td>
+<td style="text-align: left;">Length-at-age data for common blacktip sharks (Carcharhinus limbatus) from Indonesia</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">alr3::lakemary</td>
+<td style="text-align: left;">Age and length of Bluegill from Lake Mary, MN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MQMF::minnow</td>
+<td style="text-align: left;">Weekly length measurements of a minnow for use with seasonal growth curves</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::pinfish</td>
+<td style="text-align: left;">Length, age and sex data for pinfish (Lagodon rhomboides) from Tampa Bay, Florida</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fishmethods::rig</td>
+<td style="text-align: left;">Tagging growth increment data for New Zealand rig (Mustelus lenticulatus), after removal of outliers</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::trout</td>
+<td style="text-align: left;">Release lengths, recapture lengths and times-at-large for trout in the Kenai River</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">alr3::walleye</td>
+<td style="text-align: left;">Age and length of Walleye from Butternut Lake, WI in 3 different management periods</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">alr3::wblake</td>
+<td style="text-align: left;">Age and length of Smallmouth Bass from West Bearsking Lake, MN (exclude age-9 and older)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">alr3::wblake2</td>
+<td style="text-align: left;">Age and length of Smallmouth Bass from West Bearsking Lake, MN (all fish)</td>
 </tr>
 </tbody>
 </table>
@@ -1258,16 +1267,16 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BSkateGB.html">BSkateGB</a></td>
+<td style="text-align: left;">Stock and recruitment data for Barndoor Skate from Georges Bank, 1966-2007.</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BloaterLH.html">BloaterLH</a></td>
 <td style="text-align: left;">Stock and recruitment data for Lake Huron Bloaters, 1981-1996.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BrookTroutNC.html">BrookTroutNC</a></td>
 <td style="text-align: left;">Stock and recruitment data for Brook Trout from Ball Creek, NC, 1991-2004.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/BSkateGB.html">BSkateGB</a></td>
-<td style="text-align: left;">Stock and recruitment data for Barndoor Skate from Georges Bank, 1966-2007.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/ChinookKR.html">ChinookKR</a></td>
@@ -1314,24 +1323,24 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Stock and recruitment data for Greater Lizardfish, 1955-1964.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/PikeWindermere.html">PikeWindermere</a></td>
-<td style="text-align: left;">Stock and recruitment data for Northern Pike from Lake Windermere, 1944-1981.</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/PSalmonAK.html">PSalmonAK</a></td>
 <td style="text-align: left;">Stock and recruitment data for Alaskan Pink Salmon, 1960-1990.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/PikeWindermere.html">PikeWindermere</a></td>
+<td style="text-align: left;">Stock and recruitment data for Northern Pike from Lake Windermere, 1944-1981.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RBSmeltErie.html">RBSmeltErie</a></td>
 <td style="text-align: left;">Recruitment time-series for Rainbow Smelt in Lake Erie, 1977-1996.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SardinesPacific.html">SardinesPacific</a></td>
-<td style="text-align: left;">Stock and recruitment data for Pacific Sardines, 1935-1990.</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SLampreyGL.html">SLampreyGL</a></td>
 <td style="text-align: left;">Stock and recruitment data for Sea Lamprey in the Great Lakes, 1997-2007.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SardinesPacific.html">SardinesPacific</a></td>
+<td style="text-align: left;">Stock and recruitment data for Pacific Sardines, 1935-1990.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/SockeyeKL.html">SockeyeKL</a></td>
@@ -1342,20 +1351,20 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Stock and recruitment data for Skeena River Sockeye Salmon, 1940-1967.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">MQMF::tigers</td>
-<td style="text-align: left;">Prawn recruitment data from Penn and Caputi (1986)</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/TPrawnsEG.html">TPrawnsEG</a></td>
 <td style="text-align: left;">Stock and recruitment data for Exmouth Gulf Tiger Prawn, 1970-83.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/VendaceLP.html">VendaceLP</a></td>
 <td style="text-align: left;">Stock and recruitment data for Vendace from Lake Puulavesi, 1982-1996.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/VendaceLP2.html">VendaceLP2</a></td>
 <td style="text-align: left;">Stock and recruitment data for Vendace from Lake Pyhajarvi.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WShrimpGA.html">WShrimpGA</a></td>
+<td style="text-align: left;">Stock and recruitment data for White Shrimp off the coast of Georgia (USA), 1979-2000.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeEL.html">WalleyeEL</a></td>
@@ -1374,24 +1383,24 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Stock and recruitment data for Lake Whitefish in Thunder Bay, Lake Superior, 1975-1988.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WShrimpGA.html">WShrimpGA</a></td>
-<td style="text-align: left;">Stock and recruitment data for White Shrimp off the coast of Georgia (USA), 1979-2000.</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchCB2.html">YPerchCB2</a></td>
 <td style="text-align: left;">Stock and recruitment data for Yellow Perch in Chequamegon Bay, 1975-1986.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchGB.html">YPerchGB</a></td>
 <td style="text-align: left;">Recruitment time-series for Yellow Perch in Green Bay, 1978-1992.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchRL.html">YPerchRL</a></td>
 <td style="text-align: left;">Recruitment time-series for Yellow Perch in Red Lakes, MN, 1942-1960.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YPerchSB.html">YPerchSB</a></td>
 <td style="text-align: left;">Stock and recruitment data for Yellow Perch from South Bay, Lake Huron, 1950-1983.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MQMF::tigers</td>
+<td style="text-align: left;">Prawn recruitment data from Penn and Caputi (1986)</td>
 </tr>
 </tbody>
 </table>
@@ -1420,28 +1429,28 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Percent dry mass of eggs, age, and month for Lake Ontario Lake Trout</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::maki</td>
-<td style="text-align: left;">From Table 1 of Maki et al.&nbsp;(2001) for 3 years combined</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">AquaticLifeHistory::maturity_data</td>
-<td style="text-align: left;">Length-at-maturity and age-at-maturity data for female silky sharks (Carcharhinus falciformis) from Papua New Guinea</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/RuffeSLRH92.html">RuffeSLRH92</a></td>
 <td style="text-align: left;">Biological data for Ruffe captured from the St.&nbsp;Louis River in 1992.</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">MQMF::tasab</td>
-<td style="text-align: left;">Maturity and length data for Blacklip Abalone from Tasmania</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">WalleyeErie2</a></td>
 <td style="text-align: left;">Biological data for Walleye from Lake Erie, 2003-2014.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/YERockfish.html">YERockfish</a></td>
 <td style="text-align: left;">Ages, lengths, and maturity for Yelloweye Rockfish.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::maki</td>
+<td style="text-align: left;">From Table 1 of Maki et al.&nbsp;(2001) for 3 years combined</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AquaticLifeHistory::maturity_data</td>
+<td style="text-align: left;">Length-at-maturity and age-at-maturity data for female silky sharks (Carcharhinus falciformis) from Papua New Guinea</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MQMF::tasab</td>
+<td style="text-align: left;">Maturity and length data for Blacklip Abalone from Tasmania</td>
 </tr>
 </tbody>
 </table>
@@ -1488,68 +1497,84 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">MQMF::abdat</td>
-<td style="text-align: left;">Catch data for the Tasmanian abalone fishery</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/AfricanRivers.html">AfricanRivers</a></td>
 <td style="text-align: left;">Characteristics of a sample of West African rivers.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">TropFishR::bream</td>
-<td style="text-align: left;">Data of a covered codend experimental catch of the species Threadfin bream (Nemipterus japonicus) in South China Sea</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Casselman1990.html">Casselman1990</a></td>
 <td style="text-align: left;">Instantaneous growth rates for two calcified ageing structures.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">fishmethods::catch</td>
-<td style="text-align: left;">Number of cod captured in 10 standardized bottom trawl hauls from Massachusetts, 1985</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fishmethods::codcluslen</td>
-<td style="text-align: left;">Lengths of Atlantic cod caught during Massachusetts Division of Marine Fisheries bottom trawl survey, spring 1985</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fishmethods::codstrcluslen</td>
-<td style="text-align: left;">Lengths of Atlantic cod caught during Massachusetts Division of Marine Fisheries stratified random bottom trawl survey, spring 1985</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fishmethods::counts</td>
-<td style="text-align: left;">Run size data of alewife (Alosa pseudoharengus) in Herring River, MA from 1980-2010</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fishmethods::cowcod</td>
-<td style="text-align: left;">Catch data (metric tons) for cowcod Sebastes levis 1900 to 2008</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/CreelMN.html">CreelMN</a></td>
 <td style="text-align: left;">Results of a large number of creel surveys in Minnestoa lakes.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">MQMF::dataspm</td>
-<td style="text-align: left;">Catch data for Pink Ling</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/Ecoli.html">Ecoli</a></td>
 <td style="text-align: left;">Population growth of Escherichia coli.</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Ghats.html">Ghats</a></td>
+<td style="text-align: left;">Species accumulation data for fish of the Western Ghats of India.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutEggs.html">LakeTroutEggs</a></td>
+<td style="text-align: left;">Length and egg deposition of Lake Superior Lake Trout.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/Mirex.html">Mirex</a></td>
+<td style="text-align: left;">Mirex concentration, weight, capture year, and species of Lake Ontario salmon.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishMod::TigerFlathead</td>
+<td style="text-align: left;">Data set arising from a south-east Australia fish survey, see Bax and Williams (1999)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WhitefishLS.html">WhitefishLS</a></td>
+<td style="text-align: left;">Landings and value of Lake Superior Lake Whitefish.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MQMF::abdat</td>
+<td style="text-align: left;">Catch data for the Tasmanian abalone fishery</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TropFishR::bream</td>
+<td style="text-align: left;">Data of a covered codend experimental catch of the species Threadfin bream (Nemipterus japonicus) in South China Sea</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::catch</td>
+<td style="text-align: left;">Number of cod captured in 10 standardized bottom trawl hauls from Massachusetts, 1985</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fishmethods::codcluslen</td>
+<td style="text-align: left;">Lengths of Atlantic cod caught during Massachusetts Division of Marine Fisheries bottom trawl survey, spring 1985</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::codstrcluslen</td>
+<td style="text-align: left;">Lengths of Atlantic cod caught during Massachusetts Division of Marine Fisheries stratified random bottom trawl survey, spring 1985</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fishmethods::counts</td>
+<td style="text-align: left;">Run size data of alewife (Alosa pseudoharengus) in Herring River, MA from 1980-2010</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fishmethods::cowcod</td>
+<td style="text-align: left;">Catch data (metric tons) for cowcod Sebastes levis 1900 to 2008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MQMF::dataspm</td>
+<td style="text-align: left;">Catch data for Pink Ling</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">TropFishR::emperor</td>
 <td style="text-align: left;">Information about sky emperor (Lethrinus mahsena) and its fisheries of offshore Mauritius banks (Nazareth banks). It can be used for production models</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">COUNT::fishing</td>
 <td style="text-align: left;">Site abundance and characteristics from commercial fishing</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">CatDyn::gayhake</td>
 <td style="text-align: left;">Industrial and Artisanal Catch and Effort Data from the Chilean Hake Fishery</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/Ghats.html">Ghats</a></td>
-<td style="text-align: left;">Species accumulation data for fish of the Western Ghats of India.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">TropFishR::gillnet</td>
@@ -1568,24 +1593,16 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Pacific cod catch per effort from Table 1 in Kappenman (1999)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/LakeTroutEggs.html">LakeTroutEggs</a></td>
-<td style="text-align: left;">Length and egg deposition of Lake Superior Lake Trout.</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">fishmethods::lingcod</td>
 <td style="text-align: left;">Catch data (metric tons) for lingcod 1889 to 2001</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">CatDyn::lolgahi</td>
 <td style="text-align: left;">Industrial Trawling Data from the Squid Fishery of the Falkland Islands</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">fishmethods::menhaden</td>
 <td style="text-align: left;">Age, fecundity-at-age, partial recruitment, fraction mature, and nautral mortality data for menhaden to calculate eggs-per-recruit</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">FSA::<a href="https://fishr-core-team.github.io/FSA/reference/Mirex.html">Mirex</a></td>
-<td style="text-align: left;">Mirex concentration, weight, capture year, and species of Lake Ontario salmon.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">MQMF::npf</td>
@@ -1612,24 +1629,16 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Estimates of recruits and female spawning stock biomass for striped bass from the Atlantic State Marine Fisheries 2016 stock assessment</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">fishMod::TigerFlathead</td>
-<td style="text-align: left;">Data set arising from a south-east Australia fish survey, see Bax and Williams (1999)</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">TropFishR::trammelnet</td>
 <td style="text-align: left;">Data of an experiment with several trammel nets with different mesh sizes</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">TropFishR::trawl_fishery_java</td>
 <td style="text-align: left;">Times series of catch and effort data from the trawl fishery off the North coast of Java</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">CatDyn::twelver</td>
 <td style="text-align: left;">Exhaustive recorded operational activity of the Anguilla japonica sport fishery in Taiwan during the 1983-1984 season</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">FSAdata::<a href="https://fishr-core-team.github.io/FSAdata/reference/WhitefishLS.html">WhitefishLS</a></td>
-<td style="text-align: left;">Landings and value of Lake Superior Lake Whitefish.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">TropFishR::whiting</td>

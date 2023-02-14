@@ -13,7 +13,7 @@ categories:
   - "Invasive Species"
 ---
 
-@czypinski_evaluating_2011 performed an experiment to determine if a population of invasive [Ruffe](https://en.wikipedia.org/wiki/Ruffe) (*Gymnocephalus cernuus*) could be significantly reduced by sequential removal of Ruffe with bottom trawls. The following catches of Ruffe were made at the [Kakagon River](https://www.wisconsinwetlands.org/wp-content/uploads/2015/06/Kakagon-Bad-River-Sloughs.pdf) location with the corresponding minutes of trawling effort.
+@czypinskiogle_2011 performed an experiment to determine if a population of invasive [Ruffe](https://en.wikipedia.org/wiki/Ruffe) (*Gymnocephalus cernuus*) could be significantly reduced by sequential removal of Ruffe with bottom trawls. The following catches of Ruffe were made at the [Kakagon River](https://www.wisconsinwetlands.org/wp-content/uploads/2015/06/Kakagon-Bad-River-Sloughs.pdf) location with the corresponding minutes of trawling effort.
 
 ```
 Sample    1    2    3    4    5    6    7    8    9   10
@@ -25,7 +25,7 @@ Effort 19.0 30.0 31.0 20.0 29.5 42.5 34.5 36.0 27.0 25.0
 &nbsp;
 
 1. Enter the catch and effort data into separate R vectors and create a vector that represents CPE in each sampling period. Carefully interpret the meaning of the first value in the CPE vector.
-1. What is the best estimate and 95% confidence interval for the initial population size?^[Note that @czypinski_evaluating_2011 used the Ricker modified formula.]
+1. What is the best estimate and 95% confidence interval for the initial population size?^[Note that @czypinskiogle_2011 used the Ricker modified formula.]
 1. What is the best estimate and 95% confidence interval for the catchability coefficient? Very carefully interpret what this estimate means relative to the capture of Ruffe at this site.
 
 &nbsp;

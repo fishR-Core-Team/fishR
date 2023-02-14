@@ -28,7 +28,7 @@ theme_set(theme_bw())
 # Lake Superior Kiyi
 [Wilke](https://wilkelab.org/ggridges/articles/introduction.html) described ridgeline plots as "partially overlapping line plots that create the impression of a mountain range." I would describe them as partially overlapping density plots (akin to a smoothed histogram).
 
-I thought that ridgeline plots might provide a nice visualization of length frequencies over time. For example, we [published a paper](https://derekogle.com/resources/pubs/Lepak_et_al_2017.pdf) that examined (among other things) the lengths of Kiyi (*Coregonus kiyi*) captured in trawl tows in Lake Superior from 2003 to 2014. The length frequency data used in that paper is shown below (and stored in the `lf` object). @fig-kiyihist is a modified version^[Stripped of code that increased fonts, changed colors, etc.] of the length frequency histograms we included in the paper.
+I thought that ridgeline plots might provide a nice visualization of length frequencies over time. For example, @lepaketal_2017 examined (among other things) the lengths of Kiyi (*Coregonus kiyi*) captured in trawl tows in Lake Superior from 2003 to 2014. The length frequency data used in that paper is shown below (and stored in the `lf` object). @fig-kiyihist is a modified version^[Stripped of code that increased fonts, changed colors, etc.] of the length frequency histograms we included in the paper.
 
 ```{r}
 #| label: data
