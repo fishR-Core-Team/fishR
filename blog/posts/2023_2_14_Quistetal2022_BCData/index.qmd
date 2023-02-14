@@ -1,0 +1,190 @@
+---
+title: Quist et al. (2022) Back-Calculation Figure
+description: Using ggplot2 to recreate the back-calculated length-at-age figure in Quist et al. (2022).
+author: Derek H. Ogle
+date: 2/14/2023
+image: preview.png
+categories:
+  - ggplot2
+  - Growth
+---
+
+# Introduction
+@quistetal_2022 examined three structures (scales, sectioned otoliths, and whole otoliths) to estimate age of Yellowstone Cutthroat Trout (*Oncorhynchus clarkii bouvieri*). In a [previous post](../2023_2_13_Quistetal2022_AgeData) I largely recreated their Figures 1 and 2 related to age precision and bias between readers and between structures. In this post I attempt to recreate [their Figure 3](https://allen.silverchair-cdn.com/allen/content_public/journal/jfwm/13/2/10.3996_jfwm-21-095/6/m_i1944-687x-13-2-544-f03.png?Expires=1678831232&Signature=JxY~wr4kA0hso16992zOn2tYgSuS1iQA0ShHkN114sxfxPIgy-RWxnzEWGJGlGKEIkyVCm2ityRBlsYkyCYsmvtkPaQBLV2ISFV4C-yQI88DFCNJB4-H-vzwPZwnLGOBXM-ylhNvIos2vqJcHlwi89CHyFd68bRyyhySViARpwFzbhGKW8NSTZtVpN3y66rSCI5ZWA6aaqDQEZXqKX65vcr19KJv4g8gwDXf2exOhEO7LJEGVYdhsxZqZ0DH4spz8qQt5uqQnASMg66oI7eTx2kV89hgtj3a-KUwDn4mdZGAu2rnOD-a3LOqsLKZ9xk1ezBj5aPC0dr~c-0W5GZ37w__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA) which examined back-calculated lengths-at-age between structures (and observed lengths-at-age).
+
+&nbsp;
+
+# Getting Setup
+The following packages are loaded for use below.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+```
+
+The following `ggplot2` theme was used below.^[See [this post](../2022-12-22_AFS_Style_Figures/) for more information on creating and using `ggplot2` themes.]
+
+```{r}
+#| label: make_theme
+theme_q <- function(base_size=14) {
+  theme_bw(base_size=base_size) +
+    theme(
+      # margin for the plot
+      plot.margin=unit(c(0.5,0.5,0.5,0.5),"cm"),
+      # set axis label (i.e., title) colors and margins
+      axis.title.y=element_text(colour="black",margin=margin(t=0,r=10,b=0,l=0)),
+      axis.title.x=element_text(colour="black",margin=margin(t=10,r=0,b=0,l=0)),
+      # set tick label color, margin, and position and orientation
+      axis.text.y=element_text(colour="black",margin=margin(t=0,r=5,b=0,l=0),
+                               vjust=0.5,hjust=1),
+      axis.text.x=element_text(colour="black",margin=margin(t=5,r=0,b=0,l=0),
+                               vjust=0,hjust=0.5,),
+      # set size of the tick marks for y- and x-axis
+      axis.ticks=element_line(linewidth=0.5),
+      # adjust length of the tick marks
+      axis.ticks.length=unit(0.2,"cm"),
+      # set the axis size,color,and end shape
+      axis.line=element_line(colour="black",linewidth=0.5,lineend="square"),
+      # adjust size of text for legend
+      legend.text=element_text(size=12),
+      # remove grid
+      panel.grid=element_blank()
+    )
+}
+```
+
+&nbsp;
+
+# Data
+Unfortunately data for constructing Figure 3 was not provided along with the published paper.^[The supplement with the published paper only included the age estimates data.] Thus, I simulated similar data using my `FSAsim` package. Given that `FSAsim` is a work-in-progress I don't show the code for simulating the data. However, the data can be downloaded as a CSV file [from here](Quistetal2022_SimBC.csv).
+
+```{r}
+#| label: data-prep
+#| echo: false
+#| results: hide
+
+# Assumed fish growth period (make a Julian date)
+growth.per.date <- c("1-Apr-2010","21-Oct-2010")
+( growth.per <- strptime(growth.per.date,"%d-%b-%Y")$yday+1 )
+# Assumed sampling period (make a Julian date)
+sample.per.date <- c("1-May-2010","1-Jun-2010")
+( sample.per <- strptime(sample.per.date,"%d-%b-%Y")$yday+1 )
+
+sd <- set.seed(13434326)
+
+df_soto <- FSAsim::vbDataGen(100,Linf=500,K=0.3,t0=-0.5,
+                             SECV=0.02,SDCV=0.04,lendigs=0,
+                             minAge=1,maxAge=8,agedist=c(10,20,15,10,5,5,5,2),
+                             growth.per=growth.per,sample.per=sample.per,
+                             dataType="long",seed=sd)
+
+df_obs <- df_soto |>
+  filter(ageCap==agePrev) |>
+  select(id,age=ageCap,len=lenCap)
+
+df_soto <- df_soto |>
+  select(id,age=agePrev,len)
+
+df_scls <- FSAsim::vbDataGen(100,Linf=500,K=0.2,t0=-2.5,
+                             SECV=0.02,SDCV=0.04,lendigs=0,
+                             minAge=1,maxAge=8,agedist=c(20,40,30,20,10,2,2,2),
+                             growth.per=growth.per,sample.per=sample.per,
+                             dataType="long",seed=sd) |>
+  select(id,age=agePrev,len)
+
+df <- bind_rows(list(otoliths=df_soto,scales=df_scls,observed=df_obs),.id="strux")
+
+write.csv(df,"Quistetal2022_SimBC.csv",quote=FALSE,row.names=FALSE)
+```
+
+The resultant `df` data frame has the following four variables:
+
+- `strux`: Identifies the structure used to assign age (sectioned `otoliths` or `scales`), or whether the data are `observed` lengths and ages.
+- `id`: Unique fish identifier (not used in this analysis).
+- `age`: Age-at-capture for `observed` data or an age back-calculated to for `otoliths` and `scales`.
+- `len`: Length-at-capture for `observed` data or a back-calculated length for `otoliths` and `scales`.
+
+```{r}
+#| label: peekatdata
+FSA::peek(df,n=10)
+```
+
+&nbsp;
+
+# Recreating Figure 3
+Figure 3 in @quistetal_2022 is a boxplot. `geom_boxplot()` in `ggplot2` requires that the x-axis variable be "discrete" (or categorical). Thus, a new variable, `fage`, is created that is a factored (i.e., categorical) version of `age`. Additionally, the order of `strux` is alphabetical by default, which is not the order plotted by @quistetal_2022. Thus, `strux` is modified below to set the order of the levels.
+
+```{r}
+#| label: moddf
+df <- df |>
+  mutate(fage=factor(age),
+         strux=factor(strux,levels=c("scales","otoliths","observed")))
+```
+
+The default use of `geom_boxplot()` gets us close to Figure 3 in @quistetal_2022.
+
+```{r}
+#| label: figure-3-init
+#| fig-width: 7
+#| fig-height: 5
+ggplot(data=df,mapping=aes(x=fage,y=len,fill=strux)) +
+  geom_boxplot() +
+  scale_x_discrete(name="Age (yrs)") +
+  scale_y_continuous(name="Length (mm)",
+                     limits=c(0,600),breaks=seq(0,600,100),
+                     expand=expansion(mult=0)) +
+  theme_q()
+```
+
+However, we need to adjust the colors used, remove the legend, narrow the boxes, put "caps" on the ends of the whiskers, and change the outliers to open circles.
+
+The colors to be used are defined in the named vector `clrs` below. This will be given to `scale_fill_manual()` below.
+
+```{r}
+#| label: set-colors
+clrs <- c("scales"="white","otoliths"="gray80","observed"="gray40")
+```
+
+The width of the boxes is set in `boxwid` and the width of the "caps" on the whisker is set at 80% of this box width. The distance between adjacent boxes at the same age is controlled with `position=` with a function called `position_dodge()`. It was not clear to me what to set these values to but I settled on the following after a little back-and-forth tinkering.^[The dodge width should be larger than the box width so that the boxes don't touch.]
+
+```{r}
+#| label: set-widths
+boxwid <- 0.4                       # box width
+capwid <- 0.8*boxwid                # whisker cap width
+boxsep <- position_dodge(width=0.5) # dodge amount between boxes
+```
+
+The use of `stat_boxplot()` below is a trick to put an "error bar" behind the boxplot, which gives the impression that the whiskers are "capped" (i.e., the error bar caps are in the same place that the whisker caps would be). The shape^["21" means a circle that has both a boundary and a fill color.], boundary color, and fill for the outlier marks are defined with `outlier.shape=`, `outlier.color=`, and `outlier.fill=`, respectively. Finally, `show.legend=FALSE` in `geom_boxplot()` is used to remove the legend.
+
+```{r}
+#| label: figure-3
+#| fig-width: 6
+#| fig-height: 5
+ggplot(data=df,mapping=aes(x=fage,y=len,fill=strux)) +
+  stat_boxplot(geom="errorbar",width=capwid,position=boxsep) +
+  geom_boxplot(width=boxwid,position=boxsep,
+               outlier.shape=21,outlier.color="black",outlier.fill="white",
+               show.legend=FALSE) +
+  scale_fill_manual(values=clrs) +
+  scale_x_discrete(name="Age (yrs)") +
+  scale_y_continuous(name="Length (mm)",
+                     limits=c(0,600),breaks=seq(0,600,100),
+                     expand=expansion(mult=0)) +
+  theme_q()
+```
+
+&nbsp;
+
+```{r}
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=0.8)
+dev.off()
+```

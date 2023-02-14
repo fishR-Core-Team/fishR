@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="Using ggplot2 to recreate the back-calculated length-at-age figure in Quist et al.&nbsp;(2022).">
+
+<title>fishR - Quist et al.&nbsp;(2022) Back-Calculation Figure</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//helpers/img/fishRlogo_Tight_Light_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../helpers/styles.css">
+<meta property="og:title" content="fishR - Quist et al.&nbsp;(2022) Back-Calculation Figure">
+<meta property="og:description" content="Using ggplot2 to recreate the back-calculated length-at-age figure in Quist et al. (2022).">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2023_2_14_Quistetal2022_BCData\preview.png">
+<meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="Quist et al. (2022) Back-Calculation Figure">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2023-02-14">
+<meta name="citation_cover_date" content="2023-02-14">
+<meta name="citation_year" content="2023">
+<meta name="citation_online_date" content="2023-02-14">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2023_2_14_Quistetal2022_BCData">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Statistical methods for assessing agreement between two methods of clinical measurement;,citation_author=J Martin Bland;,citation_author=Douglas G Altman;,citation_publication_date=1986;,citation_cover_date=1986;,citation_year=1986;,citation_fulltext_html_url=https://www-users.york.ac.uk/~mb55/meas/ba.pdf;,citation_volume=i;,citation_language=en-US;,citation_journal_title=Lancet;">
+<meta name="citation_reference" content="citation_title=Growth, reproduction, mortality, distribution, and biomass of Freshwater Drum in Lake Erie;,citation_author=Michael T. Bur;,citation_publication_date=1984-01-01;,citation_cover_date=1984-01-01;,citation_year=1984;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133084718065;,citation_doi=10.1016/S0380-1330(84)71806-5;,citation_issn=0380-1330;,citation_volume=10;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Graphical and statistical methods for determining the consistency of age determinations;,citation_author=Steven Campana;,citation_author=M. Annand;,citation_author=James McMillan;,citation_publication_date=1995-01-01;,citation_cover_date=1995-01-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/254328508_Graphical_and_Statistical_Methods_for_Determining_the_Consistency_of_Age_Determinations;,citation_doi=10.1577/1548-8659(1995)124&amp;amp;amp;lt;0131:GASMFD&amp;gt;2.3.CO;2;,citation_volume=124;,citation_journal_title=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;,citation_journal_abbrev=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;">
+<meta name="citation_reference" content="citation_title=A novel “triple drawdown” method highlights deficiencies in invasive alien crayfish survey and control techniques;,citation_author=Daniel D. A. Chadwick;,citation_author=Eleri G. Pritchard;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Michael A. Chadwick;,citation_author=Lawrence J. B. Eagle;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/1365-2664.13758;,citation_doi=10.1111/1365-2664.13758;,citation_issn=1365-2664;,citation_volume=58;,citation_language=en-US;,citation_journal_title=Journal of Applied Ecology;">
+<meta name="citation_reference" content="citation_title=Creel limits in Minnesota: A proposal for change;,citation_author=Mark Cook;,citation_author=Timothy Goeman;,citation_author=Paul Radomski;,citation_author=Jerry Younk;,citation_author=Peter Jacobson;,citation_publication_date=2001-05-01;,citation_cover_date=2001-05-01;,citation_year=2001;,citation_fulltext_html_url=https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change;,citation_volume=26;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Recovery of an offshore Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus Namaycush&amp;lt;/i&amp;gt;) population in eastern Lake Superior;,citation_author=Gary L. Curtis;,citation_publication_date=1990-01-01;,citation_cover_date=1990-01-01;,citation_year=1990;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133090714219;,citation_issue=2;,citation_doi=10.1016/S0380-1330(90)71421-9;,citation_issn=0380-1330;,citation_volume=16;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Evaluating the physical removal of Ruffe (&amp;amp;amp;lt;i&amp;gt;Gymnocephalus&amp;lt;/i&amp;gt; <i>cernuus</i>) with bottom trawling;,citation_author=Gary D. Czypinski;,citation_author=Derek H. Ogle;,citation_publication_date=2011-09;,citation_cover_date=2011-09;,citation_year=2011;,citation_fulltext_html_url=https://derekogle.com/resources/pubs/CzypinskiOgle_2011.pdf;,citation_doi=10.1080/02705060.2011.569336;,citation_issn=0270-5060, 2156-6941;,citation_volume=26;,citation_language=en-US;,citation_journal_title=Journal of Freshwater Ecology;,citation_journal_abbrev=Journal of Freshwater Ecology;">
+<meta name="citation_reference" content="citation_title=Energy storage, growth, and maturation of Yellow Perch from different locations in Saginaw Bay, Michigan;,citation_author=James S. Diana;,citation_author=Ronald Salz;,citation_publication_date=1990-11;,citation_cover_date=1990-11;,citation_year=1990;,citation_fulltext_html_url=https://deepblue.lib.umich.edu/bitstream/handle/2027.42/142193/tafs0976.pdf?sequence=1;,citation_volume=119;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Understanding Bland Altman analysis;,citation_author=Davide Giavarina;,citation_publication_date=2015-06-05;,citation_cover_date=2015-06-05;,citation_year=2015;,citation_fulltext_html_url=https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4470095/;,citation_issue=2;,citation_doi=10.11613/BM.2015.015;,citation_issn=1330-0962;,citation_volume=25;,citation_journal_title=Biochemia Medica;,citation_journal_abbrev=Biochem Med (Zagreb);">
+<meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_volume=44;,citation_language=en-US;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Factors affecting recruitment of Walleyes in Escanaba Lake, Wisconsin, 1958–1996;,citation_author=Michael Hansen;,citation_author=Michael Bozek;,citation_author=Raimant Justine;,citation_author=Steven Newman;,citation_author=Michael Staggs;,citation_publication_date=1998-11-01;,citation_cover_date=1998-11-01;,citation_year=1998;,citation_fulltext_html_url=https://www.researchgate.net/profile/Michael-Hansen-44/publication/228588197_Factors_Affecting_Recruitment_of_Walleyes_in_Escanaba_Lake_Wisconsin_1958-1996/links/54638b9d0cf2c0c6aec4f0b0/Factors-Affecting-Recruitment-of-Walleyes-in-Escanaba-Lake-Wisconsin-1958-1996.pdf;,citation_volume=18;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Comparison of precision and bias of scale, fin ray, and otolith age estimates for Lake Whitefish (&amp;amp;amp;lt;i&amp;gt;Coregonus&amp;lt;/i&amp;gt; <i>clupeaformis</i>) in Lake Champlain;,citation_author=Seth J. Herbst;,citation_author=J. Ellen Marsden;,citation_publication_date=2011-06-01;,citation_cover_date=2011-06-01;,citation_year=2011;,citation_fulltext_html_url=https://www.academia.edu/54703943/Comparison_of_precision_and_bias_of_scale_fin_ray_and_otolith_age_estimates_for_lake_whitefish_Coregonus_clupeaformis_in_Lake_Champlain;,citation_doi=10.1016/j.jglr.2011.02.001;,citation_issn=0380-1330;,citation_volume=37;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=A computer program for age–length keys incorporating age assignment to individual fish;,citation_author=Daniel Isermann;,citation_author=C. Knight;,citation_publication_date=2005-08-01;,citation_cover_date=2005-08-01;,citation_year=2005;,citation_fulltext_html_url=https://www.researchgate.net/publication/233185504_A_Computer_Program_for_Age-Length_Keys_Incorporating_Age_Assignment_to_Individual_Fish;,citation_volume=25;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=A comparison of methods for estimating ages of unexploited Walleyes;,citation_author=Patrick M. Kocovsky;,citation_author=Robert F. Carline;,citation_publication_date=2000-11-01;,citation_cover_date=2000-11-01;,citation_year=2000;,citation_fulltext_html_url=https://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2;,citation_doi=10.1577/1548-8675(2000)020&amp;amp;amp;lt;1044:ACOMFE&amp;gt;2.0.CO;2;,citation_issn=0275-5947;,citation_volume=20;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=What’s the main idea behind Bland-Altman plots?;,citation_author=Bernhard Lehnert;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_fulltext_html_url=https://cran.r-project.org/web/packages/BlandAltmanLeh/vignettes/Intro.html;">
+<meta name="citation_reference" content="citation_title=BlandAltmanLeh: Plots (Slightly Extended) Bland-Altman Plots;,citation_author=Bernhard Lehnert;,citation_publication_date=2015-12-23;,citation_cover_date=2015-12-23;,citation_year=2015;,citation_fulltext_html_url=https://CRAN.R-project.org/package=BlandAltmanLeh;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_language=en-US;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Estimating harvestable Largemouth Bass abundance in a reservoir with an electrofishing catch depletion technique;,citation_author=Michael Maceina;,citation_author=William Wrenn;,citation_author=Donny Lowery;,citation_publication_date=1995-02-01;,citation_cover_date=1995-02-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/233240780_Estimating_Harvestable_Largemouth_Bass_Abundance_in_a_Reservoir_with_an_Electrofishing_Catch_Depletion_Technique;,citation_volume=15;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10-01;,citation_cover_date=2015-10-01;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;,citation_journal_abbrev=ICES Journal of Marine Science;">
+<meta name="citation_reference" content="citation_title=Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sexual dimorphism in Eurasian Perch as an example;,citation_author=W Mooij;,citation_author=Jules Rooij;,citation_author=Sander Wijnhoven;,citation_publication_date=1999-05-01;,citation_cover_date=1999-05-01;,citation_year=1999;,citation_fulltext_html_url=https://www.researchgate.net/profile/Sander-Wijnhoven/publication/230807448_Analysis_and_Comparison_of_Fish_Growth_from_Small_Samples_of_Length-at-Age_Data_Detection_of_Sexual_Dimorphism_in_Eurasian_Perch_as_an_Example/links/09e41504a07e30d58b000000/Analysis-and-Comparison-of-Fish-Growth-from-Small-Samples-of-Length-at-Age-Data-Detection-of-Sexual-Dimorphism-in-Eurasian-Perch-as-an-Example.pdf;,citation_volume=128;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Recruitment, growth, exploitation and management of walleyes in a southeastern Wisconsin lake;,citation_author=Donald Mraz;,citation_publication_date=1968;,citation_cover_date=1968;,citation_year=1968;,citation_fulltext_html_url=https://search.library.wisc.edu/digital/AA7LF2GR2E3E5385/pages;,citation_technical_report_institution=Wisconsin Department of Natural Resources;,citation_series_title=Technical Bulletin;">
+<meta name="citation_reference" content="citation_title=A comparison of the scale and otolith methods of age estimation for lake whitefish in lake huron;,citation_author=Andrew M. Muir;,citation_author=Mark P. Ebener;,citation_author=Ji X. He;,citation_author=James E. Johnson;,citation_publication_date=2008-06-01;,citation_cover_date=2008-06-01;,citation_year=2008;,citation_fulltext_html_url=https://doi.org/10.1577/M06-160.1;,citation_issue=3;,citation_doi=10.1577/M06-160.1;,citation_issn=0275-5947;,citation_volume=28;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_author=Derek H. Ogle;,citation_publication_date=2017-01-01;,citation_cover_date=2017-01-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_language=en-US;,citation_journal_title=Fisheries Research;,citation_journal_abbrev=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/;">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Assessing methods to improve benthic fish sampling in a stony headwater stream;,citation_author=Eleri G. Pritchard;,citation_author=Daniel D. A. Chadwick;,citation_author=Michael A. Chadwick;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/2688-8319.12111;,citation_issue=4;,citation_doi=10.1002/2688-8319.12111;,citation_issn=2688-8319;,citation_volume=2;,citation_language=en-US;,citation_journal_title=Ecological Solutions and Evidence;">
+<meta name="citation_reference" content="citation_title=Comparison of structures used to estimate age and growth of Yellowstone Cutthroat Trout;,citation_author=Michael C. Quist;,citation_author=Darcy K. McCarrick;,citation_author=Lynsey M. Harris;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-095;,citation_issue=2;,citation_doi=10.3996/JFWM-21-095;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Age and Growth of Fishes: Principles and Techniques;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/;,citation_doi=10.47886/9781934874486;,citation_isbn=978-1-934874-48-6;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_fulltext_html_url=https://books.google.com?id=33VRAAAAMAAJ;,citation_isbn=978-0-662-01440-9;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Population Biology of the Tan Riffleshell (&amp;amp;amp;lt;i&amp;gt;Epioblasma&amp;lt;/i&amp;gt; <i>florentina walkeri</i>) and the Effects of Substratum and Light on Juvenile Propagation;,citation_author=Susan Owen Rogers;,citation_publication_date=1999-12-06;,citation_cover_date=1999-12-06;,citation_year=1999;,citation_fulltext_html_url=https://vtechworks.lib.vt.edu/handle/10919/36143;,citation_language=en-US;,citation_dissertation_institution=Virginia Tech;">
+<meta name="citation_reference" content="citation_title=Population biology of Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus&amp;lt;/i&amp;gt; <i>namaycush</i>) of Lake Superior before 1950;,citation_author=Gary T. Sakagawa;,citation_author=Richard L. Pycha;,citation_publication_date=1971-01;,citation_cover_date=1971-01;,citation_year=1971;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/abs/10.1139/f71-011;,citation_doi=10.1139/f71-011;,citation_issn=0015-296X;,citation_volume=28;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {}Assessment{} of {}Fish{} {}Populations{};">
+<meta name="citation_reference" content="citation_title=Regional fisheries management investigations - Magic Valley region;,citation_author=Charels D Warren;,citation_author=Karen A Frank;,citation_author=Fred E Partridge;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_fulltext_html_url=https://collaboration.idfg.idaho.gov/FisheriesTechnicalReports/Mgt04-04Warren2001%20Regional%20Fisheries%20Management%20Investigations%20Magic%20Valley%20Region.pdf;,citation_language=en-US;,citation_publisher=Completion Report;">
+<meta name="citation_reference" content="citation_title=ggplot2: Elegant Graphics for Data Analysis;,citation_author=Hadley Wickham;,citation_author=Danielle Navarro;,citation_author=Thomas Lin Pedersen;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://ggplot2-book.org/index.html;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Age and growth of Rock Bass in eastern Lake Ontario;,citation_author=David R. Wolfert;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=http://pubs.er.usgs.gov/publication/1000461;,citation_volume=27;,citation_journal_title=New York Fish and Game Journal;">
+<meta name="citation_reference" content="citation_title=Thin plate regression splines;,citation_author=Simon N. Wood;,citation_publication_date=2003;,citation_cover_date=2003;,citation_year=2003;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00374;,citation_issue=1;,citation_doi=10.1111/1467-9868.00374;,citation_issn=1467-9868;,citation_volume=65;,citation_language=en-US;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Generalized Additive Models: An Introduction with R;,citation_author=Simon N. Wood;,citation_publication_date=2017-05-02;,citation_cover_date=2017-05-02;,citation_year=2017;,citation_fulltext_html_url=https://www.taylorfrancis.com/books/mono/10.1201/9781315370279/generalized-additive-models-simon-wood;,citation_doi=10.1201/9781315370279;,citation_isbn=978-1-315-37027-9;">
+<meta name="citation_reference" content="citation_title=Assessing the accuracy of drift‐dive estimates of brown trout ( &amp;amp;amp;lt;i&amp;gt;Salmo&amp;lt;/i&amp;gt; <i>trutta</i> ) abundance in two New Zealand rivers: A mark‐resighting study;,citation_author=Roger G. Young;,citation_author=John W. Hayes;,citation_publication_date=2001-06;,citation_cover_date=2001-06;,citation_year=2001;,citation_fulltext_html_url=http://www.tandfonline.com/doi/abs/10.1080/00288330.2001.9516997;,citation_issue=2;,citation_doi=10.1080/00288330.2001.9516997;,citation_issn=0028-8330, 1175-8805;,citation_volume=35;,citation_language=en-US;,citation_journal_title=New Zealand Journal of Marine and Freshwater Research;,citation_journal_abbrev=New Zealand Journal of Marine and Freshwater Research;">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/books.html">
+ <span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/packages.html">
+ <span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+ <span class="dropdown-text">fishR (alphabetical)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+ <span class="dropdown-text">fishR (by topic)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+ <span class="dropdown-text">Comprehensive (by package)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+ <span class="dropdown-text">Comprehensive (by topic)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching/index.html">
+ <span class="menu-text">Teaching</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/contribute.html">
+ <span class="menu-text">Get Involved</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Quist et al.&nbsp;(2022) Back-Calculation Figure</h1>
+                  <div>
+        <div class="description">
+          Using ggplot2 to recreate the back-calculated length-at-age figure in Quist et al.&nbsp;(2022).
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">Growth</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">Feb 14, 2023</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Feb 14, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#getting-setup" id="toc-getting-setup" class="nav-link" data-scroll-target="#getting-setup">Getting Setup</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#recreating-figure-3" id="toc-recreating-figure-3" class="nav-link" data-scroll-target="#recreating-figure-3">Recreating Figure 3</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023_2_14_Quistetal2022_BCData/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p><span class="citation" data-cites="quistetal_2022">Quist et al. (<a href="#ref-quistetal_2022" role="doc-biblioref">2022</a>)</span> examined three structures (scales, sectioned otoliths, and whole otoliths) to estimate age of Yellowstone Cutthroat Trout (<em>Oncorhynchus clarkii bouvieri</em>). In a <a href="../2023_2_13_Quistetal2022_AgeData">previous post</a> I largely recreated their Figures 1 and 2 related to age precision and bias between readers and between structures. In this post I attempt to recreate <a href="https://allen.silverchair-cdn.com/allen/content_public/journal/jfwm/13/2/10.3996_jfwm-21-095/6/m_i1944-687x-13-2-544-f03.png?Expires=1678831232&amp;Signature=JxY~wr4kA0hso16992zOn2tYgSuS1iQA0ShHkN114sxfxPIgy-RWxnzEWGJGlGKEIkyVCm2ityRBlsYkyCYsmvtkPaQBLV2ISFV4C-yQI88DFCNJB4-H-vzwPZwnLGOBXM-ylhNvIos2vqJcHlwi89CHyFd68bRyyhySViARpwFzbhGKW8NSTZtVpN3y66rSCI5ZWA6aaqDQEZXqKX65vcr19KJv4g8gwDXf2exOhEO7LJEGVYdhsxZqZ0DH4spz8qQt5uqQnASMg66oI7eTx2kV89hgtj3a-KUwDn4mdZGAu2rnOD-a3LOqsLKZ9xk1ezBj5aPC0dr~c-0W5GZ37w__&amp;Key-Pair-Id=APKAIE5G5CRDK6RD3PGA">their Figure 3</a> which examined back-calculated lengths-at-age between structures (and observed lengths-at-age).</p>
+<p>&nbsp;</p>
+</section>
+<section id="getting-setup" class="level1 page-columns page-full">
+<h1>Getting Setup</h1>
+<p>The following packages are loaded for use below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, ggplot2 packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>The following <code>ggplot2</code> theme was used below.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See <a href="../2022-12-22_AFS_Style_Figures/">this post</a> for more information on creating and using <code>ggplot2</code> themes.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>theme_q <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">base_size=</span><span class="dv">14</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size=</span>base_size) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="co"># margin for the plot</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.margin=</span><span class="fu">unit</span>(<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="st">"cm"</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># set axis label (i.e., title) colors and margins</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title.y=</span><span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">"black"</span>,<span class="at">margin=</span><span class="fu">margin</span>(<span class="at">t=</span><span class="dv">0</span>,<span class="at">r=</span><span class="dv">10</span>,<span class="at">b=</span><span class="dv">0</span>,<span class="at">l=</span><span class="dv">0</span>)),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title.x=</span><span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">"black"</span>,<span class="at">margin=</span><span class="fu">margin</span>(<span class="at">t=</span><span class="dv">10</span>,<span class="at">r=</span><span class="dv">0</span>,<span class="at">b=</span><span class="dv">0</span>,<span class="at">l=</span><span class="dv">0</span>)),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># set tick label color, margin, and position and orientation</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text.y=</span><span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">"black"</span>,<span class="at">margin=</span><span class="fu">margin</span>(<span class="at">t=</span><span class="dv">0</span>,<span class="at">r=</span><span class="dv">5</span>,<span class="at">b=</span><span class="dv">0</span>,<span class="at">l=</span><span class="dv">0</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                               <span class="at">vjust=</span><span class="fl">0.5</span>,<span class="at">hjust=</span><span class="dv">1</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">"black"</span>,<span class="at">margin=</span><span class="fu">margin</span>(<span class="at">t=</span><span class="dv">5</span>,<span class="at">r=</span><span class="dv">0</span>,<span class="at">b=</span><span class="dv">0</span>,<span class="at">l=</span><span class="dv">0</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                               <span class="at">vjust=</span><span class="dv">0</span>,<span class="at">hjust=</span><span class="fl">0.5</span>,),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="co"># set size of the tick marks for y- and x-axis</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.ticks=</span><span class="fu">element_line</span>(<span class="at">linewidth=</span><span class="fl">0.5</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># adjust length of the tick marks</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.ticks.length=</span><span class="fu">unit</span>(<span class="fl">0.2</span>,<span class="st">"cm"</span>),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      <span class="co"># set the axis size,color,and end shape</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.line=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="fl">0.5</span>,<span class="at">lineend=</span><span class="st">"square"</span>),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># adjust size of text for legend</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>      <span class="co"># remove grid</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid=</span><span class="fu">element_blank</span>()</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="data" class="level1 page-columns page-full">
+<h1>Data</h1>
+<div class="page-columns page-full"><p>Unfortunately data for constructing Figure 3 was not provided along with the published paper.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Thus, I simulated similar data using my <code>FSAsim</code> package. Given that <code>FSAsim</code> is a work-in-progress I don’t show the code for simulating the data. However, the data can be downloaded as a CSV file <a href="Quistetal2022_SimBC.csv">from here</a>.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;The supplement with the published paper only included the age estimates data.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+
+</div>
+<p>The resultant <code>df</code> data frame has the following four variables:</p>
+<ul>
+<li><code>strux</code>: Identifies the structure used to assign age (sectioned <code>otoliths</code> or <code>scales</code>), or whether the data are <code>observed</code> lengths and ages.</li>
+<li><code>id</code>: Unique fish identifier (not used in this analysis).</li>
+<li><code>age</code>: Age-at-capture for <code>observed</code> data or an age back-calculated to for <code>otoliths</code> and <code>scales</code>.</li>
+<li><code>len</code>: Length-at-capture for <code>observed</code> data or a back-calculated length for <code>otoliths</code> and <code>scales</code>.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">peek</span>(df,<span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|         strux  id age len
+#R|  1   otoliths   1   1 178
+#R|  80  otoliths  25   4 326
+#R|  159 otoliths  53   3 464
+#R|  239 otoliths  73   1 202
+#R|  319 otoliths  95   5 371
+#R|  398   scales  19   1 262
+#R|  478   scales  46   1 254
+#R|  558   scales  77   2 283
+#R|  637 observed  20   6 444
+#R|  717 observed 100   3 353</code></pre>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="recreating-figure-3" class="level1 page-columns page-full">
+<h1>Recreating Figure 3</h1>
+<p>Figure 3 in <span class="citation" data-cites="quistetal_2022">Quist et al. (<a href="#ref-quistetal_2022" role="doc-biblioref">2022</a>)</span> is a boxplot. <code>geom_boxplot()</code> in <code>ggplot2</code> requires that the x-axis variable be “discrete” (or categorical). Thus, a new variable, <code>fage</code>, is created that is a factored (i.e., categorical) version of <code>age</code>. Additionally, the order of <code>strux</code> is alphabetical by default, which is not the order plotted by <span class="citation" data-cites="quistetal_2022">Quist et al. (<a href="#ref-quistetal_2022" role="doc-biblioref">2022</a>)</span>. Thus, <code>strux</code> is modified below to set the order of the levels.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fage=</span><span class="fu">factor</span>(age),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">strux=</span><span class="fu">factor</span>(strux,<span class="at">levels=</span><span class="fu">c</span>(<span class="st">"scales"</span>,<span class="st">"otoliths"</span>,<span class="st">"observed"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The default use of <code>geom_boxplot()</code> gets us close to Figure 3 in <span class="citation" data-cites="quistetal_2022">Quist et al. (<a href="#ref-quistetal_2022" role="doc-biblioref">2022</a>)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>fage,<span class="at">y=</span>len,<span class="at">fill=</span>strux)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name=</span><span class="st">"Age (yrs)"</span>) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Length (mm)"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">600</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">600</span>,<span class="dv">100</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_q</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/figure-3-init-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, we need to adjust the colors used, remove the legend, narrow the boxes, put “caps” on the ends of the whiskers, and change the outliers to open circles.</p>
+<p>The colors to be used are defined in the named vector <code>clrs</code> below. This will be given to <code>scale_fill_manual()</code> below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>clrs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"scales"</span><span class="ot">=</span><span class="st">"white"</span>,<span class="st">"otoliths"</span><span class="ot">=</span><span class="st">"gray80"</span>,<span class="st">"observed"</span><span class="ot">=</span><span class="st">"gray40"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>The width of the boxes is set in <code>boxwid</code> and the width of the “caps” on the whisker is set at 80% of this box width. The distance between adjacent boxes at the same age is controlled with <code>position=</code> with a function called <code>position_dodge()</code>. It was not clear to me what to set these values to but I settled on the following after a little back-and-forth tinkering.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;The dodge width should be larger than the box width so that the boxes don’t touch.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>boxwid <span class="ot">&lt;-</span> <span class="fl">0.4</span>                       <span class="co"># box width</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>capwid <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">*</span>boxwid                <span class="co"># whisker cap width</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>boxsep <span class="ot">&lt;-</span> <span class="fu">position_dodge</span>(<span class="at">width=</span><span class="fl">0.5</span>) <span class="co"># dodge amount between boxes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>The use of <code>stat_boxplot()</code> below is a trick to put an “error bar” behind the boxplot, which gives the impression that the whiskers are “capped” (i.e., the error bar caps are in the same place that the whisker caps would be). The shape<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, boundary color, and fill for the outlier marks are defined with <code>outlier.shape=</code>, <code>outlier.color=</code>, and <code>outlier.fill=</code>, respectively. Finally, <code>show.legend=FALSE</code> in <code>geom_boxplot()</code> is used to remove the legend.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;“21” means a circle that has both a boundary and a fill color.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>fage,<span class="at">y=</span>len,<span class="at">fill=</span>strux)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_boxplot</span>(<span class="at">geom=</span><span class="st">"errorbar"</span>,<span class="at">width=</span>capwid,<span class="at">position=</span>boxsep) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width=</span>boxwid,<span class="at">position=</span>boxsep,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">outlier.shape=</span><span class="dv">21</span>,<span class="at">outlier.color=</span><span class="st">"black"</span>,<span class="at">outlier.fill=</span><span class="st">"white"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">show.legend=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span>clrs) <span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name=</span><span class="st">"Age (yrs)"</span>) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Length (mm)"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">600</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">600</span>,<span class="dv">100</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_q</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/figure-3-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-quistetal_2022" class="csl-entry" role="doc-biblioentry">
+Quist, M. C., D. K. McCarrick, and L. M. Harris. 2022. <a href="https://doi.org/10.3996/JFWM-21-095">Comparison of structures used to estimate age and growth of <span>Yellowstone Cutthroat Trout</span></a>. Journal of Fish and Wildlife Management 13(2):544–551.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{h.ogle2023,
+  author = {Derek H. Ogle},
+  title = {Quist Et Al. (2022) {Back-Calculation} {Figure}},
+  date = {2023-02-14},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023_2_14_Quistetal2022_BCData},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2023" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2023, February 14. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023_2_14_Quistetal2022_BCData">Quist
+et al. (2022) Back-Calculation Figure</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+  </li>  
+</ul>
+    </div>   
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
