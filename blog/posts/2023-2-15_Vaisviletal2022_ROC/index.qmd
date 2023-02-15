@@ -1,6 +1,6 @@
 ---
 title: Vaisvil et al. (2022) Hatching Date Figure
-description: Using ggplot2 to recreate the bass hatching date figure in Viasvil et al. (2022).
+description: Using ggplot2 to recreate the bass hatching date figure in Vaisvil et al. (2022).
 author: Derek H. Ogle
 date: 2/15/2023
 image: preview.png
