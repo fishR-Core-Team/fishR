@@ -230,7 +230,14 @@ I may update this post as I learn more about `after_stat()` and `after_scale()`.
 The solution in this section follows the concept of the code provided to me by Marta Ulaski, the lead author on the original paper. I have modified the specific code to better fit the rest of the post. I thank Marta for generously providing her source code and allowing me to modify it for presentation here.
 :::
 
+&nbsp;
+
 ### Making the Data Frame
+
+:::{.callout-important appearance="simple"}
+Since originally posting this example I have discovered a much easier way to make the data frame created in this section. Please see [this edit below](#different-method-to-construct-authors-data-frame) for that easier method.
+:::
+
 Ulaski's solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what `stat_function()` did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple `dfmat` created above.^[Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.] This posed some challenges.
 
 The first challenge was that I needed a way to create the sequence of ages between successive ages in `dfmat`. For example, between ages 0 and 10, I needed to create 99 ages that looked like 0, 0.1, 0.2, ..., 9.7, 9.8, and 9.9, whereas between 10 and 11 I only needed to create 9 ages that looked like 10, 10.1, ... 10.7, 10.8, 10.9. I am not aware of a function to do this in R so I wrote the simple function below to accomplish this task for all ages in `x` in increments given in `by=`.
@@ -371,5 +378,59 @@ ggplot(data=dfmat3,mapping=aes(x=agef,y=len)) +      # used new dfmat3
   scale_fill_viridis_d(name="Probability",begin=0.85,end=0,drop=FALSE)
 ```
 
-
 &nbsp;
+
+# Edits
+### Different Method to Construct Author's Data Frame
+I believe that there is an easier way to construct `dfmat2` used in the author's solution. This edit details that method.
+
+First, remember what the original `dfmat` looked like ... ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with `cut()`.
+
+```{r}
+#| label: remember-dfmat
+dfmat
+```
+
+Second, create a new data frame that has fractional ages that begin at the minimum age in `dfmat`, end at the maximum age in `dfmat`, and has some constant increment (0.1 in this example). Then use `lencat()` from `FSA` to create categories of ages that match the ages in `dfmat`. `lencat()` returns a factor variable by default but use `as.fact=FALSE` to return a number to match the `age` variable in `dfmat`.
+
+```{r}
+#| label: make-dfmat2a-1
+dfmat2a <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),0.1)) |>
+  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE))
+FSA::headtail(dfmat2a,n=5)
+```
+
+The probability mature values and categories can be added to this data frame with a `left_join()` using the common `age` variable in `dfmat` and `dfmat2a`.
+
+```{r}
+#| label: make-dfmat2a-2
+dfmat2a <- dfmat2a |>
+  left_join(dfmat,by="age")
+FSA::headtail(dfmat2a,n=5)
+```
+
+Finally, add the predicted mean lengths as before.
+
+```{r}
+#| label: make-dfmat2a-3
+dfmat2a <- dfmat2a |>
+  mutate(len=vb(agef,Linf=vbpar))
+FSA::headtail(dfmat2a)
+```
+
+This is the same as the original `dfmat2`.^[I rearranged the columns for ease of comparison. Also, the rownames are irrelevant so ignore them.]
+
+```{r}
+#| label: compare-dfmat2s
+FSA::headtail(dfmat2) |> select(agef,age,prmat,prcuts,len)
+```
+
+If you use this method rather than the original method to create `dfmethod2` [used above](#making-the-data-frame) then you can combine all of the code of this section into one tight set. Additionally, make sure to save the result as `dfmat2` (as below) before continuing on [to make the figure](#making-the-figure).
+
+```{r}
+#| label: make-dfmat2-alt
+dfmat2 <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),0.1)) |>
+  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE)) |>
+  left_join(dfmat,by="age") |>
+  mutate(len=vb(agef,Linf=vbpar))
+```
