@@ -1,0 +1,418 @@
+---
+title: Landry et al. (2022) Logistic Regression Figures
+description: Using ggplot2 to recreate the logistic regression figures in Landry et al. (2022).
+author: Derek H. Ogle
+date: 3/6/2023
+image: preview.png
+categories:
+  - ggplot2
+  - Logistic Regression
+---
+
+# Introduction
+
+@landryetal_2022 examined the diets of Bobcats (*Lynx rufus*) in West Virginia. They used logistic regression analyses in two parts of their analyses and presented those findings in their [Figure 2](https://meridian.allenpress.com/view-large/figure/15049887/i1944-687X-13-2-447-f02.tif) and [Figure 3](https://meridian.allenpress.com/view-large/figure/15049891/i1944-687X-13-2-447-f03.tif). In [a previous post](../2021-5-25_fitPlot-replacement/#using-a-built-in-function-2) I demonstrated how to produce similar plots using `geom_smooth()` from `ggplot2`. Here I want to show an alternative method that is more laborious, but I am starting to prefer as it (a) seems to always work, (b) generalizes more easily, and (c) is not a "black box."
+
+# Getting Setup
+The following packages are loaded for use below.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+library(patchwork)  # for positioning multiple plots in Figure 2
+```
+
+The `ggplot2` theme was set to `theme_bw()` but with modifications to more closely match the author's choices (i.e., gridlines removed, centered and bolded plot title, slightly larger and bolded axis tick labels, rotated axis tick labels for the y-axis, and slightly larger and bolded text and title for the legend).
+
+```{r}
+#| label: set-theme
+theme_set(
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        plot.title=element_text(hjust=0.5,face="bold"),
+        axis.text=element_text(size=11,face="bold"),
+        axis.text.y=element_text(angle=90,hjust=0.5),
+        legend.title=element_text(size=11,face="bold"),
+        legend.text=element_text(size=11,face="bold"))
+)
+```
+
+The x-axis of Figure 2 is labeled with "KFI<sub>i</sub>". In `ggplot2` the subscript is created with `[i]` as long as the text is wrapped in `expression()`. To minimize typing, I created an object with this expression here.
+
+```{r}
+#| label: make-kfi-label
+KFI_lbl <- expression(KFI[i])
+```
+
+The process to construct the plots described below requires using the logistic regression model to predict logit-transformed values of the response variable. These values are back-transformed to the probability scale by "reversing" the [logit transformation](https://www.statsref.com/HTML/logit.html). I coded this back-transformation function here for use below several times.
+
+```{r}
+#| label: make-inverse-logit-function
+# compute probablity (p) from a value x on the logit scale
+inverse_logit <- function(x) exp(x)/(1+exp(x))
+```
+
+&nbsp;
+
+# Get Data
+@landryetal_2022 provided the raw data for their study as a supplementary CSV file called "JFWM-22-001.S1.csv". I loaded this file from my local directory, changed the `Season` variable from a numerical code to relevant labels, and restricted the data frame to only those variables used in this post.
+
+```{r}
+#| label: get-data
+dat <- read.csv("JFWM-22-001.S1.csv") |>
+  mutate(Season=case_when(
+    Season==1 ~ "2014-2015",
+    Season==2 ~ "2015-2016")) |>
+  select(Season,KFI_i,HardMast,Rabbits_Hares,Opossum,Squirrels)
+
+head(dat)
+```
+
+The `Rabbits_Hares`, `Opossum`, and `Squirrels` variables are code as `1` if that prey item occurred in the diet and a `0` if that prey did not occur in the diet.
+
+# Recreating Figure 2
+## Fitting the Logistic Regression
+A logistic regression is computed in R with `glm()` using a formula of the form `response~explanatory` as the first argument, the relevant data frame in `data=`, and `family="binomial"` to force using the logit transformation and, thus, the fitting of a logistic regression. The `response` variable can either be coded as `0`s and `1`s, as it is here, or as a factor where the first level is the "failure." The logistic regression examining the occurrence of Virginia Opossum in the diet of Bobcats relative to the KFI<sub>i</sub> index is fit below.
+
+```{r}
+#| label: fit-opossum-glm
+glmOpo <- glm(Opossum~KFI_i,data=dat,family="binomial")
+```
+
+The results of the logistic regression are obtained from giving the object saved from `glm()` to `summary()`. These results are the same as those presented in @landryetal_2022.^[See sentence directly above their Figure 2.]
+
+```{r}
+#| label: sum-opossum-glm
+summary(glmOpo)
+```
+
+## Making a Data Frame of Predicted Probabilities
+The first step in recreating Figure 2 is to create a data frame of predicted probabilities, with 95% confidence intervals, for the occurrence of Virginia Opossums in the diet across the range of observed KFI<sub>i</sub> values. I begin this process by creating a data frame that has a `KFI_i` variable^[This variable name must be exactly as it was in the data frame used in `glm()` above.] with a sequence of 199 values^[The larger this number, the smoother the resultant curve in the figure will be.] from the minimum to maximum observed KFI<sub>i</sub> values.
+
+```{r}
+#| label: make-KFI-df
+KFI_i_df <- data.frame(KFI_i=seq(min(dat$KFI_i),max(dat$KFI_i),length.out=199))
+head(KFI_i_df)
+```
+
+Predicted values may be obtained with `predict()`, but for logistic regression `interval="confidence"` is not supported, so corresponding confidence interval values are not automatically computed. However, `predict()` can be used to make predictions, with standard errors, on the logit-transformed scale, which can then be used to  "manually" calculate confidence intervals. The predictions on the logit-transformed scale and the corresponding standard errors are returned by including `type="link"` and `se.fit=TRUE`. `predict()` returns a list by default, but I forced it into a data frame below for easier manipulation further below.^[For our purposes, ignore the `residual.scale` column.]
+
+```{r}
+#| label: demo-pred-opo-1
+predOpo <- predict(glmOpo,KFI_i_df,type="link",se.fit=TRUE) |>
+  as.data.frame()
+head(predOpo)
+```
+
+It is important to note here that the `fit` values in this data frame are on the logit-transformed scale. These values can be back-transformed to predicted probabilities using the `inverse_logit()` function created above. 
+
+```{r}
+#| label: demo-pred-opo-2
+predOpo <- predOpo |>
+  mutate(predProb=inverse_logit(fit))
+head(predOpo)
+```
+
+Approximate 95% confidence intervals for the **logit-transformed** predictions can be made by adding and subtracting 1.96 times the standard error from each predicted value.^[1.96 comes from normal distribution theory.] These values are then back-transformed to construct confidence intervals on the probability scale.
+
+```{r}
+#| label: demo-pred-opo-3
+predOpo <- predOpo |>
+  mutate(predLCI=inverse_logit(fit-1.96*se.fit),
+         predUCI=inverse_logit(fit+1.96*se.fit))
+head(predOpo)
+```
+
+Finally, I "bind as columns" the original data frame of KFI<sub>i</sub> values and select (and slightly re-arrange) the variables needed to make the figure.
+
+```{r}
+#| label: demo-pred-opo-4
+predOpo <- predOpo |>
+  bind_cols(KFI_i_df) |>
+  select(KFI_i,predProb,predLCI,predUCI)
+head(predOpo)
+```
+
+The steps above were separated to show the process. In practice, I would complete these steps in one set of code shown below.
+
+```{r}
+#| label: make-pred-opo
+predOpo <- predict(glmOpo,KFI_i_df,type="link",se.fit=TRUE) |>
+  as.data.frame() |>
+  mutate(predProb=inverse_logit(fit),
+         predLCI=inverse_logit(fit-1.96*se.fit),
+         predUCI=inverse_logit(fit+1.96*se.fit)) |>
+  bind_cols(KFI_i_df) |>
+  select(KFI_i,predProb,predLCI,predUCI)
+```
+
+Just to be clear, `predOpo` created here contains a large sequence of KFI<sub>i</sub> values across the observed range of this variable, the predicted probability that Virginia Opossum will occur in the diet of Bobcat for each of these KFI<sub>i</sub> values, and approximate 95% confidence intervals for each of those predicted probabilities. These are the data required to reconstruct one panel of Figure 2.
+
+## Making one Sub-Panel
+Showing the logistic regression results for Virginia Opossums (i.e., one panel in Figure 2) largely consists of plotting the predicted probabilities and 95% confidence bounds against the KFI<sub>i</sub> values.
+
+```{r}
+#| label: demo-opo-panel-1
+pVO <- ggplot(data=predOpo,mapping=aes(x=KFI_i)) +
+  geom_line(mapping=aes(y=predProb)) +
+  geom_line(mapping=aes(y=predLCI)) +
+  geom_line(mapping=aes(y=predUCI))
+pVO
+```
+
+`geom_ribbon()` can be used to shade the area between the two confidence bounds. However, `geom_ribbon()` should appear first so that the plotted lines will be "on top" of it and, thus, visible.^[I filled the ribbon with "darkslategray" in an attempt to match the author's color choice.] Including `color="black"` in `geom_ribbon()` will also color the bounding lines of the ribbon, so that the separate `geom_line()`s for the confidence bounds are not needed.
+
+```{r}
+#| label: demo-opo-panel-2
+pVO <- ggplot(data=predOpo,mapping=aes(x=KFI_i)) +
+  geom_ribbon(mapping=aes(ymin=predLCI,ymax=predUCI),
+              fill="darkslategray4",color="black") +
+  geom_line(mapping=aes(y=predProb))
+pVO
+```
+
+Finally, to follow the author's choices, I labeled the y-axis and adjusted its limits, breaks, and expansion factor; labeled the x-axis and adjusted its expansion factor; provided an overall plot title; and placed an "(A)" label in the upper-left corner.^[This seemed redundant to me given the plot title.] Thus, the final code for this portion of Figure 2 is as follows.
+
+```{r}
+#| label: make-opo-panel
+pVO <- ggplot(data=predOpo,mapping=aes(x=KFI_i)) +
+  geom_ribbon(mapping=aes(ymin=predLCI,ymax=predUCI),
+              fill="darkslategray4",color="black") +
+  geom_line(mapping=aes(y=predProb)) +
+  scale_y_continuous(name="Proportion of Occurrence",
+                     limits=c(0,1),breaks=seq(0,1,0.2),
+                     expand=expansion(mult=0.02)) +
+  scale_x_continuous(name=KFI_lbl,
+                     expand=expansion(mult=0.02)) +
+  labs(title="Virginia Opossum") +
+  annotate(geom="text",x=-Inf,y=Inf,label="(A)",
+           hjust=-0.5,vjust=1.5)
+```
+
+## Finishing the Figure
+The final Figure 2 has a second panel for "Rabbits." Thus, the code from above was copied and adjusted slightly to make a similar plot for rabbits.
+
+```{r}
+#| label: make-rab-panel
+# fit logistic regression
+glmRab <- glm(Rabbits_Hares~KFI_i,data=dat,family="binomial")
+
+# make predicted probabilities data frame
+predRab <- predict(glmRab,KFI_i_df,type="link",se.fit=TRUE) |>
+  as.data.frame() |>
+  mutate(predProb=inverse_logit(fit),
+         predLCI=inverse_logit(fit-1.96*se.fit),
+         predUCI=inverse_logit(fit+1.96*se.fit)) |>
+  bind_cols(KFI_i_df) |>
+  select(KFI_i,predProb,predLCI,predUCI)
+
+# make the plot
+pRH <- ggplot(data=predRab,mapping=aes(x=KFI_i)) +
+  geom_ribbon(mapping=aes(ymin=predLCI,ymax=predUCI),
+              fill="darkslategray4",color="black") +
+  geom_line(mapping=aes(y=predProb)) +
+  scale_y_continuous(name="Proportion of Occurrence",
+                     limits=c(0,1),breaks=seq(0,1,0.2),
+                     expand=expansion(mult=0.02)) +
+  scale_x_continuous(name=KFI_lbl,
+                     expand=expansion(mult=0.02)) +
+  labs(title="Rabbit") +
+  annotate(geom="text",x=-Inf,y=Inf,label="(B)",
+           hjust=-0.5,vjust=1.5)
+```
+
+The two plots are placed side-by-side as shown below using functionality from the `patchwork` package.^[The author's used longer ticks on the axes then I used here. Also, their figure has vertical "striations" that I think are a result of how they constructed the plot and not a feature to be replicated.]
+
+```{r}
+#| label: make-figure-2
+#| fig-width: 7.5
+#| fig-height: 4
+pVO + pRH
+```
+
+&nbsp;
+
+# Recreating Figure 3
+## Fitting the Logistic Regression
+Figure 3 is used by @landryetal_2022 to demonstrate an interaction effect of season of capture on the relationship between the occurrence of squirrels in the diet of Bobcat and hard mast index. Thus, a logistic regression is fit with hard mast index, season, and the interaction between hard mast index and season as explanatory "variables."^[I coded the three explanatory terms explicitly here, however `HardMast*Season` would have expanded to code all three as well.]
+
+```{r}
+#| label: fit-sqrl_logregress
+glmSqrl <- glm(Squirrels~HardMast+Season+HardMast:Season,data=dat,family="binomial")
+```
+
+The summary results (not shown here) match those in @landryetal_2022.^[See results in the second sentence above Figure 3.]
+
+```{r}
+#| label: sum-sqrl_logregress
+#| results: hide
+summary(glmSqrl)
+```
+
+## Making a Data Frame of Predicted Probabilities
+Similar to constructing Figure 2, a data frame of predicted probabilities with 95% confidence intervals at a large number of hard mast index values is needed to reproduce Figure 3. However, the probabilities must be predicted for **both seasons**. The data frame used to make the predictions must have a variable for the hard mast index values and the season as the `glm()` fit above used both of these variables. Thus, this data frame must have the 199 hard mast index values repeated twice, corresponding to the two seasons and each season repeated 199 times to match the hard mast index values.
+
+```{r}
+#| label: make_HMdf
+HM_df <- data.frame(
+  HardMast=rep(seq(min(dat$HardMast),max(dat$HardMast),length.out=199),2),
+  Season=rep(unique(dat$Season),each=199))
+FSA::headtail(HM_df)
+```
+
+With this data frame, the data frame of predicted probabilities is constructed as demonstrated for Figure 2.
+
+```{r}
+#| label: make-predSqrl
+predSqrl <- predict(glmSqrl,HM_df,type="link",se.fit=TRUE) |>
+  as.data.frame() |>
+  mutate(predProb=inverse_logit(fit),
+         predLCI=inverse_logit(fit-1.96*se.fit),
+         predUCI=inverse_logit(fit+1.96*se.fit)) |>
+  bind_cols(HM_df) |>
+  select(HardMast,Season,predProb,predLCI,predUCI)
+FSA::headtail(predSqrl)
+```
+
+## Finishing the Figure
+Figure 3 is constructed very similarly to Figure 2 except that a `fill=` color must be mapped to `Season` in `geom_ribbon()` and `linetype=` must be mapped to `Season` in `geom_line()`.^[In `geom_ribbon()` I did not include `color=` because the authors did not outline the confidence regions. I included a slight transparency with `alplha=0.75` so the two regions were more visible where they overlapped.] `scale_fill_manual()` and `scale_linetype_manual()` are used to over-ride the default fill colors and line types to better match the author's choices. Further `guide="none"` wais used in `scale_fill_manual()` as the author's did not show the fill color in their legend. Finally, I manually positioned the legend 75% of the way along the x-axis and 80% of the way up the y-axis.^[Again, the author's Figure 3 looks striated, but I did not consider this a feature of the plot.]
+
+```{r}
+#| label: make-figure-3
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data=predSqrl,mapping=aes(x=HardMast)) +
+  geom_ribbon(mapping=aes(ymin=predLCI,ymax=predUCI,fill=Season),
+              alpha=0.75) +
+  geom_line(mapping=aes(y=predProb,linetype=Season)) +
+  scale_y_continuous(name="Proportion of Occurrence",
+                     limits=c(0,1),breaks=seq(0,1,0.2),
+                     expand=expansion(mult=0.02)) +
+  scale_x_continuous(name="Hard Mast Index",
+                     expand=expansion(mult=0.02)) +
+  scale_fill_manual(values=c("2014-2015"="darkslategray","2015-2016"="gray75"),
+                    guide="none") +
+  scale_linetype_manual(values=c("2014-2015"="solid","2015-2016"="dashed")) +
+  labs(title="Squirrel") +
+  theme(legend.position=c(0.75,0.8))
+```
+
+&nbsp;
+
+It should be noted that this plot does not fully match Figure 3 in @landryetal_2022. This is most evident for the 2014-2015 seasons at small hard mast indices where the authors predicted probability approaches 0.4 more closely and the upper level of the confidence region is above 0.6. I am not sure what explains this difference but it *could be* that the author's used a slightly lower minimum hard mast index for their predictions or that their predicted values were made from separate logistic regressions for each season.
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=0.8,
+        legend.position="none")
+dev.off()
+```
+
+# Further Thoughts
+It is not my point with these posts to critique the author's presentations -- there are more than one way to present results and many times it is personal preference. Below, though, I articulate changes to the figures that I would prefer.
+
+## Show the Data
+I generally don't like plots that don't show observed data, which is the case for both Figures 2 and 3. The observed data can be added to the plot using `geom_point()` as shown in [a previous post](../2021-5-25_fitPlot-replacement/#using-manually-predicted-values-1). Note that the `data=predOpo` had to be removed from `ggplot()` and added to `geom_ribbon()` and `geom_line()` because, with this addition, `geom_point()` uses a different data frame. When geoms use different data frames, those data frames must be declared in the geom rather than in `ggplot()`. Also note the use of `alpha=` here so that the points are semi-transparent to handle overplotting.
+
+```{r}
+#| label: make-opo-panel-2
+pVO2 <- ggplot(mapping=aes(x=KFI_i)) +
+  geom_ribbon(data=predOpo,mapping=aes(ymin=predLCI,ymax=predUCI),
+              fill="darkslategray4",color="black") +
+  geom_line(data=predOpo,mapping=aes(y=predProb)) +
+  geom_point(data=dat,mapping=aes(y=Opossum),alpha=0.2) +
+  scale_y_continuous(name="Proportion of Occurrence",
+                     limits=c(0,1),breaks=seq(0,1,0.2),
+                     expand=expansion(mult=0.02)) +
+  scale_x_continuous(name=KFI_lbl,
+                     expand=expansion(mult=0.02)) +
+  labs(title="Virginia Opossum") +
+  annotate(geom="text",x=-Inf,y=Inf,label="(A)",
+           hjust=-0.5,vjust=1.5)
+pVO2
+```
+
+## Present Only Over the Range of the Group's Data
+Figure 3 as created above and shown in @landryetal_2022 implies the same range of hard mast index values in both seasons (i.e., the logistic regression model is presented over the same range of hard mast index values for both seasons). However, a summary of the range of hard mast index values for each season reveals very little overlap between the two seasons.
+
+```{r}
+#| label: sum-hardmast
+smry <- dat |>
+  group_by(Season) |>
+  summarize(n=n(),
+            minHM=min(HardMast,na.rm=TRUE),
+            maxHM=max(HardMast,na.rm=TRUE))
+smry
+```
+
+My preference is to show the model fits across the ranges observed within each season. To do so requires modifying `HM_df` from above to use the range of values within each season, rather than the range of values for both seasons combined. I could not find a simple way to do this, though it is accomplished below using `smry` from above and a combination of `apply()`, with a user-defined function for sequence, and `pivot_longer()`.
+
+```{r}
+#| label: make_HMdf-2
+#| fig-width: 3.75
+#| fig-height: 4
+seq2 <- function(x) seq(x["minHM"],x["maxHM"],length.out=199)
+
+tmp <- apply(smry,MARGIN=1,FUN=seq2) |>
+  as.data.frame()
+names(tmp) <- smry$Season
+
+HM_df <- pivot_longer(tmp,cols=everything(),
+                      values_to="HardMast",names_to="Season") |>
+  arrange(Season,HardMast)
+
+FSA::headtail(HM_df)
+```
+
+Then make a new predicted probabilities data frame from this new data frame.
+
+```{r}
+#| label: make-predSqrl-2
+predSqrl <- predict(glmSqrl,HM_df,type="link",se.fit=TRUE) |>
+  as.data.frame() |>
+  mutate(predProb=inverse_logit(fit),
+         predLCI=inverse_logit(fit-1.96*se.fit),
+         predUCI=inverse_logit(fit+1.96*se.fit)) |>
+  bind_cols(HM_df) |>
+  select(HardMast,Season,predProb,predLCI,predUCI)
+FSA::headtail(predSqrl)
+```
+
+And remake the plot, also including the raw data. Note that I changed colors here as the original colors in Figure 3 could not be differentiated well when using semi-transparency for over-plotting.
+
+```{r}
+#| label: make-figure-3a
+#| fig-width: 5
+#| fig-height: 4
+ggplot(mapping=aes(x=HardMast)) +
+  geom_ribbon(data=predSqrl,mapping=aes(ymin=predLCI,ymax=predUCI,fill=Season),
+              alpha=0.75) +
+  geom_line(data=predSqrl,mapping=aes(y=predProb,linetype=Season)) +
+  geom_point(data=dat,mapping=aes(y=Squirrels,color=Season),
+             alpha=0.1) +
+  scale_y_continuous(name="Proportion of Occurrence",
+                     limits=c(0,1),breaks=seq(0,1,0.2),
+                     expand=expansion(mult=0.02)) +
+  scale_x_continuous(name="Hard Mast Index",
+                     expand=expansion(mult=0.02)) +
+  scale_fill_manual(values=c("2014-2015"="red4","2015-2016"="cyan4"),
+                    guide="none") +
+  scale_color_manual(values=c("2014-2015"="red4","2015-2016"="cyan4"),
+                     guide="none") +
+  scale_linetype_manual(values=c("2014-2015"="solid","2015-2016"="dashed")) +
+  labs(title="Squirrel") +
+  theme(legend.position=c(0.75,0.8))
+```
+
+&nbsp;
