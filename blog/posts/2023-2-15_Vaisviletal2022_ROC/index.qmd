@@ -8,6 +8,7 @@ categories:
   - ggplot2
   - Dates
   - PNG
+  - Reference line
 ---
 
 # Introduction
