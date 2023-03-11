@@ -1,0 +1,351 @@
+---
+title: Using vjust= and hjust=
+description: Explaining the use of vjust= and hjust= to position objects in ggplots.
+author: Derek H. Ogle
+date: 3/10/2023
+image: preview.png
+categories:
+  - ggplot2
+  - Annotations
+knitr: 
+  opts_chunk:
+    dev: "png"
+    fig.width: 1.5
+    fig.height: 1.5
+---
+
+# Introduction
+It seems that many of my "positioning" issues in `ggplot2` are ultimately solved with the use of `vjust=`, `hjust=`, or both. However, when I need to use these arguments/concepts I often find myself "googling" for a solution and then not fully internalizing how the solution worked. In this post I attempt to provide some explanation around `vjust=` and `hjust=` in hopes that I, and maybe you, will better understand how they work, and will be able to better apply them in the future.
+
+# Getting Setup
+The following packages are loaded for use below.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for ggplot2 (and dplyr behind the scenes) packages
+library(patchwork)  # for arranging multiple plots (behind the scenes)
+```
+
+The `ggplot2` theme was set to `theme_classic()` and then all axis adornments were removed. The reasoning for this will be apparent below.
+
+```{r}
+#| label: set-theme
+theme_set(theme_classic() +
+            theme(axis.text=element_blank(),
+                  axis.title=element_blank(),
+                  axis.ticks=element_blank()))
+```
+
+I created an object to use for the size of the annotation text.
+
+```{r}
+#| label: set-text-size
+sz <- 5
+```
+
+&nbsp;
+
+# vjust= and hjust= Explained
+A basic plot, called `p`, that contains one red point will be the basis for all of the illustrations below.
+
+```{r}
+#| label: make-base-plot-1
+p <- ggplot(data=data.frame(x=1,y=1),mapping=aes(x=x,y=y)) +
+  geom_point(size=3,color="red")
+p
+```
+
+Single (or a few) labels can be added to a plot with `annotation()` using `geom="text"` and `x=` and `y=` coordinates to place the `label=`.^[Here the size was also changed using `sz` as defined above.] By default the label is centered on the x-y coordinate.
+
+```{r}
+#| label: initial-annotation-1
+p + annotate(geom="text",x=1,y=1,label="default",size=sz)
+```
+
+The position of the label relative to the point can be controlled with vertical and horizontal justification arguments; i.e., `vjust=` and `hjust=`. Ostensibly, `vjust=` and `hjust=` take values between 0 and 1. Values of 0.5 means "centered" in that direction. Values of 0.5 represent "centering" and are the defaults for both `vjust=` and `hjust=`. Thus, the default behavior above can be reproduced with the explicit calls to `vjust=` and `hjust=` below.
+
+```{r}
+#| label: initial-annotation-2
+p + annotate(geom="text",x=1,y=1,label="centered",vjust=0.5,hjust=0.5,size=sz)
+```
+
+I have found the use of `vjust=` and `hjust=` to be non-intuitive but thinking of the following things has helped simplify their use for me:
+
+- Justification is about the *label/object relative to the coordinate*, not the coordinate relative to the label/object.
+- Vertical scales (in the first quadrant) have *0 at the bottom* and *1 at the top*.
+- Horizontal scales (in the first quadrant) have *0 to the left* and *1 to the right*.
+
+Thus, for example (see below), `vjust=0` will place the "bottom" (i.e., 0) of the **label** on the x-y coordinate, whereas `vjust=1` will place the "top" (i.e., 1) of the **label** on the x-y coordinate. If `hjust=` is left at the default of `0.5` then the labels will remain horizontally centered with these changes to `vjust=`.
+
+```{r}
+#| label: explain-vhjust
+#| fig-width: 4
+#| fig-height: 3
+#| echo: false
+p + annotate(geom="text",x=1,y=1,label="vjust=0",vjust=0,size=sz) + 
+  p + annotate(geom="text",x=1,y=1,label="vjust=1",vjust=1,size=sz) +
+  p + annotate(geom="text",x=1,y=1,label="hjust=0",hjust=0,size=sz) + 
+  p + annotate(geom="text",x=1,y=1,label="hjust=1",hjust=1,size=sz) +
+  plot_layout(nrow=2)
+```
+
+Further, `hjust=0` will place the "left" side (i.e., 0) of the **label** on the x-y coordinate and `hjust=1` will place the "right" side (i.e., 1) of the **label** on the x-y coordinate. If `vjust=` is not changed from the default then these labels will be centered vertically.
+
+Both `vjust=` and `hjust=` can be modified simultaneously to position the **label** nearly anywhere around the x-y coordinate (see below). For example, `vjust=0` and `hjust=1` will place the lower (from `vjust=0`) right (from `hjust=1`) corner of the **label** on the x-y coordinate.
+
+```{r}
+#| label: explain-both
+#| fig-width: 6
+#| fig-height: 3
+#| echo: false
+p + annotate(geom="text",x=1,y=1,label="vjust=0,hjust=1",vjust=0,hjust=1,size=sz) +
+  p + annotate(geom="text",x=1,y=1,label="vjust=0,hjust=0",vjust=0,hjust=0,size=sz) +
+  p + annotate(geom="text",x=1,y=1,label="vjust=1,hjust=1",vjust=1,hjust=1,size=sz) +
+  p + annotate(geom="text",x=1,y=1,label="vjust=1,hjust=0",vjust=1,hjust=0,size=sz) +
+  plot_layout(nrow=2)
+```
+
+Even more control comes from the fact that values outside of 0 and 1 can be used (see below). For example, negative values for `vjust=` will place the *bottom* of the **label** further away (so above) from the x-y coordinate. Alternatively, values greater than 1 for `vjust=` will place the *top* of the **label** further away (so below) from the x-y coordinate.
+
+```{r}
+#| label: explain-out01-v
+#| echo: false
+p + annotate(geom="text",x=1,y=1,label="vjust=-0.5",vjust=-0.5,size=sz) +
+  annotate(geom="text",x=1,y=1,label="vjust=-2",vjust=-2,size=sz) +
+  annotate(geom="text",x=1,y=1,label="vjust=1.5",vjust=1.5,size=sz) +
+  annotate(geom="text",x=1,y=1,label="vjust=3",vjust=3,size=sz)
+```
+
+Similar behavior occurs for `hjust=`, with negative numbers moving the label further to the right and values greater than 1 moving the label further to the left of the x-y coordinate (see below).
+
+```{r}
+#| label: explain-out01-h
+#| fig-width: 5
+#| echo: false
+p + annotate(geom="text",x=1,y=1,label="hjust=-0.25",hjust=-0.25,size=sz) +
+  annotate(geom="text",x=1,y=1,label="hjust=-2",hjust=-2,size=sz) +
+  annotate(geom="text",x=1,y=1,label="hjust=1.25",hjust=1.25,size=sz) +
+  annotate(geom="text",x=1,y=1,label="hjust=3",hjust=3,size=sz)
+```
+
+I will often use values outside of 0 to 1 so that my labels do not overlap the point.
+
+&nbsp;
+
+# Practical Examples
+Here I will demonstrate some practical uses of `vjust=` and `hjust=` on the final plot constructed in [the previous post](../2023-3-9-Clemens2022/). This plot is saved as `p1`, is repeated below,^[See the previous post for the plot construction code.] and is used here just to have something to use as an example.
+
+```{r}
+#| label: demo-plot
+#| fig-width: 6.5
+#| fig-height: 5
+#| echo: false
+theme_set(
+  theme_classic() +
+    theme(axis.title=element_text(size=11,face="bold"),
+          axis.title.x=element_text(margin=margin(t=12.5)),
+          axis.title.y=element_text(margin=margin(r=12.5)),
+          axis.text.x=element_text(margin=margin(t=7.5)),
+          axis.text.y=element_text(margin=margin(r=7.5)),
+          axis.ticks.length=unit(-0.15, "cm"))
+)
+
+dfmt <- "%d-%b-%Y"
+
+dat <- data.frame(
+  date=seq(as.Date("15-Jun-2021",format=dfmt),
+           as.Date("10-Jul-2021",format=dfmt),
+           by=1),
+  temp=c(20.5,20.8,22.1,23.2,23.9,24.9,26.5,27.1,27.0,27.1,
+         27.4,28.3,29.5,30.9,30.0,28.5,26.8,26.0,26.6,27.5,
+         27.6,27.3,26.4,26.3,26.2,27.0)
+)
+
+dbrks <- seq(as.Date("13-Jun-2021",format=dfmt),
+             as.Date("11-Jul-2021",format=dfmt),by=2)
+
+morts <- as.Date(c("30-Jun-2021","5-Jul-2021","8-Jul-2021"),format=dfmt)
+
+mdat <- dat |>
+  filter(date %in% morts) |>
+  mutate(yend=-Inf)
+
+mdat2 <- dat |>
+  filter(date>=morts[2],date<=morts[3]) |>
+  bind_rows(data.frame(date=morts[3:2],
+                       temp=c(-Inf,-Inf)))
+
+p1 <- ggplot() +
+  geom_polygon(data=mdat2,mapping=aes(x=date,y=temp),
+               fill="gray90") +
+  geom_line(data=dat,mapping=aes(x=date,y=temp),
+            linewidth=1) +
+  geom_point(data=dat,mapping=aes(x=date,y=temp),
+             size=2) +
+  geom_segment(data=mdat,mapping=aes(x=date,y=temp,xend=date,yend=yend),
+               linetype="dashed",linewidth=1,color="gray30",
+               arrow=arrow(type="closed",length=unit(0.1,"inches"))) +
+  scale_y_continuous(name="Mean daily temperature (\u00b0C)",
+                     limits=c(18,32),breaks=seq(18,32,1),
+                     expand=expansion(mult=0)) +
+  scale_x_date(name="Date",
+               limits=range(dbrks),breaks=dbrks,date_labels="%d-%b",
+                     expand=expansion(mult=c(0,0.02)))
+
+p1
+```
+
+## Labels
+Suppose that we want to highlight the peak temperature point with a label. With this plot, the label would be best above and horizontally centered on the peak point. Thus, `hjust=` will be left at the default of 0.5 and `vjust=` will be set to a negative number (i.e., 0 would place the bottom of the label on the point, we want to move it up further so a negative number is needed).^[Here and below I colored the text red to show the change being made.]
+
+```{r}
+#| label: add-label-1
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  annotate(geom="text",x=as.Date("28-Jun-2021",format=dfmt),
+           y=max(dat$temp),label="Warmest Day!",vjust=-1,color="red")
+```
+
+The same concept works for using `geom_text()` to label all points.
+
+```{r}
+#| label: add-label-2
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  geom_text(data=dat,mapping=aes(x=date,y=temp,label=temp),
+            vjust=-1,size=3,color="red")
+```
+
+Of course, this does not work well here because the same justification is used for every point, so there is overlap with the line, other labels, etc. If you really want to do something like this then look at functionality in the `ggrepel` and `ggpp` packages.
+
+## Plot Title
+A title may be added to a plot with `title=` in `labs()`. By default, the title is left-justified with respect to the plot body. The title can be centered by modifying `plot.title=` in `theme()` with `hjust=0.5` within `element_text()`.^[`plot.title=` is a text element, thus the use of `element_text()` here.]
+
+```{r}
+#| label: add-title
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  labs(title="Pacific Lamprey Mortality Events") +
+  theme(plot.title=element_text(hjust=0.5,color="red"))
+```
+
+This is also demonstrated in [this previous post](../2023-3-6_Landryetal2022_LogRegress/).
+
+## Plot Tag Label
+If multiple plots are placed together it is common to adorn each plot with a letter or some other signifier. Suppose that this plot will be the first in a series of plots and, thus, an "(A)" should be placed in the upper-left corner. It is best not to specific numeric values for the upper-left corner because (a) that can be tricky if the axis limits have been expanded, (b) it depends on the data in the plot, and (c) it is hard to be consistent across plots. One trick here is that `ggplot2` will define the upper-left corner at `-Inf` for the x and `Inf` for the y-coordinate.^[The `-Inf` had to be converted to a date because the x-axis is dates.] The problem with this is that the label is centered on those extreme coordinates and is cutoff and over the axis (see below).
+
+```{r}
+#| label: add-tag-1
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  annotate(geom="text",x=as.Date(-Inf,format=dfmt),y=Inf,label="(A)",color="red")
+```
+
+We can set the upper-left corner of the label to be at the coordinate to move the label into the plotting region. However, to further move the point off the extreme coordinate position, use a value greater than 1 for `vjust=` (i.e., move the top further down) and a negative value for `hjust=` (i.e., move the left side further to the right).
+
+```{r}
+#| label: add-tag-2
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  annotate(geom="text",x=as.Date(-Inf,format=dfmt),y=Inf,label="(A)",color="red",
+           vjust=1.5,hjust=-1)
+```
+
+This is also demonstrated in [this previous post](../2023-3-6_Landryetal2022_LogRegress/).
+
+## Rotated Axis Labels
+The labels on the x-axis are crowded. One way to adjust for this is to rotate the labels to a vertical position using `angle=90` in `element_text()` for `axis.text.x=` in `theme=`. However, as seen below, the labels are then not horizontally aligned with the tick marks.
+
+```{r}
+#| label: rotate-xlabels-1
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  theme(axis.text.x=element_text(angle=90,color="red"))
+```
+
+It would seem that `hjust=` is needed to correct this horizontal alignment problem. However, it is `vjust=` that is used. I am not sure that I fully understand this but I think that it means that the "top" and the "bottom" of the labels were not "renamed" with the rotation and, thus, are still controlled with `vjust=`.
+
+```{r}
+#| label: rotate-xlabels-2
+#| fig-width: 6.5
+#| fig-height: 5
+p1 +
+  theme(axis.text.x=element_text(angle=90,vjust=0.5,color="red"))
+```
+
+## Legend Position
+The concepts of `vjust=` and `hjust=` are also used when placing a legend within the plotting area, though those arguments are not used explicitly.
+
+I modified the base plot from above to have a legend. Note that the grouping here is not really useful, I am just using this as an illustration of how to move the legend. This object is called `p2`.
+
+```{r}
+#| label: base-plot-2
+#| fig-width: 6.5
+#| fig-height: 5
+#| echo: false
+p2 <- p1 %+% aes(color=temp>28,group=1)
+p2
+```
+
+The position of the legend is controlled by `legend.position=` in `theme()`. The legend can be moved into the plot by providing a vector of length two that defines the proportional distance down the x-axis (0 is all the way to the left) and proportional distance up the y-axis (0 is at the bottom). Thus, the code below puts the legend in the upper-left corner of the plot (i.e., 0 is to the left, 1 is top).
+
+```{r}
+#| label: legend-pos-1
+#| fig-width: 6.5
+#| fig-height: 5
+p2 +
+  theme(legend.position=c(0,1))
+```
+
+However, the legend is centered on this coordinate. The justification of the legend is adjusted with `legend.justification=` in `theme()`. Again a vector of length two is required here with the first value serving like `hjust=` and the second value like `vjust=`. Here I would like the upper-left corner of the legend to be a little right (so a negative first value) and a little down (so a value greater than 1 for the second value) from the "coordinate" in `legend.position=`.
+
+```{r}
+#| label: legend-pos-2
+#| fig-width: 6.5
+#| fig-height: 5
+p2 +
+  theme(legend.position=c(0,1),
+        legend.justification=c(-0.25,1.1))
+```
+
+Another example where `legend.position=` puts the legend in the upper-right corner and `legend.justification=` positions the upper-right corner of the legend a little to the left and down from the `legend.position=` "coordinate."
+
+
+```{r}
+#| label: legend-pos-3
+#| fig-width: 6.5
+#| fig-height: 5
+p2 +
+  theme(legend.position=c(1,1),
+        legend.justification=c(1.25,1.1))
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+p + annotate(geom="text",x=1,y=1,label="vjust=-0.5",vjust=-0.5,size=sz) +
+  annotate(geom="text",x=1,y=1,label="vjust=-2",vjust=-2,size=sz) +
+  annotate(geom="text",x=1,y=1,label="vjust=1.5",vjust=1.5,size=sz) +
+  annotate(geom="text",x=1,y=1,label="vjust=3",vjust=3,size=sz) +
+  theme_classic() +
+  theme(axis.text=element_blank(),
+        axis.title=element_blank(),
+        axis.ticks=element_blank(),
+        aspect.ratio=1)
+dev.off()
+```

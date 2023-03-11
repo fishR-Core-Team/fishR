@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2023-03-10T03:04:44.758Z</lastmod>
+    <lastmod>2023-03-11T01:34:39.900Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -315,5 +315,9 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/resources/YEPsum.html</loc>
     <lastmod>2023-03-10T03:09:49.838Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-10-Text_Annotation_Position/index.html</loc>
+    <lastmod>2023-03-11T01:34:35.807Z</lastmod>
   </url>
 </urlset>
