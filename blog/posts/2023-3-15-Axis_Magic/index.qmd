@@ -236,7 +236,7 @@ Labels are placed only where you define them when using `seq()`, but labels may 
 
 &nbsp;
 
-# Specifying Tick Placement Relative to Axis
+# Tick Placement Relative to Axis
 People^[Most likely journals.] have different preferences for the size of tick marks and whether they should be outside the plot, inside the plot, or cross the axis.
 
 The lengths of tick marks are controlled with `axis.ticks.length=` in `theme()`. This argument takes a value returned from `unit()` which has a length value as its first argument and units of length in its `units=` argument. Positive numbers indicate tick marks that are outside the plot region. Here the tick marks are extended to a length of 10 pts^[Other units are `in`, `mm`, and `cm`.] outside the plot.
@@ -409,16 +409,16 @@ demo_continuous(c(0,100)) +
   theme(axis.text.x=element_text(angle=45,hjust=0.8,vjust=0.9))
 ```
 
-I find that I use label rotation more often with dates^[Displaying dates is discussed in nore detail [below]()] ...
+I find that I use label rotation more often with dates^[Displaying dates is discussed in more detail [below](daes-on-axes)] ...
 
 ```{r}
 #| label: demo-angle-labels-5
 demo_date(c("1-Jan-2022","31-Dec-2023")) +
-  scale_x_date(breaks="2 months",date_labels="%b-%y") +
+  scale_x_date(breaks=breaks_width("2 months"),labels=label_date("%b-%y")) +
   theme(axis.text.x=element_text(angle=45,hjust=1,vjust=1))
 ```
 
-... and categories.
+... and categories.^[See [here](#wrapping-large-labels) for another solution with large category names.]
 
 ```{r}
 #| label: demo-angle-labels-6
@@ -467,7 +467,7 @@ This method was demonstrated in [this post](../2023-3-8_MackCheatwood2022_CumSum
 
 &nbsp;
 
-# Control Axis Limits for Each Facet
+# Axis Limits for Each Facet
 It was shown [above](#specifying-only-the-minimum-limit) that the limits for axes in faceted plots can be the same for all facets if two values age given to `limits=` in `scale_(x|y)_continuous()`. Another example showed that the lower limit can be controlled across facets but the upper limit can differ by facet if the lower limit is set to a value and the upper limit is `NA` in `limits=`. However, in some situations you may want to control both the lower and upper limits and have either (or both) of those values differ across facets. This is possible with `facetted_post_scales()` from the `ggh4x` package.
 
 `facetted_post_scales()` has both an `x=` and `y=` argument for defining the scales of the x- and y-axis, respectively. Each of these can receive a list that must have as many items as there are facets/panels in the plot. Each item in this list contains directives for how to define the axis for each facet/panel in order. If a facet/panel should not be modified then `NULL` must appear in the spot in the list corresponding to that facet/panel.
@@ -511,7 +511,7 @@ demo_continuous(c(0,100,0,100),c(0,25,0,100),c("A","A","B","B")) +
 
 &nbsp;
 
-# Controlling Numeric Label Format
+# Numeric Label Format
 ## Digits
 There will be times when the axis displays more or fewer digits than you would prefer.
 
@@ -793,6 +793,19 @@ demo_date(c("1-May-2020","30-Apr-2021")) +
 ```
 
 Tick marks for a dates axis are modified in [this post](../2023-3-9-Clemens2022/), [this post](../2023-2-15_Vaisviletal2022_ROC/), and [this post](../2023-3-8_MackCheatwood2022_CumSums/).
+
+&nbsp;
+
+# Wrapping Large Labels
+[Above](#rotating-axis-labels) it was shown how to rotate large discrete labels to reduce crowding of the labels. Another solution to crowded labels that consist of multiple words is to wrap the labels. Discrete labels can be easily wrapped using `label_wrap()` from `scales` for `labels=` in `scale_x_discrete()`. This function takes a single argument that indicates the approximate character at which to wrap the labels.
+
+```{r}
+#| label: demo-wrap-labels
+#| fig-height: 2.5
+demo_discrete(c("Largemouth Bass","Smallmouth Bass","Suwanee Bass","Spotted Bass",
+                "Rock Bass","White Bass","Striped Bass")) +
+  scale_x_discrete(labels=label_wrap(8))
+```
 
 ```{r}
 #| label: make-preview
