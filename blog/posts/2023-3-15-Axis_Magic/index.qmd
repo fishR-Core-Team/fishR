@@ -789,6 +789,7 @@ demo_date(c("1-May-2020","30-Apr-2021")) +
         ggh4x.axis.ticks.length.minor=rel(0.5))
 ```
 
+Tick marks for a dates axis are modified in [this post](../2023-3-9-Clemens2022/) and [this post](../2023-2-15_Vaisviletal2022_ROC/).
 
 ```{r}
 #| label: make-preview

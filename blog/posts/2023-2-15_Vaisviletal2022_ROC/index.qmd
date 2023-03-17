@@ -23,6 +23,7 @@ The following packages are loaded for use below.
 ```{r}
 #| label: packages
 library(tidyverse)  # for dplyr, ggplot2 packages
+library(scales)     # for breaks_width(), label_date()
 library(patchwork)  # for placing subpanels into one plot
 ```
 
@@ -220,7 +221,7 @@ Both water fluctuation graphs in Figure 4 in @vaisviletal_2022 have the same y-a
 brks <- seq(-15,20,5)
 ```
 
-The code below creates the water fluctuations plot for 2017. There are four main parts to this code. First, `ggplot()` and `geom_line()` are used to plot the rate of change versus date as a line, which was made slightly larger with `linewidth=` to match Figure 4. Second, two `geom_vline()`s are used to mark the beginning and end hatch dates (as computed above) and `geom_hline()` is used to place a reference line at a rate of change of 0. Third, the axes are more specifically defined. The x-axis is defined with `scale_x_date()` using `breaks="month"` to show a break at each month and `date_labels="%b"` to use character abbreviations for those months. Fourth, the black-and-white theme is applied, the title for the x-axis is removed, and the gridlines on the plot are removed.
+The code below creates the water fluctuations plot for 2017. There are four main parts to this code. First, `ggplot()` and `geom_line()` are used to plot the rate of change versus date as a line, which was made slightly larger with `linewidth=` to match Figure 4. Second, two `geom_vline()`s are used to mark the beginning and end hatch dates (as computed above) and `geom_hline()` is used to place a reference line at a rate of change of 0. Third, the axes are more specifically defined. The x-axis is defined with `scale_x_date()` using `breaks=breaks_width("month")` to show a break at each month and `labels=label_date("%b")` to use character abbreviations for those months as described in [this post](../2023-3-15-Axis_Magic/#dates-on-axes). Fourth, the black-and-white theme is applied, the title for the x-axis is removed, and the gridlines on the plot are removed.
 
 ```{r}
 #| label: make-roc17
@@ -233,7 +234,8 @@ roc17 <- ggplot(data=dfroc17,mapping=aes(x=date,y=roc)) +
   geom_hline(yintercept=0,linetype="dotted",linewidth=1) +
   scale_y_continuous(name="Rate-of-change (cm/d)",expand=expansion(mult=0.01),
                      limits=lmts,breaks=brks) +
-  scale_x_date(date_breaks="month",date_labels="%b",expand=expansion(mult=0)) +
+  scale_x_date(expand=expansion(mult=0),
+               breaks=breaks_width("month"),labels=label_date("%b")) +
   theme_bw(base_size=14) +
   theme(axis.title.x=element_blank(),
         panel.grid=element_blank())
@@ -252,7 +254,8 @@ roc18 <- ggplot(data=dfroc18,mapping=aes(x=date,y=roc)) +
   geom_hline(yintercept=0,linetype="dotted",linewidth=1) +
   scale_y_continuous(name="Rate-of-change (cm/d)",expand=expansion(mult=0.01),
                      limits=lmts,breaks=brks) +
-  scale_x_date(date_breaks="month",date_labels="%b",expand=expansion(mult=0)) +
+  scale_x_date(expand=expansion(mult=0),
+               breaks=breaks_width("month"),labels=label_date("%b")) +
   theme_bw(base_size=14) +
   theme(axis.title.x=element_blank(),
         panel.grid=element_blank())
