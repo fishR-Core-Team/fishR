@@ -22,7 +22,6 @@ This is a collection of methods that I have used to handle various axis-related 
 
 &nbsp;
 
-## Packages and Illustrative Plots
 The following packages are used here. Also note that a function from `lemon()` is used below but `::` was used so the entire package is not attached here.
 
 ```{r}
@@ -121,7 +120,7 @@ demo_continuous(c(0,100)) +
   scale_x_continuous(limits=c(0,100))
 ```
 
-It is apparent though, that `ggplot2` automatically extends or expands the axes for continuous variables by 5%.^[Dates are also expanded by 5%, but categorical/discreate data is expanded by adding/subtracting 0.6 units.] The amount of expansion is adjusted with `expand=`, which requires using `expansion()`. A multiplied amount is applied to both axis sides if a single value is given to `mult=` in `expansion()`. For example, neither side of the x-axis is expanded below (i.e., multiplier of 0).
+It is apparent though, that `ggplot2` automatically extends or expands the axes for continuous variables by 5%.^[Dates are also expanded by 5%, but categorical/discrete data is expanded by adding/subtracting 0.6 units.] The amount of expansion is adjusted with `expand=`, which requires using `expansion()`. A multiplied amount is applied to both axis sides if a single value is given to `mult=` in `expansion()`. For example, neither side of the x-axis is expanded below (i.e., multiplier of 0).
 
 ```{r}
 #| label: demo-scale-expansion-1
@@ -342,7 +341,7 @@ demo_continuous(c(0,100)) +
         axis.text.x=element_text(color=c("red","blue","green")))
 ```
 
-Now suppose that labels are desired at intervals of 25, as above, with unlabeled ticks at interals of 5. The "trick"^[This "trick" came from this [StackOverflow answer](https://stackoverflow.com/a/60776279/112393).] here is to create a sequency for every tick (major or minor), but then set the label color to black for the first label and then `NA` for the next four labels. The `NA` "color" means to use no color. Thus, the "0" label will be black, but the "5", "10", "15", and "20" will have no color and, thus, will not be visible. Given the "recycling property discussed above this pattern will be repeated so that the "25" is black but then "30" to "45" will have no color, "50" will be black, etc.^[Make sure you note below that the breaks were set to a sequence with an interval of 5.]
+Now suppose that labels are desired at intervals of 25, as above, with unlabeled ticks at intervals of 5. The "trick"^[This "trick" came from this [StackOverflow answer](https://stackoverflow.com/a/60776279/112393).] here is to create a sequence for every tick (major or minor), but then set the label color to black for the first label and then `NA` for the next four labels. The `NA` "color" means to use no color. Thus, the "0" label will be black, but the "5", "10", "15", and "20" will have no color and, thus, will not be visible. Given the "recycling property discussed above this pattern will be repeated so that the "25" is black but then "30" to "45" will have no color, "50" will be black, etc.^[Make sure you note below that the breaks were set to a sequence with an interval of 5.]
 
 ```{r}
 #| label: demo-minor-ticks-B4
@@ -373,7 +372,7 @@ I don't know of a way to have differently sized major and minor tick marks using
 &nbsp;
 
 # Rotating Axis Labels
-Sometimes x-axis labels get crowded. One way to deal with this issue is to rotate the labels vertically from their horizontal position. The labels can be rotated by using `angle=` in `element_text()` for `axis.text.x=` in `theme=`. For example, the code below rotates the x-axis lables by 90<sup>o</sup>.
+Sometimes x-axis labels get crowded. One way to deal with this issue is to rotate the labels vertically from their horizontal position. The labels can be rotated by using `angle=` in `element_text()` for `axis.text.x=` in `theme=`. For example, the code below rotates the x-axis labels by 90<sup>o</sup>.
 
 ```{r}
 #| label: demo-angle-labels-1
@@ -409,7 +408,7 @@ demo_continuous(c(0,100)) +
   theme(axis.text.x=element_text(angle=45,hjust=0.8,vjust=0.9))
 ```
 
-I find that I use label rotation more often with dates^[Displaying dates is discussed in more detail [below](daes-on-axes)] ...
+I find that I use label rotation more often with dates^[Displaying dates is discussed in more detail [below](dates-on-axes)] ...
 
 ```{r}
 #| label: demo-angle-labels-5

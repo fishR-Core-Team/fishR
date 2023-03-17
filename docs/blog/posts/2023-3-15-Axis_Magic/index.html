@@ -316,8 +316,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#packages-and-illustrative-plots" id="toc-packages-and-illustrative-plots" class="nav-link active" data-scroll-target="#packages-and-illustrative-plots">Packages and Illustrative Plots</a></li>
-  <li><a href="#removing-axis-expansion" id="toc-removing-axis-expansion" class="nav-link" data-scroll-target="#removing-axis-expansion">Removing Axis Expansion</a></li>
+  <li><a href="#removing-axis-expansion" id="toc-removing-axis-expansion" class="nav-link active" data-scroll-target="#removing-axis-expansion">Removing Axis Expansion</a></li>
   <li><a href="#specifying-only-the-minimum-limit" id="toc-specifying-only-the-minimum-limit" class="nav-link" data-scroll-target="#specifying-only-the-minimum-limit">Specifying Only the Minimum Limit</a></li>
   <li><a href="#specifying-breaks" id="toc-specifying-breaks" class="nav-link" data-scroll-target="#specifying-breaks">Specifying Breaks</a></li>
   <li><a href="#tick-placement-relative-to-axis" id="toc-tick-placement-relative-to-axis" class="nav-link" data-scroll-target="#tick-placement-relative-to-axis">Tick Placement Relative to Axis</a></li>
@@ -365,8 +364,6 @@ Description
 </div>
 </div>
 <p>&nbsp;</p>
-<section id="packages-and-illustrative-plots" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="packages-and-illustrative-plots">Packages and Illustrative Plots</h2>
 <p>The following packages are used here. Also note that a function from <code>lemon()</code> is used below but <code>::</code> was used so the entire package is not attached here.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for ggplot2 and dplyr</span></span>
@@ -429,7 +426,6 @@ Important
 </div>
 </div>
 <p>&nbsp;</p>
-</section>
 <section id="removing-axis-expansion" class="level1 page-columns page-full">
 <h1>Removing Axis Expansion</h1>
 <div class="page-columns page-full"><p>The limits or range of the axis can be controlled with <code>limits=</code> in <code>scale_x_continuous()</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For example, the range of the x-axis is set from 0 to 100 below.</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;If the axes had categorical data then <code>scale_x_discrete()</code> would be used instead.</p></li></div></div>
@@ -444,7 +440,7 @@ Important
 </div>
 </div>
 </div>
-<div class="page-columns page-full"><p>It is apparent though, that <code>ggplot2</code> automatically extends or expands the axes for continuous variables by 5%.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The amount of expansion is adjusted with <code>expand=</code>, which requires using <code>expansion()</code>. A multiplied amount is applied to both axis sides if a single value is given to <code>mult=</code> in <code>expansion()</code>. For example, neither side of the x-axis is expanded below (i.e., multiplier of 0).</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;Dates are also expanded by 5%, but categorical/discreate data is expanded by adding/subtracting 0.6 units.</p></li></div></div>
+<div class="page-columns page-full"><p>It is apparent though, that <code>ggplot2</code> automatically extends or expands the axes for continuous variables by 5%.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The amount of expansion is adjusted with <code>expand=</code>, which requires using <code>expansion()</code>. A multiplied amount is applied to both axis sides if a single value is given to <code>mult=</code> in <code>expansion()</code>. For example, neither side of the x-axis is expanded below (i.e., multiplier of 0).</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;Dates are also expanded by 5%, but categorical/discrete data is expanded by adding/subtracting 0.6 units.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_continuous</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -751,7 +747,7 @@ Note
 </div>
 </div>
 </div>
-<div class="page-columns page-full"><p>Now suppose that labels are desired at intervals of 25, as above, with unlabeled ticks at interals of 5. The “trick”<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> here is to create a sequency for every tick (major or minor), but then set the label color to black for the first label and then <code>NA</code> for the next four labels. The <code>NA</code> “color” means to use no color. Thus, the “0” label will be black, but the “5”, “10”, “15”, and “20” will have no color and, thus, will not be visible. Given the “recycling property discussed above this pattern will be repeated so that the”25” is black but then “30” to “45” will have no color, “50” will be black, etc.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;This “trick” came from this <a href="https://stackoverflow.com/a/60776279/112393">StackOverflow answer</a>.</p></li><li id="fn13"><p><sup>13</sup>&nbsp;Make sure you note below that the breaks were set to a sequence with an interval of 5.</p></li></div></div>
+<div class="page-columns page-full"><p>Now suppose that labels are desired at intervals of 25, as above, with unlabeled ticks at intervals of 5. The “trick”<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> here is to create a sequence for every tick (major or minor), but then set the label color to black for the first label and then <code>NA</code> for the next four labels. The <code>NA</code> “color” means to use no color. Thus, the “0” label will be black, but the “5”, “10”, “15”, and “20” will have no color and, thus, will not be visible. Given the “recycling property discussed above this pattern will be repeated so that the”25” is black but then “30” to “45” will have no color, “50” will be black, etc.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;This “trick” came from this <a href="https://stackoverflow.com/a/60776279/112393">StackOverflow answer</a>.</p></li><li id="fn13"><p><sup>13</sup>&nbsp;Make sure you note below that the breaks were set to a sequence with an interval of 5.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_continuous</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="at">by=</span><span class="dv">5</span>)) <span class="sc">+</span></span>
@@ -810,7 +806,7 @@ Note
 </section>
 <section id="rotating-axis-labels" class="level1 page-columns page-full">
 <h1>Rotating Axis Labels</h1>
-<p>Sometimes x-axis labels get crowded. One way to deal with this issue is to rotate the labels vertically from their horizontal position. The labels can be rotated by using <code>angle=</code> in <code>element_text()</code> for <code>axis.text.x=</code> in <code>theme=</code>. For example, the code below rotates the x-axis lables by 90<sup>o</sup>.</p>
+<p>Sometimes x-axis labels get crowded. One way to deal with this issue is to rotate the labels vertically from their horizontal position. The labels can be rotated by using <code>angle=</code> in <code>element_text()</code> for <code>axis.text.x=</code> in <code>theme=</code>. For example, the code below rotates the x-axis labels by 90<sup>o</sup>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_continuous</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="at">by=</span><span class="dv">5</span>)) <span class="sc">+</span></span>
@@ -862,7 +858,7 @@ Note
 </div>
 </div>
 </div>
-<div class="page-columns page-full"><p>I find that I use label rotation more often with dates<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> …</p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;Displaying dates is discussed in more detail <a href="daes-on-axes">below</a></p></li></div></div>
+<div class="page-columns page-full"><p>I find that I use label rotation more often with dates<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> …</p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;Displaying dates is discussed in more detail <a href="dates-on-axes">below</a></p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">demo_date</span>(<span class="fu">c</span>(<span class="st">"1-Jan-2022"</span>,<span class="st">"31-Dec-2023"</span>)) <span class="sc">+</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks=</span><span class="fu">breaks_width</span>(<span class="st">"2 months"</span>),<span class="at">labels=</span><span class="fu">label_date</span>(<span class="st">"%b-%y"</span>)) <span class="sc">+</span></span>
