@@ -97,6 +97,8 @@ Some examples will have an x- and a y-axis and will include faceting.
 
 ```{r}
 #| label: demo-faceting
+#| fig-height: 4
+#| fig.width: 7
 demo_date(c("1-Jan-2000","31-Dec-2020","1-Jan-2000","31-Dec-2020"),
           c(0,50,0,100),c("A","A","B","B"))
 ```
@@ -420,6 +422,7 @@ demo_date(c("1-Jan-2022","31-Dec-2023")) +
 
 ```{r}
 #| label: demo-angle-labels-6
+#| fig-height: 4
 demo_discrete(c("Largemouth Bass","Smallmouth Bass","Suwanee Bass","Spotted Bass",
                 "Rock Bass","White Bass","Striped Bass")) +
   theme(axis.text.x=element_text(angle=60,hjust=1,vjust=1))
