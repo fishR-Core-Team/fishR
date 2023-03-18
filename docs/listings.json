@@ -2,6 +2,7 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/2019-12-31_vonB_plots_1/index.html",
       "/blog/posts/2023-3-18-Rooketal2021_CiscoHarvest/index.html",
       "/blog/posts/2023-3-15-Axis_Magic/index.html",
       "/blog/posts/2023-3-8_MackCheatwood2022_CumSums/index.html",
@@ -13,7 +14,6 @@
       "/blog/posts/2023_2_14_Quistetal2022_BCData/index.html",
       "/blog/posts/2023_2_13_Quistetal2022_AgeData/index.html",
       "/blog/posts/2022-12-22_AFS_Style_Figures/index.html",
-      "/blog/posts/2019-12-31_vonB_plots_1/index.html",
       "/blog/posts/2017-7-28_LF_Ridgeline_Plot/index.html",
       "/blog/posts/2016-11-11_Pauly-VBModel/index.html",
       "/blog/posts/2020-1-2_vonB_plots_2/index.html",

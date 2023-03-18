@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -323,7 +323,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Feb 13, 2023</p>
+        <p class="date-modified">Mar 17, 2023</p>
       </div>
     </div>
       
@@ -403,14 +403,17 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>( vb <span class="ot">&lt;-</span> <span class="fu">vbFuns</span>(<span class="at">param=</span><span class="st">"Typical"</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  function(t,Linf,K=NULL,t0=NULL) {
-#R|    if (length(Linf)==3) { K &lt;- Linf[[2]]
-#R|                           t0 &lt;- Linf[[3]]
-#R|                           Linf &lt;- Linf[[1]] }
-#R|    Linf*(1-exp(-K*(t-t0)))
-#R|    }
-#R|  &lt;bytecode: 0x00000277532efcc0&gt;
-#R|  &lt;environment: 0x000002775340d788&gt;</code></pre>
+<pre class="output"><code>#R|  function (t, Linf, K = NULL, t0 = NULL) 
+#R|  {
+#R|      if (length(Linf) == 3) {
+#R|          K &lt;- Linf[[2]]
+#R|          t0 &lt;- Linf[[3]]
+#R|          Linf &lt;- Linf[[1]]
+#R|      }
+#R|      Linf * (1 - exp(-K * (t - t0)))
+#R|  }
+#R|  &lt;bytecode: 0x0000025cb0885230&gt;
+#R|  &lt;environment: 0x0000025cb08cf440&gt;</code></pre>
 </div>
 </div>
 <div class="page-columns page-full"><p>Some of the methods below use the fact that the three parameters of the typical VBGF (<span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(t_{0}\)</span>) can be given to this function separately (in that order) or as a vector (still in that order). For example, both lines below can be used to predict the mean length for an age-3 fish with the given VBGF parameters.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The parameters could be given in a different order but would need to be named; e.g., <code>vb(3,t0=-0.5,K=0.3,Linf=300)</code>.</p></li></div></div>
@@ -650,7 +653,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The large parentheses created by <code>bgroup</code> in the equation do not render properly under Windows using R v4.2.2. I posted about this <a href="https://stackoverflow.com/questions/74738827/bgroup-does-not-render-properly-on-ggplot">on StackOverlow</a> and was told that it was a Windows-only bug in v4.2.2 that <a href="https://bugs.r-project.org/show_bug.cgi?id=18440">will be fixed in the next R version</a>.</p>
+<p>The large parentheses created by <code>bgroup</code> in the equation will not render properly under Windows using R v4.2.2. I posted about this <a href="https://stackoverflow.com/questions/74738827/bgroup-does-not-render-properly-on-ggplot">on StackOverlow</a> and was told that it was a Windows-only bug in v4.2.2. It has been fixed in v4.2.3 under which this post was rendered.</p>
 </div>
 </div>
 <div class="cell" data-layout-align="center">

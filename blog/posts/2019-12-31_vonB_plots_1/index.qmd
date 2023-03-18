@@ -232,7 +232,7 @@ ggplot() +
 ```
 
 :::{.callout-warning}
-The large parentheses created by `bgroup` in the equation do not render properly under Windows using R v4.2.2. I posted about this [on StackOverlow](https://stackoverflow.com/questions/74738827/bgroup-does-not-render-properly-on-ggplot) and was told that it was a Windows-only bug in v4.2.2 that [will be fixed in the next R version](https://bugs.r-project.org/show_bug.cgi?id=18440).
+The large parentheses created by `bgroup` in the equation will not render properly under Windows using R v4.2.2. I posted about this [on StackOverlow](https://stackoverflow.com/questions/74738827/bgroup-does-not-render-properly-on-ggplot) and was told that it was a Windows-only bug in v4.2.2. It has been fixed in v4.2.3 under which this post was rendered.
 :::
 
 ```{r}
