@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2023-03-17T14:52:32.952Z</lastmod>
+    <lastmod>2023-03-18T01:30:13.742Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -323,5 +323,13 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/resources/YEPsum.html</loc>
     <lastmod>2023-03-17T01:32:50.424Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-18-Rooketal2022_CiscoHarvest/index.html</loc>
+    <lastmod>2023-03-17T17:49:27.333Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-18-Rooketal2021_CiscoHarvest/index.html</loc>
+    <lastmod>2023-03-18T01:30:23.803Z</lastmod>
   </url>
 </urlset>
