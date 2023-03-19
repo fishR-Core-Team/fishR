@@ -6,9 +6,9 @@ date: 3/8/2023
 image: preview.png
 categories:
   - ggplot2
-  - Dates
-  - Facets
-  - Cumulative distribution
+  - dates
+  - facets
+  - cumulative distribution
 ---
 
 # Introduction

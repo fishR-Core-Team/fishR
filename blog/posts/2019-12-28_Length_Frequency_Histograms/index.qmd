@@ -7,7 +7,7 @@ image: "preview.png"
 categories:
   - Length Frequency
   - Size
-  - Histogram
+  - histogram
   - ggplot2
 ---
 

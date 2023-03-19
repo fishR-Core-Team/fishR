@@ -6,9 +6,9 @@ date: 2/15/2023
 image: preview.png
 categories:
   - ggplot2
-  - Dates
-  - PNG
-  - Reference line
+  - dates
+  - png
+  - reference lines
 ---
 
 # Introduction
