@@ -1,6 +1,6 @@
 ---
-title: Rook et al. (2021) Cisco Harvest Figure
-description: Using ggplot2 to recreate the figure of Great Lakes Coregonid harvest in Rook et al. (2021).
+title: Rook et al. (2022) Cisco Harvest Figure
+description: Using ggplot2 to recreate the figure of Great Lakes Coregonid harvest in Rook et al. (2022).
 author: Derek H. Ogle
 date: 3/17/2023
 image: preview.png
@@ -11,7 +11,7 @@ categories:
 ---
 
 # Introduction
-@rooketal_2021 analyzed historical data to answer the question of how many ciscoes are needed for stocking in the Laurentian Great Lakes. Their [Figure 2](https://meridian.allenpress.com/view-large/figure/14537613/i1944-687X-13-1-28-f02.tif) shows the commercial harvest of Cisco (*Coregonus artedii*) and deepwater ciscoes (*Coregonus* spp.) in the five main Great Lakes and St. Clair. The main point of their figure was to demonstrate the great reduction in harvest of these species by the 1970s.
+@rooketal_2022 analyzed historical data to answer the question of how many ciscoes are needed for stocking in the Laurentian Great Lakes. Their [Figure 2](https://meridian.allenpress.com/view-large/figure/14537613/i1944-687X-13-1-28-f02.tif) shows the commercial harvest of Cisco (*Coregonus artedii*) and deepwater ciscoes (*Coregonus* spp.) in the five main Great Lakes and St. Clair. The main point of their figure was to demonstrate the great reduction in harvest of these species by the 1970s.
 
 The following packages are loaded for use below.
 
@@ -25,7 +25,7 @@ library(ggh4x)      # for minor tick functionality and facetted_pos_scales()
 &nbsp;
 
 # Get Data
-@rooketal_2021 did not provide data for Figure 2, but they did provide a reference that linked to [a database maintained by the Great Lakes Fishery Commission](http://www.glfc.org/great-lakes-databases.php) that contained an Excel spreadsheet with harvest data for each lake (in separate sheets) for **ALL** species. Below each sheet is read into into its own data frame and reduced to just the variables needed for this post,^[Note that the total harvest variable was inconsistently named across sheets.]
+@rooketal_2022 did not provide data for Figure 2, but they did provide a reference that linked to [a database maintained by the Great Lakes Fishery Commission](http://www.glfc.org/great-lakes-databases.php) that contained an Excel spreadsheet with harvest data for each lake (in separate sheets) for **ALL** species. Below each sheet is read into into its own data frame and reduced to just the variables needed for this post,^[Note that the total harvest variable was inconsistently named across sheets.]
 
 ```{r}
 #| label: data-prep-1
@@ -60,7 +60,7 @@ I examined the names in `Species` so that I could restrict the data frame to Cis
 unique(dat$Species)
 ```
 
-This was a little messier than I had hoped. First, "Cisco" are sometimes called "Herring", so both of these "species" must be retained. Deepwater ciscoes are often called "chubs", so this "species" must be retained. However, there were also "species" called various versions of "Cisco and Chubs", all of which need to be retained. A new data frame is created below with just these "species" and, to match @rooketal_2021, only years of 1880 to 2015 (inclusive) were retained.
+This was a little messier than I had hoped. First, "Cisco" are sometimes called "Herring", so both of these "species" must be retained. Deepwater ciscoes are often called "chubs", so this "species" must be retained. However, there were also "species" called various versions of "Cisco and Chubs", all of which need to be retained. A new data frame is created below with just these "species" and, to match @rooketal_2022, only years of 1880 to 2015 (inclusive) were retained.
 
 ```{r}
 #| label: data-prep-3
@@ -102,7 +102,7 @@ cdat2 <- cdat |>
 FSA::peek(cdat2,n=10)
 ```
 
-It was not obvious to me from the Great Lakes Fisheries Commission website what the units are for these harvest data. In comparison to @rooketal_2021 they appear to be hundreds of thousands of pounds. @rooketal_2021 plotted millions of kgs so I first convert `Coregonids` to kg and then divide by 1000 to get to millions of kgs.
+It was not obvious to me from the Great Lakes Fisheries Commission website what the units are for these harvest data. In comparison to @rooketal_2022 they appear to be hundreds of thousands of pounds. @rooketal_2022 plotted millions of kgs so I first convert `Coregonids` to kg and then divide by 1000 to get to millions of kgs.
 
 ```{r}
 #| label: data-prep-5
@@ -111,7 +111,7 @@ cdat2 <- cdat2 |>
          Coregonids=Coregonids/1000)
 ```
 
-An issue that happens regularly with these type of data with this type of plot occurs when the data does not have continuous years. For example, suppose that harvest was recorded for 1900 and 1902 but not 1901. If 1901 is completely excluded from the data, rather than being entered as an `NA`, then the line in the plot will connect directly from 1900 to 1902 suggesting, if the reader is not paying close attention, that a value exists in 1901. You can see many unconnected dots in Figure 2 of @rooketal_2021 that illustrate how these missing data should be handled.
+An issue that happens regularly with these type of data with this type of plot occurs when the data does not have continuous years. For example, suppose that harvest was recorded for 1900 and 1902 but not 1901. If 1901 is completely excluded from the data, rather than being entered as an `NA`, then the line in the plot will connect directly from 1900 to 1902 suggesting, if the reader is not paying close attention, that a value exists in 1901. You can see many unconnected dots in Figure 2 of @rooketal_2022 that illustrate how these missing data should be handled.
 
 With these data, it appears that the years are contiguous within each lake except for Lake Erie, but only complete (for 1880-2015) for lakes Huron, Ontario, and Superior.
 
@@ -167,7 +167,7 @@ cdat3 |>
             compltYr=ifelse(numYrs==(2015-1880+1),"Yes","No"))
 ```
 
-Finally, `Lake` is made a factor with the levels specified so that the lakes will be ordered as in Figure 2 of @rooketal_2021
+Finally, `Lake` is made a factor with the levels specified so that the lakes will be ordered as in Figure 2 of @rooketal_2022
 
 ```{r}
 #| label: data-prep-8
@@ -176,7 +176,7 @@ cdat3 <- cdat3 |>
                                    "Erie","Ontario","Saint Clair")))
 ```
 
-As will be shown further below, these data do not appear to be exactly the data used in @rooketal_2021. One of several issues that is evident is that their Figure 2 shows many years of missing data (i.e., points not connected with lines) early in the time series for most lakes, whereas there were few missing years in my data frame. I suspected that @rooketal_2021 may have coded a harvest of 0 as `NA` so, to explore this, I created a new variable called `is0` that I will plot differently further below. I did this only to troubleshoot this data issue, not as part of recreating their Figure 2.
+As will be shown further below, these data do not appear to be exactly the data used in @rooketal_2022. One of several issues that is evident is that their Figure 2 shows many years of missing data (i.e., points not connected with lines) early in the time series for most lakes, whereas there were few missing years in my data frame. I suspected that @rooketal_2022 may have coded a harvest of 0 as `NA` so, to explore this, I created a new variable called `is0` that I will plot differently further below. I did this only to troubleshoot this data issue, not as part of recreating their Figure 2.
 
 ```{r}
 #| label: data-prep-9
@@ -200,9 +200,9 @@ theme_set(
           ggh4x.axis.ticks.length.minor=rel(0.5)))
 ```
 
-I could not find a *simple* way to have minor ticks, ticks that crossed the axes, and differing y-axis limits for each facet as used in Figure 2 of @rooketal_2021. Thus, I opted to **not** have ticks that crossed the axes.
+I could not find a *simple* way to have minor ticks, ticks that crossed the axes, and differing y-axis limits for each facet as used in Figure 2 of @rooketal_2022. Thus, I opted to **not** have ticks that crossed the axes.
 
-A basic plot is constructed below from `cdat3` with `Year` mapped to the x-axis and `Coregonids` mapped to the y-axis with `geom_line()` and `geom_point()` to plot the line with points. `facet_wrap()` was used to separate the plots by lake. In `facet_wrap()` both scales were "freed" because the y-axes need to change by lake and, though the x-axes don't differ by lake, freeing the x-axes will force an x-axis to be shown for each lake as in @rooketal_2021. `is0` is mapped to a color in `geom_point()`, and the colors are defined in `scale_color_manual()`, to show years that had 0 harvest as red.&[Again, this is not in @rooketal_2021, but I was trying to better understand why my data appeared different than theirs.]
+A basic plot is constructed below from `cdat3` with `Year` mapped to the x-axis and `Coregonids` mapped to the y-axis with `geom_line()` and `geom_point()` to plot the line with points. `facet_wrap()` was used to separate the plots by lake. In `facet_wrap()` both scales were "freed" because the y-axes need to change by lake and, though the x-axes don't differ by lake, freeing the x-axes will force an x-axis to be shown for each lake as in @rooketal_2022. `is0` is mapped to a color in `geom_point()`, and the colors are defined in `scale_color_manual()`, to show years that had 0 harvest as red.&[Again, this is not in @rooketal_2022, but I was trying to better understand why my data appeared different than theirs.]
 
 ```{r}
 #| label: figure-2-1
@@ -215,7 +215,7 @@ ggplot(data=cdat3,mapping=aes(x=Year,y=Coregonids)) +
   facet_wrap(vars(Lake),scales="free",ncol=2)
 ```
 
-Some challenges remain to try to match Figure 2 in @rooketal_2021. First, the x-axes need to be bound from 1880 to 2020, the tick mark labels need to be shown at intervals of 20 years, and minor ticks need to be shown at 5 year intervals. The axes bounds are set with `limits=`, major (i.e., labeled) breaks are set with `breaks=` using `breaks_width()`,^[`breaks_width()` requires the `scales` package attached above.] and minor breaks are set with `minor_breaks=` also using `breaks_width()`.^[As described in [this post](../2023-3-15-Axis_Magic/#placing-minor-ticks).] Note the use of `guide=` so that the minor breaks will be shown.
+Some challenges remain to try to match Figure 2 in @rooketal_2022. First, the x-axes need to be bound from 1880 to 2020, the tick mark labels need to be shown at intervals of 20 years, and minor ticks need to be shown at 5 year intervals. The axes bounds are set with `limits=`, major (i.e., labeled) breaks are set with `breaks=` using `breaks_width()`,^[`breaks_width()` requires the `scales` package attached above.] and minor breaks are set with `minor_breaks=` also using `breaks_width()`.^[As described in [this post](../2023-3-15-Axis_Magic/#placing-minor-ticks).] Note the use of `guide=` so that the minor breaks will be shown.
 
 ```{r}
 #| label: figure-2-2
@@ -275,7 +275,7 @@ ggplot(data=cdat3,mapping=aes(x=Year,y=Coregonids)) +
   facetted_pos_scales(y=syc)
 ```
 
-Finally, @rooketal_2021 placed the lake labels in the upper-right corner of each facet rather than centered above each facet. To accomplish this use `geom_text()` with `Lake` mapped to a label. This will, by default, print the lake name for each facet over-and-over for as many rows as there are for the lake in the data frame. To eliminate these overlapping labels, include `check_overlap=TRUE`. The label position was set to the maximum x and maximum y value for each facet by using both `x=Inf` and `y=Inf`. The label was then moved left (with `vjust=`) and down (with `hjust=`) as described in [this post](../2023-3-10-Text_Annotation_Position/). The font size was reduced from the default slightly. Finally, the default facet labels must be removed by setting `strip.text=` to `element_blank()` in `theme()`.
+Finally, @rooketal_2022 placed the lake labels in the upper-right corner of each facet rather than centered above each facet. To accomplish this use `geom_text()` with `Lake` mapped to a label. This will, by default, print the lake name for each facet over-and-over for as many rows as there are for the lake in the data frame. To eliminate these overlapping labels, include `check_overlap=TRUE`. The label position was set to the maximum x and maximum y value for each facet by using both `x=Inf` and `y=Inf`. The label was then moved left (with `vjust=`) and down (with `hjust=`) as described in [this post](../2023-3-10-Text_Annotation_Position/). The font size was reduced from the default slightly. Finally, the default facet labels must be removed by setting `strip.text=` to `element_blank()` in `theme()`.
 
 ```{r}
 #| label: figure-2
@@ -295,7 +295,7 @@ ggplot(data=cdat3,mapping=aes(x=Year,y=Coregonids)) +
   theme(strip.text=element_blank())
 ```
 
-This largely recreates Figure 2 in @rooketal_2021 with the exceptions of (a) tick marks that do not cross the axes and (b) discrepancies in the data used.
+This largely recreates Figure 2 in @rooketal_2022 with the exceptions of (a) tick marks that do not cross the axes and (b) discrepancies in the data used.
 
 &nbsp;
 

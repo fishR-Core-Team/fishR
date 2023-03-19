@@ -1,0 +1,283 @@
+---
+title: Rook et al. (2022) Estimated Cisco Stocking Densities
+description: Using ggplot2 to recreate the figure of estimated Cisco stocking densities in Rook et al. (2022).
+author: Derek H. Ogle
+date: 3/20/2023
+image: preview.png
+categories:
+  - ggplot2
+  - Bar Chart
+  - Confidence Intervals
+  - Facets
+  - Data Wrangling
+---
+
+# Introduction
+@rooketal_2022 analyzed historical data to answer the question of how many ciscoes are needed for stocking in the Laurentian Great Lakes. Their [Figure 4](https://meridian.allenpress.com/view-large/figure/14537627/i1944-687X-13-1-28-f04.tif) shows lake-specific estimates of fry, fall fingerling, and age-1 stocking densities used to determine the number of Cisco (*Coregonus artedi*) needed for stocking to mimic historical and contemporary age-1 and adult recruitment rates in Wisconsin waters of Lake Superior. I attempt to recreate their figure here.
+
+The following packages are loaded for use below. Also one function from each of `scales` and `ggtext` is used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+library(ggh4x)      # for minor axis functionality
+```
+
+:::{.callout-note}
+The figure recreated here is often called a "dynamite plot." I understand that there is controversy around these types of plots (see [here](http://emdbolker.wikidot.com/blog:dynamite)]. However, they appear often in the fisheries literature, for better or worse. With this in mind, I thought it worthwhile to some to show how one might be constructed with `ggplot2`.
+:::
+
+&nbsp;
+
+# Get Data
+@rooketal_2022 provided summarized data presented in Figure 4 in their Data Supplement S1. Unfortunately the data were provided as a table in a MSWord document. I tried to extract the data from the Word document using the `officer` package but was unsuccessful. Fortunately, the tables looked like they were originally created in MSExcel, so I copied the "Smax" (i.e., "adult equivalents") and "Rmax" (age-1 equivalents) portions of the table and pasted them into separate sheets of a single Excel file.
+
+Each sheet is read into a temporary data frame below. Note that the authors used "N/A" to represent missing values so this was accounted for with `na=`. Further note that a new variable called `Type` was added to each data frame to identify whether the data represented the "Smax" or "Rmax" results.
+
+```{r}
+#| label: data-prep-1
+tmp1 <- readxl::read_excel("Rooketal2021_S1.xlsx",sheet="Smax",na=c("","N/A"))
+tmp2 <- readxl::read_excel("Rooketal2021_S1.xlsx",sheet="Rmax",na=c("","N/A"))
+```
+
+The two data frames were then row-bound (i.e., stacked) together by putting the data frames into a name list that is given to `bind_rows()`. The `.id=` argument will create a new variable called `Type` with the names from the list. Additionally, the `Lake` variable was renamed to `Summary` (it contains the summary metrics) and the original "long" names were abbreviated to match those used in the legend of Figure 4 in @rooketal_2022.^[`as.data.frame()` is used to make this a regular data frame rather than a "tibble."]
+
+```{r}
+#| label: data-prep-2
+tmp <- bind_rows(list(Smax=tmp1,Rmax=tmp2),.id="Type") |>
+  rename(Summary=Lake,
+         `Hist. Fry`=`Historical Fry`,`Hist. Fingerling`=`Historical Fingerling`,
+         `Hist. Age-1`=`Historical Age-1`,`Cont. Fry`=`Contemporary Fry`,
+         `Cont. Fingerling`=`Contemporary Fingerling`,`Cont. Age-1`=`Contemporary Age-1`) |>
+  as.data.frame()
+head(tmp)
+```
+
+These data are in an awkward format with the now-named `Summary` variable containing the lake name followed by `U95` and `L95` for the upper and lower 95% confidence interval endpoints. I would prefer to have a variable called `Lake` that would, for example, say `Erie` for the first three rows above and `Saint Clair` for the next three rows (and so on for the other lakes). Then, the lake names under `Summary` would be replaced with `Median` as the values to the right of the lake names are median stocking densities.
+
+I begin by creating the `Lake` variable by `rep()`eating the names in the first, fourth, seventh, etc. positions in `Summary` three times. The first, fourth, seventh, etc. positions are identified as a sequence from 1 to 34 in intervals of 3.^[`Lake` was moved to the first variable with `relocate()` to better see the effect of this code.]
+
+```{r}
+#| label: data-prep-3
+tmp <- tmp |>
+  mutate(Lake=rep(Summary[seq(1,34,by=3)],each=3)) |>
+  relocate(Lake)
+head(tmp)
+```
+
+Now, the lake names in those same positions in `Summary` are replaced with "MEDIAN".
+
+```{r}
+#| label: data-prep-4
+tmp$Summary[seq(1,34,by=3)] <- "MEDIAN"
+head(tmp)
+```
+
+These data are still in a format that is not conducive to plotting. What is ultimately needed is for the "MEDIAN", "U95", and "L95" to be variables with their respective values, and a variable should indicate the timing ("historical" or "contemporary") and stage ("fry", "fingerling", or "age-1") for those values.
+
+I begin this process by creating a "longer" data frame that will stack the current "historical" and "contemporary" columns on top of each other. To do this use `pivot_longer()` where the columns to pivot in `cols=` are from `Hist. Fry` to `Cont. Age-1`^[The `:` identifies all contiguous columns between the two columns identified.], the values under those columns will now be in `Number`, and the names of those columns will be moved to `Stage`.
+
+```{r}
+#| label: data-prep-5
+tmp <- tmp |>
+  pivot_longer(cols=`Hist. Fry`:`Cont. Age-1`,values_to="Number",names_to="Stage")
+head(tmp,n=12)
+```
+
+The `Summary` column then needs to be "expanded" to form three new columns with the median and confidence interval endpoints. This is accomplished with `pivot_wider()` with the names of the new columns coming from `Summary` and the values in the new columns coming from `Number`.
+
+```{r}
+#| label: data-prep-6
+tmp <- tmp |>
+  pivot_wider(names_from=Summary,values_from=Number)
+head(tmp,n=12)
+```
+
+The `Type`, `Lake`, and `Stage` variables were then converted to factors with the levels controlled to match that of @rooketal_2022. I also ordered the data by `Stage` within `Lake` within `Type` for personal preference.
+
+```{r}
+#| label: data-prep-7
+dat <- tmp |>
+  mutate(Type=factor(Type,levels=c("Smax","Rmax")),
+         Lake=factor(Lake,levels=c("Erie","Saint Clair","Ontario","Michigan","Huron","Superior")),
+         Stage=factor(Stage,levels=c("Hist. Fry","Hist. Fingerling","Hist. Age-1",
+                                     "Cont. Fry","Cont. Fingerling","Cont. Age-1"))) |>
+  arrange(Type,Lake,Stage)
+```
+
+This data frame, now called `dat`, is now ready for plotting.
+
+:::{.callout-note}
+I suspect there is an easier way to wrangle these data into this format, but I don't know what it is. It likely would have been easier to create this format from the raw data, rather than the tabularized results provided.
+:::
+
+&nbsp;
+
+# Recreating Figure 2
+## Preliminaries
+@rooketal_2022 used various shades of gray to identify the time-stage (i.e., `Stage`) data in their Figure 4. The object below is a named vector with approximations to their color choices.
+
+```{r}
+#| label: prep-colors
+sclrs <- c("Hist. Fry"="gray20","Hist. Fingerling"="gray50","Hist. Age-1"="gray80",
+           "Cont. Fry"="gray35","Cont. Fingerling"="gray65","Cont. Age-1"="gray95")
+```
+
+Figure 4 is a side-by-side bar chart with confidence intervals on each bar. Sided-by-side bars require "dodging" in `ggplot2` (see below). The confidence intervals also need to be "dodged" to match the bars, but they will only match if the "dodging" is pre-defined. Dodging is defined with `position_dodge()` using `width=` to determine how much the side-by-side objects will overlap. A `width=` of 0 will result in complete overlap, whereas a `width=` of 1 results in no overlap with a slight separation between bars. A value of 0.9 resulted in no overlap but touching bars as used in @rooketal_2022.
+
+```{r}
+#| label: define-dodging
+pd <- position_dodge(width=0.9)
+```
+
+Finally, @rooketal_2022 labeled each panel of their Figure 4 within the plot region, rather than as a "title" above the plot region. Thus, as in [this previous post about @rooketal_2022](../2023-3-18-Rooketal2021_CiscoHarvest/), the default facet labels cannot be used. An added challenge here though is that the labels they used contain plain text, italicized text, and a subscript. Thus, the "trick" used in that post cannot be easily used here.
+
+Here I create a very simple data frame with two variables. The first variable is `Type` which contains the two types of data found in `dat`. It is important that this variable is exactly as it is in `dat` (i.e., factored, levels the same) as this is the variable that is going to define the facets, or sub-panels, of Figure 4. The second variable, `Label`, contains the "long" labels for each panel. Here I use markdown code to create the italics (i.e., `*`) and the subscript (i.e., `~`).^[These will be used in `geom_richtext()` from `ggtext` below, rather than `plotmath` which I find exceedingly difficult to get correct.]
+
+```{r}
+datlbls <- data.frame(Type=factor(c("Smax","Rmax"),levels=c("Smax","Rmax")),
+                      Label=c("Adult (*S~max~*) Equivalents",
+                              "Age-1 (*R~max~*) Equivalents"))
+```
+
+## Putting It Together
+The basic bar plot is constructed from the summarized data in `dat` using `geom_col()` with `Lake` mapped to the x-axis, `MEDIAN` mapped to the y-axis, and `Stage` mapped to the `fill=` color. The bars will not be sided-by-side by default; they need to be "dodged" by setting `postion=` to the dodge position value set above. `color=` is set to black to outline each bar as in @rooketal_2022. `facet_wrap()` is used to separate the plots by `Type`, with only one column used. The x-axis was "freed" so that the axis and labels would be shown in both facets as in @rooketal_2022.
+
+```{r}
+#| label: figure-4-1
+#| fig-width: 7
+#| fig-height: 7
+ggplot() +
+  geom_col(data=dat,mapping=aes(x=Lake,y=MEDIAN,fill=Stage),
+           position=pd,color="black") +
+  facet_wrap(vars(Type),ncol=1,scales="free_x")
+```
+
+Confidence intervals are added with `geom_errorbar()` with `Lake` again mapped to the x-axis, `L95` and `U95` mapped to the minimum and maximum y interval values, and `Stage` set as a group.^[The data needs a `group` here to match the group created by `fill=` in `geom_col()`.] To match the bars the confidence intervals must be dodged in the same way with `postion=` and the "cap" on the interval was made smaller with `width=`.
+
+```{r}
+#| label: figure-4-2
+#| fig-width: 7
+#| fig-height: 7
+ggplot() +
+  geom_col(data=dat,mapping=aes(x=Lake,y=MEDIAN,fill=Stage),
+           position=pd,color="black") +
+  geom_errorbar(data=dat,mapping=aes(x=Lake,ymin=L95,ymax=U95,group=Stage),
+                position=pd,width=0.5) +
+  facet_wrap(vars(Type),ncol=1,scales="free_x")
+```
+
+Colors were then set with `scale_fill_manual()` using the `sclrs` vector defined above. In addition, the y-axis was given a better title, the limits were set, axis expansion was removed, major breaks (i.e., labelled) were set at intervals of 200, and minor breaks were set at intervals of 100.^[These axis modifications were described in more detail in [this post](../2023-3-15-Axis_Magic/).]
+
+```{r}
+#| label: figure-4-3
+#| fig-width: 7
+#| fig-height: 7
+ggplot() +
+  geom_col(data=dat,mapping=aes(x=Lake,y=MEDIAN,fill=Stage),
+           position=pd,color="black") +
+  geom_errorbar(data=dat,mapping=aes(x=Lake,ymin=L95,ymax=U95,group=Stage),
+                position=pd,width=0.5) +
+  facet_wrap(vars(Type),ncol=1,scales="free_x") +
+  scale_fill_manual(values=sclrs) +
+  scale_y_continuous(name="Stocking Density (fish/ha)",
+                     limits=c(0,1800),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(200),
+                     minor_breaks=scales::breaks_width(100),
+                     guide="axis_minor")
+```
+
+Labels are now added to the facets with `geom_richtext()` from the `ggtext` package. Here `data=` is set to `datlbls`, which is why `data=dat` was used in `geom_col()` and `geom_errobar()` rather than being set in `ggplot()`.^[If multiple data frames are used when constructing a figure, then those data frames are usually declared in the geoms rather than in `ggplot()`.] The `Label` in `datlbls` is mapped to the labels, but `x=` and `y=` are defined outside of the data frame. Specifically, `x=` is set to 3.5 because each category is listed behind the scenes with sequential numbers beginning at 1. With six categories on the x-axis, the center will be at 3.5. `y=` is set to `Inf` to generically be set at the largest y value plotted. Thus, the labels will be centered from left-to-right (x-axis orientation) and at the top (y-axis orientation). `vjust=` is used to move the label down slightly (see [this post](../2023-3-10-Text_Annotation_Position/)), `label.color=NA` removes the default box around the label, and `size=` was used to reduce the default size slightly.
+
+```{r}
+#| label: figure-4-4
+#| fig-width: 7
+#| fig-height: 7
+ggplot() +
+  geom_col(data=dat,mapping=aes(x=Lake,y=MEDIAN,fill=Stage),
+           position=pd,color="black") +
+  geom_errorbar(data=dat,mapping=aes(x=Lake,ymin=L95,ymax=U95,group=Stage),
+                position=pd,width=0.5) +
+  ggtext::geom_richtext(dat=datlbls,mapping=aes(label=Label),x=3.5,y=Inf,
+                        vjust=0.9,label.color=NA,size=3.5) +
+  facet_wrap(vars(Type),ncol=1,scales="free_x") +
+  scale_fill_manual(values=sclrs) +
+  scale_y_continuous(name="Stocking Density (fish/ha)",
+                     limits=c(0,1800),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(200),
+                     minor_breaks=scales::breaks_width(100),
+                     guide="axis_minor")
+```
+
+Finally, the theme was modified to more closely match Figure 4 in @rooketal_2022. Specifically, `theme_class()` was used as the base and facet labels were removed, the x-axis title was removed, major tick mark size was increased, minor tick mark size was set to 50% of the major tick mark size, the legend was moved to the upper right of the plot, the legend title was removed, the legend text was made smaller, and the legend box size was made smaller.
+
+```{r}
+#| label: figure-4
+#| fig-width: 5
+#| fig-height: 7
+ggplot() +
+  geom_col(data=dat,mapping=aes(x=Lake,y=MEDIAN,fill=Stage),
+           position=pd,color="black") +
+  geom_errorbar(data=dat,mapping=aes(x=Lake,ymin=L95,ymax=U95,group=Stage),
+                position=pd,width=0.5) +
+  ggtext::geom_richtext(dat=datlbls,mapping=aes(label=Label),x=3.5,y=Inf,
+                        vjust=0.9,label.color=NA,size=3.5) +
+  facet_wrap(vars(Type),ncol=1,scales="free_x") +
+  scale_fill_manual(values=sclrs) +
+  scale_y_continuous(name="Stocking Density (fish/ha)",
+                     limits=c(0,1800),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(200),
+                     minor_breaks=scales::breaks_width(100),
+                     guide="axis_minor") +
+  theme_classic() +
+  theme(strip.text=element_blank(),
+        axis.title.x=element_blank(),
+        axis.ticks.length=unit(5,units="pt"),
+        ggh4x.axis.ticks.length.minor=rel(0.5),
+        legend.position=c(1,1),
+        legend.justification=c(1.05,0.95),
+        legend.title=element_blank(),
+        legend.text=element_text(size=7),
+        legend.key.size = unit(0.75,units="line")
+        )
+```
+
+This largely reproduces Figure 4 in @rooketal_2022 with the exceptions that (a) the tick marks don't cross the x-axes and (b) the x-axis tick marks are centered on the group of bars rather than between the group of bars.
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot() +
+  geom_col(data=filter(dat,Type=="Smax"),
+           mapping=aes(x=Lake,y=MEDIAN,fill=Stage),
+           position=pd,color="black") +
+  geom_errorbar(data=dat,mapping=aes(x=Lake,ymin=L95,ymax=U95,group=Stage),
+                position=pd,width=0.5) +
+  scale_fill_manual(values=sclrs) +
+  scale_y_continuous(name="Stocking Density (fish/ha)",
+                     limits=c(0,1800),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(200),
+                     minor_breaks=scales::breaks_width(100),
+                     guide="axis_minor") +
+  theme_classic() +
+  theme(strip.text=element_blank(),
+        axis.title.x=element_blank(),
+        axis.ticks.length=unit(5,units="pt"),
+        ggh4x.axis.ticks.length.minor=rel(0.5),
+        legend.position=c(1,1),
+        legend.justification=c(1.05,0.8),
+        legend.title=element_blank(),
+        legend.text=element_text(size=7),
+        legend.key.size = unit(0.5,units="line")
+        ) +
+  theme(aspect.ratio=0.7)
+dev.off()
+```
