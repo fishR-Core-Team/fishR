@@ -6,7 +6,9 @@ date: 3/10/2023
 image: preview.png
 categories:
   - ggplot2
-  - Annotations
+  - annotations
+  - labels
+  - legend
 knitr: 
   opts_chunk:
     dev: "png"
