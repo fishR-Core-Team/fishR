@@ -295,9 +295,12 @@ div.csl-indent {
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">ggplot2</div>
                 <div class="quarto-category">Growth</div>
                 <div class="quarto-category">Maturity</div>
+                <div class="quarto-category">Data Wrangling</div>
+                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">functions</div>
+                <div class="quarto-category">color</div>
               </div>
                   </div>
   </div>
@@ -322,7 +325,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Feb 16, 2023</p>
+        <p class="date-modified">Mar 19, 2023</p>
       </div>
     </div>
       
@@ -355,10 +358,6 @@ div.csl-indent {
   <li><a href="#making-the-figure" id="toc-making-the-figure" class="nav-link" data-scroll-target="#making-the-figure">Making the Figure</a></li>
   </ul></li>
   <li><a href="#further-thoughts" id="toc-further-thoughts" class="nav-link" data-scroll-target="#further-thoughts">Further Thoughts</a></li>
-  <li><a href="#edits" id="toc-edits" class="nav-link" data-scroll-target="#edits">Edits</a>
-  <ul class="collapse">
-  <li><a href="#different-method-to-construct-authors-data-frame" id="toc-different-method-to-construct-authors-data-frame" class="nav-link" data-scroll-target="#different-method-to-construct-authors-data-frame">Different Method to Construct Author’s Data Frame</a></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-2-16_Ulaskietal_GrowthMortFig/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -408,8 +407,8 @@ div.csl-indent {
 #R|      }
 #R|      Linf * (1 - exp(-K * (t - t0)))
 #R|  }
-#R|  &lt;bytecode: 0x000001ded795f660&gt;
-#R|  &lt;environment: 0x000001ded7978d20&gt;</code></pre>
+#R|  &lt;bytecode: 0x0000028442eddc68&gt;
+#R|  &lt;environment: 0x0000028442f691b8&gt;</code></pre>
 </div>
 </div>
 <p>While this function appears overly complicated, an advantage of this function is that all three parameters of the typical VBGF can be given to the <code>Linf=</code> argument.</p>
@@ -644,214 +643,10 @@ Acknowledgment
 <p>&nbsp;</p>
 <section id="making-the-data-frame" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="making-the-data-frame">Making the Data Frame</h3>
-<div class="callout-important callout callout-style-simple">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Since originally posting this example I have discovered a much easier way to make the data frame created in this section. Please see <a href="#different-method-to-construct-authors-data-frame">this edit below</a> for that easier method.</p>
-</div>
-</div>
-</div>
-<div class="page-columns page-full"><p>Ulaski’s solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what <code>stat_function()</code> did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple <code>dfmat</code> created above.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> This posed some challenges.</p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.</p></li></div></div>
-<p>The first challenge was that I needed a way to create the sequence of ages between successive ages in <code>dfmat</code>. For example, between ages 0 and 10, I needed to create 99 ages that looked like 0, 0.1, 0.2, …, 9.7, 9.8, and 9.9, whereas between 10 and 11 I only needed to create 9 ages that looked like 10, 10.1, … 10.7, 10.8, 10.9. I am not aware of a function to do this in R so I wrote the simple function below to accomplish this task for all ages in <code>x</code> in increments given in <code>by=</code>.</p>
+<div class="page-columns page-full"><p>Ulaski’s solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what <code>stat_function()</code> did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple <code>dfmat</code> created above.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.</p></li></div></div>
+<p>Recall what the original <code>dfmat</code> looked like … ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with <code>cut()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>seq_prs <span class="ot">&lt;-</span> <span class="cf">function</span>(x,by) {</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># initiate result</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># cycle through successive ages, create sequence, make sure not to include</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   second age (it will be first on next iteration), append to res</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span>)) {</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">c</span>(res,<span class="fu">seq</span>(x[i],x[i<span class="sc">+</span><span class="dv">1</span>]<span class="sc">-</span>by,<span class="at">by=</span>by))</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># include last age (it was left off in the loop), return the result</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(res,x[<span class="fu">length</span>(x)])</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This function was used to create the sequence of “fractional” ages for the ages in <code>dfmat</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>by <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>agef <span class="ot">&lt;-</span> <span class="fu">seq_prs</span>(dfmat<span class="sc">$</span>age,by)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>agef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    [1]  0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4
-#R|   [16]  1.5  1.6  1.7  1.8  1.9  2.0  2.1  2.2  2.3  2.4  2.5  2.6  2.7  2.8  2.9
-#R|   [31]  3.0  3.1  3.2  3.3  3.4  3.5  3.6  3.7  3.8  3.9  4.0  4.1  4.2  4.3  4.4
-#R|   [46]  4.5  4.6  4.7  4.8  4.9  5.0  5.1  5.2  5.3  5.4  5.5  5.6  5.7  5.8  5.9
-#R|   [61]  6.0  6.1  6.2  6.3  6.4  6.5  6.6  6.7  6.8  6.9  7.0  7.1  7.2  7.3  7.4
-#R|   [76]  7.5  7.6  7.7  7.8  7.9  8.0  8.1  8.2  8.3  8.4  8.5  8.6  8.7  8.8  8.9
-#R|   [91]  9.0  9.1  9.2  9.3  9.4  9.5  9.6  9.7  9.8  9.9 10.0 10.1 10.2 10.3 10.4
-#R|  [106] 10.5 10.6 10.7 10.8 10.9 11.0 11.1 11.2 11.3 11.4 11.5 11.6 11.7 11.8 11.9
-#R|  [121] 12.0 12.1 12.2 12.3 12.4 12.5 12.6 12.7 12.8 12.9 13.0 13.1 13.2 13.3 13.4
-#R|  [136] 13.5 13.6 13.7 13.8 13.9 14.0 14.1 14.2 14.3 14.4 14.5 14.6 14.7 14.8 14.9
-#R|  [151] 15.0 15.1 15.2 15.3 15.4 15.5 15.6 15.7 15.8 15.9 16.0 16.1 16.2 16.3 16.4
-#R|  [166] 16.5 16.6 16.7 16.8 16.9 17.0 17.1 17.2 17.3 17.4 17.5 17.6 17.7 17.8 17.9
-#R|  [181] 18.0 18.1 18.2 18.3 18.4 18.5 18.6 18.7 18.8 18.9 19.0 19.1 19.2 19.3 19.4
-#R|  [196] 19.5 19.6 19.7 19.8 19.9 20.0 20.1 20.2 20.3 20.4 20.5 20.6 20.7 20.8 20.9
-#R|  [211] 21.0 21.1 21.2 21.3 21.4 21.5 21.6 21.7 21.8 21.9 22.0 22.1 22.2 22.3 22.4
-#R|  [226] 22.5 22.6 22.7 22.8 22.9 23.0 23.1 23.2 23.3 23.4 23.5 23.6 23.7 23.8 23.9
-#R|  [241] 24.0 24.1 24.2 24.3 24.4 24.5 24.6 24.7 24.8 24.9 25.0 25.1 25.2 25.3 25.4
-#R|  [256] 25.5 25.6 25.7 25.8 25.9 26.0 26.1 26.2 26.3 26.4 26.5 26.6 26.7 26.8 26.9
-#R|  [271] 27.0 27.1 27.2 27.3 27.4 27.5 27.6 27.7 27.8 27.9 28.0 28.1 28.2 28.3 28.4
-#R|  [286] 28.5 28.6 28.7 28.8 28.9 29.0 29.1 29.2 29.3 29.4 29.5 29.6 29.7 29.8 29.9
-#R|  [301] 30.0 30.1 30.2 30.3 30.4 30.5 30.6 30.7 30.8 30.9 31.0 31.1 31.2 31.3 31.4
-#R|  [316] 31.5 31.6 31.7 31.8 31.9 32.0 32.1 32.2 32.3 32.4 32.5 32.6 32.7 32.8 32.9
-#R|  [331] 33.0 33.1 33.2 33.3 33.4 33.5 33.6 33.7 33.8 33.9 34.0 34.1 34.2 34.3 34.4
-#R|  [346] 34.5 34.6 34.7 34.8 34.9 35.0 35.1 35.2 35.3 35.4 35.5 35.6 35.7 35.8 35.9
-#R|  [361] 36.0 36.1 36.2 36.3 36.4 36.5 36.6 36.7 36.8 36.9 37.0 37.1 37.2 37.3 37.4
-#R|  [376] 37.5 37.6 37.7 37.8 37.9 38.0 38.1 38.2 38.3 38.4 38.5 38.6 38.7 38.8 38.9
-#R|  [391] 39.0 39.1 39.2 39.3 39.4 39.5 39.6 39.7 39.8 39.9 40.0 40.1 40.2 40.3 40.4
-#R|  [406] 40.5 40.6 40.7 40.8 40.9 41.0 41.1 41.2 41.3 41.4 41.5 41.6 41.7 41.8 41.9
-#R|  [421] 42.0 42.1 42.2 42.3 42.4 42.5 42.6 42.7 42.8 42.9 43.0 43.1 43.2 43.3 43.4
-#R|  [436] 43.5 43.6 43.7 43.8 43.9 44.0 44.1 44.2 44.3 44.4 44.5 44.6 44.7 44.8 44.9
-#R|  [451] 45.0 45.1 45.2 45.3 45.4 45.5 45.6 45.7 45.8 45.9 46.0 46.1 46.2 46.3 46.4
-#R|  [466] 46.5 46.6 46.7 46.8 46.9 47.0 47.1 47.2 47.3 47.4 47.5 47.6 47.7 47.8 47.9
-#R|  [481] 48.0 48.1 48.2 48.3 48.4 48.5 48.6 48.7 48.8 48.9 49.0 49.1 49.2 49.3 49.4
-#R|  [496] 49.5 49.6 49.7 49.8 49.9 50.0</code></pre>
-</div>
-</div>
-<p>The second challenge is that the rows of <code>dfmat</code> needed to be appropriately repeated for each of the “fractional” ages just computed. The number of times to repeat each row is found by dividing the difference between successive ages in <code>dfmat</code> by the increment value used for creating the “fractional” ages. The result below shows that the age-0 (first) row should be repeated 100 times, the age-1 (second) row 10 times, etc.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span>(dfmat<span class="sc">$</span>age)<span class="sc">/</span>by</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|   [1] 100  10  10  10  10  10  10  10  10  10  10 300</code></pre>
-</div>
-</div>
-<div class="page-columns page-full"><p>I then created an index of row numbers<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> repeated the appropriate number of times. Note that 1 had to be appended to the repeat values so that the last age appeared once in these indices.</p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;Created with <code>1:nrow(dfmat)</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>repinds <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dfmat),<span class="fu">c</span>(<span class="fu">diff</span>(dfmat<span class="sc">$</span>age)<span class="sc">/</span>by,<span class="dv">1</span>))</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>repinds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    [1]  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
-#R|   [26]  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
-#R|   [51]  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
-#R|   [76]  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
-#R|  [101]  2  2  2  2  2  2  2  2  2  2  3  3  3  3  3  3  3  3  3  3  4  4  4  4  4
-#R|  [126]  4  4  4  4  4  5  5  5  5  5  5  5  5  5  5  6  6  6  6  6  6  6  6  6  6
-#R|  [151]  7  7  7  7  7  7  7  7  7  7  8  8  8  8  8  8  8  8  8  8  9  9  9  9  9
-#R|  [176]  9  9  9  9  9 10 10 10 10 10 10 10 10 10 10 11 11 11 11 11 11 11 11 11 11
-#R|  [201] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [226] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [251] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [276] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [301] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [326] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [351] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [376] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [401] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [426] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [451] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [476] 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
-#R|  [501] 13</code></pre>
-</div>
-</div>
-<p>A new data frame is then created from <code>dfmat</code> using these repeated row indices.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> dfmat[repinds,]</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         age prmat  prcuts
-#R|  1        0     0      0%
-#R|  1.1      0     0      0%
-#R|  1.2      0     0      0%
-#R|  12.298  20   100 90-100%
-#R|  12.299  20   100 90-100%
-#R|  13      50   100 90-100%</code></pre>
-</div>
-</div>
-<p>Finally, the data frame used by Ulaski is completed by appending the fractional age vector and creating a vector of predicted lengths at each fractional age.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> dfmat2 <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">agef=</span>agef,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar))</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         age prmat  prcuts agef       len
-#R|  1        0     0      0%  0.0  23.45828
-#R|  1.1      0     0      0%  0.1  24.41965
-#R|  1.2      0     0      0%  0.2  25.37842
-#R|  12.298  20   100 90-100% 49.8 287.06956
-#R|  12.299  20   100 90-100% 49.9 287.32013
-#R|  13      50   100 90-100% 50.0 287.57003</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="making-the-figure" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="making-the-figure">Making the Figure</h3>
-<div class="page-columns page-full"><p>Figure 1 is then simply created by mapping the fractional ages (i.e., <code>agef</code>) to <code>x=</code> and the lengths to <code>y</code>, mapping the probability cuts to <code>fill=</code> in <code>geom_ares()</code>, and including <code>geom_line()</code> (with a slightly larger line width).<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;This will produce a warning because the data frame extends to age 50 but the figure is limited to age 20.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>agef,<span class="at">y=</span>len)) <span class="sc">+</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">fill=</span>prcuts)) <span class="sc">+</span> </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span>lenttl,<span class="at">limits=</span>lenlmts,<span class="at">breaks=</span>lenlbls,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">name=</span><span class="st">"Probability"</span>,<span class="at">begin=</span><span class="fl">0.85</span>,<span class="at">end=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/figure-1-MU-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-
-</div>
-<p>&nbsp;</p>
-</section>
-</section>
-<section id="further-thoughts" class="level1 page-columns page-full">
-<h1>Further Thoughts</h1>
-<p>There are a few things that I would like to see different in this figure. First, the “white” lines between the colors are too prominent. The size of these lines are a function of the number of “fractional” ages used to produce the plot. Thus, to make these “lines” thinner one could increase <code>n=</code> in my solution or decrease <code>by=</code> in the author’s solution.</p>
-<div class="page-columns page-full"><p>Second, it bothers me that the colors for the probabilities seem equally spaced even though two categories are not represented in the data (e.g., 30-40% and 40-50%). In my mind, there should be a “jump” in colors at the ages where the probability jumps from 20-30% to 50-60% (i.e., between age-13 and age-14).<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> I could not address this issue with my solution, but including <code>drop=FALSE</code> in <code>scale_fill_viridis_d()</code> fixed this in the author’s solution.</p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;This will be a common issue with maturity data as the probability of maturity often increases dramatically over a short range of lengths and, thus, one or very few ages.</p></li></div></div>
-<div class="page-columns page-full"><p>Third, the “line” does not look like a typical VBGF to me as these sturgeon are long-lived and grow so slowly that very little curvature and no asymptote is evident. In some situations is may be useful to extend the x-axis to older ages to better “see” the typical asymptotic growth of the VBGF.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn16"><p><sup>16</sup>&nbsp;This is not that useful here given the shape of the VBGF for this species.</p></li></div></div>
-<p>Finally, the authors started their plot age-1. I am not sure why they did this, but that can be accomplished by filtering the data to only age-1 and older.</p>
-<p>All of these changes (with <code>by=0.01</code> and extending the ages to 30) were made below using the author’s solution.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>agelmts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">30</span>)                                   <span class="co"># changed max</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>agelbls <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="dv">2</span>)                               <span class="co"># changed max, made sequence by 2</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>lenlmts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">250</span>)                                  <span class="co"># changed max</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>lenlbls <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">250</span>,<span class="dv">50</span>)                             <span class="co"># changed max</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>by <span class="ot">&lt;-</span> <span class="fl">0.01</span>                                           <span class="co"># made smaller</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>agef <span class="ot">&lt;-</span> <span class="fu">seq_prs</span>(dfmat<span class="sc">$</span>age,by)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>repinds <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dfmat),<span class="fu">c</span>(<span class="fu">diff</span>(dfmat<span class="sc">$</span>age)<span class="sc">/</span>by,<span class="dv">1</span>))</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>dfmat3 <span class="ot">&lt;-</span> dfmat[repinds,] <span class="sc">|&gt;</span>  <span class="co"># changed name to dfmat3</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">agef=</span>agef,</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar)) <span class="sc">|&gt;</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(agef<span class="sc">&gt;=</span><span class="dv">1</span>)             <span class="co"># filtered out &lt;age-1</span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat3,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>agef,<span class="at">y=</span>len)) <span class="sc">+</span>      <span class="co"># used new dfmat3</span></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">fill=</span>prcuts)) <span class="sc">+</span> </span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span>lenttl,<span class="at">limits=</span>lenlmts,<span class="at">breaks=</span>lenlbls,</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">name=</span><span class="st">"Probability"</span>,<span class="at">begin=</span><span class="fl">0.85</span>,<span class="at">end=</span><span class="dv">0</span>,<span class="at">drop=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/figure-1-MU2-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="edits" class="level1 page-columns page-full">
-<h1>Edits</h1>
-<section id="different-method-to-construct-authors-data-frame" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="different-method-to-construct-authors-data-frame">Different Method to Construct Author’s Data Frame</h3>
-<p>I believe that there is an easier way to construct <code>dfmat2</code> used in the author’s solution. This edit details that method.</p>
-<p>First, remember what the original <code>dfmat</code> looked like … ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with <code>cut()</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dfmat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dfmat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|     age prmat  prcuts
 #R|  1    0   0.0      0%
@@ -869,11 +664,11 @@ Acknowledgment
 #R|  13  50 100.0 90-100%</code></pre>
 </div>
 </div>
-<p>Second, create a new data frame that has fractional ages that begin at the minimum age in <code>dfmat</code>, end at the maximum age in <code>dfmat</code>, and has some constant increment (0.1 in this example). Then use <code>lencat()</code> from <code>FSA</code> to create categories of ages that match the ages in <code>dfmat</code>. <code>lencat()</code> returns a factor variable by default but use <code>as.fact=FALSE</code> to return a number to match the <code>age</code> variable in <code>dfmat</code>.</p>
+<p>A new data frame is created that has fractional ages that begin at the minimum age in <code>dfmat</code>, end at the maximum age in <code>dfmat</code>, and uses a constant increment (0.1 in this example). <code>lencat()</code> from <code>FSA</code> is then used to create categories of ages that match the ages in <code>dfmat</code>. <code>lencat()</code> returns a factor variable by default but <code>as.fact=FALSE</code> causes it to return a number to match the <code>age</code> variable in <code>dfmat</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dfmat2a <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">agef=</span><span class="fu">seq</span>(<span class="fu">min</span>(dfmat<span class="sc">$</span>age),<span class="fu">max</span>(dfmat<span class="sc">$</span>age),<span class="fl">0.1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age=</span>FSA<span class="sc">::</span><span class="fu">lencat</span>(agef,<span class="at">breaks=</span>dfmat<span class="sc">$</span>age,<span class="at">as.fact=</span><span class="cn">FALSE</span>))</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2a,<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">agef=</span><span class="fu">seq</span>(<span class="fu">min</span>(dfmat<span class="sc">$</span>age),<span class="fu">max</span>(dfmat<span class="sc">$</span>age),<span class="fl">0.1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age=</span>FSA<span class="sc">::</span><span class="fu">lencat</span>(agef,<span class="at">breaks=</span>dfmat<span class="sc">$</span>age,<span class="at">as.fact=</span><span class="cn">FALSE</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2,<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|      agef age
 #R|  1    0.0   0
@@ -888,11 +683,11 @@ Acknowledgment
 #R|  501 50.0  50</code></pre>
 </div>
 </div>
-<p>The probability mature values and categories can be added to this data frame with a <code>left_join()</code> using the common <code>age</code> variable in <code>dfmat</code> and <code>dfmat2a</code>.</p>
+<p>The probability mature values and categories are added to this data frame with <code>left_join()</code> using the common <code>age</code> variable in <code>dfmat</code> and <code>dfmat2</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>dfmat2a <span class="ot">&lt;-</span> dfmat2a <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dfmat,<span class="at">by=</span><span class="st">"age"</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2a,<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> dfmat2 <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dfmat,<span class="at">by=</span><span class="st">"age"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2,<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|      agef age prmat  prcuts
 #R|  1    0.0   0     0      0%
@@ -907,11 +702,11 @@ Acknowledgment
 #R|  501 50.0  50   100 90-100%</code></pre>
 </div>
 </div>
-<p>Finally, add the predicted mean lengths as before.</p>
+<p>Finally, the predicted mean lengths are added using <code>vb()</code> as before.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>dfmat2a <span class="ot">&lt;-</span> dfmat2a <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar))</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> dfmat2 <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output"><code>#R|      agef age prmat  prcuts       len
 #R|  1    0.0   0     0      0%  23.45828
@@ -922,30 +717,82 @@ Acknowledgment
 #R|  501 50.0  50   100 90-100% 287.57003</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>This is the same as the original <code>dfmat2</code>.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn17"><p><sup>17</sup>&nbsp;I rearranged the columns for ease of comparison. Also, the rownames are irrelevant so ignore them.</p></li></div></div>
+<p>These steps can be combined into one tight set of code as shown below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dfmat2) <span class="sc">|&gt;</span> <span class="fu">select</span>(agef,age,prmat,prcuts,len)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         agef age prmat  prcuts       len
-#R|  1       0.0   0     0      0%  23.45828
-#R|  1.1     0.1   0     0      0%  24.41965
-#R|  1.2     0.2   0     0      0%  25.37842
-#R|  12.298 49.8  20   100 90-100% 287.06956
-#R|  12.299 49.9  20   100 90-100% 287.32013
-#R|  13     50.0  50   100 90-100% 287.57003</code></pre>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">agef=</span><span class="fu">seq</span>(<span class="fu">min</span>(dfmat<span class="sc">$</span>age),<span class="fu">max</span>(dfmat<span class="sc">$</span>age),<span class="fl">0.1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age=</span>FSA<span class="sc">::</span><span class="fu">lencat</span>(agef,<span class="at">breaks=</span>dfmat<span class="sc">$</span>age,<span class="at">as.fact=</span><span class="cn">FALSE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dfmat,<span class="at">by=</span><span class="st">"age"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>If you use this method rather than the original method to create <code>dfmethod2</code> <a href="#making-the-data-frame">used above</a> then you can combine all of the code of this section into one tight set. Additionally, make sure to save the result as <code>dfmat2</code> (as below) before continuing on <a href="#making-the-figure">to make the figure</a>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>dfmat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">agef=</span><span class="fu">seq</span>(<span class="fu">min</span>(dfmat<span class="sc">$</span>age),<span class="fu">max</span>(dfmat<span class="sc">$</span>age),<span class="fl">0.1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age=</span>FSA<span class="sc">::</span><span class="fu">lencat</span>(agef,<span class="at">breaks=</span>dfmat<span class="sc">$</span>age,<span class="at">as.fact=</span><span class="cn">FALSE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dfmat,<span class="at">by=</span><span class="st">"age"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-
-
+<p>&nbsp;</p>
 </section>
+<section id="making-the-figure" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="making-the-figure">Making the Figure</h3>
+<div class="page-columns page-full"><p>Figure 1 is then created by mapping the fractional ages (i.e., <code>agef</code>) to <code>x=</code> and the lengths to <code>y</code>, mapping the probability cuts to <code>fill=</code> in <code>geom_ares()</code>, and including <code>geom_line()</code> (with a slightly larger line width).<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;This will produce a warning because the data frame extends to age 50 but the figure is limited to age 20.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>agef,<span class="at">y=</span>len)) <span class="sc">+</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">fill=</span>prcuts)) <span class="sc">+</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span>lenttl,<span class="at">limits=</span>lenlmts,<span class="at">breaks=</span>lenlbls,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">name=</span><span class="st">"Probability"</span>,<span class="at">begin=</span><span class="fl">0.85</span>,<span class="at">end=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/figure-1-MU-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+
+</div>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="further-thoughts" class="level1 page-columns page-full">
+<h1>Further Thoughts</h1>
+<p>There are a few things that I would like to see different in this figure. First, the “white” lines between the colors are too prominent. The size of these lines are a function of the number of “fractional” ages used to produce the plot. Thus, to make these “lines” thinner one could increase <code>n=</code> in my solution or decrease <code>by=</code> in the author’s solution.</p>
+<div class="page-columns page-full"><p>Second, it bothers me that the colors for the probabilities seem equally spaced even though two categories are not represented in the data (e.g., 30-40% and 40-50%). In my mind, there should be a “jump” in colors at the ages where the probability jumps from 20-30% to 50-60% (i.e., between age-13 and age-14).<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> I could not address this issue with my solution, but including <code>drop=FALSE</code> in <code>scale_fill_viridis_d()</code> fixed this in the author’s solution.</p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;This will be a common issue with maturity data as the probability of maturity often increases dramatically over a short range of lengths and, thus, one or very few ages.</p></li></div></div>
+<div class="page-columns page-full"><p>Third, the “line” does not look like a typical VBGF to me as these sturgeon are long-lived and grow so slowly that very little curvature and no asymptote is evident. In some situations is may be useful to extend the x-axis to older ages to better “see” the typical asymptotic growth of the VBGF.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;This is not that useful here given the shape of the VBGF for this species.</p></li></div></div>
+<p>Finally, the authors started their plot at age-1. I am not sure why they did this, but that can be accomplished by filtering the data to only age-1 and older.</p>
+<p>All of these changes (with <code>by=0.05</code> and extending the ages to 30) were made below using the author’s solution.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>agelmts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">30</span>)                               <span class="co"># changed max</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>agelbls <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="dv">2</span>)                           <span class="co"># changed max, made sequence by 2</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>lenlmts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">250</span>)                              <span class="co"># changed max</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>lenlbls <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">250</span>,<span class="dv">50</span>)                         <span class="co"># changed max</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>by <span class="ot">&lt;-</span> <span class="fl">0.05</span>                                       <span class="co"># made smaller</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>dfmat3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">agef=</span><span class="fu">seq</span>(<span class="fu">min</span>(dfmat<span class="sc">$</span>age),<span class="fu">max</span>(dfmat<span class="sc">$</span>age),by)) <span class="sc">|&gt;</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age=</span>FSA<span class="sc">::</span><span class="fu">lencat</span>(agef,<span class="at">breaks=</span>dfmat<span class="sc">$</span>age,<span class="at">as.fact=</span><span class="cn">FALSE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dfmat,<span class="at">by=</span><span class="st">"age"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">len=</span><span class="fu">vb</span>(agef,<span class="at">Linf=</span>vbpar)) <span class="sc">|&gt;</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(agef<span class="sc">&gt;=</span><span class="dv">1</span>)                                <span class="co"># filtered out &lt;age-1</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat3,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>agef,<span class="at">y=</span>len)) <span class="sc">+</span>  <span class="co"># used new dfmat3</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">fill=</span>prcuts)) <span class="sc">+</span> </span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span>lenttl,<span class="at">limits=</span>lenlmts,<span class="at">breaks=</span>lenlbls,</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">name=</span><span class="st">"Probability"</span>,<span class="at">begin=</span><span class="fl">0.85</span>,<span class="at">end=</span><span class="dv">0</span>,<span class="at">drop=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/figure-1-MU2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+
+
+
 </section>
 
 

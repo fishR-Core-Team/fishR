@@ -5,9 +5,12 @@ author: Derek H. Ogle
 date: 2/16/2023
 image: preview.png
 categories:
-  - ggplot2
   - Growth
   - Maturity
+  - Data Wrangling
+  - ggplot2
+  - functions
+  - color
 ---
 
 # Introduction
@@ -221,6 +224,7 @@ ggplot(data=dfmat,mapping=aes(x=age)) +
 ### Future Updates?
 I may update this post as I learn more about `after_stat()` and `after_scale()`.
 :::
+
 &nbsp;
 
 # Author's Creation of Figure 1
@@ -233,76 +237,56 @@ The solution in this section follows the concept of the code provided to me by M
 &nbsp;
 
 ### Making the Data Frame
+Ulaski's solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what `stat_function()` did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple `dfmat` created above.^[Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.]
 
-:::{.callout-important appearance="simple"}
-Since originally posting this example I have discovered a much easier way to make the data frame created in this section. Please see [this edit below](#different-method-to-construct-authors-data-frame) for that easier method.
-:::
-
-Ulaski's solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what `stat_function()` did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple `dfmat` created above.^[Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.] This posed some challenges.
-
-The first challenge was that I needed a way to create the sequence of ages between successive ages in `dfmat`. For example, between ages 0 and 10, I needed to create 99 ages that looked like 0, 0.1, 0.2, ..., 9.7, 9.8, and 9.9, whereas between 10 and 11 I only needed to create 9 ages that looked like 10, 10.1, ... 10.7, 10.8, 10.9. I am not aware of a function to do this in R so I wrote the simple function below to accomplish this task for all ages in `x` in increments given in `by=`.
+Recall what the original `dfmat` looked like ... ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with `cut()`.
 
 ```{r}
-#| label: define-seq_prs
-seq_prs <- function(x,by) {
-  # initiate result
-  res <- NULL
-  # cycle through successive ages, create sequence, make sure not to include
-  #   second age (it will be first on next iteration), append to res
-  for (i in 1:(length(x)-1)) {
-    res <- c(res,seq(x[i],x[i+1]-by,by=by))
-  }
-  # include last age (it was left off in the loop), return the result
-  c(res,x[length(x)])
-}
+#| label: remember-dfmat
+dfmat
 ```
 
-This function was used to create the sequence of "fractional" ages for the ages in `dfmat`.
-
-```{r}
-#| label: defns-for-dfmat2
-by <- 0.1
-agef <- seq_prs(dfmat$age,by)
-agef
-```
-
-The second challenge is that the rows of `dfmat` needed to be appropriately repeated for each of the "fractional" ages just computed. The number of times to repeat each row is found by dividing the difference between successive ages in `dfmat` by the increment value used for creating the "fractional" ages. The result below shows that the age-0 (first) row should be repeated 100 times, the age-1 (second) row 10 times, etc.
-
-```{r}
-#| label: demo-diff
-diff(dfmat$age)/by
-```
-
-I then created an index of row numbers^[Created with `1:nrow(dfmat)`.] repeated the appropriate number of times. Note that 1 had to be appended to the repeat values so that the last age appeared once in these indices.
-
-```{r}
-#| label: make-repinds
-repinds <- rep(1:nrow(dfmat),c(diff(dfmat$age)/by,1))
-repinds
-```
-
-A new data frame is then created from `dfmat` using these repeated row indices.
+A new data frame is created that has fractional ages that begin at the minimum age in `dfmat`, end at the maximum age in `dfmat`, and uses a constant increment (0.1 in this example). `lencat()` from `FSA` is then used to create categories of ages that match the ages in `dfmat`. `lencat()` returns a factor variable by default but `as.fact=FALSE` causes it to return a number to match the `age` variable in `dfmat`.
 
 ```{r}
 #| label: make-dfmat2-1
-dfmat2 <- dfmat[repinds,]
+dfmat2 <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),0.1)) |>
+  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE))
+FSA::headtail(dfmat2,n=5)
+```
+
+The probability mature values and categories are added to this data frame with `left_join()` using the common `age` variable in `dfmat` and `dfmat2`.
+
+```{r}
+#| label: make-dfmat2-2
+dfmat2 <- dfmat2 |>
+  left_join(dfmat,by="age")
+FSA::headtail(dfmat2,n=5)
+```
+
+Finally, the predicted mean lengths are added using `vb()` as before.
+
+```{r}
+#| label: make-dfmat2-3
+dfmat2 <- dfmat2 |>
+  mutate(len=vb(agef,Linf=vbpar))
 FSA::headtail(dfmat2)
 ```
 
-Finally, the data frame used by Ulaski is completed by appending the fractional age vector and creating a vector of predicted lengths at each fractional age.
+These steps can be combined into one tight set of code as shown below.
 
 ```{r}
 #| label: make-dfmat2
-dfmat2 <- dfmat2 |>
-  mutate(agef=agef,
-         len=vb(agef,Linf=vbpar))
-FSA::headtail(dfmat2)
+dfmat2 <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),0.1)) |>
+  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE)) |>
+  left_join(dfmat,by="age") |>
+  mutate(len=vb(agef,Linf=vbpar))
 ```
 
 &nbsp;
 
 ### Making the Figure
-Figure 1 is then simply created by mapping the fractional ages (i.e., `agef`) to `x=` and the lengths to `y`, mapping the probability cuts to `fill=` in `geom_ares()`, and including `geom_line()` (with a slightly larger line width).^[This will produce a warning because the data frame extends to age 50 but the figure is limited to age 20.]
+Figure 1 is then created by mapping the fractional ages (i.e., `agef`) to `x=` and the lengths to `y`, mapping the probability cuts to `fill=` in `geom_ares()`, and including `geom_line()` (with a slightly larger line width).^[This will produce a warning because the data frame extends to age 50 but the figure is limited to age 20.]
 
 ```{r}
 #| label: figure-1-MU
@@ -345,30 +329,29 @@ Second, it bothers me that the colors for the probabilities seem equally spaced 
 
 Third, the "line" does not look like a typical VBGF to me as these sturgeon are long-lived and grow so slowly that very little curvature and no asymptote is evident. In some situations is may be useful to extend the x-axis to older ages to better "see" the typical asymptotic growth of the VBGF.^[This is not that useful here given the shape of the VBGF for this species.]
 
-Finally, the authors started their plot age-1. I am not sure why they did this, but that can be accomplished by filtering the data to only age-1 and older.
+Finally, the authors started their plot at age-1. I am not sure why they did this, but that can be accomplished by filtering the data to only age-1 and older.
 
-All of these changes (with `by=0.01` and extending the ages to 30) were made below using the author's solution.
+All of these changes (with `by=0.05` and extending the ages to 30) were made below using the author's solution.
 
 ```{r}
 #| label: figure-1-MU2
 #| fig-width: 7
 #| fig-height: 4.5
 
-agelmts <- c(0,30)                                   # changed max
-agelbls <- seq(0,30,2)                               # changed max, made sequence by 2
-lenlmts <- c(0,250)                                  # changed max
-lenlbls <- seq(0,250,50)                             # changed max
+agelmts <- c(0,30)                               # changed max
+agelbls <- seq(0,30,2)                           # changed max, made sequence by 2
+lenlmts <- c(0,250)                              # changed max
+lenlbls <- seq(0,250,50)                         # changed max
 
-by <- 0.01                                           # made smaller
-agef <- seq_prs(dfmat$age,by)
-repinds <- rep(1:nrow(dfmat),c(diff(dfmat$age)/by,1))
+by <- 0.05                                       # made smaller
 
-dfmat3 <- dfmat[repinds,] |>  # changed name to dfmat3
-  mutate(agef=agef,
-         len=vb(agef,Linf=vbpar)) |>
-  filter(agef>=1)             # filtered out <age-1
+dfmat3 <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),by)) |>
+  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE)) |>
+  left_join(dfmat,by="age") |>
+  mutate(len=vb(agef,Linf=vbpar)) |>
+  filter(agef>=1)                                # filtered out <age-1
 
-ggplot(data=dfmat3,mapping=aes(x=agef,y=len)) +      # used new dfmat3
+ggplot(data=dfmat3,mapping=aes(x=agef,y=len)) +  # used new dfmat3
   geom_area(mapping=aes(fill=prcuts)) + 
   geom_line(linewidth=0.75) +
   scale_x_continuous(name=agettl,limits=agelmts,breaks=agelbls,
@@ -379,58 +362,3 @@ ggplot(data=dfmat3,mapping=aes(x=agef,y=len)) +      # used new dfmat3
 ```
 
 &nbsp;
-
-# Edits
-### Different Method to Construct Author's Data Frame
-I believe that there is an easier way to construct `dfmat2` used in the author's solution. This edit details that method.
-
-First, remember what the original `dfmat` looked like ... ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with `cut()`.
-
-```{r}
-#| label: remember-dfmat
-dfmat
-```
-
-Second, create a new data frame that has fractional ages that begin at the minimum age in `dfmat`, end at the maximum age in `dfmat`, and has some constant increment (0.1 in this example). Then use `lencat()` from `FSA` to create categories of ages that match the ages in `dfmat`. `lencat()` returns a factor variable by default but use `as.fact=FALSE` to return a number to match the `age` variable in `dfmat`.
-
-```{r}
-#| label: make-dfmat2a-1
-dfmat2a <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),0.1)) |>
-  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE))
-FSA::headtail(dfmat2a,n=5)
-```
-
-The probability mature values and categories can be added to this data frame with a `left_join()` using the common `age` variable in `dfmat` and `dfmat2a`.
-
-```{r}
-#| label: make-dfmat2a-2
-dfmat2a <- dfmat2a |>
-  left_join(dfmat,by="age")
-FSA::headtail(dfmat2a,n=5)
-```
-
-Finally, add the predicted mean lengths as before.
-
-```{r}
-#| label: make-dfmat2a-3
-dfmat2a <- dfmat2a |>
-  mutate(len=vb(agef,Linf=vbpar))
-FSA::headtail(dfmat2a)
-```
-
-This is the same as the original `dfmat2`.^[I rearranged the columns for ease of comparison. Also, the rownames are irrelevant so ignore them.]
-
-```{r}
-#| label: compare-dfmat2s
-FSA::headtail(dfmat2) |> select(agef,age,prmat,prcuts,len)
-```
-
-If you use this method rather than the original method to create `dfmethod2` [used above](#making-the-data-frame) then you can combine all of the code of this section into one tight set. Additionally, make sure to save the result as `dfmat2` (as below) before continuing on [to make the figure](#making-the-figure).
-
-```{r}
-#| label: make-dfmat2-alt
-dfmat2 <- data.frame(agef=seq(min(dfmat$age),max(dfmat$age),0.1)) |>
-  mutate(age=FSA::lencat(agef,breaks=dfmat$age,as.fact=FALSE)) |>
-  left_join(dfmat,by="age") |>
-  mutate(len=vb(agef,Linf=vbpar))
-```
