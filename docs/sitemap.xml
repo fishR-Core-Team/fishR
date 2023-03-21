@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2023-03-19T22:44:43.304Z</lastmod>
+    <lastmod>2023-03-21T20:24:11.057Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -98,11 +98,11 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-15-Axis_Magic/index.html</loc>
-    <lastmod>2023-03-19T22:47:07.882Z</lastmod>
+    <lastmod>2023-03-21T20:19:16.989Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-18-Rooketal2022_CiscoHarvest/index.html</loc>
-    <lastmod>2023-03-19T22:47:13.561Z</lastmod>
+    <lastmod>2023-03-21T20:19:30.421Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-20-Rooketal2022_Fig4/index.html</loc>
@@ -331,5 +331,9 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/teaching/resources/YEPsum.html</loc>
     <lastmod>2023-03-19T22:50:15.739Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-22_McCarricketal2022_Fig2/index.html</loc>
+    <lastmod>2023-03-21T20:24:20.417Z</lastmod>
   </url>
 </urlset>
