@@ -41,7 +41,7 @@ You may submit additions or corrections to the list of packages by using the lin
 * [fishStan](https://code.usgs.gov/umesc/quant-ecology/fishstan); *Collection of hierarchical Bayesian models for fisheries analyses written in the Stan language*
 * [fishualize](https://cran.r-project.org/web/packages/fishualize/index.html): *Color palettes based on fish species*
 * [gfplot](https://pbs-assess.github.io/gfplot/index.html): *Data extraction and plotting of British Columbia groundfish data*
-* [ggFishPlot](https://deepwaterimr.github.io/ggFishPlots/): *Visualise and calculate life history parameters for fisheries science using ggplot2*
+* [ggFishPlots](https://deepwaterimr.github.io/ggFishPlots/): *Visualize and calculate life history parameters for fisheries science using ggplot2*
 * [hafroAssmt](https://data.hafro.is/readme.html): *Fisheries stock assessment at Hafro, the Marine Research Institute in Iceland*
 * [LBSPR: Length-Based Spawning Potential Ratio](https://cran.r-project.org/web/packages/LBSPR/index.html): *Simulate expected equilibrium length composition, YPR, and SPR using the LBSPR model. Fit the LBSPR model to length data to estimate selectivity, relative fishing mortality, and spawning potential ratio for data-limited fisheries.*
 * [LeMaRns](https://cran.r-project.org/web/packages/LeMaRns/index.html): *Set-up, run, and explore the outputs of the Length-based Multi-species model (LeMans; [Hall et al. 2006](https://doi.org/10.1139/f06-039)), focused on the marine environment. [Introductory publication is here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0227767).*
