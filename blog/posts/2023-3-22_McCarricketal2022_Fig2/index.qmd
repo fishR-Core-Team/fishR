@@ -10,6 +10,7 @@ categories:
   - facets
   - axes
   - Data Wrangling
+  - CPE
 ---
 
 :::{.callout-important}
