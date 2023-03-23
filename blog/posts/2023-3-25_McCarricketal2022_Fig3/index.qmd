@@ -1,0 +1,279 @@
+---
+title: McCarrick et al. (2022) PSD Plot
+description: Using ggplot2 to recreate the PSD by year figure in McCarrick et al. (2022). Extended it to include CIs.
+author: Derek H. Ogle
+date: 3/25/2023
+image: preview.png
+categories:
+  - ggplot2
+  - bar chart
+  - facets
+  - axes
+  - confidence intervals
+  - Data Wrangling
+  - PSD
+  - Size Structure
+---
+
+:::{.callout-important}
+## Series Note
+This is the second of several posts related to @mccarricketal_2022.
+:::
+
+# Introduction
+@mccarricketal_2022 examined the population dynamics of Yellowstone Cutthroat Trout (*Oncorhynchus clarkii bouvieri*) in Henrys Lake, Idaho over a nearly two decade period. Their [Figure 3](https://meridian.allenpress.com/view-large/figure/14538507/i1944-687X-13-1-169-f03.tif) showed various proportional stock distribution (PSD) calculations of Cutthroat Trout across years. I use `ggplot2` to recreate that figure here. I also modified their plot by adding confidence intervals to the calculations.
+
+The following packages are loaded for use below. A few functions from each of `lubridate`, `FSA`, `plyr`, `tidyr`, `scales`, `gghrx`, and `lemon` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+```
+
+@mccarricketal_2022 computed what I am calling an overall PSD^[This is the most common PSD measure.] and what are called "incremental" PSD indices. I assume that these are familar to most fisheries scientists, but they are described in more detail in Chapter 6 of @ogleIntroductoryFisheriesAnalyses2016.^[[This](https://ppp.purdue.edu/wp-content/uploads/2020/05/PPP-132.pdf) provides a decent description of the overall PSD.]
+
+&nbsp;
+
+# Data Wrangling
+### Individual Fish Data Frame
+@mccarricketal_2022 provided raw data for Figure 2 as an Excel file in their Data Supplement S1. The same data wrangling, up to where catch-per-unit-effort was calculated, used in [this previous post](../2023-3-22_McCarricketal2022_Fig2/#data-wrangling) is used here and, thus, will not be discussed in detail. 
+
+```{r}
+#| label: data-prep-1
+dat <- readxl::read_xlsx("../2023-3-22_McCarricketal2022_Fig2/download.xlsx",
+                         na=c("","??","QTY =","QTY=","UNK","NO TAG"),
+                         col_types=c("date","numeric","text",
+                                     "numeric","numeric","text")) |>
+  mutate(year=lubridate::year(Date),
+         year=ifelse(year==1905,2002,year)) |>
+  filter(!is.na(year)) |>
+  select(species=Species,year,length,weight)  |>
+  mutate(species=case_when(
+    species %in% c("YCT","Yct") ~ "YCT",
+    species %in% c("UTC","CHB","CHUB") ~ "UTC",
+    TRUE ~ species
+  )) |>
+  filter(species %in% c("YCT","UTC")) |>
+  mutate(species2=plyr::mapvalues(species,
+                                  from=c("YCT","UTC"),
+                                  to=c("Cutthroat Trout","Utah Chub"))) |>
+  mutate(gcat=FSA::psdAdd(len=length,species=species2))
+
+FSA::headtail(dat)
+```
+
+### PSD Summary Data Frame
+The data frame was filtered to only Cutthroat Trout (the only species shown in Figure 3) and sub-stock-sized fish were removed (PSD calculations do not consider sub-stock-sized fish).
+
+```{r}
+#| label: data-prep-2
+psd_dat <- dat |>
+  filter(species=="YCT",gcat!="substock")
+```
+
+The calculation of PSD values begins by counting the number of fish in each of the remaining Gabelhouse length categories, within each year.
+
+```{r}
+#| label: data-prep-3
+psd_dat <- psd_dat |>
+  group_by(year,gcat) |>
+  summarize(count=n()) |>
+  ungroup()
+FSA::headtail(psd_dat)
+```
+
+This data frame was then made wider by creating columns with the length category names, each with the "count" in that category underneath it for each year.
+
+```{r}
+#| label: data-prep-4
+psd_dat <- psd_dat |>
+  pivot_wider(names_from=gcat,values_from=count)
+FSA::headtail(psd_dat)
+```
+
+For example, in 2002 there were 20 stock- to quality-sized fish, 28 quality- to preferred-size fish, 1 preferred- to memorable-sized fish, and no fish in the other categories. Each PSD calculation requires the total number of stock-size and larger fish as the denominator; i.e., 49 fish in 2002. In addition, the overall PSD calculation requires the total number of quality-sized and larger fish as the numerator; i.e., 28 fish in 2002. These two quantities are computed in `mutate()` below, but note that `rowwise()` is used before that to force the calculations to be computed by row (i.e., by year).^[If `rowwise` is not used then, for example, `sum(stock+quality)` would be the sum of both the `stock` and `quality` **columns**; i.e., the sum across all years.]
+
+```{r}
+#| label: data-prep-5
+psd_dat <- psd_dat |>
+  rowwise() |>
+  mutate(qualityplus=sum(quality,preferred,memorable,trophy,na.rm=TRUE),
+         stockplus=sum(stock,qualityplus,na.rm=TRUE))
+FSA::headtail(psd_dat)
+```
+
+The overall PSD is calculated as quality-sized and larger fish divided by stock-sized and larger fish multiplied by 100. The three incremental PSD values are calculated as the number in the incremental length group (e.g., stock- to quality-sized) divided by stock-sized and larger fish multiplied by 100. These calculations are made below within `mutate()`.^[The incremental PSD names are within single back-ticks because the name contains a space (and a hyphen).]
+
+```{r}
+#| label: data-prep-6
+psd_dat <- psd_dat |>
+  mutate(PSD=qualityplus/stockplus*100,
+         `PSD S-Q`=stock/stockplus*100,
+         `PSD Q-P`=quality/stockplus*100,
+         `PSD P-M`=preferred/stockplus*100) |>
+  ungroup()
+FSA::headtail(psd_dat)
+```
+
+Finally, this data frame should be made longer such that the calculated PSD values will appear under one column (called `values`) and another column will be created with the name of the PSD metric. This process begins by restricting the data frame to the `year` and all calculated PSD values, then pivoting the values in all of the PSD columns into one column with the names of the PSD metric stored in `metric`, and then factoring `metric` with the levels controlled so that they will be plotted in the same order as in Figure 3. This new data frame has a new name, as the original `psd_dat` data frame is used [further below](#adding-confidence-intervals).
+
+```{r}
+#| label: data-prep-7
+psd_dat2 <- psd_dat |>
+  select(year,contains("PSD")) |>
+  pivot_longer(cols=contains("PSD"),names_to="metric") |>
+  mutate(metric=factor(metric,levels=c("PSD","PSD S-Q","PSD Q-P","PSD P-M")))
+FSA::headtail(psd_dat2)
+```
+
+This data frame, now called `psd_dat2`, is ready for recreating Figure 3.
+
+&nbsp;
+
+# Recreating Figure 3
+Figure 3 is a simple bar plot facetted across years similar to the CPE plot in [this previous post](../2023-3-22_McCarricketal2022_Fig2/#recreating-figure-2). Thus, I don't discuss the details further here.
+
+```{r}
+#| label: make-fig3
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=psd_dat2,mapping=aes(x=year,y=value)) +
+  geom_col(color="black",fill="gray70",width=1) +
+  geom_text(mapping=aes(label=metric),x=Inf,y=Inf,vjust=1.25,hjust=1.05,size=3,
+            check_overlap=TRUE) +
+  scale_y_continuous(name="PSD",limits=c(0,100),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(20)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  lemon::facet_rep_wrap(vars(metric),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.background=element_blank(),
+        strip.text=element_blank())
+```
+
+&nbsp;
+
+# Adding Confidence Intervals
+I wanted to see if I could make Figure 3 as above, but add confidence intervals to the PSD calculations.^[The authors added CIs to the relative weight calculations in their Figure 4, but did not do that here for their PSD calculations.]
+
+As discussed in @ogleIntroductoryFisheriesAnalyses2016 confidence intervals for a PSD can be made from binomial distribution theory using `binCI()` from `FSA`. This is a simple process of giving `binCI()` the number of "successes" (i.e., the numerator in the PSD calculation), the number of "trials"(i.e., the denominator), and the type of algorithm to use (we will use the "Wilson" algorithm here). For example, the CI for the overall PSD in 2002 is computed below.
+
+```{r}
+#| label: example-psd-ci
+FSA::binCI(29,49,type="wilson")*100
+```
+
+This becomes complicated here for several reasons:
+
+- The CIs are computed across multiple years.
+- The numerators differ among the PSD metrics (e.g., quality-sized and larger fish for the overall PSD but just quality-sized fish for PSD S-Q).
+- `binCI()` returns two values rather than 1 (thus, complicating the use of `mutate()`).
+- `binCI()` returns a matrix with column names rather than a named vector.
+
+Given these issues, confidence intervals the PSD, PSD S-Q, etc. will each be calculated separately and then combined into a single data frame. I begin by calculating the CIs for the PSD.
+
+Here we return to the wide `psd_dat` data frame from above. The calculation will be for each year so again use `rowwise()`. `FSA::binCI()` will be used with `mutate()` but its result must first be converted to a vector with `as.vector()` (*addresses last issue above*) and then put in a `list()`. In this case the `ci` "variable" will be a list with two items (the lower and upper CI values) for each year. We want to get the two values out of this list and into their own variables, which is accomplished with `unnest_wider()` from `tidyr` (*addressing the third issue above*). The results from `binCI()` (after `as.vector()`) were unnamed, so `names_sep=` must be used in `unnest_wider()`. With this set to `""`, the unnested variables will be the original name ("ci") followed by sequential numbers (i.e., "ci1" and "ci2" here). Finally,the data frame is reduced to the `year`, `PSD`, `ci1`, and `ci2` variables, but `PSD` is renamed `value` along the way.^[This renaming is necessary for `bind_rows()` further below.]
+
+```{r}
+#| label: calc-ci-PSD
+tmp1 <- psd_dat |>
+  rowwise() |>
+  mutate(ci=list(as.vector(FSA::binCI(qualityplus,stockplus,type="wilson")))) |>
+  tidyr::unnest_wider(ci,names_sep="") |>
+  select(year,value=PSD,ci1,ci2)
+FSA::headtail(tmp1)
+```
+
+This exact code is repeated for PSD S-Q but making sure that `stock` is the first argument to `binCI()`, the new `value` variable comes from `PSD S-Q`, and the resulting data frame is given a different name.
+
+```{r}
+#| label: calc-ci-PSDSQ
+tmp2 <- psd_dat |>
+  rowwise() |>
+  mutate(ci=list(as.vector(FSA::binCI(stock,stockplus,type="wilson")))) |>
+  tidyr::unnest_wider(ci,names_sep="") |>
+  select(year,value=`PSD S-Q`,ci1,ci2)
+```
+
+This process is repeated for the other two metrics.
+
+```{r}
+#| label: calc-ci-PSDQP
+tmp3 <- psd_dat |>
+  rowwise() |>
+  mutate(ci=list(as.vector(FSA::binCI(quality,stockplus,type="wilson")))) |>
+  tidyr::unnest_wider(ci,names_sep="") |>
+  select(year,value=`PSD Q-P`,ci1,ci2)
+```
+```{r}
+#| label: calc-ci-PSDPM
+tmp4 <- psd_dat |>
+  rowwise() |>
+  mutate(ci=list(as.vector(FSA::binCI(preferred,stockplus,type="wilson")))) |>
+  tidyr::unnest_wider(ci,names_sep="") |>
+  select(year,value=`PSD P-M`,ci1,ci2)
+```
+
+These four temporary data frames are bound together with a `metric` variable added to indicate which PSD metric appears in each row of the new data frame. Additionally, `ci1` and `ci2` were renamed to `LCI` and `UCI` for clarity, each CI endpoint was muliplied by 100 to put it on the same scale as the point estimates (i.e., percentages rather than proportions returned from `binCI()`), and `metric` was factored with controlled levels as above.
+
+```{r}
+#| label: make-psd-dat-3
+psd_dat3 <- bind_rows(list("PSD"=tmp1,"PSD S-Q"=tmp2,"PSD Q-P"=tmp3,"PSD P-M"=tmp4),
+                      .id="metric") |>
+  rename(LCI=`ci1`,UCI=`ci2`) |>
+  mutate(LCI=LCI*100,UCI=UCI*100,
+         metric=factor(metric,levels=c("PSD","PSD S-Q","PSD Q-P","PSD P-M")))
+FSA::headtail(psd_dat3)
+```
+
+The same code used above to recreate Figure 3 is repeated below, but `geom_errorbar()` is used with `LCI` mapped to `ymin=` and `UCI` mapped to `ymax=` to form the confidence intervals. `geom_errorbar()` is before `geom_col()` which gives the appearance of only showing the upper portion of the confidence interval (i.e., the lower portion is behind the bar). `width=0.25` was used to narrow the "caps" on the intervals.
+
+```{r}
+#| label: make-fig3-alt
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=psd_dat3,mapping=aes(x=year,y=value)) +
+  geom_errorbar(mapping=aes(ymin=LCI,ymax=UCI),width=0.25) +
+  geom_col(color="black",fill="gray70",width=1) +
+  geom_text(mapping=aes(label=metric),x=Inf,y=Inf,vjust=1.25,hjust=1.05,size=3,
+            check_overlap=TRUE) +
+  scale_y_continuous(name="PSD",limits=c(0,100),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(20)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  lemon::facet_rep_wrap(vars(metric),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.background=element_blank(),
+        strip.text=element_blank())
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot(data=filter(psd_dat3,metric=="PSD"),
+       mapping=aes(x=year,y=value)) +
+  geom_errorbar(mapping=aes(ymin=LCI,ymax=UCI),width=0.25) +
+  geom_col(color="black",fill="gray70",width=1) +
+  scale_y_continuous(name="PSD",limits=c(0,100),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(20)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        aspect.ratio=0.7)
+dev.off()
+```
