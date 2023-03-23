@@ -327,7 +327,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Mar 22, 2023</p>
+        <p class="date-modified">Mar 23, 2023</p>
       </div>
     </div>
       
@@ -350,6 +350,11 @@ div.csl-indent {
   </ul></li>
   <li><a href="#recreating-figure-3" id="toc-recreating-figure-3" class="nav-link" data-scroll-target="#recreating-figure-3">Recreating Figure 3</a></li>
   <li><a href="#adding-confidence-intervals" id="toc-adding-confidence-intervals" class="nav-link" data-scroll-target="#adding-confidence-intervals">Adding Confidence Intervals</a></li>
+  <li><a href="#further-thoughts" id="toc-further-thoughts" class="nav-link" data-scroll-target="#further-thoughts">Further Thoughts</a>
+  <ul class="collapse">
+  <li><a href="#point-and-lines-plot" id="toc-point-and-lines-plot" class="nav-link" data-scroll-target="#point-and-lines-plot">Point-and-Lines Plot</a></li>
+  <li><a href="#loess-smoother" id="toc-loess-smoother" class="nav-link" data-scroll-target="#loess-smoother">Loess Smoother</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-3-25_McCarricketal2022_Fig3/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -654,12 +659,75 @@ Series Note
 </div>
 </div>
 <p>&nbsp;</p>
+</section>
+<section id="further-thoughts" class="level1">
+<h1>Further Thoughts</h1>
+<section id="point-and-lines-plot" class="level3">
+<h3 class="anchored" data-anchor-id="point-and-lines-plot">Point-and-Lines Plot</h3>
+<p>As mentioned in <a href="../2023-3-20-Rooketal2022_Fig4/">this previous post</a> I understand that these are the much derided <a href="https://simplystatistics.org/posts/2019-02-21-dynamite-plots-must-die/">“dynamite plots”</a>. Personally, I find the bars distracting (so much gray with little purpose) and find a point-and-lines plot more appealing.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>psd_dat3,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span>value)) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),<span class="at">linewidth=</span><span class="fl">0.5</span>,<span class="at">width=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray70"</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>metric),<span class="at">x=</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.25</span>,<span class="at">hjust=</span><span class="fl">1.05</span>,<span class="at">size=</span><span class="dv">3</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">check_overlap=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"PSD"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Year"</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">2000</span>,<span class="dv">2022</span>),<span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="dv">2</span>),</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  lemon<span class="sc">::</span><span class="fu">facet_rep_wrap</span>(<span class="fu">vars</span>(metric),<span class="at">ncol=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/make-fig3-alt2-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="loess-smoother" class="level3">
+<h3 class="anchored" data-anchor-id="loess-smoother">Loess Smoother</h3>
+<p>A loess smoother could also be added with <code>geom_smooth()</code> to highlight any trends (or lack thereof).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>psd_dat3,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span>value)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">ymin=</span>LCI,<span class="at">ymax=</span>UCI),<span class="at">linewidth=</span><span class="fl">0.5</span>,<span class="at">width=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray70"</span>) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se=</span><span class="cn">FALSE</span>,<span class="at">color=</span><span class="st">"gray30"</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>metric),<span class="at">x=</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.25</span>,<span class="at">hjust=</span><span class="fl">1.05</span>,<span class="at">size=</span><span class="dv">3</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">check_overlap=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"PSD"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Year"</span>,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">2000</span>,<span class="dv">2022</span>),<span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="dv">2</span>),</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  lemon<span class="sc">::</span><span class="fu">facet_rep_wrap</span>(<span class="fu">vars</span>(metric),<span class="at">ncol=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/make-fig3-alt3-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
 <div class="cell" data-layout-align="center">
 
 </div>
 
 
 
+</section>
 </section>
 
 

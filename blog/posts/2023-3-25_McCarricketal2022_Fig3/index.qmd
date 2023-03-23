@@ -253,6 +253,61 @@ ggplot(data=psd_dat3,mapping=aes(x=year,y=value)) +
 
 &nbsp;
 
+# Further Thoughts
+### Point-and-Lines Plot
+As mentioned in [this previous post](../2023-3-20-Rooketal2022_Fig4/) I understand that these are the much derided ["dynamite plots"](https://simplystatistics.org/posts/2019-02-21-dynamite-plots-must-die/). Personally, I find the bars distracting (so much gray with little purpose) and find a point-and-lines plot more appealing.
+
+```{r}
+#| label: make-fig3-alt2
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=psd_dat3,mapping=aes(x=year,y=value)) +
+  geom_errorbar(mapping=aes(ymin=LCI,ymax=UCI),linewidth=0.5,width=0.25) +
+  geom_line(linewidth=0.75,color="gray70") +
+  geom_point(size=1) +
+  geom_text(mapping=aes(label=metric),x=Inf,y=Inf,vjust=1.25,hjust=1.05,size=3,
+            check_overlap=TRUE) +
+  scale_y_continuous(name="PSD",limits=c(0,100),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(20)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  lemon::facet_rep_wrap(vars(metric),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.background=element_blank(),
+        strip.text=element_blank())
+```
+
+### Loess Smoother
+A loess smoother could also be added with `geom_smooth()` to highlight any trends (or lack thereof).
+
+```{r}
+#| label: make-fig3-alt3
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=psd_dat3,mapping=aes(x=year,y=value)) +
+  geom_errorbar(mapping=aes(ymin=LCI,ymax=UCI),linewidth=0.5,width=0.25) +
+  geom_line(linewidth=0.75,color="gray70") +
+  geom_point(size=1) +
+  geom_smooth(se=FALSE,color="gray30",linetype="dashed",linewidth=0.5) +
+  geom_text(mapping=aes(label=metric),x=Inf,y=Inf,vjust=1.25,hjust=1.05,size=3,
+            check_overlap=TRUE) +
+  scale_y_continuous(name="PSD",limits=c(0,100),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(20)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  lemon::facet_rep_wrap(vars(metric),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.background=element_blank(),
+        strip.text=element_blank())
+```
+
+
+&nbsp;
+
 ```{r}
 #| label: make-preview
 #| echo: false
