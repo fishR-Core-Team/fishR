@@ -2,7 +2,7 @@
 title: McCarrick et al. (2022) Age Composition Plot
 description: Using ggplot2 to recreate the age composition by year figure in McCarrick et al. (2022).
 author: Derek H. Ogle
-date: 3/26/2023
+date: 3/27/2023
 image: preview.png
 categories:
   - ggplot2
