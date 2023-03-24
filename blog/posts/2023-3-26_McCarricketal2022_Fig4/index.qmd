@@ -1,0 +1,226 @@
+---
+title: McCarrick et al. (2022) Wr Plot
+description: Using ggplot2 to recreate the relative weight (wr) by year figure in McCarrick et al. (2022).
+author: Derek H. Ogle
+date: 3/26/2023
+image: preview.png
+categories:
+  - ggplot2
+  - bar chart
+  - facets
+  - axes
+  - confidence intervals
+  - Data Wrangling
+  - Relative Weight
+  - Condition
+---
+
+:::{.callout-important}
+## Series Note
+This is the third of several posts related to @mccarricketal_2022.
+:::
+
+# Introduction
+@mccarricketal_2022 examined the population dynamics of Yellowstone Cutthroat Trout (*Oncorhynchus clarkii bouvieri*) in Henrys Lake, Idaho over a nearly two decade period. Their [Figure 4](https://meridian.allenpress.com/view-large/figure/14538508/i1944-687X-13-1-169-f04.tif) showed mean (with confidence interval) relative weight (Wr) for various length categories of Cutthroat Trout across years. I use `ggplot2` to recreate that figure here.
+
+The following packages are loaded for use below. A few functions from each of `lubridate`, `FSA`, `plyr`, `scales`, `gghrx`, `lemon`, and `ggtext` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+```
+
+The data plotted here are relative weights, a common measure used to assess body condition of fish. I assume that this metric is familar to most fisheries scientists, but it is described in more detail in Chapter 8 of @ogleIntroductoryFisheriesAnalyses2016.^[Also see @blackwelletal_2000.]
+
+&nbsp;
+
+# Data Wrangling
+### Individual Fish Data Frame
+@mccarricketal_2022 provided raw data for Figure 2 as an Excel file in their Data Supplement S1. The same data wrangling, up to where catch-per-unit-effort was calculated, used in [this previous post](../2023-3-22_McCarricketal2022_Fig2/#data-wrangling) is used here^[And in [this post](../2023-3-25_McCarricketal2022_Fig3/)] and, thus, will not be discussed in detail. 
+
+```{r}
+#| label: data-prep-1
+dat <- readxl::read_xlsx("../2023-3-22_McCarricketal2022_Fig2/download.xlsx",
+                         na=c("","??","QTY =","QTY=","UNK","NO TAG"),
+                         col_types=c("date","numeric","text",
+                                     "numeric","numeric","text")) |>
+  mutate(year=lubridate::year(Date),
+         year=ifelse(year==1905,2002,year)) |>
+  filter(!is.na(year)) |>
+  select(species=Species,year,length,weight)  |>
+  mutate(species=case_when(
+    species %in% c("YCT","Yct") ~ "YCT",
+    species %in% c("UTC","CHB","CHUB") ~ "UTC",
+    TRUE ~ species
+  )) |>
+  filter(species %in% c("YCT","UTC")) |>
+  mutate(species2=plyr::mapvalues(species,
+                                  from=c("YCT","UTC"),
+                                  to=c("Cutthroat Trout","Utah Chub"))) |>
+  mutate(gcat=FSA::psdAdd(len=length,species=species2))
+
+FSA::headtail(dat)
+```
+
+The relative weigt for each fish needs to be added to this data frame, preferably with `wrAdd()` from `FSA`. Note, however, that there are two standard weight equations for Cutthroat Trout, one for lentic and one for lotic populations. We want to make sure to use the one for lentic populations here and, thus, cannot use the species name found in the data frame within `wrAdd()`. Note below that the data frame was also reduced to just Cutthroat Trout for which a weight was recorded, and the two species variables were dropped (just to simplify the output).
+
+```{r}
+#| label: data-prep-2
+dat <- dat |>
+  filter(species=="YCT",!is.na(weight)) |>
+  mutate(wr=FSA::wrAdd(weight,length,spec="Cutthroat Trout (lentic)")) |>
+  select(-starts_with("species"))
+FSA::headtail(dat)
+```
+
+### Wr Summary Data Frame
+Summary statistics of relative weight for all fish is computed below.
+
+```{r}
+#| label: data-prep-3
+wr_all <- dat |>
+  group_by(year) |>
+  summarize(n=n(),
+            mn_wr=mean(wr,na.rm=TRUE),
+            sd_wr=sd(wr,na.rm=TRUE),
+            se_wr=FSA::se(wr,na.rm=TRUE))
+FSA::headtail(wr_all)
+```
+
+Summary statistics of relative weight for each length category is computed below.
+
+```{r}
+#| label: data-prep-4
+wr_gcat <- dat |>
+  group_by(year,gcat) |>
+  summarize(n=n(),
+            mn_wr=mean(wr,na.rm=TRUE),
+            sd_wr=sd(wr,na.rm=TRUE),
+            se_wr=FSA::se(wr,na.rm=TRUE)) |>
+  ungroup()
+FSA::headtail(wr_gcat)
+```
+
+@mccarricketal_2022 only plotted fish in the "stock", "quality", and "preferred" length categories in Figure 4; thus, only these length categories are retained below.
+
+```{r}
+#| label: data-prep-5
+wr_gcat <- wr_gcat |>
+  filter(gcat %in% c("stock","quality","preferred"))
+```
+
+The summaries for all fish and fish by length categories are row-bound (i.e., stacked) together to form an overall summary data frame. Because the data frame for all fish did not have a `gcat` variable, that variable will be populated with `NA` when the two data frames are bound. The `ifelse()` below converts these `NA` values to `All`, before `gcat` is factored with levels ordered as they would appear in Figure 4 and with more descriptive labels. Finally, for aesthetic purposes, I moved `gcat` to be the first variable and sorted the results by year within length category.
+
+```{r}
+#| label: data-prep-6
+wr_dat <- bind_rows(wr_all,wr_gcat) |>
+  mutate(gcat=ifelse(is.na(gcat),"All",as.character(gcat)),
+         gcat=factor(gcat,levels=c("All","stock","quality","preferred"),
+                     labels=c("All fish","Stock to Quality",
+                              "Quality to Preferred","Preferred to Memorable"))) |>
+  relocate(gcat) |>
+  arrange(gcat,year)
+FSA::headtail(wr_dat)
+```
+
+Finally, the lower and upper confidence intervals for each mean are added to the data frame using normal distribution theory.^[`qt()` returns a the 97.5th percent critical value from a t-distribution with `df` degrees-of-freedom.]
+
+```{r}
+#| label: data-prep-7
+wr_dat <- wr_dat |>
+  mutate(lci=mn_wr-qt(0.975,df=n-1)*se_wr,
+         uci=mn_wr+qt(0.975,df=n-1)*se_wr)
+FSA::headtail(wr_dat)
+```
+
+This data frame, now called `wr_dat`, is ready for recreating Figure 4.
+
+&nbsp;
+
+# Recreating Figure 4
+Figure 4 is a simple bar plot facetted across years similar to the PSD plot in [this previous post](../2023-3-25_McCarricketal2022_Fig3/#recreating-figure-3). Confidence intervals are added as described in [that same post](../2023-3-25_McCarricketal2022_Fig3/#adding-confidence-intervals). Thus, many of the details below are not discussed further here. However, there are two new things to consider here.
+
+First, the y-axis in Figure 4 in @mccarricketal_2022 is limited from 70 to 140. If `limits=c(70,140)` is used in `scale_y_continuous()` as described in [this post]() the bars will be removed because their "data" extends to zero.^[Data points outside axis limits created in this way are treated as missing and are removed from the figure.] Thus, the limits of the y-axis must be set with `ylim=` in `coord_cartesian()` to preserved the bars.
+
+Second, the y-axis label in Figure 4 in @mccarricketal_2022 is italicized with a subscript "r". In the markdown language, asterisks are used to denoted italics and the tilde is used to create a subscript, which can be seen in `name=` in `scale_y_continuous()`. However, to make this markdown code render properly `axis.title.y=` in `theme` must be set to `element_markdown()` from `ggtext`.
+
+```{r}
+#| label: make-fig4
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=wr_dat,mapping=aes(x=year,y=mn_wr)) +
+  geom_errorbar(mapping=aes(ymin=lci,ymax=uci),width=0.25) +
+  geom_col(color="black",fill="gray70",width=1) +
+  geom_text(mapping=aes(label=gcat),x=Inf,y=Inf,vjust=1.25,hjust=1.05,size=3,
+            check_overlap=TRUE) +
+  scale_y_continuous(name="*W~r~*",expand=expansion(mult=0),
+                     breaks=scales::breaks_width(10)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  coord_cartesian(ylim=c(70,140)) +
+  lemon::facet_rep_wrap(vars(gcat),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.background=element_blank(),
+        strip.text=element_blank(),
+        axis.title.y=ggtext::element_markdown())
+```
+
+&nbsp;
+
+# Further Thoughts
+### Point-and-Lines Plot
+As mentioned in [this previous post](../2023-3-25_McCarricketal2022_Fig3/#further-thoughts) I understand that these are the much derided ["dynamite plots"](https://simplystatistics.org/posts/2019-02-21-dynamite-plots-must-die/). Personally, I find the bars distracting (so much gray with little purpose and starting at 70) and find a point-and-lines plot, possibly with a horizontal line at the common reference value of 100. 
+
+```{r}
+#| label: make-fig4-alt
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=wr_dat,mapping=aes(x=year,y=mn_wr)) +
+  geom_errorbar(mapping=aes(ymin=lci,ymax=uci),width=0.25) +
+  geom_line(linewidth=0.75,color="gray70") +
+  geom_point(size=1) +
+  geom_hline(yintercept=100,color="gray30",linetype="dashed",linewidth=0.5) +
+  geom_text(mapping=aes(label=gcat),x=Inf,y=Inf,vjust=1.25,hjust=1.05,size=3,
+            check_overlap=TRUE) +
+  scale_y_continuous(name="*W~r~*",limits=c(70,140),expand=expansion(mult=0),
+                     breaks=scales::breaks_width(10)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  lemon::facet_rep_wrap(vars(gcat),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.background=element_blank(),
+        strip.text=element_blank(),
+        axis.title.y=ggtext::element_markdown())
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot(data=filter(wr_dat,gcat=="All fish"),mapping=aes(x=year,y=mn_wr)) +
+  geom_errorbar(mapping=aes(ymin=lci,ymax=uci),width=0.25) +
+  geom_col(color="black",fill="gray70",width=1) +
+  scale_y_continuous(name="*W~r~*",expand=expansion(mult=0),
+                     breaks=scales::breaks_width(10)) +
+  scale_x_continuous(name="Year",
+                     limits=c(2000,2022),breaks=scales::breaks_width(2),
+                     expand=expansion(mult=0)) +
+  coord_cartesian(ylim=c(70,140)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title.y=ggtext::element_markdown(),
+        aspect.ratio=0.7)
+dev.off()
+```
