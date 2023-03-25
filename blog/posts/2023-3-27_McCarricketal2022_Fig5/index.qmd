@@ -8,7 +8,7 @@ categories:
   - ggplot2
   - area chart
   - bar chart
-  - facet
+  - facets
   - color
   - Data Wrangling
   - Age
