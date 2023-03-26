@@ -1,0 +1,276 @@
+---
+title: How Does Size Work in ggplot2
+description: Demonstration of size= and linewidth= in ggplot2 objects.
+author: Derek H. Ogle
+date: 3/27/2023
+image: preview.png
+categories:
+  - ggplot2
+  - axes
+  - annotations
+  - labels
+---
+
+# Introduction
+I have often wrestled with issues of "size" with respect to ggplot objects. It seems that `size=` behaves differently in certain situations and is unrelated to `linewidth=`. I often just fiddle with the values until I get something that looks like I want. Dissatisfied with this approach, I explored the idea of "size" in `ggplot2` further and report some of my findings here.
+
+```{r}
+#| label: load-packages
+library(ggplot2)
+```
+
+
+# Text
+### Default Sizes
+Unless modified by the user, the default "base" font size in most `ggplot2` themes is 11 pt. This is evident for `theme_grey()` (the default `ggplot2` theme) below. This can be modified with `base_size=` to the theme function.
+
+```{r}
+#| label: see-theme-text-size
+theme_grey()$text
+```
+
+Several of the default font sizes for other items are based on this base size. For example, for most themes the axis titles are the base size, the plot title is 1.2&times; larger than the base size, and the axis tick labels and facet strip labels are 0.8&times; the base size.^[I chose not to show the code by default for some of these plots because the point demonstrated by the plot is the point, not the code. However, click "code" if you would like to see the code.]
+
+```{r}
+#| label: demo-default-text-sizes
+#| code-fold: true
+#| fig.width: 5
+pd <- ggplot() +
+  geom_point() +
+  scale_x_continuous(name="Base Font Size (11)",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.5),
+                     labels=rep("0.8X Base Font Size",2)) +
+  scale_y_continuous(name="Base Font Size (11)",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.25),
+                     labels=rep("0.8X Base Font Size",2)) +
+  ggtitle("1.2X Base Font Size")
+pd
+```
+
+Text added to the plot with `geom_text()` is shown at the base font size by default.
+
+```{r}
+#| label: demo-default-label-size
+#| code-fold: true
+#| fig.width: 5
+pd +
+  geom_text(data=data.frame(x=0.5,y=0.5,label="Text at Default Base Font Size"),
+            mapping=aes(x=x,y=y,label=label))
+```
+
+### Text Label Font Sizes
+`geom_text()` has a `size=` argument for changing the size of the text. As such, you might change it to 13.2 assuming that its size would then match the size of plot title (i.e., 1.2&times;11).
+
+```{r}
+#| label: demo-default-label-issue-1
+#| code-fold: true
+#| fig.width: 5
+pd +
+  geom_text(data=data.frame(x=0.5,y=0.5,label="Text at 'size=13.2'"),
+            mapping=aes(x=x,y=y,label=label),size=13.2)
+```
+
+This clearly did not meet expectations. Why? Because the units for `size=` is **not** pts, rather it is mm. In `geom_text()` those mm units get converted to pts for displaying the text. There are a little over 72 dots (or "pts") per inch, which corresponds to approximately `r formatC(72/25.4,format="f",digits=3)` dots per mm. Thus, `size=13.2` sets the text size at approximately 13.2&times;`r formatC(72/25.4,format="f",digits=3)`=`r formatC(13.2*72/25.4,format="f",digits=3)` pts. Thus, the very large text above.
+
+This phenomenon is also evident in the default "size" used in `geom_text()` shown below. Note that 3.88&times;`r formatC(72/25.4,format="f",digits=3)`=`r formatC(3.88*72/25.4,format="f",digits=3)` or, approximately, the 11 pt base font size.
+
+```{r}
+#| label: geomtext-default-aes
+GeomText$default_aes
+```
+
+The exact conversion factor from mm to pts is stored in the `ggplot2` constant `.pt`.
+
+```{r}
+#| lbel: ggplots-pt-constant
+.pt
+```
+
+Thus, if you want use `size=` in `geom_text()` to display text at a specific pt size then divide the desired pt size by `.pt`. For example, the plot below uses `size=11*1.2/.pt` for the top text and `size=16/.pt` for the bottom text.
+
+```{r}
+#| label: demo-default-label-issue-2
+#| code-fold: true
+#| fig.width: 5
+pd +
+  geom_text(data=data.frame(x=c(0.5,0.5),y=c(0.75,0.25),
+                            label=c("Text at 1.2X Base Font Size",
+                                    "Text at 16 pt Font Size")),
+            mapping=aes(x=x,y=y,label=label),size=c(11*1.2,16)/.pt)
+```
+
+:::{.callout-tip}
+Set the font size in `geom_text()` or `geom_label()` to a desired point size by setting `size=` to the desired point size divided by the `ggplot2` constant in `.pt`. For example, use `size=16/.pt` to use a 16 pt font size.
+:::
+
+The following "chart" gives an idea of how a particular `size=` will be converted to a pt size (on the left) and how a particular pt size corresponds to a `size=` value (on the right).
+
+```{r}
+#| label: show-mm-to-pt-conversion-examples
+#| code-fold: true
+#| fig.width: 7
+#| fig.height: 6
+dat2 <- data.frame(sz1=3:10,
+                   pts2=c(6,8,10,11,12,14,18,24)) |>
+  dplyr::mutate(sz2=pts2/.pt,
+         pts1=sz1*.pt,
+         x1=rep(0,length(sz1)),
+         y=seq_along(sz1),
+         lbl1=glue::glue("size={sz1}; {round(pts1,1)} pt"),
+         x2=rep(1,length(sz2)),
+         lbl2=glue::glue("{pts2} pts; size={round(sz2,1)}"))
+
+ggplot(data=dat2) +
+  geom_text(mapping=aes(x=x1,y=y,size=sz1,label=lbl1)) +
+  geom_text(mapping=aes(x=x2,y=y,size=sz2,label=lbl2)) +
+  geom_vline(xintercept=0.5,color="gray70") +
+  scale_size_identity() +
+  scale_x_continuous(expand=expansion(add=0.5)) +
+  theme_classic() +
+  theme(axis.title=element_blank(),axis.text=element_blank(),
+        axis.ticks=element_blank(),axis.line=element_blank(),
+        legend.position="none")
+```
+
+
+### Theme-Related Font Sizes
+Text related to plot titles,^[And subtitles, captions, and tags.] axis titles, axis tick labels, and facet strip labels are all modified using `element_text()` with specific arguments in `theme()`. `element_text()` has `size=` for altering the size of text. However, the units of `size=` in this element function **is** pts and is not mm. The text sizes for the plot title, axis title, and axis tick marks for a `ggplot2` object called `pd2` are modified as shown below.
+
+```{r}
+#| label: demo-theme-text-sizes-1
+#| code-fold: true
+#| fig.width: 5
+pd2 <- ggplot() +
+  geom_point() +
+  scale_x_continuous(name="16 pt Font",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.5),
+                     labels=rep("12 pt Font",2)) +
+  scale_y_continuous(name="18 pt Font",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.25),
+                     labels=rep("11 pt Font",2)) +
+  ggtitle("24 pt Font")
+```
+
+```{r}
+#| label: demo-theme-text-sizes-2
+#| fig.width: 4.5
+pd2 +
+  theme(plot.title=element_text(size=24),
+        axis.title.y=element_text(size=18),
+        axis.title.x=element_text(size=16),
+        axis.text.y=element_text(size=11),
+        axis.text.x=element_text(size=12))
+```
+
+:::{.callout-tip}
+Set the font size for `ggplot2` plot labels, axis titles, axis tick labels, and facet strip lables using `size=` in `element_text()` set equal to specific arguments related to these items in `theme()`. The values used in `size=` here in pts and, thus, do **not** need to be converted to pts.
+:::
+
+&nbsp;
+
+# Line Widths
+
+```{r}
+#| label: demo-linewidths
+#| code-fold: true
+#| fig.width: 4.5
+dat1 <- data.frame(lw=c(0.1,0.25,0.5,0.75,1,1.5,2,3,4)) |>
+  dplyr::mutate(x=rep(0,length(lw)),
+         xend=rep(1,length(lw)),
+         y=seq_along(lw),
+         yend=y)
+
+ggplot(data=dat1) +
+  geom_segment(mapping=aes(x=x,xend=xend,y=y,yend=yend,linewidth=lw)) +
+  scale_y_continuous(name="linewidth=",breaks=dat1$y,labels=dat1$lw,
+                     sec.axis=sec_axis(~.*0.75,name="mm",
+                                       breaks=dat1$y*0.75,
+                                       labels=round(dat1$lw*0.75,2))) +
+  geom_segment(x=0,y=3,xend=1,yend=3,color="red") +
+  scale_x_continuous(expand=expansion(mult=0)) +
+  scale_linewidth_identity() +
+  theme_classic() +
+  theme(axis.title.x=element_blank(),axis.text.x=element_blank(),
+        axis.ticks=element_blank(),axis.line=element_blank(),
+        axis.title.y=element_text(size=14),axis.text.y=element_text(size=12),
+        legend.position="none")
+```
+
+
+```{r}
+#| label: show-linewidth-defaults
+GeomLine$default_aes
+GeomSegment$default_aes
+GeomPath$default_aes
+```
+
+&nbsp;
+
+# Points
+
+```{r}
+#| label: demo-points-1
+#| code-fold: true
+dat3 <- tidyr::expand_grid(Size=(0:3)*2,Stroke=(0:3)*2)
+
+ggplot(data=dat3,mapping=aes(x=Size,y=Stroke,size=Size,stroke=Stroke)) + 
+  geom_abline(slope=-1,intercept=(1:5)*2,linewidth=(1:5)*2,
+              colour="gray95",alpha=0.75) + 
+  geom_point(shape=21,fill="red") +
+  scale_size_identity() +
+  scale_y_continuous(expand=expansion(mult=0.1)) +
+  scale_x_continuous(expand=expansion(mult=0.1)) +
+  theme_bw() +
+  theme(axis.line=element_blank(),
+        axis.title=element_text(size=14),axis.text=element_text(size=12),
+        panel.grid.minor=element_blank(),
+        panel.border=element_blank())
+```
+
+
+```{r}
+#| label: demo-points-2
+#| code-fold: true
+dat4 <- tidyr::expand_grid(Size=0:6,Shape=c(19,21))
+
+stroke <- 4
+
+ggplot(data=dat4,mapping=aes(x=Shape,y=Size,size=Size,shape=Shape)) + 
+  geom_hline(yintercept=0:6,linewidth=(0:6)+stroke,color="gray90") +
+  geom_hline(yintercept=0:6,linewidth=(0:6),color="gray95") +
+  geom_point(fill="red",stroke=stroke) +
+  scale_size_identity() +
+  scale_shape_identity() +
+  scale_y_continuous(expand=expansion(mult=0.1)) +
+  scale_x_continuous(expand=expansion(mult=0.1),breaks=c(19,21)) +
+  theme_bw() +
+  theme(axis.line=element_blank(),
+        axis.title=element_text(size=14),axis.text=element_text(size=12),
+        panel.grid.minor=element_blank(),
+        panel.border=element_blank())
+
+```
+
+```{r}
+#| label: show-points-defaults
+GeomPoint$default_aes
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot() +
+  geom_point() +
+  theme_bw() +
+  theme(aspect.ratio=0.7)
+dev.off()
+```
