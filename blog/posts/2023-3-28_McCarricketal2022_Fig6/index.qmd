@@ -1,0 +1,297 @@
+---
+title: McCarrick et al. (2022) Back-Calculated TL Plots
+description: Using ggplot2 to recreate the boxplot and bar chart of back-calculated lengths at age in McCarrick et al. (2022).
+author: Derek H. Ogle
+date: 3/28/2023
+image: preview.png
+categories:
+  - ggplot2
+  - box plot
+  - bar chart
+  - facets
+  - Data Wrangling
+  - Growth
+  - Back-calculation
+---
+
+:::{.callout-important}
+## Series Note
+This is the fifth, and last, of several posts related to @mccarricketal_2022. I thank the authors for making their data available with their publication.
+:::
+
+# Introduction
+@mccarricketal_2022 examined the population dynamics of Yellowstone Cutthroat Trout (*Oncorhynchus clarkii bouvieri*) in Henrys Lake, Idaho over a nearly two decade period. Their [Figure 6](https://meridian.allenpress.com/view-large/figure/14538511/i1944-687X-13-1-169-f06.tif) showed the back-calculated total length of both Cutthroat Trout at three ages separated by decade and their [Figure 7](https://meridian.allenpress.com/view-large/figure/14538512/i1944-687X-13-1-169-f07.tif) showed the mean (and SE) back-calculated TL at age for two time periods. I use `ggplot2` here to recreate both figures.
+
+The following packages are loaded for use below. A few functions from each of `readxl`, `FSA`, `scales`, and `lemon` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+```
+
+:::{.callout-note}
+You will see below that I could recreate the structure but not the exact results of the author's Figure 6 or Figure 7. This may be due to issues present in the data provided with the publication that I discuss below, but it could also be that my data wrangling differs from theirs. I defer to the authors here as they are the experts with their data; I am just an interloper. I actually appreciate these data issues from an educational perspective as they provide rich opportunities to demonstrate a variety of techniques with "real" "messy" data.
+:::
+
+&nbsp;
+
+# Data Wrangling
+### Reading Excel File and Handling Some Initial Issuees
+@mccarricketal_2022 provided raw data for these figures as an Excel file in their Data Supplement S2. An initial glance at the Excel file revealed that every other line in the file was essentially a header line for the annular measurements on the scales or otoliths.^[This was not immediately obvious in the Excel file as a filter had been applied to hide those rows. I had to remove the filter in Excel to see the issue.] Fortunately, when these data were read in below, those lines appeared as missing data for the age-at-capture variable (as well as several others). Thus, I immediately removed rows with missing values in the age-at-capture variable. The variable names in Excel were also longer than I prefer so I renamed the variables that I chose to retain.
+
+```{r}
+#| label: data-prep-1
+dat <- readxl::read_excel("Download.xlsx") |>
+  select(Year,ID=Fish_Number,Structure,capAge=Age_at_Capture,capTL=Total_Length_mm,
+         edge,starts_with("annulus")) |>
+  filter(!is.na(capAge))
+
+FSA::headtail(dat)
+```
+
+These data are in what I call "one-fish-per-line" format. This is the "tidy" format for performing analyses on a fish, but it is not in a "tidy" format for performing analyses on lengths at specific ages. This will become more evident in the following sections.
+
+For consideration below, note that `Structure` contains only `Scale` and `Otolith`.
+
+```{r}
+#| label: see-structures
+unique(dat$Structure)
+```
+
+### Back-Calculation
+The authors used the Dahl-Lea method of back-calculation for otoliths and the Fraser-Lee method for scales.^[I assume the reader is familiar with back-calculation methods. If not [see here](https://fishr-core-team.github.io/RFishBC/articles/BCIntro.html) or examine the methods in @mccarricketal_2022.] The length adjustment term in the Fraser-Lee method came from the intercept of the regression of length-at-capture on scale radius-at-capture. This regression is performed using the "per fish" data in `dat`, but filtered to only the data from scales. The intercept is extracted from the regression results and stored in `a` for use below.
+
+```{r}
+#| label: length-on-scale-regression
+LonR <- lm(capTL~edge,data=filter(dat,Structure=="Scale"))
+( a <- coef(LonR)[["(Intercept)"]] )
+```
+
+Back-calculating length at a previous age requires the data to be in a "one-annulus-per-line" format. For this purpose, the data in `dat` is considered "wide" (annuli are in multiple columns of each row) and need  to be "pivoted" to "long" format with `pivot_longer()`. The columns that contain the annular measurements are given to `cols=`, `values_to=` gets a name for the column to contain these annular measurements, and `names_to=` gets a name for the column to contain the "label" for the annular measurements. The new `bcAge` variable (from `names_to=`) will contain the old columns names (i.e., "annulus 1", "annulus 2", etc.) by default. `names_prefix=` is used below to remove "annulus" from these labels and leave just the numeric age *labels* (e.g., "1", "2", etc.). The age "labels" are converted to numeric values with `as.numeric()` in `mutate()`. Finally, many rows in the new `Radius` variable will be missing because annular measurements were not made for ages older than the age-at-capture for the fish (e.g., `Radius` will be missing for all ages greater than 3 for an age-3 fish). These rows are removed with `filter()` below.
+
+```{r}
+#| label: data-prep-2
+dat2 <- dat |>
+  pivot_longer(cols=annulus1:annulus11,values_to="Radius",
+               names_to="bcAge",names_prefix="annulus") |>
+  mutate(bcAge=as.numeric(bcAge)) |>
+  filter(!is.na(Radius))
+
+FSA::headtail(dat2)
+```
+
+This data frame is now prepared to back-calculate lengths at previous ages from the measurements in `Radius`, the structure size-at-capture in `edge`, and the fish's length at capture in `capTL`. This calculation is somewhat complicated by the fact that different back-calculation equations are used depending on the structure examined. This is handled below using `case_when()` within `mutate()`.
+
+```{r}
+#| label: data-prep-3
+dat2 <- dat2 |>
+  mutate(bcTL=case_when(
+    Structure=="Scale" ~ ((capTL-a)/edge)*Radius+a,
+    Structure=="Otolith" ~ capTL*Radius/edge
+  ))
+
+FSA::headtail(dat2)
+```
+
+At this point, I felt the need to see if these calculations "worked." I made a plot of back-calculated length-at-age and noticed that most results were reasonable, but there were a handful of VERY large back-calculated lengths. This seemed like date error rather than systematic calculation error. I was further concerned that there may be errors of very low back-calculated lengths; thus, I used a log scale for the y-axis.
+
+```{r}
+#| label: data-examine-1
+#| fig-width: 5.5
+ggplot(data=dat2,mapping=aes(x=bcAge,y=bcTL,color=Structure)) +
+  geom_jitter(width=0.2,height=0,alpha=0.5) +
+  scale_y_continuous(trans="log10") +
+  theme_bw()
+```
+
+The large back-calculated lengths were from four individual fish, three of which had lengths-at-capture that were clearly errors (i.e., `capTL` over 2000 mm). Additionally, at least two of the small back-calculated lengths were from errors in length-at-capture (i.e., `capTL` less that 50 mm). A few of the other problems appeared related to bad `edge` measurements.
+
+```{r}
+#| label: data-examine-2
+dat2 |> filter(bcTL>1000)
+dat2 |> filter(bcTL<80)
+```
+
+I examined the length-at-capture and radius-at-capture data more closely.
+
+```{r}
+#| label: data-examine-3
+#| eval: false
+ggplot(data=dat,mapping=aes(x=capTL)) +
+  geom_histogram(bins=100) +
+  scale_x_continuous(trans="log10") +
+  coord_cartesian(ylim=c(0,10))
+## <100 and >1000 seem to be errors
+
+ggplot(data=dat,mapping=aes(x=edge)) +
+  geom_histogram(bins=100) +
+  scale_x_continuous(trans="log10") +
+  coord_cartesian(ylim=c(0,10))
+## <200? and >1500 seem to be errors
+```
+```{r}
+#| label: data-examine-3a
+#| fig.width: 8
+#| echo: false
+a <- ggplot(data=dat,mapping=aes(x=capTL)) +
+  geom_histogram(bins=100) +
+  scale_x_continuous(trans="log10") +
+  coord_cartesian(ylim=c(0,10))
+
+b <- ggplot(data=dat,mapping=aes(x=edge)) +
+  geom_histogram(bins=100) +
+  scale_x_continuous(trans="log10") +
+  coord_cartesian(ylim=c(0,10))
+
+library(patchwork)
+a + b
+```
+
+From this analysis, it seems that lengths-at-capture less than 100 mm and greater than 1000 mm are data errors. In addition, it seems that edge measurements of less than 200 and greater than 1500 are also data errors. If I had access to the original records, I would attempt to determine if these are data entry errors and fix them. I don't have that access, so I deleted fish with these measurements from the `dat` data frame.
+
+```{r}
+#| label: data-prep-4
+dat <- dat |>
+  filter(capTL>100,capTL<1000) |>
+  filter(edge>200,edge<3000)
+```
+
+Because the original `dat` data frame has now been altered, the regression and creation of `dat2` above needed to be repeated before continuing. **I did not show the repeated code here.**
+
+```{r}
+#| label: length-on-scale-regression-repeat
+#| echo: false
+LonR <- lm(capTL~edge,data=filter(dat,Structure=="Scale"))
+a <- coef(LonR)[["(Intercept)"]]
+```
+
+```{r}
+#| label: data-prep-2-repeat
+#| echo: false
+dat2 <- dat |>
+  pivot_longer(cols=annulus1:annulus11,values_to="Radius",
+               names_to="bcAge",names_prefix="annulus") |>
+  mutate(bcAge=as.numeric(bcAge)) |>
+  filter(!is.na(Radius))
+```
+
+```{r}
+#| label: data-prep-3-repeat
+#| echo: false
+dat2 <- dat2 |>
+  mutate(bcTL=case_when(
+    Structure=="Scale" ~ ((capTL-a)/edge)*Radius+a,
+    Structure=="Otolith" ~ capTL*Radius/edge
+  ))
+
+FSA::headtail(dat2)
+```
+
+&nbsp;
+
+# Recreating Figure 6
+A decade variable is added to `dat2` and the data was reduced to only age-2 to age-4 fish, as those were the only ages used in Figure 6.
+
+```{r}
+#| label: data-prep-5
+dat3 <- dat2 |>
+  mutate(Decade=floor(Year/10)*10,
+         Decade=ifelse(Decade==2020,2010,Decade),
+         Decade=factor(Decade)) |>
+  filter(bcAge>=2,bcAge<=4)
+```
+
+Figure 6 is a boxplot that can be produced with `geom_boxplot()`, with `Decade` mapped to the x-axis and `bcTL` mapped to the y-axis. Note that the x-axis variables should not be numeric, which is why `Decade` was converted to a factor above. Because of this, the x-axis is modified with `scale_x_discrete()` rather than `scale_x_continuous()`. The rest of functions used here were described in the previous posts related to @mccarricketal_2022.
+
+```{r}
+#| label: make-fig6
+#| fig-width: 4.5
+#| fig-height: 8
+ggplot(data=dat3,mapping=aes(x=Decade,y=bcTL)) +
+  geom_boxplot() +
+  geom_text(mapping=aes(label=paste("Age",bcAge)),check_overlap=TRUE,
+            x=Inf,y=Inf,vjust=1.2,hjust=1.1) +
+  scale_y_continuous(name="Back-calculated length (mm)",
+                     limits=c(100,700),breaks=scales::breaks_width(100),
+                     expand=expansion(mult=0)) +
+  scale_x_discrete(name="Decade") +
+  lemon::facet_rep_wrap(vars(bcAge),ncol=1) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.text=element_blank())
+```
+
+&nbsp;
+
+# Recreating Figure 7
+Figure 7 is a bar chart based on summarized data, which needs to be constructed from `dat2`. Below, `dat2` is restricted to only otoliths, the two periods shown in Figure 7 are created and converted to a factor, and then the sample size and the mean and standard error of back-calculated total lengths are calculated by age for each period. `.drop=FALSE` is used in `group_by()` so that the same number of ages will be shown for both periods, though both periods don't have the same range of ages.^[So, some ages will have `NA` for the mean and SE.] This will make the bars in the plot before appear in their proper locations even if a result is missing for the other period.
+
+```{r}
+#| label: data-prep-6
+dat4 <- dat2 |> 
+  filter(Structure=="Otolith") |>
+  mutate(Period=ifelse(Year<2011,"2002-2010","2011-2020"),
+         Period=factor(Period,levels=c("2002-2010","2011-2020")),
+         bcAge=factor(bcAge)) |>
+  group_by(Period,bcAge,.drop=FALSE) |>
+  summarize(n=n(),
+            mnTL=mean(bcTL,na.rm=TRUE),
+            seTL=FSA::se(bcTL,na.rm=TRUE)) |>
+  ungroup()
+FSA::headtail(dat4)
+```
+
+These summary data are then ready to make a bar chart, very similar to what was done in [this post](https://fishr-core-team.github.io/fishR/blog/posts/2023-3-26_McCarricketal2022_Fig4/#recreating-figure-4). Note here, though, that the width of the bars (in `geom_col()`) was reduced to create more room between the bars at each age. The `width=` of dodging in `position_dodge()` had to then be reduced a commensurate amount so that the bars at each age would touch. Finally, `legend.key.width=` and `legend.key.height=` were used in `theme()` to make the elongated "keys" in the legend as was done in Figure 7.
+
+```{r}
+#| label: make-fig7
+#| fig-width: 5.5
+pd <- position_dodge(width=0.7)
+
+ggplot(dat=dat4,mapping=aes(x=bcAge,y=mnTL,fill=Period)) +
+  geom_errorbar(mapping=aes(ymin=mnTL-seTL,ymax=mnTL+seTL),
+                position=pd,width=0.5) +
+  geom_col(position=pd,color="black",width=0.7) +
+  scale_x_discrete(name="Age (years)") +
+  scale_y_continuous(name="Mean back-calculated length (mm)",
+                     limits=c(0,600),breaks=scales::breaks_width(100),
+                     expand=expansion(mult=0)) +
+  scale_fill_manual(values=c("2002-2010"="gray10","2011-2020"="gray70")) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        strip.text=element_blank(),
+        legend.position=c(0,1),
+        legend.justification=c(-0.1,1.1),
+        legend.title=element_blank(),
+        legend.key.width=unit(15,units="mm"),
+        legend.key.height=unit(3,units="mm"),
+        legend.text=element_text(size=11))
+```
+
+:::{.callout-warning}
+I am not a fan of showing "error bars" that are only one SE. This is akin to showing a 68% confidence interval, which is not something that someone would usually do. I did that here because that is what was done in the published Figure 7, but I urge you not to do this ... show a proper confidence interval instead.
+:::
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot(data=filter(dat3,bcAge==3),mapping=aes(x=Decade,y=bcTL)) +
+  geom_boxplot() +
+  scale_y_continuous(name="Back-calculated length (mm)",
+                     limits=c(100,700),breaks=scales::breaks_width(100),
+                     expand=expansion(mult=0)) +
+  scale_x_discrete(name="Decade") +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        aspect.ratio=0.7)
+dev.off()
+```
