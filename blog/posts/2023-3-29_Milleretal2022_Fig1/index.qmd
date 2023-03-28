@@ -1,0 +1,277 @@
+---
+title: Miller et al. (2022) CPE Plot
+description: Using ggplot2 to recreate the CPE times series plot for two reservoirs in Miller et al. (2022).
+author: Derek H. Ogle
+date: 3/29/2023
+image: preview.png
+categories:
+  - CPE
+  - Linear Regression
+  - Data Wrangling
+  - ggplot2
+  - line plot
+  - facets
+  - annotations
+  - labels
+---
+
+:::{.callout-important}
+## Series Note
+This is the first of several posts related to @milleretal_2022. I thank the authors for making their data available with their publication.
+:::
+
+# Introduction
+@milleretal_2022 examined life history characteristics of Goldeye (*Hiodon alosoides*) in two Kansas reservoirs. Their [Figure 1](https://meridian.allenpress.com/view-large/figure/14538577/i1944-687X-13-1-243-f01.tif) displayed a time series of catch-per-unit-effort (CPE) from 1997 to 2020 for both reservoirs, including a regression line to demonstrate the decline in abundance. I use `ggplot2` here to recreate both figures.
+
+The following packages are loaded for use below. A few functions from each of `readxl`, `FSA`, `scales`, and `rstatix` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+library(ggtext)     # for use of markdown in text/labels
+```
+
+&nbsp;
+
+# Data Wrangling
+@milleretal_2022 provided the raw data for producing Figure 1 in the Data Supplement S1, which I loaded below. I converted the "reservoir" (`impd`) variable to a factor, reordered the levels so that the facets created below would be in the order used by the authors, and replaced the reservoir abbreviations with their longer names/labels.
+
+```{r}
+#| label: data-prep-1
+dat <- read.csv("JFWM-21-090.S1.csv") |>
+  mutate(impd=factor(impd,levels=c("MILR","LOVR"),labels=c("Milford","Lovewell")))
+
+FSA::headtail(dat)
+```
+
+I double-checked to make sure that the provided CPE variable (`catch_m2`) was equal to catch (`fish`) divided by the areal effort (`net_area_m2`).^[`all_equal()` checks equality between two vectors with a tolerance for machine precision.]
+
+```{r}
+#| label: check-cpe-var
+all.equal(dat$fish/dat$net_area_m2,dat$catch_m2)
+```
+
+These data are ready to recreate Figure 1.
+
+&nbsp;
+
+# Recreating Figure 1
+### Basic Plot with Regression Line
+The basic time series plot is created with `geom_line()` by mapping `yr` to the x-axis and `catch_m2` to the y-axis, and using a shade of gray and slightly thicker line to match the authors' choices. A linear regression is added with `geom_smooth()` using `method="lm"`.^[The default is to add a loess smoother, `lm` is for a linear model.] Here `se=FALSE` was used so a confidence band is not shown, and the line was changed to dashed, made black,^[It defaults to blue.] and made a little thicker than the time series line to match the authors' choices. A facet based on `impd` was created with `ncol=1` to stack the two plots and `scales="free_x"` so that labeled ticks would appear on the x-axis of both facets. Finally, the y-axis was labelled (more on this below), both axis limits were controlled and were expanded in a way to try to match the authors' choices, and the basic black-and-white theme was added.
+
+```{r}
+#| label: make-fig1-1
+#| fig-height: 5
+#| fig-width: 5
+ggplot(data=dat,mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",se=FALSE,linetype="dashed",color="black",linewidth=1.2) +
+  facet_wrap(vars(impd),ncol=1,scales="free_x") +
+  scale_y_continuous(name="Catch/m^2^",expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  theme_bw()
+```
+
+The portion of the regression line for Lovewell that extends below 0 was cut off in the published Figure 1. It is tempting to accomplish this by limiting the extent of the y-axis with `limits=` in `scale_y_continuous()` as has been done in other posts. However, in this case, that will remove the years for which the regression extends below zero from the data used to compute the regression, effectively altering the results. The better way to handle this is to limit the extent of the y-axis with `ylim=` in `coord_cartesian()`. With this all data is used in the regression, but the axis is clipped for viewing. 
+
+```{r}
+#| label: make-fig1-2
+#| fig-height: 5
+#| fig-width: 5
+ggplot(data=dat,mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",se=FALSE,linetype="dashed",color="black",linewidth=1.2) +
+  facet_wrap(vars(impd),ncol=1,scales="free_x") +
+  scale_y_continuous(name="Catch/m^2^",expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  coord_cartesian(ylim=c(0,0.4)) +
+  theme_bw()
+```
+
+The theme was then modified to try to match choices made by the authors. Specifically, the grid lines were removed; the x-axis title was removed; the axes tick mark labels were made slightly larger, bold, and black; and the facet strip labels were removed. In addition, the y-axis title was formatted with `element_markdown()` which forces any markdown language code in the title to be rendered appropriately. In this case, the "carets" around the "2" in `name=` (in `scale_y_continuous()`) is markup code to superscript the "2." Other arguments to `element_markdown()` are treated the same as those in `element_text()`. Thus, the y-axis title was also made slightly larger and bold.
+
+```{r}
+#| label: make-fig1-3
+#| fig-height: 5
+#| fig-width: 5
+ggplot(data=dat,mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",se=FALSE,linetype="dashed",color="black",linewidth=1.2) +
+  facet_wrap(vars(impd),ncol=1,scales="free_x") +
+  scale_y_continuous(name="Catch/m^2^",expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  coord_cartesian(ylim=c(0,0.4)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title.x=element_blank(),
+        axis.text=element_text(size=10,face="bold",color="black"),
+        strip.text=element_blank(),
+        axis.title.y=element_markdown(size=12,face="bold"))
+```
+
+### Reservoir and Regression Result Labels
+The last part to add to the plot is the reservoir label along with the significance (of the slope) and "r-squared" value from the regression. This takes a little bit of work.
+
+First, the regressions for each reservoir were fit "outside" of ggplot and the results returned from `summary()` were saved to individual objects.
+
+```{r}
+#| label: do-regressions
+mreg <- summary(lm(catch_m2~yr,data=filter(dat,impd=="Milford")))
+lreg <- summary(lm(catch_m2~yr,data=filter(dat,impd=="Lovewell")))
+```
+
+These objects contain the pertinent p-value and r-squared, which will be extracted for use. The p-value is in the second row and `Pr(>|t|)` column of the `$coefficients` portion of the results. These values were extracted from both regression results, saved into a vector `ps`, and then that vector was given to `p_format()` from `rstatix` for formatting. This particular use of `p_format()` will include the `p=` or `p<` label, will use one significant digit, and will convert any p-value that is less than 0.001 to "p<0.001".
+
+```{r}
+#| label: get-pvalues
+( ps <- c(mreg$coefficients[2,"Pr(>|t|)"],lreg$coefficients[2,"Pr(>|t|)"]) )
+( ps <-rstatix::p_format(ps,add.p=TRUE,accuracy=0.001,digits=1) )
+```
+
+The r-squared values are stored in `$r.squared` of the regression results and are extracted below and placed into a vector `rs`. They are then rounded to three decimal places and appended to `r^2^` which is markdown language for r<sup>2</sup>.
+
+```{r}
+#| label: get-rsquareds
+( rs <- c(mreg$r.squared,lreg$r.squared) )
+( rs <- paste0("r^2^=",round(rs,3)) )
+```
+
+Finally, a small data frame was created that had the reservoir names (in factor format to match the original data frame) and the `ps` and `rs` pasted together with `<br>` in between in a variable called `lbls`. The `<br>` will force a "line break" when the markdown language is rendered, thus forming a label with the r-squared value beneath to p-value result.
+
+```{r}
+#| label: make-labels-dataframe
+dlbls <- data.frame(impd=factor(c("Milford","Lovewell"),levels=c("Milford","Lovewell")),
+                    lbls=paste0(ps,"<br>",rs))
+dlbls
+```
+
+The reservoir names are added with `geom_text()` below as described in [this post](https://fishr-core-team.github.io/fishR/blog/posts/2023-3-18-Rooketal2022_CiscoHarvest/#recreating-figure-2). Note here that `size=13/.pt` will use a 13 pt font and that `fontface="bold"` will make the font bold. `geom_richtext()` is very similar to `geom_text()` except that it will render the markdown code appropriately. By default `geom_richtext()` places a box around the text, which is removed with `label.color=NA`. The reservoir label and the regression statistics were placed on the plot separately because the authors used a larger font for the reservoir label.
+
+```{r}
+#| label: make-fig1
+#| fig-height: 5
+#| fig-width: 5
+ggplot(data=dat,mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",se=FALSE,linetype="dashed",color="black",linewidth=1.2) +
+  geom_text(mapping=aes(label=impd),
+            x=2014,y=Inf,vjust=1.3,hjust=0,size=13/.pt,fontface="bold",
+            check_overlap=TRUE) +
+  geom_richtext(data=dlbls,mapping=aes(label=lbls),
+                x=2014,y=Inf,vjust=1.5,hjust=0,size=10/.pt,fontface="bold",
+                label.color=NA) +
+  facet_wrap(vars(impd),ncol=1,scales="free_x") +
+  scale_y_continuous(name="Catch/m^2^",expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  coord_cartesian(ylim=c(0,0.4)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title.x=element_blank(),
+        axis.text=element_text(size=10,face="bold",color="black"),
+        strip.text=element_blank(),
+        axis.title.y=element_markdown(size=12,face="bold"))
+```
+
+&nbsp;
+
+# Further Thoughts
+### Confidence Band
+In the authors' Figure 5 they included a confidence band around the fitted von Bertalanffy growth curve. They did not include a confidence band in their Figure 1. A confidence band can be added to Figure 1 by simply removing `se=FALSE` from `geom_smooth()`.^[The default is `se=TRUE` which adds the confidence band.]
+
+```{r}
+#| label: make-fig1-ci
+#| fig-height: 5
+#| fig-width: 5
+ggplot(data=dat,mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",linetype="dashed",color="black",linewidth=1.2) +
+  geom_text(mapping=aes(label=impd),
+            x=2014,y=Inf,vjust=1.3,hjust=0,size=13/.pt,fontface="bold",
+            check_overlap=TRUE) +
+  geom_richtext(data=dlbls,mapping=aes(label=lbls),
+                x=2014,y=Inf,vjust=1.5,hjust=0,size=10/.pt,fontface="bold",
+                label.color=NA) +
+  facet_wrap(vars(impd),ncol=1,scales="free_x") +
+  scale_y_continuous(name="Catch/m^2^",expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  coord_cartesian(ylim=c(0,0.4)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title.x=element_blank(),
+        axis.text=element_text(size=10,face="bold",color="black"),
+        strip.text=element_blank(),
+        axis.title.y=element_markdown(size=12,face="bold"))
+```
+
+### Information Label
+The process of adding the reservoir name with the regression results above was hacky because the reservoir name was in a larger font then the regression results. This, can, however be solved more elegantly, but more verbosely, using HTML code in `geom_richtext()`.^[Markdown is flexible enough to render HTML code appropriately.] Here, though, the reservoir label and the regression results need to be wrapped in paired `<span>` and `<\span>` couplets, with `<span>` including a `style=` that sets the font size as shown below.
+
+```{r}
+#| label: make-labels-dataframe-2
+tmp <- c("Milford","Lovewell")
+dlbls <- data.frame(impd=factor(tmp,levels=tmp),
+                    lbls=paste0("<span style='font-size:13pt;'>",tmp,"</span><br>",
+                                "<span style='font-size:10pt;'>",ps,"<br>",
+                                rs,"</span>"))
+dlbls
+```
+
+With this new `dlbls` data frame, the `geom_text()` from above that put on the reservoir labels can be removed and, in `geom_richtext()`, the `size=` should be removed as the font size is set in `dlbls` and `vjust=` should be adjusted up a little bit.
+
+```{r}
+#| label: make-fig1-alt
+#| fig-height: 5
+#| fig-width: 5
+ggplot(data=dat,mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",se=FALSE,linetype="dashed",color="black",linewidth=1.2) +
+  geom_richtext(data=dlbls,mapping=aes(label=lbls),
+                x=2014,y=Inf,vjust=1.1,hjust=0,fontface="bold",
+                label.color=NA) +
+  facet_wrap(vars(impd),ncol=1,scales="free_x") +
+  scale_y_continuous(name="Catch/m^2^",expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  coord_cartesian(ylim=c(0,0.4)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title.x=element_blank(),
+        axis.text=element_text(size=10,face="bold",color="black"),
+        strip.text=element_blank(),
+        axis.title.y=element_markdown(size=12,face="bold"))
+```
+
+:::{.callout-tip}
+If you know a little bit of markdown or HTML, then `ggtext` is a simple but powerful package for handling these kinds of issues. See more about `ggtext` [here](https://wilkelab.org/ggtext/index.html).
+:::
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot(data=filter(dat,impd=="Lovewell"),mapping=aes(x=yr,y=catch_m2)) +
+  geom_line(color="gray50",linewidth=1) +
+  geom_smooth(method="lm",se=FALSE,linetype="dashed",color="black",linewidth=1.2) +
+  geom_richtext(data=filter(dlbls,impd=="Lovewell"),mapping=aes(label=lbls),
+                x=2012,y=Inf,vjust=1.1,hjust=0,fontface="bold",
+                label.color=NA) +
+  scale_y_continuous(name="Catch/m^2^",
+                     expand=expansion(mult=c(0.02,0.10))) +
+  scale_x_continuous(limits=c(1995,2020),expand=expansion(mult=0.03)) +
+  coord_cartesian(ylim=c(0,0.4)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title.x=element_blank(),
+        axis.text=element_text(size=10,face="bold",color="black"),
+        strip.text=element_blank(),
+        axis.title.y=element_markdown(size=12,face="bold"),
+        aspect.ratio=0.7)
+dev.off()
+```
