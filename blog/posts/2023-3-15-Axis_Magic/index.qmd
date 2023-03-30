@@ -806,6 +806,9 @@ demo_discrete(c("Largemouth Bass","Smallmouth Bass","Suwanee Bass","Spotted Bass
   scale_x_discrete(labels=label_wrap(8))
 ```
 
+# Nested x-axis Labels
+There are times where it is useful to have the two levels of labels on the x-axis. For example, the primary labels are month in the year and a second level of labels shows the year. Or, the primary labels are species and the second levels shows the family that the species belong. Nesting x-axis labels is described in detail in [this post](../2023-3-30_Nested_xaxis/). 
+
 ```{r}
 #| label: make-preview
 #| echo: false
