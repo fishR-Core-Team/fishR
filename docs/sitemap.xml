@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2023-03-30T02:40:59.601Z</lastmod>
+    <lastmod>2023-03-30T21:54:57.583Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -354,10 +354,14 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-29_Milleretal2022_Fig1/index.html</loc>
-    <lastmod>2023-03-28T13:28:30.543Z</lastmod>
+    <lastmod>2023-03-30T20:53:52.170Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-30_Nested_xaxis/index.html</loc>
     <lastmod>2023-03-30T02:43:01.082Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-3-31_Milleretal2022_Fig23/index.html</loc>
+    <lastmod>2023-03-30T21:54:53.071Z</lastmod>
   </url>
 </urlset>
