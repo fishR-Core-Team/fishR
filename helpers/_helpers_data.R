@@ -9,10 +9,16 @@ library(dplyr)
 ## Helper Functions
 prepare_db <- function(pkg) {
   tmp <- hsearch_db(pkg)
-  tmp <- right_join(tmp$Base,tmp$Keywords,by="ID") %>%
-    right_join(tmp$Concept,by="ID") %>%
+  tmpB <- tmp$Base %>%
+    select(ID,Topic,Title,Package)
+  tmpK <- tmp$Keywords %>%
     filter(Keyword=="datasets") %>%
+    select(-Package)
+  tmpC <- tmp$Concepts %>%
     filter(Concept!="Datasets available by data()") %>%
+    select(-Package)
+  tmp <- right_join(tmpB,tmpK,by="ID") %>%
+    left_join(tmpC,by="ID",multiple="all") %>%
     select(Dataset=Topic,Description=Title,Concept,Package)
   tmp
 }
