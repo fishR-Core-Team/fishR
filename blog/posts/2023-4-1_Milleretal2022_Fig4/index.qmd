@@ -1,0 +1,225 @@
+---
+title: Miller et al. (2022) Catch Curve Plot
+description: Using ggplot2 to recreate the catch curve plot in Miller et al. (2022).
+author: Derek H. Ogle
+date: 4/1/2023
+image: preview.png
+categories:
+  - Mortality
+  - Catch Curve
+  - ggplot2
+  - line plot
+  - regression
+  - labels
+---
+
+:::{.callout-important}
+## Series Note
+This is the third and last post related to @milleretal_2022. I do not have plans to recreate their Figure 5 as it looks like they largely followed [this post](../2019-12-31_vonB_plots_1/).
+:::
+
+# Introduction
+@milleretal_2022 examined life history characteristics of Goldeye (*Hiodon alosoides*) in two Kansas reservoirs. Their [Figure 4](https://meridian.allenpress.com/view-large/figure/14538582/i1944-687X-13-1-243-f04.tif) represents a catch curve (log catch at age) for Goldeye captured in Milford Reservoir in 2020. I use `FSA` and `ggplot2` here to recreate this figure.
+
+The following packages are loaded for use below. A few functions from each of `readxl` and `scales` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+library(ggtext)     # for use of markdown in text/labels
+library(FSA)        # for catchCurve et al.
+```
+
+&nbsp;
+
+# Data Wrangling
+@milleretal_2022 provided the raw data for producing Figure 4 in their Data Supplement S2. These are the same data used to recreate Figures 2 and 3 [in this post](../2023-3-31_Milleretal2022_Fig23/). Thus, I do not explain the data wrangling used to obtain `dat2` below.
+
+```{r}
+#| label: data-prep-1
+dat2 <- read.csv("../2023-3-31_Milleretal2022_Fig23/JFWM-21-090.S2.csv") |>
+  filter(ann==1)
+head(dat2)
+```
+
+The total catch of individuals at each age-at-capture is required to construct Figure 4. One issue that occurs with these data is that no age-2 fish were captured and @milleretal_2022 treat this as an observed zero. If the data are simply grouped by `agecap` and summarized then no age-2 data will be present in the result. There are several ways to deal with this but I am going to handle it by first creating a new variable `fagecap` that is a factored version of `agecap`. The key here, though, is to set the levels of this new variable to cover the entire range of observed ages.
+
+```{r}
+#| label: data-prep-2
+dat2 <- dat2 |>
+  mutate(fagecap=factor(agecap,levels=1:8))
+```
+
+The "sample size" (i.e., catch) at each `fagecap` is then found. It is important to use `.drop=FALSE` so that the age-2 "level" is not removed from the resultant data frame because it did not exist in the original data frame.
+
+```{r}
+#| label: data-prep-3
+sum_a <- dat2 |>
+  group_by(fagecap,.drop=FALSE) |>
+  summarize(catch=n())
+sum_a
+```
+
+The issue now with using these data is that `fcapage` is a factor rather than a numeric. Thus, a new `agecap` variable is created below that treats age as numeric.^[This conversion code comes from `?factor`.]
+
+```{r}
+#| label: data-prep-4
+sum_a <- sum_a |>
+  mutate(agecap=as.numeric(levels(fagecap)))
+sum_a
+```
+
+Finally, the catch curve analysis ultimately requires log-transforming the catch variable. The zero for age-2 will cause an error when log-transforming. The authors addressed this by adding 1 to all of the `catch`es. This is common practice, but I comment on it further below. Also, for use when recreating Figure 4, the log of these modified catches are added to the data frame.
+
+```{r}
+#| label: data-prep-5
+sum_a <- sum_a |>
+  mutate(catch1=catch+1,
+         logcatch1=log(catch1))
+sum_a
+```
+
+# Catch Curve Analysis
+Catch curves analysis^[I assume the reader is familiar with catch curves. If not see Chapter 11 in @ogleIntroductoryFisheriesAnalyses2016.] may be conducted with `catchCurve()` from `FSA`. `catchCurve` require a formula of the form `catch~age` as the first argument and the corresponding data frame in `data=`. The "weighted catch curve" that @milleretal_2022 used requires `weighted=TRUE` in `catchCurve()`. The results should be saved to an object.
+
+```{r}
+#| label: fit-catch-curve-1
+cc1 <- catchCurve(catch1~agecap,data=sum_a,weighted=TRUE)
+```
+
+The point estimates of $Z$ and $A$ may be extracted with `coef()` or seen in the `Estimate` column of the `summary()` results.
+
+```{r}
+#| label: catch-curve-results-1
+coef(cc1)
+summary(cc1)
+```
+
+The so-called "recruitment coefficient of determination" (RCD) in @milleretal_2022 is just the usual r<sup>2</sup>, which can be extracted from the `summary()` of the `lm` object in `cc1`.
+
+```{r}
+#| label: catch-curve-results-2
+( r2 <- summary(cc1$lm)$r.squared )
+```
+
+These results were put into a label that will ultimately be placed on the plot.^[This process is discussed in several previous posts, including [this one](../2023-3-29_Milleretal2022_Fig1/#reservoir-and-regression-result-labels).]
+
+```{r}
+#| label: make-label
+lbl <- paste0("*Z* = ",round(coef(cc1)[["Z"]],2),
+              "<br>*A* = ",round(coef(cc1)[["A"]],2),"%",
+              "<br>RCD = ",round(r2,2))
+lbl
+```
+
+The `cc1` object also contains the data used in the catch curve analysis, including the weights in an object called `weights.e`. These weights are added to the `sum_a` data frame as they are needed to produce Figure 4.^[The weights can be produced "manually" as described in @ogleIntroductoryFisheriesAnalyses2016, but this process using `catchCurve()` is more efficient and less prone to error.]
+
+```{r}
+#| label: data-prep-6
+sum_a <- sum_a |>
+  mutate(wts=cc1$weights.e)
+sum_a
+```
+
+The data in `sum_a` are now ready to recreate Figure 4.
+
+&nbsp;
+
+# Recreating Figure 4
+Figure 4 is simply a scatterplot with a regression line overlaid. Constructing these kinds of plots was discussed in detail in [this post](../2023-3-31_Milleretal2022_Fig23/#recreating-figure-3). Thus, most of the code below are not discussed in depth. A very important detail, though, is that mapping `weight=wts` will provide the `wts` to `lm()` in `geom_smooth()` as weights, so that the weighted regression is used in the same way as was done in `catch_curve()`.^[In my opinion, the y-axis title should clearly note that 1 was added to the catches. Thus, my y-axis title is different than that in @milleretal_2022.] 
+
+```{r}
+#| label: make-fig4
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data=sum_a,mapping=aes(x=agecap,y=logcatch1,weight=wts)) +
+  geom_smooth(method="lm",se=FALSE,color="black") +
+  geom_point() +
+  scale_x_continuous(name="Estimated age",
+                     limits=c(0,8),breaks=scales::breaks_width(1),
+                     expand=expansion(mult=c(0,0.02))) +
+  scale_y_continuous(name="log(catch+1)",
+                     limits=c(0,5),breaks=scales::breaks_width(1),
+                     expand=expansion(mult=c(0.01,0))) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title=element_text(size=12,face="bold"),
+        axis.text=element_text(size=10,face="bold",color="black")) +
+  annotate(geom="richtext",x=Inf,y=Inf,vjust=1,hjust=1,label=lbl,
+           label.color=NA,fontface="bold")
+```
+
+### Possible Modifications
+As with other posts related to @milleretal_2022, a confidence band can be added to this regression.^[Note use of `coord_cartesian()` as the confidence band extends outside the desired range of the y-axis.]
+
+```{r}
+#| label: make-fig4-alt
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data=sum_a,mapping=aes(x=agecap,y=logcatch1,weight=wts)) +
+  geom_smooth(method="lm",color="black") +
+  geom_point() +
+  scale_x_continuous(name="Estimated age",
+                     limits=c(0,8),breaks=scales::breaks_width(1),
+                     expand=expansion(mult=c(0,0.02))) +
+  scale_y_continuous(name="log(catch+1)",
+                     breaks=scales::breaks_width(1),
+                     expand=expansion(mult=c(0.01,0))) +
+  coord_cartesian(ylim=c(0,5)) +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title=element_text(size=12,face="bold"),
+        axis.text=element_text(size=10,face="bold",color="black")) +
+  annotate(geom="richtext",x=Inf,y=Inf,vjust=1,hjust=1,label=lbl,
+           label.color=NA,fontface="bold")
+```
+
+Here, I think the confidence band is critical to include because it demonstrates that the regression line is NOT statistically declining.^[This was also apparent by the "large" p-value for the slope in the `summary(cc1)` results above.] Obviously, there is mortality in this population, so this indicates data issues.
+
+A major assumption of catch curve analysis is that recruitment is constant, which it clearly is not here. The most glaring evidence of this is the complete lack of age-2 fish. I don't know if the age-2 fish should be considered as an observed zero (i.e., that age-class is actually very low) or if there is a sampling issue (i.e., was the gear highly selective; here is some evidence for that in the length frequency histogram in their Figure 2 and in [this post](../2023-3-31_Milleretal2022_Fig23/#recreating-figure-2).)
+
+It is common to add 1 to "integer" data that has zeroes prior to log-transformation. However, this can be problematic. For example, adding 1 to the catch of age-1 fish is relatively minor (<1% change from 122 to 123), but the same modification is relatively important for the catch of age-7 fish (50% increase from 2 to 3). This can influence mortality estimates. For example, below one was added **only** to the age-2 catch.^[I am not suggesting that this is the correct thing to do. However, the authors would not have added a 1 if *one* age-2 fish had been captured. Thus, this will demonstrate some level of sensitivity to the data collection and analysis choice.]
+
+```{r}
+#| label: data-mod-1
+sum_a <- sum_a |>
+  mutate(catch1a=ifelse(agecap==2,1,catch))
+sum_a
+```
+
+And the catch curve analysis was conducted with these data instead.
+
+```{r}
+#| label: fit-catch-curve-2
+cc1a <- FSA::catchCurve(catch1a~agecap,data=sum_a,weighted=TRUE)
+summary(cc1a)
+```
+
+The issue of no statistical decline is still evident, but the point estimates of A, for example, has increased substantially.
+
+Ignoring the age-2 "fish" completely has an even larger effect.
+
+```{r}
+#| label: fit-catch-curve-3
+cc1b <- FSA::catchCurve(catch~agecap,data=sum_a,ages2use=-2,weighted=TRUE)
+summary(cc1b)
+```
+
+I am not sure what is the best way to handle this problem, but this exercise suggests to me that the published mortality estimate should be considered cautiously.
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=0.7)
+dev.off()
+```
