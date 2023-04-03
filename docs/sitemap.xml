@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2023-04-01T14:37:40.257Z</lastmod>
+    <lastmod>2023-04-03T20:49:33.388Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -367,5 +367,9 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-4-1_Milleretal2022_Fig4/index.html</loc>
     <lastmod>2023-04-01T14:37:50.405Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-4-4_Size/index.html</loc>
+    <lastmod>2023-04-03T20:49:28.701Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="Demonstration of size= and linewidth= in ggplot2 objects.">
+
+<title>fishR - How Does Size Work in ggplot2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//helpers/img/fishRlogo_Tight_Light_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+<script src="../../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../../helpers/styles.css">
+<meta property="og:title" content="fishR - How Does Size Work in ggplot2">
+<meta property="og:description" content="Demonstration of size= and linewidth= in ggplot2 objects.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2023-4-4_Size\preview.png">
+<meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="How Does Size Work in ggplot2">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2023-04-03">
+<meta name="citation_cover_date" content="2023-04-03">
+<meta name="citation_year" content="2023">
+<meta name="citation_online_date" content="2023-04-03">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Relative Weight (Wr) Status and Current Use in Fisheries Assessment and Management;,citation_author=Brian Blackwell;,citation_author=Michael Brown;,citation_author=David Willis;,citation_publication_date=2000-01-01;,citation_cover_date=2000-01-01;,citation_year=2000;,citation_fulltext_html_url=https://www.researchgate.net/publication/248945465_Relative_Weight_Wr_Status_and_Current_Use_in_Fisheries_Assessment_and_Management;,citation_doi=10.1080/10641260091129161;,citation_volume=8;,citation_journal_title=Reviews in Fisheries Science;,citation_journal_abbrev=REV FISH SCI;">
+<meta name="citation_reference" content="citation_title=Statistical methods for assessing agreement between two methods of clinical measurement;,citation_author=J Martin Bland;,citation_author=Douglas G Altman;,citation_publication_date=1986;,citation_cover_date=1986;,citation_year=1986;,citation_fulltext_html_url=https://www-users.york.ac.uk/~mb55/meas/ba.pdf;,citation_volume=i;,citation_language=en-US;,citation_journal_title=Lancet;">
+<meta name="citation_reference" content="citation_title=Growth, reproduction, mortality, distribution, and biomass of Freshwater Drum in Lake Erie;,citation_author=Michael T. Bur;,citation_publication_date=1984-01-01;,citation_cover_date=1984-01-01;,citation_year=1984;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133084718065;,citation_doi=10.1016/S0380-1330(84)71806-5;,citation_issn=0380-1330;,citation_volume=10;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Graphical and statistical methods for determining the consistency of age determinations;,citation_author=Steven Campana;,citation_author=M. Annand;,citation_author=James McMillan;,citation_publication_date=1995-01-01;,citation_cover_date=1995-01-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/254328508_Graphical_and_Statistical_Methods_for_Determining_the_Consistency_of_Age_Determinations;,citation_doi=10.1577/1548-8659(1995)124&amp;amp;amp;lt;0131:GASMFD&amp;gt;2.3.CO;2;,citation_volume=124;,citation_journal_title=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;,citation_journal_abbrev=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;">
+<meta name="citation_reference" content="citation_title=A novel “triple drawdown” method highlights deficiencies in invasive alien crayfish survey and control techniques;,citation_author=Daniel D. A. Chadwick;,citation_author=Eleri G. Pritchard;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Michael A. Chadwick;,citation_author=Lawrence J. B. Eagle;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/1365-2664.13758;,citation_doi=10.1111/1365-2664.13758;,citation_issn=1365-2664;,citation_volume=58;,citation_language=en-US;,citation_journal_title=Journal of Applied Ecology;">
+<meta name="citation_reference" content="citation_title=Warmwater Temperatures (≥ 20°C) as a Threat to Pacific Lamprey: Implications of Climate Change;,citation_author=Benjamin J. Clemens;,citation_publication_date=2022-07-07;,citation_cover_date=2022-07-07;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-087;,citation_issue=2;,citation_doi=10.3996/JFWM-21-087;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Creel limits in Minnesota: A proposal for change;,citation_author=Mark Cook;,citation_author=Timothy Goeman;,citation_author=Paul Radomski;,citation_author=Jerry Younk;,citation_author=Peter Jacobson;,citation_publication_date=2001-05-01;,citation_cover_date=2001-05-01;,citation_year=2001;,citation_fulltext_html_url=https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change;,citation_volume=26;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Recovery of an offshore Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus Namaycush&amp;lt;/i&amp;gt;) population in eastern Lake Superior;,citation_author=Gary L. Curtis;,citation_publication_date=1990-01-01;,citation_cover_date=1990-01-01;,citation_year=1990;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133090714219;,citation_issue=2;,citation_doi=10.1016/S0380-1330(90)71421-9;,citation_issn=0380-1330;,citation_volume=16;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Evaluating the physical removal of Ruffe (&amp;amp;amp;lt;i&amp;gt;Gymnocephalus&amp;lt;/i&amp;gt; <i>cernuus</i>) with bottom trawling;,citation_author=Gary D. Czypinski;,citation_author=Derek H. Ogle;,citation_publication_date=2011-09;,citation_cover_date=2011-09;,citation_year=2011;,citation_fulltext_html_url=https://derekogle.com/resources/pubs/CzypinskiOgle_2011.pdf;,citation_doi=10.1080/02705060.2011.569336;,citation_issn=0270-5060, 2156-6941;,citation_volume=26;,citation_language=en-US;,citation_journal_title=Journal of Freshwater Ecology;,citation_journal_abbrev=Journal of Freshwater Ecology;">
+<meta name="citation_reference" content="citation_title=Energy storage, growth, and maturation of Yellow Perch from different locations in Saginaw Bay, Michigan;,citation_author=James S. Diana;,citation_author=Ronald Salz;,citation_publication_date=1990-11;,citation_cover_date=1990-11;,citation_year=1990;,citation_fulltext_html_url=https://deepblue.lib.umich.edu/bitstream/handle/2027.42/142193/tafs0976.pdf?sequence=1;,citation_volume=119;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Understanding Bland Altman analysis;,citation_author=Davide Giavarina;,citation_publication_date=2015-06-05;,citation_cover_date=2015-06-05;,citation_year=2015;,citation_fulltext_html_url=https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4470095/;,citation_issue=2;,citation_doi=10.11613/BM.2015.015;,citation_issn=1330-0962;,citation_volume=25;,citation_journal_title=Biochemia Medica;,citation_journal_abbrev=Biochem Med (Zagreb);">
+<meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_volume=44;,citation_language=en-US;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Factors affecting recruitment of Walleyes in Escanaba Lake, Wisconsin, 1958–1996;,citation_author=Michael Hansen;,citation_author=Michael Bozek;,citation_author=Raimant Justine;,citation_author=Steven Newman;,citation_author=Michael Staggs;,citation_publication_date=1998-11-01;,citation_cover_date=1998-11-01;,citation_year=1998;,citation_fulltext_html_url=https://www.researchgate.net/profile/Michael-Hansen-44/publication/228588197_Factors_Affecting_Recruitment_of_Walleyes_in_Escanaba_Lake_Wisconsin_1958-1996/links/54638b9d0cf2c0c6aec4f0b0/Factors-Affecting-Recruitment-of-Walleyes-in-Escanaba-Lake-Wisconsin-1958-1996.pdf;,citation_volume=18;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Comparison of precision and bias of scale, fin ray, and otolith age estimates for Lake Whitefish (&amp;amp;amp;lt;i&amp;gt;Coregonus&amp;lt;/i&amp;gt; <i>clupeaformis</i>) in Lake Champlain;,citation_author=Seth J. Herbst;,citation_author=J. Ellen Marsden;,citation_publication_date=2011-06-01;,citation_cover_date=2011-06-01;,citation_year=2011;,citation_fulltext_html_url=https://www.academia.edu/54703943/Comparison_of_precision_and_bias_of_scale_fin_ray_and_otolith_age_estimates_for_lake_whitefish_Coregonus_clupeaformis_in_Lake_Champlain;,citation_doi=10.1016/j.jglr.2011.02.001;,citation_issn=0380-1330;,citation_volume=37;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=A computer program for age–length keys incorporating age assignment to individual fish;,citation_author=Daniel Isermann;,citation_author=C. Knight;,citation_publication_date=2005-08-01;,citation_cover_date=2005-08-01;,citation_year=2005;,citation_fulltext_html_url=https://www.researchgate.net/publication/233185504_A_Computer_Program_for_Age-Length_Keys_Incorporating_Age_Assignment_to_Individual_Fish;,citation_volume=25;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=A comparison of methods for estimating ages of unexploited Walleyes;,citation_author=Patrick M. Kocovsky;,citation_author=Robert F. Carline;,citation_publication_date=2000-11-01;,citation_cover_date=2000-11-01;,citation_year=2000;,citation_fulltext_html_url=https://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2;,citation_doi=10.1577/1548-8675(2000)020&amp;amp;amp;lt;1044:ACOMFE&amp;gt;2.0.CO;2;,citation_issn=0275-5947;,citation_volume=20;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Dietary patterns suggest West Virginia Bobcats are generalist carnivores;,citation_author=Stephanie M. Landry;,citation_author=Jordan E. Roof;,citation_author=Richard E. Rogers;,citation_author=Amy B. Welsh;,citation_author=Christopher W. Ryan;,citation_author=James T. Anderson;,citation_publication_date=2022-07-08;,citation_cover_date=2022-07-08;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-22-001;,citation_issue=2;,citation_doi=10.3996/JFWM-22-001;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=What’s the main idea behind Bland-Altman plots?;,citation_author=Bernhard Lehnert;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_fulltext_html_url=https://cran.r-project.org/web/packages/BlandAltmanLeh/vignettes/Intro.html;">
+<meta name="citation_reference" content="citation_title=BlandAltmanLeh: Plots (Slightly Extended) Bland-Altman Plots;,citation_author=Bernhard Lehnert;,citation_publication_date=2015-12-23;,citation_cover_date=2015-12-23;,citation_year=2015;,citation_fulltext_html_url=https://CRAN.R-project.org/package=BlandAltmanLeh;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_language=en-US;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Estimating harvestable Largemouth Bass abundance in a reservoir with an electrofishing catch depletion technique;,citation_author=Michael Maceina;,citation_author=William Wrenn;,citation_author=Donny Lowery;,citation_publication_date=1995-02-01;,citation_cover_date=1995-02-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/233240780_Estimating_Harvestable_Largemouth_Bass_Abundance_in_a_Reservoir_with_an_Electrofishing_Catch_Depletion_Technique;,citation_volume=15;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Generalizing trends in upstream american eel movements at four east coast hydropower projects;,citation_author=Kevin Mack;,citation_author=Twyla Cheatwood;,citation_publication_date=2022-12-05;,citation_cover_date=2022-12-05;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-066;,citation_issue=2;,citation_doi=10.3996/JFWM-21-066;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10-01;,citation_cover_date=2015-10-01;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;,citation_journal_abbrev=ICES Journal of Marine Science;">
+<meta name="citation_reference" content="citation_title=Population dynamics of Yellowstone Cutthroat Trout in Henrys Lake, Idaho;,citation_author=Darcy K. McCarrick;,citation_author=Jeffrey C. Dillon;,citation_author=Brett High;,citation_author=Michael C. Quist;,citation_publication_date=2022-03-25;,citation_cover_date=2022-03-25;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-074;,citation_issue=1;,citation_doi=10.3996/JFWM-21-074;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=An Evaluation of Goldeye Life History Characteristics in Two Kansas Reservoirs;,citation_author=Brett T. Miller;,citation_author=Ernesto Flores;,citation_author=D. Scott Waters;,citation_author=Ben C. Neely;,citation_publication_date=2022-02-02;,citation_cover_date=2022-02-02;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-090;,citation_issue=1;,citation_doi=10.3996/JFWM-21-090;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sexual dimorphism in Eurasian Perch as an example;,citation_author=W Mooij;,citation_author=Jules Rooij;,citation_author=Sander Wijnhoven;,citation_publication_date=1999-05-01;,citation_cover_date=1999-05-01;,citation_year=1999;,citation_fulltext_html_url=https://www.researchgate.net/profile/Sander-Wijnhoven/publication/230807448_Analysis_and_Comparison_of_Fish_Growth_from_Small_Samples_of_Length-at-Age_Data_Detection_of_Sexual_Dimorphism_in_Eurasian_Perch_as_an_Example/links/09e41504a07e30d58b000000/Analysis-and-Comparison-of-Fish-Growth-from-Small-Samples-of-Length-at-Age-Data-Detection-of-Sexual-Dimorphism-in-Eurasian-Perch-as-an-Example.pdf;,citation_volume=128;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Recruitment, growth, exploitation and management of walleyes in a southeastern Wisconsin lake;,citation_author=Donald Mraz;,citation_publication_date=1968;,citation_cover_date=1968;,citation_year=1968;,citation_fulltext_html_url=https://search.library.wisc.edu/digital/AA7LF2GR2E3E5385/pages;,citation_technical_report_institution=Wisconsin Department of Natural Resources;,citation_series_title=Technical Bulletin;">
+<meta name="citation_reference" content="citation_title=A comparison of the scale and otolith methods of age estimation for lake whitefish in lake huron;,citation_author=Andrew M. Muir;,citation_author=Mark P. Ebener;,citation_author=Ji X. He;,citation_author=James E. Johnson;,citation_publication_date=2008-06-01;,citation_cover_date=2008-06-01;,citation_year=2008;,citation_fulltext_html_url=https://doi.org/10.1577/M06-160.1;,citation_issue=3;,citation_doi=10.1577/M06-160.1;,citation_issn=0275-5947;,citation_volume=28;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_author=Derek H. Ogle;,citation_publication_date=2017-01-01;,citation_cover_date=2017-01-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_language=en-US;,citation_journal_title=Fisheries Research;,citation_journal_abbrev=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/;">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Assessing methods to improve benthic fish sampling in a stony headwater stream;,citation_author=Eleri G. Pritchard;,citation_author=Daniel D. A. Chadwick;,citation_author=Michael A. Chadwick;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/2688-8319.12111;,citation_issue=4;,citation_doi=10.1002/2688-8319.12111;,citation_issn=2688-8319;,citation_volume=2;,citation_language=en-US;,citation_journal_title=Ecological Solutions and Evidence;">
+<meta name="citation_reference" content="citation_title=Comparison of structures used to estimate age and growth of Yellowstone Cutthroat Trout;,citation_author=Michael C. Quist;,citation_author=Darcy K. McCarrick;,citation_author=Lynsey M. Harris;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-095;,citation_issue=2;,citation_doi=10.3996/JFWM-21-095;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Age and Growth of Fishes: Principles and Techniques;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/;,citation_doi=10.47886/9781934874486;,citation_isbn=978-1-934874-48-6;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_fulltext_html_url=https://books.google.com?id=33VRAAAAMAAJ;,citation_isbn=978-0-662-01440-9;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Population Biology of the Tan Riffleshell (&amp;amp;amp;lt;i&amp;gt;Epioblasma&amp;lt;/i&amp;gt; <i>florentina walkeri</i>) and the Effects of Substratum and Light on Juvenile Propagation;,citation_author=Susan Owen Rogers;,citation_publication_date=1999-12-06;,citation_cover_date=1999-12-06;,citation_year=1999;,citation_fulltext_html_url=https://vtechworks.lib.vt.edu/handle/10919/36143;,citation_language=en-US;,citation_dissertation_institution=Virginia Tech;">
+<meta name="citation_reference" content="citation_title=How many Ciscoes are needed for stocking in the Laurentian Great Lakes?;,citation_author=Benjamin J. Rook;,citation_author=Michael J. Hansen;,citation_author=Charles R. Bronte;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-025;,citation_issue=1;,citation_doi=10.3996/JFWM-21-025;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Population biology of Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus&amp;lt;/i&amp;gt; <i>namaycush</i>) of Lake Superior before 1950;,citation_author=Gary T. Sakagawa;,citation_author=Richard L. Pycha;,citation_publication_date=1971-01;,citation_cover_date=1971-01;,citation_year=1971;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/abs/10.1139/f71-011;,citation_doi=10.1139/f71-011;,citation_issn=0015-296X;,citation_volume=28;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {}Assessment{} of {}Fish{} {}Populations{};">
+<meta name="citation_reference" content="citation_title=Management goals for conserving White Sturgeon in the Sacramento–San Joaquin River Basin;,citation_author=Marta E. Ulaski;,citation_author=Shannon E. Blackburn;,citation_author=Zachary J. Jackson;,citation_author=Michael C. Quist;,citation_publication_date=2022-05-03;,citation_cover_date=2022-05-03;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-070;,citation_issue=2;,citation_doi=10.3996/JFWM-21-070;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Water-level fluctuations and water temperature effects on young-of-year Largemouth Bass in a Southwest irrigation reservoir;,citation_author=Alexander Vaisvil;,citation_author=Colleen A. Caldwell;,citation_author=Eric Frey;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-071;,citation_issue=2;,citation_doi=10.3996/JFWM-21-071;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Regional fisheries management investigations - Magic Valley region;,citation_author=Charels D Warren;,citation_author=Karen A Frank;,citation_author=Fred E Partridge;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_fulltext_html_url=https://collaboration.idfg.idaho.gov/FisheriesTechnicalReports/Mgt04-04Warren2001%20Regional%20Fisheries%20Management%20Investigations%20Magic%20Valley%20Region.pdf;,citation_language=en-US;,citation_publisher=Completion Report;">
+<meta name="citation_reference" content="citation_title=ggplot2: Elegant Graphics for Data Analysis;,citation_author=Hadley Wickham;,citation_author=Danielle Navarro;,citation_author=Thomas Lin Pedersen;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://ggplot2-book.org/index.html;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Age and growth of Rock Bass in eastern Lake Ontario;,citation_author=David R. Wolfert;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=http://pubs.er.usgs.gov/publication/1000461;,citation_volume=27;,citation_journal_title=New York Fish and Game Journal;">
+<meta name="citation_reference" content="citation_title=Thin plate regression splines;,citation_author=Simon N. Wood;,citation_publication_date=2003;,citation_cover_date=2003;,citation_year=2003;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00374;,citation_issue=1;,citation_doi=10.1111/1467-9868.00374;,citation_issn=1467-9868;,citation_volume=65;,citation_language=en-US;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Generalized Additive Models: An Introduction with R;,citation_author=Simon N. Wood;,citation_publication_date=2017-05-02;,citation_cover_date=2017-05-02;,citation_year=2017;,citation_fulltext_html_url=https://www.taylorfrancis.com/books/mono/10.1201/9781315370279/generalized-additive-models-simon-wood;,citation_doi=10.1201/9781315370279;,citation_isbn=978-1-315-37027-9;">
+<meta name="citation_reference" content="citation_title=Assessing the accuracy of drift‐dive estimates of brown trout ( &amp;amp;amp;lt;i&amp;gt;Salmo&amp;lt;/i&amp;gt; <i>trutta</i> ) abundance in two New Zealand rivers: A mark‐resighting study;,citation_author=Roger G. Young;,citation_author=John W. Hayes;,citation_publication_date=2001-06;,citation_cover_date=2001-06;,citation_year=2001;,citation_fulltext_html_url=http://www.tandfonline.com/doi/abs/10.1080/00288330.2001.9516997;,citation_issue=2;,citation_doi=10.1080/00288330.2001.9516997;,citation_issn=0028-8330, 1175-8805;,citation_volume=35;,citation_language=en-US;,citation_journal_title=New Zealand Journal of Marine and Freshwater Research;,citation_journal_abbrev=New Zealand Journal of Marine and Freshwater Research;">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/books.html">
+ <span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/packages.html">
+ <span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+ <span class="dropdown-text">fishR (alphabetical)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+ <span class="dropdown-text">fishR (by topic)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+ <span class="dropdown-text">Comprehensive (by package)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+ <span class="dropdown-text">Comprehensive (by topic)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching/index.html">
+ <span class="menu-text">Teaching</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/contribute.html">
+ <span class="menu-text">Get Involved</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">How Does Size Work in ggplot2</h1>
+                  <div>
+        <div class="description">
+          Demonstration of size= and linewidth= in ggplot2 objects.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">size</div>
+                <div class="quarto-category">annotations</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">Apr 3, 2023</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Apr 3, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#aesthetic-specification-documentation" id="toc-aesthetic-specification-documentation" class="nav-link" data-scroll-target="#aesthetic-specification-documentation">Aesthetic Specification Documentation</a></li>
+  <li><a href="#setting-sizes" id="toc-setting-sizes" class="nav-link" data-scroll-target="#setting-sizes">Setting Sizes</a>
+  <ul class="collapse">
+  <li><a href="#text" id="toc-text" class="nav-link" data-scroll-target="#text">Text</a>
+  <ul class="collapse">
+  <li><a href="#default-sizes" id="toc-default-sizes" class="nav-link" data-scroll-target="#default-sizes">Default Sizes</a></li>
+  <li><a href="#text-label-font-sizes" id="toc-text-label-font-sizes" class="nav-link" data-scroll-target="#text-label-font-sizes">Text Label Font Sizes</a></li>
+  <li><a href="#theme-related-font-sizes" id="toc-theme-related-font-sizes" class="nav-link" data-scroll-target="#theme-related-font-sizes">Theme-Related Font Sizes</a></li>
+  </ul></li>
+  <li><a href="#lines" id="toc-lines" class="nav-link" data-scroll-target="#lines">Lines</a></li>
+  <li><a href="#points" id="toc-points" class="nav-link" data-scroll-target="#points">Points</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a>
+  <ul class="collapse">
+  <li><a href="#scatterplot-with-best-fit-line" id="toc-scatterplot-with-best-fit-line" class="nav-link" data-scroll-target="#scatterplot-with-best-fit-line">Scatterplot with Best-Fit Line</a></li>
+  <li><a href="#bar-chart-with-labels" id="toc-bar-chart-with-labels" class="nav-link" data-scroll-target="#bar-chart-with-labels">Bar Chart with Labels</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-4-4_Size/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>I often struggle with “size” of ggplot objects. It has seemed that <code>size=</code> behaved differently in certain situations and was unrelated to <code>linewidth=</code>. I often just fiddle with the values until I get something that looks like I want. Dissatisfied with this approach, I explored the idea of “size” in <code>ggplot2</code> further.</p>
+<p>The rest of this post is split into two main sections. In <a href="#aesthetic-specification-documentation">the first</a>, I describe a confusion that I had from reading the <code>ggplot2</code> documentation with respect to the size of text, points, and lines. That section finishes with a summary of my findings with respect to this confusion, which is largely a summary of one answer I received on StackOverflow (as of 1-Apr-2023), and a possible solution which seems to address my confusion. In <a href="#setting-sizes">the second section</a>, I discuss how to set the “size” for text, lines, and points, and what these sizes mean.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="aesthetic-specification-documentation" class="level1 page-columns page-full">
+<h1>Aesthetic Specification Documentation</h1>
+<p>Aesthetic specifications are defined in <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html">this online documentation</a>. Below I copied some of the text from that documentation as it appeared on 1-Apr-2023. Under <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#linewidth">linewidth</a> the documentation reads:</p>
+<blockquote class="blockquote">
+<p>Due to a historical error, the unit of linewidth is roughly 0.75 mm. Making it exactly 1 mm would change a very large number of existing plots, so we’re stuck with this mistake.</p>
+</blockquote>
+<p>Under <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#font-size">Font size</a> the documentation reads:</p>
+<blockquote class="blockquote">
+<p>The <code>size</code> of text is measured in mm. This is unusual, but makes the size of text consistent with the size of lines and points. Typically you specify font size using points (or pt for short), where 1 pt = 0.35mm. <code>ggplot2</code> provides this conversion factor in the variable <code>.pt</code>, so if you want to draw 12pt text, set <code>size = 12 / .pt</code>.</p>
+</blockquote>
+<p>Under <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#colour-and-fill-1">Colour and fill</a> for points the documentation reads:</p>
+<blockquote class="blockquote">
+<p>Note that shapes 21-24 have both stroke <code>colour</code> and a <code>fill</code>. The size of the filled part is controlled by <code>size</code>, the size of the stroke is controlled by <code>stroke</code>. Each is measured in mm, and the total size of the point is the sum of the two.</p>
+</blockquote>
+<p>My read of these portions of the documentation leads me to conclude that using the same value for <code>linewidth=</code> for a line and <code>size=</code> for a point and text should result in either (a) all three being the same size but scaled to approximately 0.75 mm rather than 1 mm or (b) the point and text being the same size and scaled to 1 mm and the line being smaller and scaled to 0.75 mm.</p>
+<p>I tested these expectations with the plot below using a “base size” of 24 such that</p>
+<ul>
+<li>The gray text used <code>size=24</code> in <code>geom_text()</code>.</li>
+<li>The blue-and-red point used <code>size=12</code> and <code>stroke=12</code> in <code>geom_point()</code>.</li>
+<li>The orange point used <code>size=24</code> and <code>stroke=0</code> in <code>geom_point()</code>.</li>
+<li>The green point used <code>size=0</code> and <code>stroke=24</code> in <code>geom_point()</code>.</li>
+<li>The green-and-orange point use <code>size=12</code> and <code>stroke=12*0.753</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> in <code>geom_point()</code>.</li>
+</ul>
+<div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;More about 0.753 later, but note that it is “roughly 0.75” from the documentation for <code>linewidth=</code> shown above.</p></li></div><p>From these choices and my interpretation of the documentation above, I expected the following:</p>
+<ol type="1">
+<li>All but the green-and-orange point to be equally sized or the black line to be smaller than all but the green-and-orange point to which it would be equal in size.</li>
+<li>Regardless of the relation to the black line and the text, I expected all but the green-and-orange point to be equal in size.</li>
+</ol>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sz <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cf <span class="ot">&lt;-</span> .pt<span class="sc">/</span>.stroke</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">1</span>,<span class="at">linewidth=</span>sz) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.35</span>,<span class="at">y=</span><span class="dv">1</span>,<span class="at">label=</span><span class="st">"Text"</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">label=</span>label),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span>sz,<span class="at">color=</span><span class="st">"gray70"</span>) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.5</span>,<span class="at">y=</span><span class="dv">1</span>),<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">pch=</span><span class="dv">21</span>,<span class="at">size=</span>sz<span class="sc">/</span><span class="dv">2</span>,<span class="at">stroke=</span>sz<span class="sc">/</span><span class="dv">2</span>,<span class="at">fill=</span><span class="st">"red"</span>,<span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.6</span>,<span class="at">y=</span><span class="dv">1</span>),<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">pch=</span><span class="dv">21</span>,<span class="at">size=</span>sz,<span class="at">stroke=</span><span class="dv">0</span>,<span class="at">fill=</span><span class="st">"orange"</span>) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.7</span>,<span class="at">y=</span><span class="dv">1</span>),<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">pch=</span><span class="dv">21</span>,<span class="at">size=</span><span class="dv">0</span>,<span class="at">stroke=</span>sz,<span class="at">color=</span><span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.8</span>,<span class="at">y=</span><span class="dv">1</span>),<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">pch=</span><span class="dv">21</span>,<span class="at">size=</span>sz<span class="sc">/</span><span class="dv">2</span>,<span class="at">stroke=</span>sz<span class="sc">/</span><span class="dv">2</span><span class="sc">*</span>cf,<span class="at">fill=</span><span class="st">"orange"</span>,<span class="at">color=</span><span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limit=</span><span class="fu">c</span>(<span class="fl">0.275</span>,<span class="fl">0.85</span>)) <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-doc-confusion-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="page-columns page-full"><p>From this, it seems like an obvious issue is related to <code>stroke=</code>. Comparing the orange (only) to the green (only) point suggests that the size” of <code>stroke=</code> is larger than the size of <code>size=</code> such that <code>size=</code> plus <code>stroke=</code> does equal the overall size of the point, but not in a one-to-one way. For example, you can not reduce <code>size=</code> by some number of units and increase <code>stroke=</code> by the same number of units to have the same overall size of point. For example, each point below has the same sum of <code>size=</code> (first number, red fill) and <code>stroke=</code> (second number, blue).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;All overlaid on a line constructed with <code>linewidth=24</code>.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mostly from stefan in https://stackoverflow.com/a/75896754/1123933</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">size=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="dv">3</span>)<span class="sc">*</span><span class="dv">2</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">stroke=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="dv">3</span>)<span class="sc">*</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(size<span class="sc">+</span>stroke<span class="sc">==</span>sz)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>tmp,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>size)) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">1</span>,<span class="at">linewidth=</span>sz) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span><span class="dv">1</span>,<span class="at">stroke=</span>stroke,<span class="at">size=</span>size),<span class="at">shape=</span><span class="dv">21</span>,<span class="at">color=</span><span class="st">"blue"</span>,<span class="at">fill=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span><span class="dv">1</span>,<span class="at">label=</span><span class="fu">paste</span>(size,stroke,<span class="at">sep=</span><span class="st">" / "</span>)),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                        <span class="at">color=</span><span class="st">"white"</span>,<span class="at">fontface=</span><span class="st">"bold"</span>,<span class="at">size=</span><span class="dv">11</span><span class="sc">/</span>.pt) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_identity</span>() <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-doc-confusion-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I asked a question about all of this on <a href="https://community.rstudio.com/t/units-of-linewidth/162885">Posit Community</a> and on <a href="https://stackoverflow.com/questions/75894278/how-are-size-and-linewidth-related-in-ggplot20">StackOverlow</a>. While responses on both platforms ultimately did not clarify the issue above, one answer on StackOverflow was instructive. There, “Stefan” pointed out that <code>size=</code> is converted to pts with a constant built-in to <code>ggplot2</code> as <code>.pt</code> and that <code>stroke=</code> is converted to pts with a constant built-in to <code>ggplot2</code> as <code>.stroke</code>. These two conversion constants are different.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>.pt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  [1] 2.845276</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>.stroke</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  [1] 3.779528</code></pre>
+</div>
+</div>
+<p>Interestingly, their ratio is 0.753 which sounds like the “roughly 0.75” from the documentation about <code>linewidth=</code> above. “Stefan” went on to show in his StackOverflow answer that if you multiply the stroke value by the ratio of these two constants, which he called a “correction factor”, that the overall size of the point will follow my expectations. This is illustrated below where each point below has the same sum of <code>size=</code> (first number, orange fill) and <code>stroke=</code> times the correction factor (second number, green).</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mostly from stefan in https://stackoverflow.com/a/75896754/1123933</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>tmp,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>size)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">1</span>,<span class="at">linewidth=</span>sz) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span><span class="dv">1</span>,<span class="at">stroke=</span>stroke<span class="sc">*</span>cf,<span class="at">size=</span>size),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape=</span><span class="dv">21</span>,<span class="at">color=</span><span class="st">"green"</span>,<span class="at">fill=</span><span class="st">"orange"</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span><span class="dv">1</span>,<span class="at">label=</span><span class="fu">paste0</span>(size,<span class="st">" / "</span>,stroke,<span class="st">"*cf"</span>)),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">color=</span><span class="st">"black"</span>,<span class="at">fontface=</span><span class="st">"bold"</span>,<span class="at">size=</span><span class="dv">11</span><span class="sc">/</span>.pt) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_identity</span>() <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-doc-confusion-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From this it appears to me that <code>size=</code>, <code>stroke=</code>, and <code>linewidth=</code> will provide the same size for their respective objects if <code>stroke=</code> is multiplied by the “correction factor” derived from the ratio of <code>.pt</code> to <code>.stroke</code>.</p>
+<p>It is worth noting at this point that this “issue” of the overall size of the point may be moot in most situations as the default <code>size=</code> is 1.5 and default <code>stroke=</code> is <code>0.5</code>. Thus, the overall point will be larger than what would be expected for a <code>size=</code> plus <code>stroke=</code> of 2, but will likely not be perceptible to most eyes. That being said, you can always set <code>stroke=0.5*.pt/*.stroke</code> for default points to adjust for this issue.</p>
+<p>&nbsp;</p>
+</section>
+<section id="setting-sizes" class="level1 page-columns page-full">
+<h1>Setting Sizes</h1>
+<section id="text" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="text">Text</h2>
+<section id="default-sizes" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="default-sizes">Default Sizes</h3>
+<p>Unless modified by the user, the default “base” font size in most <code>ggplot2</code> themes is 11 pt, as shown below for <code>theme_grey()</code> (the default <code>ggplot2</code> theme). This can be modified with <code>base_size=</code> to the theme function.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_grey</span>()<span class="sc">$</span>text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  List of 11
+#R|   $ family       : chr ""
+#R|   $ face         : chr "plain"
+#R|   $ colour       : chr "black"
+#R|   $ size         : num 11
+#R|   $ hjust        : num 0.5
+#R|   $ vjust        : num 0.5
+#R|   $ angle        : num 0
+#R|   $ lineheight   : num 0.9
+#R|   $ margin       : 'margin' num [1:4] 0points 0points 0points 0points
+#R|    ..- attr(*, "unit")= int 8
+#R|   $ debug        : logi FALSE
+#R|   $ inherit.blank: logi TRUE
+#R|   - attr(*, "class")= chr [1:2] "element_text" "element"</code></pre>
+</div>
+</div>
+<div class="page-columns page-full"><p>Several of the default font sizes for other items are based off of this base size. For example, for most themes the axis titles are the base size, the plot title is 1.2× larger than the base size, and the axis tick labels and facet strip labels are 0.8× the base size.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;I chose not to show the code by default for some of these plots because the point demonstrated by the plot is the point, not the code. However, click “code” if you would like to see the code.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pd <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Base Font Size (11)"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">add=</span><span class="fl">0.5</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels=</span><span class="fu">rep</span>(<span class="st">"0.8X Base Font Size"</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Base Font Size (11)"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">add=</span><span class="fl">0.25</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels=</span><span class="fu">rep</span>(<span class="st">"0.8X Base Font Size"</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"1.2X Base Font Size"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-default-text-sizes-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Text added to the plot with <code>geom_text()</code> is shown at the base font size by default.</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pd <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.5</span>,<span class="at">y=</span><span class="fl">0.5</span>,<span class="at">label=</span><span class="st">"Text at Default Base Font Size"</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">label=</span>label))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-default-label-size-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="text-label-font-sizes" class="level3">
+<h3 class="anchored" data-anchor-id="text-label-font-sizes">Text Label Font Sizes</h3>
+<p><code>geom_text()</code> has a <code>size=</code> argument for changing the size of the text. As such, you might change it to 13.2 assuming that its size would then match the size of plot title (i.e., 1.2×11).</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pd <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fl">0.5</span>,<span class="at">y=</span><span class="fl">0.5</span>,<span class="at">label=</span><span class="st">"Text at 'size=13.2'"</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">label=</span>label),<span class="at">size=</span><span class="fl">13.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-default-label-issue-1-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This clearly did not meet expectations. Why? Because the units for <code>size=</code> is <strong>not</strong> pts, rather it is mm. In <code>geom_text()</code> those mm units get converted to pts for displaying the text. There are a little over 72 dots (or “pts”) per inch, which corresponds to approximately 2.835 dots per mm. Thus, <code>size=13.2</code> sets the text size at approximately 13.2×2.835=37.4 pts. Thus, the very large text above.</p>
+<p>This phenomenon is also evident in the default “size” used in <code>geom_text()</code> shown below. Note that 3.88×2.835=11.0 or, approximately, the 11 pt base font size.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>GeomText<span class="sc">$</span>default_aes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  Aesthetic mapping: 
+#R|  * `colour`     -&gt; "black"
+#R|  * `size`       -&gt; 3.88
+#R|  * `angle`      -&gt; 0
+#R|  * `hjust`      -&gt; 0.5
+#R|  * `vjust`      -&gt; 0.5
+#R|  * `alpha`      -&gt; NA
+#R|  * `family`     -&gt; ""
+#R|  * `fontface`   -&gt; 1
+#R|  * `lineheight` -&gt; 1.2</code></pre>
+</div>
+</div>
+<p>The exact conversion factor from mm to pts is stored in the <code>ggplot2</code> constant <code>.pt</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>.pt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  [1] 2.845276</code></pre>
+</div>
+</div>
+<p>Thus, to use <code>size=</code> in <code>geom_text()</code> to display text at a specific pt size, then divide the desired pt size by <code>.pt</code>. For example, the plot below uses <code>size=11*1.2/.pt</code> for the top text and <code>size=16/.pt</code> for the bottom text.</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pd <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="at">y=</span><span class="fu">c</span>(<span class="fl">0.75</span>,<span class="fl">0.25</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">label=</span><span class="fu">c</span>(<span class="st">"Text at 1.2X Base Font Size"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Text at 16 pt Font Size"</span>)),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">label=</span>label),<span class="at">size=</span><span class="fu">c</span>(<span class="dv">11</span><span class="sc">*</span><span class="fl">1.2</span>,<span class="dv">16</span>)<span class="sc">/</span>.pt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-default-label-issue-2-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Set the font size in <code>geom_text()</code> or <code>geom_label()</code> to a desired point size by setting <code>size=</code> to the desired point size divided by the <code>ggplot2</code> constant in <code>.pt</code>. For example, use <code>size=16/.pt</code> to use a 16 pt font size.</p>
+</div>
+</div>
+<p>The following “chart” gives an idea of how a particular <code>size=</code> will be converted to a pt size (on the left) and how a particular pt size corresponds to a <code>size=</code> value (on the right).</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sz1=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pts2=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">14</span>,<span class="dv">18</span>,<span class="dv">24</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sz2=</span>pts2<span class="sc">/</span>.pt,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">pts1=</span>sz1<span class="sc">*</span>.pt,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">x1=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(sz1)),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">y=</span><span class="fu">seq_along</span>(sz1),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">lbl1=</span>glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"size={sz1}; {round(pts1,1)} pt"</span>),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">x2=</span><span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">length</span>(sz2)),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">lbl2=</span>glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"{pts2} pts; size={round(sz2,1)}"</span>))</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2) <span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x1,<span class="at">y=</span>y,<span class="at">size=</span>sz1,<span class="at">label=</span>lbl1)) <span class="sc">+</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x2,<span class="at">y=</span>y,<span class="at">size=</span>sz2,<span class="at">label=</span>lbl2)) <span class="sc">+</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fl">0.5</span>,<span class="at">color=</span><span class="st">"gray70"</span>) <span class="sc">+</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_identity</span>() <span class="sc">+</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">add=</span><span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title=</span><span class="fu">element_blank</span>(),<span class="at">axis.text=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks=</span><span class="fu">element_blank</span>(),<span class="at">axis.line=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/show-mm-to-pt-conversion-examples-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="theme-related-font-sizes" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="theme-related-font-sizes">Theme-Related Font Sizes</h3>
+<div class="page-columns page-full"><p>Text related to plot titles,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> axis titles, axis tick labels, and facet strip labels are all modified using <code>element_text()</code> with specific arguments in <code>theme()</code>. <code>element_text()</code> has <code>size=</code> for altering the size of text. However, the units of <code>size=</code> in this element function <strong>is</strong> pts and is not mm. The text sizes for the plot title, axis title, and axis tick marks for a <code>ggplot2</code> object called <code>pd2</code> are modified as shown below.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;And subtitles, captions, and tags.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pd2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"16 pt Font"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">add=</span><span class="fl">0.5</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels=</span><span class="fu">rep</span>(<span class="st">"12 pt Font"</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"18 pt Font"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">add=</span><span class="fl">0.25</span>),</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels=</span><span class="fu">rep</span>(<span class="st">"11 pt Font"</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"24 pt Font"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pd2 <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">24</span>),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">18</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">16</span>),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">11</span>),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-theme-text-sizes-2-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Set the font size for <code>ggplot2</code> plot labels, axis titles, axis tick labels, and facet strip labels using <code>size=</code> in <code>element_text()</code> set equal to specific arguments related to these items in <code>theme()</code>. The values used in <code>size=</code> here is pts and, thus, do <strong>not</strong> need to be converted to pts.</p>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="lines" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="lines">Lines</h2>
+<div class="page-columns page-full"><p>Objects that are “lines” of some sort (see table below)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> all control their size or thickness with <code>linewidth=</code>. As noted in the <a href="#aesthetic-specification-documentation">first section</a>, <code>linewidth=</code> is measured in mm but due to an historical error it actually scales to “roughly 0.75 mm.”<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> The default linewidth for most geoms is 0.5, though some differ as shown below.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;There are still other geoms that use <code>linewidth=</code>.</p></li><li id="fn6"><p><sup>6</sup>&nbsp;The actual mm depends on the resolution of the display device.</p></li><li id="fn7"><p><sup>7</sup>&nbsp;These defaults come from, for example, <code>GeomLine$default_aes</code>.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">`</span><span class="at">geom_</span><span class="st">`</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">"abline()"</span>,<span class="st">"area()"</span>,<span class="st">"bar()"</span>,<span class="st">"boxplot()"</span>,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"col()"</span>,<span class="st">"contour()"</span>,<span class="st">"curve()"</span>,<span class="st">"errorbar()"</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">default=</span><span class="fu">c</span>(GeomAbline<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                            GeomArea<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                            GeomBar<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                            GeomBoxplot<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                            GeomCol<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                            GeomContour<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                            GeomCurve<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                            GeomErrorbar<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth),</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">     </span><span class="st">`</span><span class="ot">=</span><span class="fu">rep</span>(<span class="st">"     "</span>,<span class="dv">8</span>),</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">geom_</span><span class="st">`</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">"hline()"</span>,<span class="st">"line()"</span>,<span class="st">"path()"</span>,<span class="st">"pointrange()"</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"polygon()"</span>,<span class="st">"segment()"</span>,<span class="st">"smooth()"</span>,<span class="st">"tile()"</span>),</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">default=</span><span class="fu">c</span>(GeomHline<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>                            GeomLine<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>                            GeomPath<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>                            GeomPointrange<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>                            GeomPolygon<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>                            GeomSegment<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>                            GeomSmooth<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>                            GeomTile<span class="sc">$</span>default_aes<span class="sc">$</span>linewidth),</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>                  <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>tmp <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">|&gt;</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width=</span><span class="cn">FALSE</span>,</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>                            <span class="at">bootstrap_options=</span><span class="fu">c</span>(<span class="st">"striped"</span>,<span class="st">"hover"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">3</span>,<span class="at">width=</span><span class="st">"4em"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> geom_ </th>
+   <th style="text-align:right;"> default </th>
+   <th style="text-align:left;">       </th>
+   <th style="text-align:left;"> geom_ </th>
+   <th style="text-align:right;"> default </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> abline() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> hline() </td>
+   <td style="text-align:right;"> 0.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> area() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> line() </td>
+   <td style="text-align:right;"> 0.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> bar() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> path() </td>
+   <td style="text-align:right;"> 0.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> boxplot() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> pointrange() </td>
+   <td style="text-align:right;"> 0.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> col() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> polygon() </td>
+   <td style="text-align:right;"> 0.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> contour() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> segment() </td>
+   <td style="text-align:right;"> 0.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> curve() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> smooth() </td>
+   <td style="text-align:right;"> 1.0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> errorbar() </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:left;width: 4em; ">  </td>
+   <td style="text-align:left;"> tile() </td>
+   <td style="text-align:right;"> 0.1 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="page-columns page-full"><p>The display below gives an idea of the relative sizes of the different <code>linewidth=</code> values.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;The most common default linewidth is shown in red.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">lw=</span><span class="fu">c</span>(<span class="fl">0.1</span>,<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>,<span class="dv">1</span>,<span class="fl">1.5</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">x=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(lw)),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">xend=</span><span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">length</span>(lw)),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">y=</span><span class="fu">seq_along</span>(lw),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">yend=</span>y)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">xend=</span>xend,<span class="at">y=</span>y,<span class="at">yend=</span>yend,<span class="at">linewidth=</span>lw)) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"linewidth="</span>,<span class="at">breaks=</span>dat1<span class="sc">$</span>y,<span class="at">labels=</span>dat1<span class="sc">$</span>lw) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">0</span>,<span class="at">y=</span><span class="dv">3</span>,<span class="at">xend=</span><span class="dv">1</span>,<span class="at">yend=</span><span class="dv">3</span>,<span class="at">color=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linewidth_identity</span>() <span class="sc">+</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x=</span><span class="fu">element_blank</span>(),<span class="at">axis.text.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks=</span><span class="fu">element_blank</span>(),<span class="at">axis.line=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>),<span class="at">axis.text.y=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-linewidths-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="points" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="points">Points</h2>
+<p>As alluded to in the <a href="#aesthetic-specification-documentation">first section</a>, points consist of a <code>size=</code> “fill” portion and a <code>stroke=</code> “color” outline portion. As shown above, the total “size” of the point is the sum of the <code>size=</code> and <code>stroke=</code> value, though these values seem to be scaled differently. The <code>size=</code> portion of the point is scaled to the same as <code>size=</code> for text and <code>linewidth=</code> for lines. However, <code>stroke=</code> is scaled larger and, thus, you cannot “trade” values from <code>scale=</code> to <code>stroke=</code> to get the same size of point.</p>
+<div class="page-columns page-full"><p>The default values for points are <code>size=1.5</code> and <code>stroke=0.5</code>.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;Because of the small <code>stroke=</code> value, the issue discussed above is likely not going to be noticeable.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>GeomPoint<span class="sc">$</span>default_aes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  Aesthetic mapping: 
+#R|  * `shape`  -&gt; 19
+#R|  * `colour` -&gt; "black"
+#R|  * `size`   -&gt; 1.5
+#R|  * `fill`   -&gt; NA
+#R|  * `alpha`  -&gt; NA
+#R|  * `stroke` -&gt; 0.5</code></pre>
+</div>
+</div>
+<div class="page-columns page-full"><p>The following figure gives an idea of what different sizes look like for different shapes of “points.”<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn10"><p><sup>10</sup>&nbsp;The default <code>stroke=</code> of 0.5 was used.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>szs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fl">1.5</span>,<span class="dv">2</span>,<span class="fl">2.5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dat4 <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">Size=</span>szs,<span class="at">Shape=</span><span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">21</span>,<span class="dv">1</span>,<span class="dv">17</span>,<span class="dv">24</span>,<span class="dv">2</span>,<span class="dv">15</span>,<span class="dv">22</span>,<span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fShape=</span><span class="fu">factor</span>(Shape,<span class="at">levels=</span><span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">21</span>,<span class="dv">1</span>,<span class="dv">17</span>,<span class="dv">24</span>,<span class="dv">2</span>,<span class="dv">15</span>,<span class="dv">22</span>,<span class="dv">0</span>)),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">fSize=</span><span class="fu">factor</span>(Size))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>stroke <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat4,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>fShape,<span class="at">y=</span>fSize,<span class="at">size=</span>Size,<span class="at">shape=</span>Shape)) <span class="sc">+</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fu">seq_along</span>(szs),<span class="at">linewidth=</span>szs<span class="sc">+</span>stroke,<span class="at">color=</span><span class="st">"gray90"</span>) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fu">seq_along</span>(szs),<span class="at">linewidth=</span>szs,<span class="at">color=</span><span class="st">"gray95"</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">fill=</span><span class="st">"red"</span>,<span class="at">stroke=</span>stroke) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_identity</span>() <span class="sc">+</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_identity</span>() <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">name=</span><span class="st">"Size"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>),<span class="at">breaks=</span>szs) <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name=</span><span class="st">"Shape"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.line=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>),<span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/demo-points-2-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="examples" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<section id="scatterplot-with-best-fit-line" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="scatterplot-with-best-fit-line">Scatterplot with Best-Fit Line</h3>
+<div class="page-columns page-full"><p>As an example, suppose that you have log-transformed catch-at-age data that looks like this.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;This is typical, though idealistic, catch curve data.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">173</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">catch=</span><span class="dv">500</span><span class="sc">*</span>(<span class="dv">1</span><span class="fl">-0.4</span>)<span class="sc">^</span>age<span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">8</span>,<span class="at">sd=</span><span class="dv">10</span>),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">catch=</span><span class="fu">round</span>(catch,<span class="dv">0</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">logcatch=</span><span class="fu">log</span>(catch))</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>dat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|    age catch logcatch
+#R|  1   1   311 5.739793
+#R|  2   2   176 5.170484
+#R|  3   3   125 4.828314
+#R|  4   4    60 4.094345
+#R|  5   5    42 3.737670
+#R|  6   6    18 2.890372
+#R|  7   7    12 2.484907
+#R|  8   8    26 3.258097</code></pre>
+</div>
+</div>
+<p>And a simple “catch curve” plot is constructed that looks like this.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>logcatch)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">shape=</span><span class="dv">21</span>,<span class="at">fill=</span><span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"log(Catch)"</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/example-plot-1-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, suppose that you made the following changes to meet some (perhaps yours) requirements.</p>
+<ul>
+<li>Points that are twice as big (i.e., <code>size=3</code> rather than default <code>size=1.5</code>).</li>
+<li>A “best-fit” line that is 50% thicker (i.e., <code>linewidth=1.5</code> rather than default <code>linewidth=1</code>).</li>
+<li>Axis title labels that are 14 pt.</li>
+<li>Axis tick mark labels that are 12 pt.</li>
+<li>A species annotation label (in the upper-right corner) that uses 14 pt font.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>logcatch)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray80"</span>,<span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">shape=</span><span class="dv">21</span>,<span class="at">fill=</span><span class="st">"gray60"</span>,<span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"log(Catch)"</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"text"</span>,<span class="at">label=</span><span class="st">"Freshwater Drum"</span>,<span class="at">x=</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.5</span>,<span class="at">hjust=</span><span class="fl">1.1</span>,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">size=</span><span class="dv">14</span><span class="sc">/</span>.pt) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/example-plot-2-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="bar-chart-with-labels" class="level3">
+<h3 class="anchored" data-anchor-id="bar-chart-with-labels">Bar Chart with Labels</h3>
+<p>Suppose these same data are presented as a bar chart without the fitted line.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">"gray60"</span>,<span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.1</span>))) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/example-plot-3-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>And further suppose that you want to make the same textual changes as above and …</p>
+<ul>
+<li>Borders of the bars two times heavier (i.e., <code>linewidth=1</code> rather than the default <code>linewidth=0.5</code>).</li>
+<li>Horizontal gridlines four times heavier (i.e., <code>linewidth=2</code> rather than the default <code>linewidth=0.5</code>).</li>
+<li>Numeric labels of the catch amount above each bar in 12 pt font.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">"gray60"</span>,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>catch),<span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.5</span>,<span class="at">size=</span><span class="dv">12</span><span class="sc">/</span>.pt) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.1</span>))) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"text"</span>,<span class="at">label=</span><span class="st">"Freshwater Drum"</span>,<span class="at">x=</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.5</span>,<span class="at">hjust=</span><span class="fl">1.1</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">size=</span><span class="dv">14</span><span class="sc">/</span>.pt) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y=</span><span class="fu">element_line</span>(<span class="at">linewidth=</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/example-plot-4-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
+
+
+</section>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2023,
+  author = {Derek H. Ogle},
+  title = {How {Does} {Size} {Work} in Ggplot2},
+  date = {2023-04-03},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2023" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2023, April 3. How Does Size Work in ggplot2. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+  </li>  
+</ul>
+    </div>   
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

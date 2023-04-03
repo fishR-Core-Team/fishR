@@ -1,0 +1,513 @@
+---
+title: How Does Size Work in ggplot2
+description: Demonstration of size= and linewidth= in ggplot2 objects.
+author: Derek H. Ogle
+date: 4/3/2023
+image: preview.png
+categories:
+  - ggplot2
+  - size
+  - annotations
+---
+
+# Introduction
+I often struggle with "size" of ggplot objects. It has seemed that `size=` behaved differently in certain situations and was unrelated to `linewidth=`. I often just fiddle with the values until I get something that looks like I want. Dissatisfied with this approach, I explored the idea of "size" in `ggplot2` further.
+
+The rest of this post is split into two main sections. In [the first](#aesthetic-specification-documentation), I describe a confusion that I had from reading the `ggplot2` documentation with respect to the size of text, points, and lines. That section finishes with a summary of my findings with respect to this confusion, which is largely a summary of one answer I received on StackOverflow (as of 1-Apr-2023), and a possible solution which seems to address my confusion. In [the second section](#setting-sizes), I discuss how to set the "size" for text, lines, and points, and what these sizes mean.
+
+```{r}
+#| label: load-packages
+library(tidyverse)
+```
+
+&nbsp;
+
+# Aesthetic Specification Documentation
+Aesthetic specifications are defined in [this online documentation](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html). Below I copied some of the text from that documentation as it appeared on 1-Apr-2023. Under [linewidth](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#linewidth) the documentation reads:
+
+> Due to a historical error, the unit of linewidth is roughly 0.75 mm. Making it exactly 1 mm would change a very large number of existing plots, so we’re stuck with this mistake.
+
+Under [Font size](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#font-size) the documentation reads:
+
+> The `size` of text is measured in mm. This is unusual, but makes the size of text consistent with the size of lines and points. Typically you specify font size using points (or pt for short), where 1 pt = 0.35mm. `ggplot2` provides this conversion factor in the variable `.pt`, so if you want to draw 12pt text, set `size = 12 / .pt`.
+
+Under [Colour and fill](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#colour-and-fill-1) for points the documentation reads:
+
+> Note that shapes 21-24 have both stroke `colour` and a `fill`. The size of the filled part is controlled by `size`, the size of the stroke is controlled by `stroke`. Each is measured in mm, and the total size of the point is the sum of the two.
+
+My read of these portions of the documentation leads me to conclude that using the same value for `linewidth=` for a line and `size=` for a point and text should result in either (a) all three being the same size but scaled to approximately 0.75 mm rather than 1 mm or (b) the point and text being the same size and scaled to 1 mm and the line being smaller and scaled to 0.75 mm.
+
+I tested these expectations with the plot below using a "base size" of 24 such that
+
+- The gray text used `size=24` in `geom_text()`.
+- The blue-and-red point used `size=12` and `stroke=12` in `geom_point()`.
+- The orange point used `size=24` and `stroke=0` in `geom_point()`.
+- The green point used `size=0` and `stroke=24` in `geom_point()`.
+- The green-and-orange point use `size=12` and `stroke=12*0.753`^[More about 0.753 later, but note that it is "roughly 0.75" from the documentation for `linewidth=` shown above.] in `geom_point()`.
+
+From these choices and my interpretation of the documentation above, I expected the following:
+
+1. All but the green-and-orange point to be equally sized or the black line to be smaller than all but the green-and-orange point to which it would be equal in size.
+1. Regardless of the relation to the black line and the text, I expected all but the green-and-orange point to be equal in size.
+
+```{r}
+#| label: demo-doc-confusion
+#| fig-width: 7
+#| fig-height: 1.2
+#| code-fold: true
+sz <- 24
+cf <- .pt/.stroke
+  
+ggplot() +
+  geom_hline(yintercept=1,linewidth=sz) +
+  geom_text(data=data.frame(x=0.35,y=1,label="Text"),
+            mapping=aes(x=x,y=y,label=label),
+            size=sz,color="gray70") +
+  geom_point(data=data.frame(x=0.5,y=1),mapping=aes(x=x,y=y),
+             pch=21,size=sz/2,stroke=sz/2,fill="red",color="blue") +
+  geom_point(data=data.frame(x=0.6,y=1),mapping=aes(x=x,y=y),
+             pch=21,size=sz,stroke=0,fill="orange") +
+  geom_point(data=data.frame(x=0.7,y=1),mapping=aes(x=x,y=y),
+             pch=21,size=0,stroke=sz,color="green") +
+  geom_point(data=data.frame(x=0.8,y=1),mapping=aes(x=x,y=y),
+             pch=21,size=sz/2,stroke=sz/2*cf,fill="orange",color="green") +
+  scale_x_continuous(limit=c(0.275,0.85)) +
+  theme_void() +
+  theme(aspect.ratio=0.2)
+```
+
+From this, it seems like an obvious issue is related to `stroke=`. Comparing the orange (only) to the green (only) point suggests that the size" of `stroke=` is larger than the size of `size=` such that `size=` plus `stroke=` does equal the overall size of the point, but not in a one-to-one way. For example, you can not reduce `size=` by some number of units and increase `stroke=` by the same number of units to have the same overall size of point. For example, each point below has the same sum of `size=` (first number, red fill) and `stroke=` (second number, blue).^[All overlaid on a line constructed with `linewidth=24`.]
+
+```{r}
+#| label: demo-doc-confusion-2
+#| fig-width: 7
+#| fig-height: 1.2
+#| code-fold: true
+## mostly from stefan in https://stackoverflow.com/a/75896754/1123933
+tmp <- expand.grid(size=seq(0,30,3)*2,
+                   stroke=seq(0,30,3)*2) |>
+  subset(size+stroke==sz)
+
+ggplot(data=tmp,mapping=aes(x=size)) +
+  geom_hline(yintercept=1,linewidth=sz) +
+  geom_point(aes(y=1,stroke=stroke,size=size),shape=21,color="blue",fill="red") +
+  geom_text(mapping=aes(y=1,label=paste(size,stroke,sep=" / ")),
+                        color="white",fontface="bold",size=11/.pt) +
+  scale_size_identity() +
+  scale_x_continuous(expand=expansion(mult=0.1)) +
+  theme_void() +
+  theme(aspect.ratio=0.2)
+```
+
+I asked a question about all of this on [Posit Community](https://community.rstudio.com/t/units-of-linewidth/162885) and on [StackOverlow](https://stackoverflow.com/questions/75894278/how-are-size-and-linewidth-related-in-ggplot20). While responses on both platforms ultimately did not clarify the issue above, one answer on StackOverflow was instructive. There, "Stefan" pointed out that `size=` is converted to pts with a constant built-in to `ggplot2` as `.pt` and that `stroke=` is converted to pts with a constant built-in to `ggplot2` as `.stroke`. These two conversion constants are different.
+
+```{r}
+#| label: ggplots-constants
+.pt
+.stroke
+```
+
+Interestingly, their ratio is `r round(cf,digits=3)` which sounds like the "roughly 0.75" from the documentation about `linewidth=` above. "Stefan" went on to show in his StackOverflow answer that if you multiply the stroke value by the ratio of these two constants, which he called a "correction factor", that the overall size of the point will follow my expectations. This is illustrated below where each point below has the same sum of `size=` (first number, orange fill) and `stroke=` times the correction factor (second number, green).
+
+```{r}
+#| label: demo-doc-confusion-3
+#| fig-width: 7
+#| fig-height: 1.2
+#| code-fold: true
+## mostly from stefan in https://stackoverflow.com/a/75896754/1123933
+ggplot(data=tmp,mapping=aes(x=size)) +
+  geom_hline(yintercept=1,linewidth=sz) +
+  geom_point(aes(y=1,stroke=stroke*cf,size=size),
+             shape=21,color="green",fill="orange") +
+  geom_text(mapping=aes(y=1,label=paste0(size," / ",stroke,"*cf")),
+                        color="black",fontface="bold",size=11/.pt) +
+  scale_size_identity() +
+  scale_x_continuous(expand=expansion(mult=0.1)) +
+  theme_void() +
+  theme(aspect.ratio=0.2)
+```
+
+From this it appears to me that `size=`, `stroke=`, and `linewidth=` will provide the same size for their respective objects if `stroke=` is multiplied by the "correction factor" derived from the ratio of `.pt` to `.stroke`.
+
+It is worth noting at this point that this "issue" of the overall size of the point may be moot in most situations as the default `size=` is 1.5 and default `stroke=` is `0.5`. Thus, the overall point will be larger than what would be expected for a `size=` plus `stroke=` of 2, but will likely not be perceptible to most eyes. That being said, you can always set `stroke=0.5*.pt/*.stroke` for default points to adjust for this issue.
+
+&nbsp;
+
+# Setting Sizes
+## Text
+### Default Sizes
+Unless modified by the user, the default "base" font size in most `ggplot2` themes is 11 pt, as shown below for `theme_grey()` (the default `ggplot2` theme). This can be modified with `base_size=` to the theme function.
+
+```{r}
+#| label: see-theme-text-size
+theme_grey()$text
+```
+
+Several of the default font sizes for other items are based off of this base size. For example, for most themes the axis titles are the base size, the plot title is 1.2&times; larger than the base size, and the axis tick labels and facet strip labels are 0.8&times; the base size.^[I chose not to show the code by default for some of these plots because the point demonstrated by the plot is the point, not the code. However, click "code" if you would like to see the code.]
+
+```{r}
+#| label: demo-default-text-sizes
+#| code-fold: true
+#| fig.width: 5
+pd <- ggplot() +
+  geom_point() +
+  scale_x_continuous(name="Base Font Size (11)",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.5),
+                     labels=rep("0.8X Base Font Size",2)) +
+  scale_y_continuous(name="Base Font Size (11)",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.25),
+                     labels=rep("0.8X Base Font Size",2)) +
+  ggtitle("1.2X Base Font Size")
+pd
+```
+
+Text added to the plot with `geom_text()` is shown at the base font size by default.
+
+```{r}
+#| label: demo-default-label-size
+#| code-fold: true
+#| fig.width: 5
+pd +
+  geom_text(data=data.frame(x=0.5,y=0.5,label="Text at Default Base Font Size"),
+            mapping=aes(x=x,y=y,label=label))
+```
+
+### Text Label Font Sizes
+`geom_text()` has a `size=` argument for changing the size of the text. As such, you might change it to 13.2 assuming that its size would then match the size of plot title (i.e., 1.2&times;11).
+
+```{r}
+#| label: demo-default-label-issue-1
+#| code-fold: true
+#| fig.width: 5
+pd +
+  geom_text(data=data.frame(x=0.5,y=0.5,label="Text at 'size=13.2'"),
+            mapping=aes(x=x,y=y,label=label),size=13.2)
+```
+
+This clearly did not meet expectations. Why? Because the units for `size=` is **not** pts, rather it is mm. In `geom_text()` those mm units get converted to pts for displaying the text. There are a little over 72 dots (or "pts") per inch, which corresponds to approximately `r formatC(72/25.4,format="f",digits=3)` dots per mm. Thus, `size=13.2` sets the text size at approximately 13.2&times;`r formatC(72/25.4,format="f",digits=3)`=`r formatC(13.2*72/25.4,format="f",digits=1)` pts. Thus, the very large text above.
+
+This phenomenon is also evident in the default "size" used in `geom_text()` shown below. Note that 3.88&times;`r formatC(72/25.4,format="f",digits=3)`=`r formatC(3.88*72/25.4,format="f",digits=1)` or, approximately, the 11 pt base font size.
+
+```{r}
+#| label: geomtext-default-aes
+GeomText$default_aes
+```
+
+The exact conversion factor from mm to pts is stored in the `ggplot2` constant `.pt`.
+
+```{r}
+#| label: ggplots-pt-constant
+.pt
+```
+
+Thus, to use `size=` in `geom_text()` to display text at a specific pt size, then divide the desired pt size by `.pt`. For example, the plot below uses `size=11*1.2/.pt` for the top text and `size=16/.pt` for the bottom text.
+
+```{r}
+#| label: demo-default-label-issue-2
+#| code-fold: true
+#| fig.width: 5
+pd +
+  geom_text(data=data.frame(x=c(0.5,0.5),y=c(0.75,0.25),
+                            label=c("Text at 1.2X Base Font Size",
+                                    "Text at 16 pt Font Size")),
+            mapping=aes(x=x,y=y,label=label),size=c(11*1.2,16)/.pt)
+```
+
+:::{.callout-tip}
+Set the font size in `geom_text()` or `geom_label()` to a desired point size by setting `size=` to the desired point size divided by the `ggplot2` constant in `.pt`. For example, use `size=16/.pt` to use a 16 pt font size.
+:::
+
+The following "chart" gives an idea of how a particular `size=` will be converted to a pt size (on the left) and how a particular pt size corresponds to a `size=` value (on the right).
+
+```{r}
+#| label: show-mm-to-pt-conversion-examples
+#| code-fold: true
+#| fig.width: 7
+#| fig.height: 6
+dat2 <- data.frame(sz1=3:10,
+                   pts2=c(6,8,10,11,12,14,18,24)) |>
+  dplyr::mutate(sz2=pts2/.pt,
+         pts1=sz1*.pt,
+         x1=rep(0,length(sz1)),
+         y=seq_along(sz1),
+         lbl1=glue::glue("size={sz1}; {round(pts1,1)} pt"),
+         x2=rep(1,length(sz2)),
+         lbl2=glue::glue("{pts2} pts; size={round(sz2,1)}"))
+
+ggplot(data=dat2) +
+  geom_text(mapping=aes(x=x1,y=y,size=sz1,label=lbl1)) +
+  geom_text(mapping=aes(x=x2,y=y,size=sz2,label=lbl2)) +
+  geom_vline(xintercept=0.5,color="gray70") +
+  scale_size_identity() +
+  scale_x_continuous(expand=expansion(add=0.5)) +
+  theme_classic() +
+  theme(axis.title=element_blank(),axis.text=element_blank(),
+        axis.ticks=element_blank(),axis.line=element_blank(),
+        legend.position="none")
+```
+
+### Theme-Related Font Sizes
+Text related to plot titles,^[And subtitles, captions, and tags.] axis titles, axis tick labels, and facet strip labels are all modified using `element_text()` with specific arguments in `theme()`. `element_text()` has `size=` for altering the size of text. However, the units of `size=` in this element function **is** pts and is not mm. The text sizes for the plot title, axis title, and axis tick marks for a `ggplot2` object called `pd2` are modified as shown below.
+
+```{r}
+#| label: demo-theme-text-sizes-1
+#| code-fold: true
+#| fig.width: 5
+pd2 <- ggplot() +
+  geom_point() +
+  scale_x_continuous(name="16 pt Font",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.5),
+                     labels=rep("12 pt Font",2)) +
+  scale_y_continuous(name="18 pt Font",
+                     limits=c(0,1),breaks=c(0,1),expand=expansion(add=0.25),
+                     labels=rep("11 pt Font",2)) +
+  ggtitle("24 pt Font")
+```
+
+```{r}
+#| label: demo-theme-text-sizes-2
+#| fig.width: 4.5
+pd2 +
+  theme(plot.title=element_text(size=24),
+        axis.title.y=element_text(size=18),
+        axis.title.x=element_text(size=16),
+        axis.text.y=element_text(size=11),
+        axis.text.x=element_text(size=12))
+```
+
+:::{.callout-tip}
+Set the font size for `ggplot2` plot labels, axis titles, axis tick labels, and facet strip labels using `size=` in `element_text()` set equal to specific arguments related to these items in `theme()`. The values used in `size=` here is pts and, thus, do **not** need to be converted to pts.
+:::
+
+&nbsp;
+
+## Lines
+Objects that are "lines" of some sort (see table below)^[There are still other geoms that use `linewidth=`.] all control their size or thickness with `linewidth=`. As noted in the [first section](#aesthetic-specification-documentation), `linewidth=` is measured in mm but due to an historical error it actually scales to "roughly 0.75 mm."^[The actual mm depends on the resolution of the display device.] The default linewidth for most geoms is 0.5, though some differ as shown below.^[These defaults come from, for example, `GeomLine$default_aes`.]
+
+```{r}
+#| label: show-linewidth-defaults
+#| code-fold: true
+#| results: markup
+tmp <- data.frame(`geom_`=c("abline()","area()","bar()","boxplot()",
+                            "col()","contour()","curve()","errorbar()"),
+                  default=c(GeomAbline$default_aes$linewidth,
+                            GeomArea$default_aes$linewidth,
+                            GeomBar$default_aes$linewidth,
+                            GeomBoxplot$default_aes$linewidth,
+                            GeomCol$default_aes$linewidth,
+                            GeomContour$default_aes$linewidth,
+                            GeomCurve$default_aes$linewidth,
+                            GeomErrorbar$default_aes$linewidth),
+                  `     `=rep("     ",8),
+                  `geom_`=c("hline()","line()","path()","pointrange()",
+                            "polygon()","segment()","smooth()","tile()"),
+                  default=c(GeomHline$default_aes$linewidth,
+                            GeomLine$default_aes$linewidth,
+                            GeomPath$default_aes$linewidth,
+                            GeomPointrange$default_aes$linewidth,
+                            GeomPolygon$default_aes$linewidth,
+                            GeomSegment$default_aes$linewidth,
+                            GeomSmooth$default_aes$linewidth,
+                            GeomTile$default_aes$linewidth),
+                  check.names=FALSE)
+tmp |> knitr::kable() |>
+  kableExtra::kable_styling(full_width=FALSE,
+                            bootstrap_options=c("striped","hover")) |>
+  kableExtra::column_spec(3,width="4em")
+```
+
+The display below gives an idea of the relative sizes of the different `linewidth=` values.^[The most common default linewidth is shown in red.]
+
+```{r}
+#| label: demo-linewidths
+#| code-fold: true
+#| fig.width: 4.5
+dat1 <- data.frame(lw=c(0.1,0.25,0.5,0.75,1,1.5,2,3,4)) |>
+  dplyr::mutate(x=rep(0,length(lw)),
+         xend=rep(1,length(lw)),
+         y=seq_along(lw),
+         yend=y)
+
+ggplot(data=dat1) +
+  geom_segment(mapping=aes(x=x,xend=xend,y=y,yend=yend,linewidth=lw)) +
+  scale_y_continuous(name="linewidth=",breaks=dat1$y,labels=dat1$lw) +
+  geom_segment(x=0,y=3,xend=1,yend=3,color="red") +
+  scale_x_continuous(expand=expansion(mult=0)) +
+  scale_linewidth_identity() +
+  theme_classic() +
+  theme(axis.title.x=element_blank(),axis.text.x=element_blank(),
+        axis.ticks=element_blank(),axis.line=element_blank(),
+        axis.title.y=element_text(size=14),axis.text.y=element_text(size=12),
+        legend.position="none")
+```
+
+&nbsp;
+
+## Points
+As alluded to in the [first section](#aesthetic-specification-documentation), points consist of a `size=` "fill" portion and a `stroke=` "color" outline portion. As shown above, the total "size" of the point is the sum of the `size=` and `stroke=` value, though these values seem to be scaled differently. The `size=` portion of the point is scaled to the same as `size=` for text and `linewidth=` for lines. However, `stroke=` is scaled larger and, thus, you cannot "trade" values from `scale=` to `stroke=` to get the same size of point.
+
+The default values for points are `size=1.5` and `stroke=0.5`.^[Because of the small `stroke=` value, the issue discussed above is likely not going to be noticeable.]
+
+```{r}
+#| label: show-points-defaults
+GeomPoint$default_aes
+```
+
+The following figure gives an idea of what different sizes look like for different shapes of "points."^[The default `stroke=` of 0.5 was used.]
+
+```{r}
+#| label: demo-points-2
+#| fig-width: 6
+#| fig-height: 5
+#| code-fold: true
+szs <- c(1,1.5,2,2.5,3,4,5)
+dat4 <- tidyr::expand_grid(Size=szs,Shape=c(19,21,1,17,24,2,15,22,0)) |>
+  mutate(fShape=factor(Shape,levels=c(19,21,1,17,24,2,15,22,0)),
+         fSize=factor(Size))
+
+stroke <- 0.5
+
+ggplot(data=dat4,mapping=aes(x=fShape,y=fSize,size=Size,shape=Shape)) + 
+  geom_hline(yintercept=seq_along(szs),linewidth=szs+stroke,color="gray90") +
+  geom_hline(yintercept=seq_along(szs),linewidth=szs,color="gray95") +
+  geom_point(fill="red",stroke=stroke) +
+  scale_size_identity() +
+  scale_shape_identity() +
+  scale_y_discrete(name="Size",expand=expansion(mult=0.1),breaks=szs) +
+  scale_x_discrete(name="Shape",expand=expansion(mult=0.1)) +
+  theme_bw() +
+  theme(axis.line=element_blank(),
+        axis.title=element_text(size=14),axis.text=element_text(size=12),
+        panel.grid.minor=element_blank(),
+        panel.border=element_blank())
+```
+
+
+```{r}
+#| label: demo-points-1
+#| code-fold: true
+#| include: false
+dat3 <- tidyr::expand_grid(Size=0:4,Stroke=0:4)
+
+ggplot(data=dat3,mapping=aes(x=Size,y=Stroke,size=Size,stroke=Stroke)) + 
+  geom_abline(slope=-1,intercept=1:7,linewidth=1:7,
+              colour="gray90") + 
+  geom_vline(xintercept=1:4,linewidth=1:4,
+              colour="gray95") + 
+  geom_point(shape=21,fill="red") +
+  scale_size_identity() +
+  scale_y_continuous(expand=expansion(mult=0.1)) +
+  scale_x_continuous(expand=expansion(mult=0.1)) +
+  theme_bw() +
+  theme(axis.line=element_blank(),
+        axis.title=element_text(size=14),axis.text=element_text(size=12),
+        panel.grid.minor=element_blank(),
+        panel.border=element_blank())
+```
+
+## Examples
+### Scatterplot with Best-Fit Line
+As an example, suppose that you have log-transformed catch-at-age data that looks like this.^[This is typical, though idealistic, catch curve data.]
+
+```{r}
+#| label: make-example-data-1
+#| code-fold: true
+set.seed(173)
+dat <- data.frame(age=1:8) |>
+  mutate(catch=500*(1-0.4)^age+rnorm(8,sd=10),
+         catch=round(catch,0),
+         logcatch=log(catch))
+dat
+```
+
+And a simple "catch curve" plot is constructed that looks like this.
+
+```{r}
+#| label: example-plot-1
+#| fig-width: 4.5
+ggplot(data=dat,mapping=aes(x=age,y=logcatch)) +
+  geom_smooth(method=lm,color="black",fill="gray80") +
+  geom_point(shape=21,fill="gray60") +
+  scale_y_continuous(name="log(Catch)") +
+  scale_x_continuous(name="Age (years)",breaks=1:8) +
+  theme_bw() +
+  theme(panel.grid.minor=element_blank())
+```
+
+However, suppose that you made the following changes to meet some (perhaps yours) requirements.
+
+- Points that are twice as big (i.e., `size=3` rather than default `size=1.5`).
+- A "best-fit" line that is 50% thicker (i.e., `linewidth=1.5` rather than default `linewidth=1`).
+- Axis title labels that are 14 pt.
+- Axis tick mark labels that are 12 pt.
+- A species annotation label (in the upper-right corner) that uses 14 pt font.
+
+```{r}
+#| label: example-plot-2
+#| fig-width: 4.5
+ggplot(data=dat,mapping=aes(x=age,y=logcatch)) +
+  geom_smooth(method=lm,color="black",fill="gray80",linewidth=1.5) +
+  geom_point(shape=21,fill="gray60",size=3) +
+  scale_y_continuous(name="log(Catch)") +
+  scale_x_continuous(name="Age (years)",breaks=1:8) +
+  annotate(geom="text",label="Freshwater Drum",x=Inf,y=Inf,vjust=1.5,hjust=1.1,
+           size=14/.pt) +
+  theme_bw() +
+  theme(panel.grid.minor=element_blank(),
+        axis.title=element_text(size=14),
+        axis.text=element_text(size=12))
+```
+
+### Bar Chart with Labels
+Suppose these same data are presented as a bar chart without the fitted line.
+
+```{r}
+#| label: example-plot-3
+#| fig-width: 4.5
+ggplot(data=dat,mapping=aes(x=age,y=catch)) +
+  geom_col(fill="gray60",color="black") +
+  scale_y_continuous(name="Catch",expand=expansion(mult=c(0,0.1))) +
+  scale_x_continuous(name="Age (years)",breaks=1:8) +
+  theme_bw() +
+  theme(panel.grid.minor=element_blank())
+```
+
+And further suppose that you want to make the same textual changes as above and ...
+
+- Borders of the bars two times heavier (i.e., `linewidth=1` rather than the default `linewidth=0.5`).
+- Horizontal gridlines four times heavier (i.e., `linewidth=2` rather than the default `linewidth=0.5`).
+- Numeric labels of the catch amount above each bar in 12 pt font.
+
+```{r}
+#| label: example-plot-4
+#| fig-width: 4.5
+ggplot(data=dat,mapping=aes(x=age,y=catch)) +
+  geom_col(fill="gray60",color="black",linewidth=1) +
+  geom_text(mapping=aes(label=catch),vjust=-0.5,size=12/.pt) +
+  scale_y_continuous(name="Catch",expand=expansion(mult=c(0,0.1))) +
+  scale_x_continuous(name="Age (years)",breaks=1:8) +
+  annotate(geom="text",label="Freshwater Drum",x=Inf,y=Inf,vjust=1.5,hjust=1.1,
+           size=14/.pt) +
+  theme_bw() +
+  theme(panel.grid.minor=element_blank(),
+        axis.title=element_text(size=14),
+        axis.text=element_text(size=12),
+        panel.grid.major.y=element_line(linewidth=2))
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=0.7)
+dev.off()
+```
