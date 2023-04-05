@@ -1,0 +1,234 @@
+---
+title: Vasquez et al. (2022) Kuskal-Wallis Results
+description: Using ggplot2 to display results from Kruskal-Wallis test.
+author: Derek H. Ogle
+date: 4/5/2023
+image: preview.png
+categories:
+  - ggplot2
+  - confidence intervals
+  - significance letters
+  - Kruskal-Wallis Test
+  - Dunn Test
+---
+
+# Introduction
+@vasquezetal_2022 examined the nesting materials of Black-Crested Titmice (*Baeolophus atricristatus*) near San Marcos, Texas. In one part of their analysis they used a Kruskal-Wallis test to identify differences in total nest weight for nests from four different area types (based on a rural to urban gradient). They summarized their results in Panel A of their [Figure 2](https://meridian.allenpress.com/view-large/figure/14538150/i1944-687X-13-1-236-f02.tif). Here I recreate their statistics, but summarize the results differently.
+
+The following packages are loaded for use below. A few functions from each of `FSA`, `car`, `DescTools`, and `scales` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+```
+
+&nbsp;
+
+# Data Wrangling
+@vasquezetal_2022 provided the raw data in their Data Supplement S1.
+
+```{r}
+#| label: data-prep-1
+dat <- read.csv("JFWM-21-058.S1.csv")
+names(dat)
+```
+
+There is both a `Location` and a `Location2` variable in this data frame, but neither contains text that exactly match the "area types" shown in @vasquezetal_2022.
+
+```{r}
+#| label: data-prep-2
+xtabs(~Location+Location2,data=dat)
+```
+
+However, sample sizes for the `Location` variable groups match those in the paper. Therefore, I created `Location3` by mapping the names in `Location` to the names used in the paper. I also turned `Location3` into a factor to order the levels along the rural to urban gradient as @vasquezetal_2022 did. Finally, for this post, I only focus on the total weight of the nest, so I only retained `Nest.Weight` and `Location3` for further analysis.
+
+```{r}
+#| label: data-prep-3
+dat2 <- dat |>
+  mutate(Location3=plyr::mapvalues(Location,
+                                   from=c("ACampus","BResidence","CPark","DFreeman"),
+                                   to=c("Urban","Residential","Parks","Rural")),
+         Location3=factor(Location3,levels=c("Rural","Parks","Residential","Urban"))) |>
+  select(Location3,Nest.Weight)
+FSA::headtail(dat2)
+```
+
+# Kruskal-Wallis Test
+## Assumption Checking
+@vasquezetal_2022 chose to use a Kruskal-Wallis test^[I assume the reader is familiar with a Kruskal-Wallis Test. If not, [this](https://www.statology.org/kruskal-wallis-test/) is one resource that may be useful.] to determine if nest weights differed among area types because of concerns over normality and equal variances. They tested normality with a Shapiro-Wilk test, but this is difficult to do given the small sample sizes, especially in the "Parks" and "Urban" areas. Instead of the test I examined a density plot of total nest weight for each area type.
+
+```{r}
+#| label: examine-normality-1
+#| fig-width: 5
+#| fig-height: 5
+ggplot(data=dat2,mapping=aes(x=Nest.Weight)) +
+  geom_density(linewidth=0.75) +
+  geom_rug(linewidth=0.75) +
+  scale_x_continuous(name="Nest Weight (g)") +
+  scale_y_continuous(expand=expansion(mult=c(0,0.05))) +
+  facet_wrap(vars(Location3)) +
+  theme_bw() +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank())
+```
+
+Alternatively, Q-Q plots^[I assume the reader is familiar with a Q_Q plot. If not, [this](https://www.statology.org/q-q-plot-normality/) is one resource that may be useful.] may be used to examine normality.
+
+```{r}
+#| label: examine-normality-2
+#| fig-width: 5
+#| fig-height: 5
+ggplot(data=dat2,mapping=aes(sample=Nest.Weight)) +
+  geom_qq() +
+  geom_qq_line(linewidth=0.75) +
+  scale_x_continuous(name="Nest Weight (g)") +
+  scale_y_continuous(expand=expansion(mult=c(0,0.05))) +
+  facet_wrap(vars(Location3)) +
+  theme_bw() +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank())
+```
+
+With either plot, the data do not appear to follow a normal distribution but, given the sample size, they do not look terribly non-normal either.
+
+@vasquezetal_2022 examined homogeneity of variances with the Bartlett test. I prefer to use Levene's test for this purpose as it does not assume a normal distribution. Both `bartlett.test()` and `leveneTest()` (from `car`) require a formula of the form `response~explanatory`^[Or `dependent~independent`.] as the first argument and the corresponding data frame in `data=`.
+
+```{r}
+#| label: examine-variances
+bartlett.test(Nest.Weight~Location3,data=dat2)
+car::leveneTest(Nest.Weight~Location3,data=dat2)
+```
+
+Unfortunately, the two results give different answers, with Bartlett's test suggesting unequal variances and Levene's test suggesting the opposite.
+
+Given these results it may have been appropriate to analyze these data with a one-way ANOVA. I suspect, however, that other variables in the data set more egregiously violated these assumptions and the authors wanted to use consistent methods for all variables. And, of course, using the Kruskal-Wallis test here *a priori* would not be incorrect, though there is some loss of power.
+
+## Kruskal-Wallis Test
+The Kruskal-Wallis test may be performed with `kruskal.test()` using the same arguments as `bartlett.test()` or `leveneTest()` above.
+
+```{r}
+#| label: perform-kw-test
+kruskal.test(Nest.Weight~Location3,data=dat2)
+```
+
+This result provides strong evidence that the **median** total nest weight is different for at least one of the area types.
+
+## Post-hoc Multiple Comparisons
+Dunn's test^[I assume that the reader is familiar with Dunn's Test. If not [this](https://www.statology.org/dunns-test/) is one resources that may be helpful.] may be used, after a significant Kruskal-Wallis test, to determine which pairs of **medians** differ after adjusting for multiple comparisons. Dunn's test is performed with `dunnTest()` from `FSA` using the same arguments as given to `kruskal.test()` above. As noted in the results below, `dunnTest()` defaults to using the "Holm" method to adjust for multiple comparisons. Other methods may be used with `method=`.^[See the possible methods with `?dunn.test::dunn.test`.]
+
+```{r}
+#| label: perform-dunn-test
+FSA::dunnTest(Nest.Weight~Location3,data=dat2)
+```
+
+From these results it is apparent that the **median** nest weight in the "Urban" areas differs from the other three area types, which all have statistically equal medians.
+
+&nbsp;
+
+# Displaying Results
+## Create Summary Data Frame
+The Kruskal-Wallis test is a test of the equality of **medians** across groups. Thus, in my opinion, a summary graphic for this test should plot the medians with their respective confidence intervals. Computing the confidence intervals for medians across groups takes a bit of work in R. This process is described below.
+
+The original data frame is converted to a list with separate vectors of nest weights for each area type.
+
+```{r}
+#| label: sum-medians-1
+tmp <- split(dat2$Nest.Weight,dat2$Location3)
+tmp
+```
+
+`MedianCI()` from `DescTools` may be used to compute the median and corresponding confidence interval for a vector of values. Below is an example for the "Urban" area. The default is to use a so-called "exact" method, but here I prefer to use "bootstrapping" instead so I include `method="boot"`.
+
+```{r}
+#| label: sum-medians-2
+DescTools::MedianCI(tmp$Urban,method="boot")
+```
+
+`sapply()` can be used to "apply" `MedianCI()` to each item in the `tmp` list (so each area type) and return the result as a matrix.
+
+```{r}
+#| label: sum-medians-3
+tmp <- sapply(tmp,FUN=DescTools::MedianCI,method="boot")
+tmp
+```
+
+However, the "median", "lwr.ci", and "upper.ci" should be the columns rather than the rows of this matrix. Thus, `t()` is used below to "transpose" the matrix which is then given to `data.frame()` to convert the matrix to a data frame.
+
+```{r}
+#| label: sum-medians-4
+sumNW <- t(tmp) |>
+  data.frame()
+sumNW
+```
+
+Now, unfortunately, the area type names are row names and not a variable. Below, these row names are used to create a new `Location3` variable and then converted to a factor with the levels controlled to match the authors' order along a rural to urban gradient.
+
+```{r}
+#| label: sum-medians-5
+sumNW <- sumNW |>
+  mutate(Location3=rownames(sumNW),
+         Location3=factor(Location3,levels=c("Rural","Parks","Residential","Urban")))
+sumNW
+```
+
+Finally, a new variable is added that contains "significance letters" that communicate the results from Dunn's Test above. Groups that have the same letter are statistically equal and those with different letters are statistically not equal. In this case, "Urban" was different than the other three which were all the same. Thus, "Urban" will have a unique letter that is different then the same letter used for the other three. I usually start the letters on the left, so "Rural" gets an "a" which it will share with "Parks" and "Residential" before "Urban" gets a "b."
+
+```{r}
+#| label: sum-medians-6
+sumNW <- sumNW |>
+  mutate(letsH=c("a","a","a","b"))
+sumNW
+```
+
+This data frame is the used to construct the summary graphic below.
+
+## Summary Graphic
+I created the summary graphic below by ...
+
+- Mapping `Location3` to the x-axis for all geoms.
+- Mapping `lwr.ci` and `upr.ci` to `ymin=` and `ymax=`, respectively, in `geom_errobar()` to create the "intervals." Here `linewidth=` was increased to make the interval lines "heavier"^[The use of `linewidth=` was discussed in more detail in [this post](../2023-4-4_Size/).] and `width=` was reduced to make the "caps" at the end of the interval lines narrower.
+- Mapping `median` to `y=` in `geom_point()` to place a point at the median. `geom_point()` came afer `geom_errorbar()` so that the point would be "on top" of the interval line. Here an open circle was used for the point with an inner portion a light gray and a black outline. The point was made larger than the default, as was the "stroke" used to draw the outline.^[The use of `size=` and `stroke=` was discussed in more detail in [this post](../2023-4-4_Size/).]
+- Mapping `letsH` to `labels=` and `upr.ci=` to `y` in `geom_text()` to place the significance letters at the upper CI value. The `vjust=` was used to move the text up slightly^[The use of `vjust=` was discussed in more detail in [this post](../2023-3-10-Text_Annotation_Position/).] and `size=` was used to show the letters in a 12 pt font.^[The use of `size=` was discussed in more detail in [this post](../2023-4-4_Size/).]
+- The y-axis was labeled, the breaks were controlled at 10 g intervals, the lower limit was constrained to be at 0, and the lower expansion was removed so that the x-axis was shown at a y of 0.
+- The x-axis was labeled.
+- The black-and-white theme was applied.
+- The axis titles were set a 14 pt font, and the axis tick mark labels were set to be black and in a 12 pt font.
+
+```{r}
+#| label: make-figure
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data=sumNW,mapping=aes(x=Location3)) +
+  geom_errorbar(mapping=aes(ymin=lwr.ci,ymax=upr.ci),
+                linewidth=0.75,width=0.1) +
+  geom_point(mapping=aes(y=median),
+             shape=21,size=2.5,stroke=1,
+             fill="gray70",color="black") +
+  geom_text(mapping=aes(label=letsH,y=upr.ci),vjust=-0.5,size=12/.pt) +
+  scale_y_continuous(name="Median Nest Weight (g)",
+                     breaks=scales::breaks_width(10),
+                     limits=c(0,NA),expand=expansion(mult=c(0,0.05))) +
+  scale_x_discrete(name="Area Type") +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.title=element_text(size=14),
+        axis.text=element_text(size=12,color="black"))
+```
+
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=0.7)
+dev.off()
+```
