@@ -1,0 +1,320 @@
+---
+title: O'Malley et al. (2021) Regression Plots
+description: Using ggplot2 to recreate the regresion plots of O'Malley et al. (2021).
+author: Derek H. Ogle
+date: 4/6/2023
+image: preview.png
+categories:
+  - Linear Regression
+  - Data Wrangling
+  - ggplot2
+  - facets
+  - annotations
+  - labels
+---
+
+# Introduction
+@omalleyetal_2021 compared morphometric measurements made directly on Cisco (*Coregonus artedi*) to those made from digitized images. Their [Figure 2](https://meridian.allenpress.com/view-large/figure/13413231/i1944-687X-12-1-208-f02.tif) displayed the relationship between the two measurements for 12 morphometric measures. They tested whether the slope of the relationship between two measurements was equal to 1 for all 12 measures, but only showed the regression result on the plot if the slope was significantly different from 1. I use `ggplot2` here to recreate their figure.
+
+The following packages are loaded for use below. A few functions from each of `FSA`, `tibble`, `scales`, `ggtext`, and `smatr` are used with `::` such that the entire packages are not attached here.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, ggplot2 packages
+```
+
+&nbsp;
+
+# Data Wrangling
+## Individual Measures
+@omalleyetal_2021 provided the raw data for producing Figure 1 in their Archived Material A1, which I loaded below. I retained only the variables needed for this post and renamed them to be shorter.
+
+```{r}
+#| label: data-prep-1
+dat <- read.csv("CiscoMethodMSDataset_20200929.csv") |>
+  select(id=SpecimenID,measure=MorphometricAbbreviation,method=Method,
+         measurer=MeasurerInitials,value=Value)
+FSA::headtail(dat)
+```
+
+The image-based measurements were made by two `measurer`s. Figure 2 uses only those measurements made by the same `measurer` as for the specimen-based measurements (i.e., "BPO").
+
+```{r}
+#| label: data-prep-2
+dat2 <- dat |>
+  filter(measurer=="BPO")
+FSA::headtail(dat2)
+```
+
+These data need to be made "wider" by placing the two `method`s of measurement into their own columns, rather than in different rows.
+
+```{r}
+#| label: data-prep-3
+dat2 <- dat2 |>
+  pivot_wider(names_from=method,values_from=value)
+FSA::headtail(dat2)
+```
+
+These data are now ready for plotting `imageBased` versus `specimenBased` for each `measure`.
+
+## Regression Summaries
+Figure 2, however, also shows summary results from the linear regression of `imageBased` on `specimenBased` for each `measure` for which the slope was significantly different from 1. Thus, these regressions must be conducted for each `measure` and the results stored in a data frame for use when plotting. There are a variety of ways to do this, but `sapply()` is used below.^[`lmList()` from `nlme` is another option, though manipulation of results afterwards is still required to produce the needed data frame.]
+
+The original data frame is split on `measure` to form a list with a data frame for each measure. The result is too big to show here.
+
+```{r}
+#| label: sum-regress-1
+dat2.split <- split(dat2,dat2$measure)
+```
+
+A function is then defined that will take a data frame as its sole argument, fit the regression of `imageBased` on `specimenBased`, extract certain results about the regression and combine them into a vector, and then return that vector.^[To see how this works, run the `tmp` line below but with `data=dat2` instead and then use `str(tmp)` to see what is stored from this result and then extracted in the following lines.] This function is created below and called `regfun()`.
+
+```{r}
+#| label: create-regfun-1
+regfun <- function(d) {
+  tmp <- summary(lm(imageBased~specimenBased,data=d))
+  c(slope=tmp$coefficients["specimenBased","Estimate"],
+    slopeSE=tmp$coefficients["specimenBased","Std. Error"],
+    intercept=tmp$coefficients["(Intercept)","Estimate"],
+    rsq=tmp$r.squared,
+    df=tmp$df[2])
+}
+```
+
+As an example, `regfun` is called below with only the data for the "BDD" morphometric measurement in `dat2.split`. Here you can see that `regfun()` returns the estimated intercept and slope, the standard error for the slope, the r-squared value, and the residual degrees-of-freedom for the regression.
+
+```{r}
+#| label: create-regfun-2
+regfun(dat2.split$BDD)
+```
+
+`regfun()` can be applied to each item in `dat2.split` with `sapply()`.
+
+```{r}
+#| label: create-regfun-3
+sapply(dat2.split,FUN=regfun)
+```
+
+However, the result needs to be transposed with `t()` so that the summary statistics form the columns and the `measure`s form the rows. The transposed matrix is converted to a data frame for further manipulation.
+
+```{r}
+#| label: sum-regress-2
+rsum <- sapply(dat2.split,FUN=regfun) |>
+  t() |>
+  as.data.frame()
+rsum
+```
+
+This data frame is modified by converting the rownames to a variable name (i.e., `measure`) with `rownames_to_column()` from `tibble`. In addition, a t test statistic for the comparison of the estimated slope to 1 is computed and a two-tailed p-value is computed from that test statistic using `pt()`.
+
+```{r}
+#| label: sum-regress-3
+rsum <- rsum |>
+  tibble::rownames_to_column(var="measure") |>
+  mutate(t=(slope-1)/slopeSE,
+         p=2*pt(abs(t),df=df,lower.tail=FALSE))
+rsum
+```
+
+The authors determined the significance of the regression with a Bonferroni correction, which they implemented by comparing the calculated p-value to 0.05/12, where 0.05 is the overall rejection criterion value and 12 is the number of p-values calculated. An alternative to this is to multiply the calculated p-values by 12 and then compare those adjusted p-values to 0.05 to determine significance. Either method produces the same result, but the second method, when implemented with `p.adjust()` provides flexibility to try methods other than Bonferroni (see Further Comments below).^[Bonferroni-corrected p-values greater than 1 are displayed as 1.]
+
+```{r}
+#| label: sum-regress-3a
+rsum <- rsum |>
+  mutate(p.bonf=p.adjust(p,method="bonferroni"))
+rsum
+```
+
+The authors used `slope.test()` from `smatr` to compute the p-value for the comparison of the estimated slope to 1. The code below uses `sapply()` to compute these p-values for each group. A comparison of the `p` column below to the one above shows that the results above are the same as those from `smatr`.
+
+```{r}
+#| label: using-smatr
+sth <- function(d) with(d,smatr::slope.test(imageBased,specimenBased,
+                                            test.value=1,method="OLS"))$p
+sapply(dat2.split,FUN=sth) |> 
+  as.data.frame() |>
+  rename(p=1)
+```
+
+Figure 2 in @omalleyetal_2021 showed the regression line, its slope, and the corresponding r^2^ value only for those measures for which the slope was significantly different from 1. To facilitate this, three new variables are created that contain the slope, the intercept, and the regression label **only** for those measures with slopes that differed significantly from 1.^[I also remove three variables that are not needed further.] Use of HTML and markdown code in the label was described in [this post](../2023-3-29_Milleretal2022_Fig1/#reservoir-and-regression-result-labels).
+
+```{r}
+#| label: sum-regress-4
+rsum <- rsum |>
+  mutate(b=ifelse(p.bonf<0.05,intercept,NA),
+         m=ifelse(p.bonf<0.05,slope,NA),
+         lbl=ifelse(p.bonf<0.05,paste0("slope = ",round(slope,3),
+                                       "<br>R^2^ = ",round(rsq,2)),
+                    NA)) |>
+  select(-slopeSE,-df,-t)
+rsum
+```
+
+Below, `b` and `m` will be used to show regressions lines on each facet, but for `measure`s where these are `NA` no line will be shown. This same idea will be true for adding the results labels; i.e., `measure`s where `lbl` is NA will not show a label. Thus, the regression line and results will only be shown in facets for measures with slopes significantly different from 1.
+
+&nbsp;
+
+# Recreating Figure 1
+Once the data are arranged as above, making Figure 1 is a fairly straight-forward application of techniques used in previous posts. I highlight the steps below.
+
+- Use `geom_abline()` to make the 1:1 line (i.e., slope of 1, intercept of 0). This is first so that it sits behind the data and potential regression lines.
+- Use `geom_point()` with `dat2` to add points for each observed `specimenBased` and `imageBased` pair. `shape=1` uses an "open circle" for the point. `deepskyblue4` was my best guess at the `color=` that @omalleyetal_2021 used.
+- Use `geom_abline()` with `rsum` and `b` mapped to `intercept=` and `m` mapped to `slope`. Do not use `intercept` and `slope` here as that will show the regression line on each facet.
+- Use `geom_richtext()` from `ggtext` using `rsum` with `lbl` mapped to `label=` to place the regression result labels in the upper-right corner. `geom_richtext()` is used here rather than `geom_text()` because the `lbl` had HTML and markdown code in them.
+- Label the x- and y-axes and expand their limits a little more.
+- Create three rows of facets based on `measure` with `facet_wrap()`. `scales="free"` is used so that each facet has its own x- and y-axis tick mark labels.
+- Apply the `theme_bw()` theme and remove the default grid lines.
+
+```{r}
+#| label: make-fig2
+#| fig-height: 6
+#| fig-width: 8
+ggplot() +
+  geom_abline(slope=1,intercept=0,linetype="dashed",linewidth=0.75,color="gray50") +
+  geom_point(data=dat2,mapping=aes(x=specimenBased,y=imageBased),
+             shape=1,color="deepskyblue4") +
+  geom_abline(data=rsum,mapping=aes(intercept=b,slope=m),
+              color="black",linewidth=1) +
+  ggtext::geom_richtext(data=rsum,mapping=aes(label=lbl),
+                        x=-Inf,y=Inf,vjust=1.1,hjust=-0.1,
+                        size=9/.pt,label.color=NA) +
+  scale_x_continuous(name="Specimen-based (mm)",expand=expansion(mult=0.1)) +
+  scale_y_continuous(name="Image-based (mm)",expand=expansion(mult=0.1)) +
+  facet_wrap(vars(measure),nrow=3,scales="free") +
+  theme_bw() +
+  theme(panel.grid=element_blank())
+```
+
+&nbsp;
+
+# Further Thoughts
+## Same Axes in Each Facet
+The last part of Figure 2 in @omalleyetal_2021 that I could not recreate simply was to ensure that the x- and y-axes were the same (same limits and breaks) in each facet. An especially egregious example of my failure here is for the "OOL" facet.
+
+[This StackOverflow answer](https://stackoverflow.com/a/32533219/1123933) provided a method for making the x- and y-axes the same within each facet, but also the same across the facets. A simple modification of that answer results in the x- and y-axes being the same within each facet, but different across facets.
+
+There are two "tricks" in this process. The first is to create a data fame that finds the minimum and maximum value of `imageBased` and `specimenBased` combined for each `measure`, then place those values in a single variable that is matched against the `measure` name, and then repeat that column in a second variable.
+
+```{r}
+fctlims <- dat2 |>
+  group_by(measure) |>
+  summarize(min=min(imageBased,specimenBased),
+            max=max(imageBased,specimenBased)) |>
+  pivot_longer(cols=min:max,values_to="x") |>
+  mutate(y=x) |>
+  select(-name)
+FSA::headtail(fctlims)
+```
+
+These "data" are then added to the plot from above using `geom_blank()` where `x=` and `y=` are mapped to the two columns of "min" and "max" values. This then sets the range of data to be presented on the x- and y-axes, and because the two columns are the same then the axes will appear the same. `geom_blank()` does not plot any actual data so this effectively just sets the x- and y-axis limits and breaks.
+
+```{r}
+#| label: make-fig2-2
+#| fig-height: 6
+#| fig-width: 8
+ggplot() +
+  geom_blank(data=fctlims,mapping=aes(x=x,y=y)) +
+  geom_abline(slope=1,intercept=0,linetype="dashed",linewidth=0.75,color="gray50") +
+  geom_point(data=dat2,mapping=aes(x=specimenBased,y=imageBased),
+             shape=1,color="deepskyblue4") +
+  geom_abline(data=rsum,mapping=aes(intercept=b,slope=m),
+              color="black",linewidth=1) +
+  ggtext::geom_richtext(data=rsum,mapping=aes(label=lbl),
+                        x=-Inf,y=Inf,vjust=1.1,hjust=-0.1,
+                        size=9/.pt,label.color=NA) +
+  scale_x_continuous(name="Specimen-based (mm)",expand=expansion(mult=0.1)) +
+  scale_y_continuous(name="Image-based (mm)",expand=expansion(mult=0.1)) +
+  facet_wrap(vars(measure),nrow=3,scales="free") +
+  theme_bw() +
+  theme(panel.grid=element_blank())
+```
+
+This is pretty nice, but I still could not get the exact breaks in @omalleyetal_2021. I started to try `facetted_pos_scales()` from `ggh4x` but lost my patience with it.
+
+## Alternative Multiple Comparison Procedures
+The Bonferroni-correction for multiple comparisons is a "brute-force" method that becomes "too conservative" (i.e., overall error rate less than 0.05), especially as the number of comparisons increases. This, ultimately results in a loss of statistical power (i.e., potentially detecting fewer truly significant results). The Bonferroni method is often employed because it is simple to implement as shown above -- you either divide or multiply by the number of tests. However, `p.adjust()` provides the ability to use a wider variety of other methods that are less conservative than the Bonferroni.^[See `?p.adjust` for more explanation of these methods.] Below, the Holm method is demonstrated.
+
+```{r}
+#| label: sum-regress-5
+p.adjust.methods
+
+rsum |>
+  mutate(p.holm=p.adjust(p,method="holm")) |>
+  select(measure,p,p.bonf,p.holm)
+```
+
+In this situation the Bonferroni and Holm methods did not provide different conclusions, so I did not recreate the `b`, `m`, and `lbl` variables. However, alternative correction methods may provide different conclusions in other situations.
+
+## Descriptive Facet Labels
+I believe that @omalleyetal_2021 used the measure abbreviations in their Figure 2 to tie the results to their Figure 1, which showed the measures on a schematic fish. However, there may be situations where more descriptive facet labels may be useful. For example, below a named vector is created where the name (before the `=`) is the measure abbreviation used in `measure` and the "value" (after the `=`) is a more descriptive name for the measure.
+
+```{r}
+longnames <- c("BDD"="Body Depth",
+               "CPL"="Caudal Peduncle Length",
+               "DOH"="Dorsal Fin Height",
+               "HLL"="Head Length",
+               "MXL"="Maxillary Length",
+               "OOL"="Orbital Length",
+               "PAD"="Pelvic-Anal Fin Length",
+               "PCL"="Pectoral Fin Length",
+               "POL"="Preorbital Length",
+               "PVL"="Pelvic Fin Length",
+               "STL"="Standard Length",
+               "TTL"="Total Length")
+```
+
+The abbreviations in the facet strip can be replaced with the longer names by setting `labeller=` in `facet_wrap()` to `labeller()` which has the variable name that creates the facets (i.e., `measure` here) set equal to the named vector just created.
+
+```{r}
+#| label: make-fig2-alt
+#| fig-height: 6
+#| fig-width: 8
+ggplot() +
+  geom_abline(slope=1,intercept=0,linetype="dashed",linewidth=0.75,color="gray50") +
+  geom_point(data=dat2,mapping=aes(x=specimenBased,y=imageBased),
+             shape=1,color="deepskyblue4") +
+  geom_abline(data=rsum,mapping=aes(intercept=b,slope=m),
+              color="black",linewidth=1) +
+  ggtext::geom_richtext(data=rsum,mapping=aes(label=lbl),
+                        x=-Inf,y=Inf,vjust=1.1,hjust=-0.1,
+                        size=9/.pt,label.color=NA) +
+  scale_x_continuous(name="Specimen-based (mm)",expand=expansion(mult=0.1)) +
+  scale_y_continuous(name="Image-based (mm)",expand=expansion(mult=0.1)) +
+  facet_wrap(vars(measure),nrow=3,scales="free",
+             labeller=labeller(measure=longnames)) +
+  theme_bw() +
+  theme(panel.grid=element_blank())
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+ggplot() +
+  geom_abline(slope=1,intercept=0,linetype="dashed",linewidth=0.75,color="gray50") +
+  geom_point(data=filter(dat2,measure=="PCL"),
+             mapping=aes(x=specimenBased,y=imageBased),
+             shape=1,color="skyblue3") +
+  geom_abline(data=filter(rsum,measure=="PCL"),
+              mapping=aes(intercept=b,slope=m),
+              color="black",linewidth=1) +
+  ggtext::geom_richtext(data=filter(rsum,measure=="PCL"),
+                        mapping=aes(label=lbl),
+                        x=-Inf,y=Inf,vjust=1.1,hjust=-0.1,
+                        size=10/.pt,label.color=NA) +
+  scale_x_continuous(name="Specimen-based (mm)",expand=expansion(mult=0.1)) +
+  scale_y_continuous(name="Image-based (mm)",expand=expansion(mult=0.1)) +
+  facet_wrap(vars(measure),scales="free") +
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        aspect.ratio=1)
+dev.off()
+```

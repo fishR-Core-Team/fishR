@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="Using ggplot2 to recreate the regresion plots of O’Malley et al.&nbsp;(2021).">
+
+<title>fishR - O’Malley et al.&nbsp;(2021) Regression Plots</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//helpers/img/fishRlogo_Tight_Light_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../helpers/styles.css">
+<meta property="og:title" content="fishR - O’Malley et al.&nbsp;(2021) Regression Plots">
+<meta property="og:description" content="Using ggplot2 to recreate the regresion plots of O'Malley et al. (2021).">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2023-4-6_OMalleyetal2021_Fig2\preview.png">
+<meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="O&amp;amp;#039;Malley et al. (2021) Regression Plots">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2023-04-06">
+<meta name="citation_cover_date" content="2023-04-06">
+<meta name="citation_year" content="2023">
+<meta name="citation_online_date" content="2023-04-06">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Relative Weight (Wr) Status and Current Use in Fisheries Assessment and Management;,citation_author=Brian Blackwell;,citation_author=Michael Brown;,citation_author=David Willis;,citation_publication_date=2000-01-01;,citation_cover_date=2000-01-01;,citation_year=2000;,citation_fulltext_html_url=https://www.researchgate.net/publication/248945465_Relative_Weight_Wr_Status_and_Current_Use_in_Fisheries_Assessment_and_Management;,citation_doi=10.1080/10641260091129161;,citation_volume=8;,citation_journal_title=Reviews in Fisheries Science;,citation_journal_abbrev=REV FISH SCI;">
+<meta name="citation_reference" content="citation_title=Statistical methods for assessing agreement between two methods of clinical measurement;,citation_author=J Martin Bland;,citation_author=Douglas G Altman;,citation_publication_date=1986;,citation_cover_date=1986;,citation_year=1986;,citation_fulltext_html_url=https://www-users.york.ac.uk/~mb55/meas/ba.pdf;,citation_volume=i;,citation_language=en-US;,citation_journal_title=Lancet;">
+<meta name="citation_reference" content="citation_title=Growth, reproduction, mortality, distribution, and biomass of Freshwater Drum in Lake Erie;,citation_author=Michael T. Bur;,citation_publication_date=1984-01-01;,citation_cover_date=1984-01-01;,citation_year=1984;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133084718065;,citation_doi=10.1016/S0380-1330(84)71806-5;,citation_issn=0380-1330;,citation_volume=10;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Graphical and statistical methods for determining the consistency of age determinations;,citation_author=Steven Campana;,citation_author=M. Annand;,citation_author=James McMillan;,citation_publication_date=1995-01-01;,citation_cover_date=1995-01-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/254328508_Graphical_and_Statistical_Methods_for_Determining_the_Consistency_of_Age_Determinations;,citation_doi=10.1577/1548-8659(1995)124&amp;amp;amp;lt;0131:GASMFD&amp;gt;2.3.CO;2;,citation_volume=124;,citation_journal_title=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;,citation_journal_abbrev=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;">
+<meta name="citation_reference" content="citation_title=A novel “triple drawdown” method highlights deficiencies in invasive alien crayfish survey and control techniques;,citation_author=Daniel D. A. Chadwick;,citation_author=Eleri G. Pritchard;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Michael A. Chadwick;,citation_author=Lawrence J. B. Eagle;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/1365-2664.13758;,citation_doi=10.1111/1365-2664.13758;,citation_issn=1365-2664;,citation_volume=58;,citation_language=en-US;,citation_journal_title=Journal of Applied Ecology;">
+<meta name="citation_reference" content="citation_title=Warmwater Temperatures (≥ 20°C) as a Threat to Pacific Lamprey: Implications of Climate Change;,citation_author=Benjamin J. Clemens;,citation_publication_date=2022-07-07;,citation_cover_date=2022-07-07;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-087;,citation_issue=2;,citation_doi=10.3996/JFWM-21-087;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Creel limits in Minnesota: A proposal for change;,citation_author=Mark Cook;,citation_author=Timothy Goeman;,citation_author=Paul Radomski;,citation_author=Jerry Younk;,citation_author=Peter Jacobson;,citation_publication_date=2001-05-01;,citation_cover_date=2001-05-01;,citation_year=2001;,citation_fulltext_html_url=https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change;,citation_volume=26;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Recovery of an offshore Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus Namaycush&amp;lt;/i&amp;gt;) population in eastern Lake Superior;,citation_author=Gary L. Curtis;,citation_publication_date=1990-01-01;,citation_cover_date=1990-01-01;,citation_year=1990;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133090714219;,citation_issue=2;,citation_doi=10.1016/S0380-1330(90)71421-9;,citation_issn=0380-1330;,citation_volume=16;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Evaluating the physical removal of Ruffe (&amp;amp;amp;lt;i&amp;gt;Gymnocephalus&amp;lt;/i&amp;gt; <i>cernuus</i>) with bottom trawling;,citation_author=Gary D. Czypinski;,citation_author=Derek H. Ogle;,citation_publication_date=2011-09;,citation_cover_date=2011-09;,citation_year=2011;,citation_fulltext_html_url=https://derekogle.com/resources/pubs/CzypinskiOgle_2011.pdf;,citation_doi=10.1080/02705060.2011.569336;,citation_issn=0270-5060, 2156-6941;,citation_volume=26;,citation_language=en-US;,citation_journal_title=Journal of Freshwater Ecology;,citation_journal_abbrev=Journal of Freshwater Ecology;">
+<meta name="citation_reference" content="citation_title=Energy storage, growth, and maturation of Yellow Perch from different locations in Saginaw Bay, Michigan;,citation_author=James S. Diana;,citation_author=Ronald Salz;,citation_publication_date=1990-11;,citation_cover_date=1990-11;,citation_year=1990;,citation_fulltext_html_url=https://deepblue.lib.umich.edu/bitstream/handle/2027.42/142193/tafs0976.pdf?sequence=1;,citation_volume=119;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Understanding Bland Altman analysis;,citation_author=Davide Giavarina;,citation_publication_date=2015-06-05;,citation_cover_date=2015-06-05;,citation_year=2015;,citation_fulltext_html_url=https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4470095/;,citation_issue=2;,citation_doi=10.11613/BM.2015.015;,citation_issn=1330-0962;,citation_volume=25;,citation_journal_title=Biochemia Medica;,citation_journal_abbrev=Biochem Med (Zagreb);">
+<meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_volume=44;,citation_language=en-US;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Factors affecting recruitment of Walleyes in Escanaba Lake, Wisconsin, 1958–1996;,citation_author=Michael Hansen;,citation_author=Michael Bozek;,citation_author=Raimant Justine;,citation_author=Steven Newman;,citation_author=Michael Staggs;,citation_publication_date=1998-11-01;,citation_cover_date=1998-11-01;,citation_year=1998;,citation_fulltext_html_url=https://www.researchgate.net/profile/Michael-Hansen-44/publication/228588197_Factors_Affecting_Recruitment_of_Walleyes_in_Escanaba_Lake_Wisconsin_1958-1996/links/54638b9d0cf2c0c6aec4f0b0/Factors-Affecting-Recruitment-of-Walleyes-in-Escanaba-Lake-Wisconsin-1958-1996.pdf;,citation_volume=18;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Comparison of precision and bias of scale, fin ray, and otolith age estimates for Lake Whitefish (&amp;amp;amp;lt;i&amp;gt;Coregonus&amp;lt;/i&amp;gt; <i>clupeaformis</i>) in Lake Champlain;,citation_author=Seth J. Herbst;,citation_author=J. Ellen Marsden;,citation_publication_date=2011-06-01;,citation_cover_date=2011-06-01;,citation_year=2011;,citation_fulltext_html_url=https://www.academia.edu/54703943/Comparison_of_precision_and_bias_of_scale_fin_ray_and_otolith_age_estimates_for_lake_whitefish_Coregonus_clupeaformis_in_Lake_Champlain;,citation_doi=10.1016/j.jglr.2011.02.001;,citation_issn=0380-1330;,citation_volume=37;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=A computer program for age–length keys incorporating age assignment to individual fish;,citation_author=Daniel Isermann;,citation_author=C. Knight;,citation_publication_date=2005-08-01;,citation_cover_date=2005-08-01;,citation_year=2005;,citation_fulltext_html_url=https://www.researchgate.net/publication/233185504_A_Computer_Program_for_Age-Length_Keys_Incorporating_Age_Assignment_to_Individual_Fish;,citation_volume=25;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=A comparison of methods for estimating ages of unexploited Walleyes;,citation_author=Patrick M. Kocovsky;,citation_author=Robert F. Carline;,citation_publication_date=2000-11-01;,citation_cover_date=2000-11-01;,citation_year=2000;,citation_fulltext_html_url=https://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2;,citation_doi=10.1577/1548-8675(2000)020&amp;amp;amp;lt;1044:ACOMFE&amp;gt;2.0.CO;2;,citation_issn=0275-5947;,citation_volume=20;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Dietary patterns suggest West Virginia Bobcats are generalist carnivores;,citation_author=Stephanie M. Landry;,citation_author=Jordan E. Roof;,citation_author=Richard E. Rogers;,citation_author=Amy B. Welsh;,citation_author=Christopher W. Ryan;,citation_author=James T. Anderson;,citation_publication_date=2022-07-08;,citation_cover_date=2022-07-08;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-22-001;,citation_issue=2;,citation_doi=10.3996/JFWM-22-001;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=What’s the main idea behind Bland-Altman plots?;,citation_author=Bernhard Lehnert;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_fulltext_html_url=https://cran.r-project.org/web/packages/BlandAltmanLeh/vignettes/Intro.html;">
+<meta name="citation_reference" content="citation_title=BlandAltmanLeh: Plots (Slightly Extended) Bland-Altman Plots;,citation_author=Bernhard Lehnert;,citation_publication_date=2015-12-23;,citation_cover_date=2015-12-23;,citation_year=2015;,citation_fulltext_html_url=https://CRAN.R-project.org/package=BlandAltmanLeh;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_language=en-US;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Estimating harvestable Largemouth Bass abundance in a reservoir with an electrofishing catch depletion technique;,citation_author=Michael Maceina;,citation_author=William Wrenn;,citation_author=Donny Lowery;,citation_publication_date=1995-02-01;,citation_cover_date=1995-02-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/233240780_Estimating_Harvestable_Largemouth_Bass_Abundance_in_a_Reservoir_with_an_Electrofishing_Catch_Depletion_Technique;,citation_volume=15;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Generalizing trends in upstream american eel movements at four east coast hydropower projects;,citation_author=Kevin Mack;,citation_author=Twyla Cheatwood;,citation_publication_date=2022-12-05;,citation_cover_date=2022-12-05;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-066;,citation_issue=2;,citation_doi=10.3996/JFWM-21-066;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10-01;,citation_cover_date=2015-10-01;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;,citation_journal_abbrev=ICES Journal of Marine Science;">
+<meta name="citation_reference" content="citation_title=Population dynamics of Yellowstone Cutthroat Trout in Henrys Lake, Idaho;,citation_author=Darcy K. McCarrick;,citation_author=Jeffrey C. Dillon;,citation_author=Brett High;,citation_author=Michael C. Quist;,citation_publication_date=2022-03-25;,citation_cover_date=2022-03-25;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-074;,citation_issue=1;,citation_doi=10.3996/JFWM-21-074;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=An evaluation of Goldeye life history characteristics in two Kansas reservoirs;,citation_author=Brett T. Miller;,citation_author=Ernesto Flores;,citation_author=D. Scott Waters;,citation_author=Ben C. Neely;,citation_publication_date=2022-02-02;,citation_cover_date=2022-02-02;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-090;,citation_issue=1;,citation_doi=10.3996/JFWM-21-090;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sexual dimorphism in Eurasian Perch as an example;,citation_author=W Mooij;,citation_author=Jules Rooij;,citation_author=Sander Wijnhoven;,citation_publication_date=1999-05-01;,citation_cover_date=1999-05-01;,citation_year=1999;,citation_fulltext_html_url=https://www.researchgate.net/profile/Sander-Wijnhoven/publication/230807448_Analysis_and_Comparison_of_Fish_Growth_from_Small_Samples_of_Length-at-Age_Data_Detection_of_Sexual_Dimorphism_in_Eurasian_Perch_as_an_Example/links/09e41504a07e30d58b000000/Analysis-and-Comparison-of-Fish-Growth-from-Small-Samples-of-Length-at-Age-Data-Detection-of-Sexual-Dimorphism-in-Eurasian-Perch-as-an-Example.pdf;,citation_volume=128;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Recruitment, growth, exploitation and management of walleyes in a southeastern Wisconsin lake;,citation_author=Donald Mraz;,citation_publication_date=1968;,citation_cover_date=1968;,citation_year=1968;,citation_fulltext_html_url=https://search.library.wisc.edu/digital/AA7LF2GR2E3E5385/pages;,citation_technical_report_institution=Wisconsin Department of Natural Resources;,citation_series_title=Technical Bulletin;">
+<meta name="citation_reference" content="citation_title=A comparison of the scale and otolith methods of age estimation for lake whitefish in lake huron;,citation_author=Andrew M. Muir;,citation_author=Mark P. Ebener;,citation_author=Ji X. He;,citation_author=James E. Johnson;,citation_publication_date=2008-06-01;,citation_cover_date=2008-06-01;,citation_year=2008;,citation_fulltext_html_url=https://doi.org/10.1577/M06-160.1;,citation_issue=3;,citation_doi=10.1577/M06-160.1;,citation_issn=0275-5947;,citation_volume=28;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_author=Derek H. Ogle;,citation_publication_date=2017-01-01;,citation_cover_date=2017-01-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_language=en-US;,citation_journal_title=Fisheries Research;,citation_journal_abbrev=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/;">
+<meta name="citation_reference" content="citation_title=Comparison of specimen- and image-based morphometrics for Cisco;,citation_author=Brian P. O’Malley;,citation_author=Joseph D. Schmitt;,citation_author=Jeremy P. Holden;,citation_author=Brian C. Weidel;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-029;,citation_issue=1;,citation_doi=10.3996/JFWM-20-029;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Assessing methods to improve benthic fish sampling in a stony headwater stream;,citation_author=Eleri G. Pritchard;,citation_author=Daniel D. A. Chadwick;,citation_author=Michael A. Chadwick;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/2688-8319.12111;,citation_issue=4;,citation_doi=10.1002/2688-8319.12111;,citation_issn=2688-8319;,citation_volume=2;,citation_language=en-US;,citation_journal_title=Ecological Solutions and Evidence;">
+<meta name="citation_reference" content="citation_title=Comparison of structures used to estimate age and growth of Yellowstone Cutthroat Trout;,citation_author=Michael C. Quist;,citation_author=Darcy K. McCarrick;,citation_author=Lynsey M. Harris;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-095;,citation_issue=2;,citation_doi=10.3996/JFWM-21-095;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Age and Growth of Fishes: Principles and Techniques;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/;,citation_doi=10.47886/9781934874486;,citation_isbn=978-1-934874-48-6;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_fulltext_html_url=https://books.google.com?id=33VRAAAAMAAJ;,citation_isbn=978-0-662-01440-9;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Population Biology of the Tan Riffleshell (&amp;amp;amp;lt;i&amp;gt;Epioblasma&amp;lt;/i&amp;gt; <i>florentina walkeri</i>) and the Effects of Substratum and Light on Juvenile Propagation;,citation_author=Susan Owen Rogers;,citation_publication_date=1999-12-06;,citation_cover_date=1999-12-06;,citation_year=1999;,citation_fulltext_html_url=https://vtechworks.lib.vt.edu/handle/10919/36143;,citation_language=en-US;,citation_dissertation_institution=Virginia Tech;">
+<meta name="citation_reference" content="citation_title=How many Ciscoes are needed for stocking in the Laurentian Great Lakes?;,citation_author=Benjamin J. Rook;,citation_author=Michael J. Hansen;,citation_author=Charles R. Bronte;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-025;,citation_issue=1;,citation_doi=10.3996/JFWM-21-025;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Population biology of Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus&amp;lt;/i&amp;gt; <i>namaycush</i>) of Lake Superior before 1950;,citation_author=Gary T. Sakagawa;,citation_author=Richard L. Pycha;,citation_publication_date=1971-01;,citation_cover_date=1971-01;,citation_year=1971;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/abs/10.1139/f71-011;,citation_doi=10.1139/f71-011;,citation_issn=0015-296X;,citation_volume=28;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {}Assessment{} of {}Fish{} {}Populations{};">
+<meta name="citation_reference" content="citation_title=Management goals for conserving White Sturgeon in the Sacramento–San Joaquin River Basin;,citation_author=Marta E. Ulaski;,citation_author=Shannon E. Blackburn;,citation_author=Zachary J. Jackson;,citation_author=Michael C. Quist;,citation_publication_date=2022-05-03;,citation_cover_date=2022-05-03;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-070;,citation_issue=2;,citation_doi=10.3996/JFWM-21-070;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Water-level fluctuations and water temperature effects on young-of-year Largemouth Bass in a Southwest irrigation reservoir;,citation_author=Alexander Vaisvil;,citation_author=Colleen A. Caldwell;,citation_author=Eric Frey;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-071;,citation_issue=2;,citation_doi=10.3996/JFWM-21-071;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Use of anthropogenic nest materials by Black-Crested Titmice along an urban gradient;,citation_author=Madi P. Vasquez;,citation_author=Rebekah J. Rylander;,citation_author=Jacquelyn M. Tleimat;,citation_author=Sarah R. Fritts;,citation_publication_date=2022-01-11;,citation_cover_date=2022-01-11;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-058;,citation_issue=1;,citation_doi=10.3996/JFWM-21-058;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Regional fisheries management investigations - Magic Valley region;,citation_author=Charels D Warren;,citation_author=Karen A Frank;,citation_author=Fred E Partridge;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_fulltext_html_url=https://collaboration.idfg.idaho.gov/FisheriesTechnicalReports/Mgt04-04Warren2001%20Regional%20Fisheries%20Management%20Investigations%20Magic%20Valley%20Region.pdf;,citation_language=en-US;,citation_publisher=Completion Report;">
+<meta name="citation_reference" content="citation_title=ggplot2: Elegant Graphics for Data Analysis;,citation_author=Hadley Wickham;,citation_author=Danielle Navarro;,citation_author=Thomas Lin Pedersen;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://ggplot2-book.org/index.html;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Age and growth of Rock Bass in eastern Lake Ontario;,citation_author=David R. Wolfert;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=http://pubs.er.usgs.gov/publication/1000461;,citation_volume=27;,citation_journal_title=New York Fish and Game Journal;">
+<meta name="citation_reference" content="citation_title=Thin plate regression splines;,citation_author=Simon N. Wood;,citation_publication_date=2003;,citation_cover_date=2003;,citation_year=2003;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00374;,citation_issue=1;,citation_doi=10.1111/1467-9868.00374;,citation_issn=1467-9868;,citation_volume=65;,citation_language=en-US;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Generalized Additive Models: An Introduction with R;,citation_author=Simon N. Wood;,citation_publication_date=2017-05-02;,citation_cover_date=2017-05-02;,citation_year=2017;,citation_fulltext_html_url=https://www.taylorfrancis.com/books/mono/10.1201/9781315370279/generalized-additive-models-simon-wood;,citation_doi=10.1201/9781315370279;,citation_isbn=978-1-315-37027-9;">
+<meta name="citation_reference" content="citation_title=Assessing the accuracy of drift‐dive estimates of brown trout ( &amp;amp;amp;lt;i&amp;gt;Salmo&amp;lt;/i&amp;gt; <i>trutta</i> ) abundance in two New Zealand rivers: A mark‐resighting study;,citation_author=Roger G. Young;,citation_author=John W. Hayes;,citation_publication_date=2001-06;,citation_cover_date=2001-06;,citation_year=2001;,citation_fulltext_html_url=http://www.tandfonline.com/doi/abs/10.1080/00288330.2001.9516997;,citation_issue=2;,citation_doi=10.1080/00288330.2001.9516997;,citation_issn=0028-8330, 1175-8805;,citation_volume=35;,citation_language=en-US;,citation_journal_title=New Zealand Journal of Marine and Freshwater Research;,citation_journal_abbrev=New Zealand Journal of Marine and Freshwater Research;">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/books.html">
+ <span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/packages.html">
+ <span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+ <span class="dropdown-text">fishR (alphabetical)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+ <span class="dropdown-text">fishR (by topic)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+ <span class="dropdown-text">Comprehensive (by package)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+ <span class="dropdown-text">Comprehensive (by topic)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching/index.html">
+ <span class="menu-text">Teaching</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/contribute.html">
+ <span class="menu-text">Get Involved</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">O’Malley et al.&nbsp;(2021) Regression Plots</h1>
+                  <div>
+        <div class="description">
+          Using ggplot2 to recreate the regresion plots of O’Malley et al.&nbsp;(2021).
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Linear Regression</div>
+                <div class="quarto-category">Data Wrangling</div>
+                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">facets</div>
+                <div class="quarto-category">annotations</div>
+                <div class="quarto-category">labels</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">Apr 6, 2023</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Apr 6, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#individual-measures" id="toc-individual-measures" class="nav-link" data-scroll-target="#individual-measures">Individual Measures</a></li>
+  <li><a href="#regression-summaries" id="toc-regression-summaries" class="nav-link" data-scroll-target="#regression-summaries">Regression Summaries</a></li>
+  </ul></li>
+  <li><a href="#recreating-figure-1" id="toc-recreating-figure-1" class="nav-link" data-scroll-target="#recreating-figure-1">Recreating Figure 1</a></li>
+  <li><a href="#further-thoughts" id="toc-further-thoughts" class="nav-link" data-scroll-target="#further-thoughts">Further Thoughts</a>
+  <ul class="collapse">
+  <li><a href="#same-axes-in-each-facet" id="toc-same-axes-in-each-facet" class="nav-link" data-scroll-target="#same-axes-in-each-facet">Same Axes in Each Facet</a></li>
+  <li><a href="#alternative-multiple-comparison-procedures" id="toc-alternative-multiple-comparison-procedures" class="nav-link" data-scroll-target="#alternative-multiple-comparison-procedures">Alternative Multiple Comparison Procedures</a></li>
+  <li><a href="#descriptive-facet-labels" id="toc-descriptive-facet-labels" class="nav-link" data-scroll-target="#descriptive-facet-labels">Descriptive Facet Labels</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-4-6_OMalleyetal2021_Fig2/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p><span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> compared morphometric measurements made directly on Cisco (<em>Coregonus artedi</em>) to those made from digitized images. Their <a href="https://meridian.allenpress.com/view-large/figure/13413231/i1944-687X-12-1-208-f02.tif">Figure 2</a> displayed the relationship between the two measurements for 12 morphometric measures. They tested whether the slope of the relationship between two measurements was equal to 1 for all 12 measures, but only showed the regression result on the plot if the slope was significantly different from 1. I use <code>ggplot2</code> here to recreate their figure.</p>
+<p>The following packages are loaded for use below. A few functions from each of <code>FSA</code>, <code>tibble</code>, <code>scales</code>, <code>ggtext</code>, and <code>smatr</code> are used with <code>::</code> such that the entire packages are not attached here.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, ggplot2 packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="data-wrangling" class="level1 page-columns page-full">
+<h1>Data Wrangling</h1>
+<section id="individual-measures" class="level2">
+<h2 class="anchored" data-anchor-id="individual-measures">Individual Measures</h2>
+<p><span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> provided the raw data for producing Figure 1 in their Archived Material A1, which I loaded below. I retained only the variables needed for this post and renamed them to be shorter.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"CiscoMethodMSDataset_20200929.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">id=</span>SpecimenID,<span class="at">measure=</span>MorphometricAbbreviation,<span class="at">method=</span>Method,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">measurer=</span>MeasurerInitials,<span class="at">value=</span>Value)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|                   id measure        method measurer     value
+#R|  1    2018-50-886-20     BDD specimenBased      BPO  66.88000
+#R|  2    2018-50-886-20     CPL specimenBased      BPO  26.59000
+#R|  3    2018-50-886-20     DOH specimenBased      BPO  42.61000
+#R|  3562  2018-38-208-6     PVL    imageBased      JDS  40.41272
+#R|  3563  2018-38-208-6     STL    imageBased      JDS 275.50429
+#R|  3564  2018-38-208-6     TTL    imageBased      JDS 328.48593</code></pre>
+</div>
+</div>
+<p>The image-based measurements were made by two <code>measurer</code>s. Figure 2 uses only those measurements made by the same <code>measurer</code> as for the specimen-based measurements (i.e., “BPO”).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(measurer<span class="sc">==</span><span class="st">"BPO"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|                   id measure        method measurer     value
+#R|  1    2018-50-886-20     BDD specimenBased      BPO  66.88000
+#R|  2    2018-50-886-20     CPL specimenBased      BPO  26.59000
+#R|  3    2018-50-886-20     DOH specimenBased      BPO  42.61000
+#R|  2374  2018-38-208-6     PVL    imageBased      BPO  38.73081
+#R|  2375  2018-38-208-6     STL    imageBased      BPO 276.25851
+#R|  2376  2018-38-208-6     TTL    imageBased      BPO 329.04718</code></pre>
+</div>
+</div>
+<p>These data need to be made “wider” by placing the two <code>method</code>s of measurement into their own columns, rather than in different rows.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span>method,<span class="at">values_from=</span>value)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|                   id measure measurer specimenBased imageBased
+#R|  1    2018-50-886-20     BDD      BPO         66.88   69.05096
+#R|  2    2018-50-886-20     CPL      BPO         26.59   28.61097
+#R|  3    2018-50-886-20     DOH      BPO         42.61   44.97137
+#R|  1186  2018-38-208-6     PVL      BPO         38.64   38.73081
+#R|  1187  2018-38-208-6     STL      BPO        267.00  276.25851
+#R|  1188  2018-38-208-6     TTL      BPO        325.00  329.04718</code></pre>
+</div>
+</div>
+<p>These data are now ready for plotting <code>imageBased</code> versus <code>specimenBased</code> for each <code>measure</code>.</p>
+</section>
+<section id="regression-summaries" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="regression-summaries">Regression Summaries</h2>
+<div class="page-columns page-full"><p>Figure 2, however, also shows summary results from the linear regression of <code>imageBased</code> on <code>specimenBased</code> for each <code>measure</code> for which the slope was significantly different from 1. Thus, these regressions must be conducted for each <code>measure</code> and the results stored in a data frame for use when plotting. There are a variety of ways to do this, but <code>sapply()</code> is used below.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<code>lmList()</code> from <code>nlme</code> is another option, though manipulation of results afterwards is still required to produce the needed data frame.</p></li></div></div>
+<p>The original data frame is split on <code>measure</code> to form a list with a data frame for each measure. The result is too big to show here.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dat2.split <span class="ot">&lt;-</span> <span class="fu">split</span>(dat2,dat2<span class="sc">$</span>measure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>A function is then defined that will take a data frame as its sole argument, fit the regression of <code>imageBased</code> on <code>specimenBased</code>, extract certain results about the regression and combine them into a vector, and then return that vector.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This function is created below and called <code>regfun()</code>.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;To see how this works, run the <code>tmp</code> line below but with <code>data=dat2</code> instead and then use <code>str(tmp)</code> to see what is stored from this result and then extracted in the following lines.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>regfun <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(imageBased<span class="sc">~</span>specimenBased,<span class="at">data=</span>d))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">slope=</span>tmp<span class="sc">$</span>coefficients[<span class="st">"specimenBased"</span>,<span class="st">"Estimate"</span>],</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">slopeSE=</span>tmp<span class="sc">$</span>coefficients[<span class="st">"specimenBased"</span>,<span class="st">"Std. Error"</span>],</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">intercept=</span>tmp<span class="sc">$</span>coefficients[<span class="st">"(Intercept)"</span>,<span class="st">"Estimate"</span>],</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">rsq=</span>tmp<span class="sc">$</span>r.squared,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">df=</span>tmp<span class="sc">$</span>df[<span class="dv">2</span>])</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As an example, <code>regfun</code> is called below with only the data for the “BDD” morphometric measurement in <code>dat2.split</code>. Here you can see that <code>regfun()</code> returns the estimated intercept and slope, the standard error for the slope, the r-squared value, and the residual degrees-of-freedom for the regression.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">regfun</span>(dat2.split<span class="sc">$</span>BDD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|         slope      slopeSE    intercept          rsq           df 
+#R|   1.031474479  0.008749461  0.010705827  0.993068986 97.000000000</code></pre>
+</div>
+</div>
+<p><code>regfun()</code> can be applied to each item in <code>dat2.split</code> with <code>sapply()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>regfun)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|                     BDD        CPL         DOH         HLL         MXL
+#R|  slope      1.031474479  1.0757713  1.02856998  1.01445030  0.96781162
+#R|  slopeSE    0.008749461  0.0352823  0.02442481  0.02186351  0.04933639
+#R|  intercept  0.010705827  0.1554068 -0.44887045  0.44980926  1.16453067
+#R|  rsq        0.993068986  0.9055193  0.94813927  0.95688676  0.79867605
+#R|  df        97.000000000 97.0000000 97.00000000 97.00000000 97.00000000
+#R|                    OOL         PAD         PCL         POL         PVL
+#R|  slope      0.81350663  0.98313163  1.11895119  0.86621728  0.90627210
+#R|  slopeSE    0.05721728  0.02070146  0.02995096  0.05628229  0.04636973
+#R|  intercept  1.82831841  0.18526295 -5.15899945  1.78522043  2.71996110
+#R|  rsq        0.67574491  0.95876533  0.93501829  0.70946778  0.79748909
+#R|  df        97.00000000 97.00000000 97.00000000 97.00000000 97.00000000
+#R|                     STL         TTL
+#R|  slope      1.033775553  1.02287457
+#R|  slopeSE    0.008315711  0.01384976
+#R|  intercept  0.017022154 -7.17195762
+#R|  rsq        0.993762642  0.98252745
+#R|  df        97.000000000 97.00000000</code></pre>
+</div>
+</div>
+<p>However, the result needs to be transposed with <code>t()</code> so that the summary statistics form the columns and the <code>measure</code>s form the rows. The transposed matrix is converted to a data frame for further manipulation.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> <span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>regfun) <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|          slope     slopeSE   intercept       rsq df
+#R|  BDD 1.0314745 0.008749461  0.01070583 0.9930690 97
+#R|  CPL 1.0757713 0.035282303  0.15540677 0.9055193 97
+#R|  DOH 1.0285700 0.024424812 -0.44887045 0.9481393 97
+#R|  HLL 1.0144503 0.021863514  0.44980926 0.9568868 97
+#R|  MXL 0.9678116 0.049336389  1.16453067 0.7986760 97
+#R|  OOL 0.8135066 0.057217285  1.82831841 0.6757449 97
+#R|  PAD 0.9831316 0.020701457  0.18526295 0.9587653 97
+#R|  PCL 1.1189512 0.029950963 -5.15899945 0.9350183 97
+#R|  POL 0.8662173 0.056282293  1.78522043 0.7094678 97
+#R|  PVL 0.9062721 0.046369732  2.71996110 0.7974891 97
+#R|  STL 1.0337756 0.008315711  0.01702215 0.9937626 97
+#R|  TTL 1.0228746 0.013849764 -7.17195762 0.9825274 97</code></pre>
+</div>
+</div>
+<p>This data frame is modified by converting the rownames to a variable name (i.e., <code>measure</code>) with <code>rownames_to_column()</code> from <code>tibble</code>. In addition, a t test statistic for the comparison of the estimated slope to 1 is computed and a two-tailed p-value is computed from that test statistic using <code>pt()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">"measure"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t=</span>(slope<span class="dv">-1</span>)<span class="sc">/</span>slopeSE,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">p=</span><span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(t),<span class="at">df=</span>df,<span class="at">lower.tail=</span><span class="cn">FALSE</span>))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     measure     slope     slopeSE   intercept       rsq df          t
+#R|  1      BDD 1.0314745 0.008749461  0.01070583 0.9930690 97  3.5973049
+#R|  2      CPL 1.0757713 0.035282303  0.15540677 0.9055193 97  2.1475736
+#R|  3      DOH 1.0285700 0.024424812 -0.44887045 0.9481393 97  1.1697113
+#R|  4      HLL 1.0144503 0.021863514  0.44980926 0.9568868 97  0.6609323
+#R|  5      MXL 0.9678116 0.049336389  1.16453067 0.7986760 97 -0.6524268
+#R|  6      OOL 0.8135066 0.057217285  1.82831841 0.6757449 97 -3.2593886
+#R|  7      PAD 0.9831316 0.020701457  0.18526295 0.9587653 97 -0.8148399
+#R|  8      PCL 1.1189512 0.029950963 -5.15899945 0.9350183 97  3.9715313
+#R|  9      POL 0.8662173 0.056282293  1.78522043 0.7094678 97 -2.3769948
+#R|  10     PVL 0.9062721 0.046369732  2.71996110 0.7974891 97 -2.0213164
+#R|  11     STL 1.0337756 0.008315711  0.01702215 0.9937626 97  4.0616555
+#R|  12     TTL 1.0228746 0.013849764 -7.17195762 0.9825274 97  1.6516215
+#R|                p
+#R|  1  5.081712e-04
+#R|  2  3.423944e-02
+#R|  3  2.449833e-01
+#R|  4  5.102225e-01
+#R|  5  5.156691e-01
+#R|  6  1.540325e-03
+#R|  7  4.171601e-01
+#R|  8  1.371816e-04
+#R|  9  1.941692e-02
+#R|  10 4.600229e-02
+#R|  11 9.887411e-05
+#R|  12 1.018456e-01</code></pre>
+</div>
+</div>
+<div class="page-columns page-full"><p>The authors determined the significance of the regression with a Bonferroni correction, which they implemented by comparing the calculated p-value to 0.05/12, where 0.05 is the overall rejection criterion value and 12 is the number of p-values calculated. An alternative to this is to multiply the calculated p-values by 12 and then compare those adjusted p-values to 0.05 to determine significance. Either method produces the same result, but the second method, when implemented with <code>p.adjust()</code> provides flexibility to try methods other than Bonferroni (see Further Comments below).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Bonferroni-corrected p-values greater than 1 are displayed as 1.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p.bonf=</span><span class="fu">p.adjust</span>(p,<span class="at">method=</span><span class="st">"bonferroni"</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     measure     slope     slopeSE   intercept       rsq df          t
+#R|  1      BDD 1.0314745 0.008749461  0.01070583 0.9930690 97  3.5973049
+#R|  2      CPL 1.0757713 0.035282303  0.15540677 0.9055193 97  2.1475736
+#R|  3      DOH 1.0285700 0.024424812 -0.44887045 0.9481393 97  1.1697113
+#R|  4      HLL 1.0144503 0.021863514  0.44980926 0.9568868 97  0.6609323
+#R|  5      MXL 0.9678116 0.049336389  1.16453067 0.7986760 97 -0.6524268
+#R|  6      OOL 0.8135066 0.057217285  1.82831841 0.6757449 97 -3.2593886
+#R|  7      PAD 0.9831316 0.020701457  0.18526295 0.9587653 97 -0.8148399
+#R|  8      PCL 1.1189512 0.029950963 -5.15899945 0.9350183 97  3.9715313
+#R|  9      POL 0.8662173 0.056282293  1.78522043 0.7094678 97 -2.3769948
+#R|  10     PVL 0.9062721 0.046369732  2.71996110 0.7974891 97 -2.0213164
+#R|  11     STL 1.0337756 0.008315711  0.01702215 0.9937626 97  4.0616555
+#R|  12     TTL 1.0228746 0.013849764 -7.17195762 0.9825274 97  1.6516215
+#R|                p      p.bonf
+#R|  1  5.081712e-04 0.006098055
+#R|  2  3.423944e-02 0.410873238
+#R|  3  2.449833e-01 1.000000000
+#R|  4  5.102225e-01 1.000000000
+#R|  5  5.156691e-01 1.000000000
+#R|  6  1.540325e-03 0.018483900
+#R|  7  4.171601e-01 1.000000000
+#R|  8  1.371816e-04 0.001646179
+#R|  9  1.941692e-02 0.233002989
+#R|  10 4.600229e-02 0.552027438
+#R|  11 9.887411e-05 0.001186489
+#R|  12 1.018456e-01 1.000000000</code></pre>
+</div>
+</div>
+<p>The authors used <code>slope.test()</code> from <code>smatr</code> to compute the p-value for the comparison of the estimated slope to 1. The code below uses <code>sapply()</code> to compute these p-values for each group. A comparison of the <code>p</code> column below to the one above shows that the results above are the same as those from <code>smatr</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sth <span class="ot">&lt;-</span> <span class="cf">function</span>(d) <span class="fu">with</span>(d,smatr<span class="sc">::</span><span class="fu">slope.test</span>(imageBased,specimenBased,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">test.value=</span><span class="dv">1</span>,<span class="at">method=</span><span class="st">"OLS"</span>))<span class="sc">$</span>p</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>sth) <span class="sc">|&gt;</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">p=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|                 p
+#R|  BDD 5.081712e-04
+#R|  CPL 3.423944e-02
+#R|  DOH 2.449833e-01
+#R|  HLL 5.102225e-01
+#R|  MXL 5.156691e-01
+#R|  OOL 1.540325e-03
+#R|  PAD 4.171601e-01
+#R|  PCL 1.371816e-04
+#R|  POL 1.941692e-02
+#R|  PVL 4.600229e-02
+#R|  STL 9.887411e-05
+#R|  TTL 1.018456e-01</code></pre>
+</div>
+</div>
+<div class="page-columns page-full"><p>Figure 2 in <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> showed the regression line, its slope, and the corresponding r<sup>2</sup> value only for those measures for which the slope was significantly different from 1. To facilitate this, three new variables are created that contain the slope, the intercept, and the regression label <strong>only</strong> for those measures with slopes that differed significantly from 1.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Use of HTML and markdown code in the label was described in <a href="../2023-3-29_Milleretal2022_Fig1/#reservoir-and-regression-result-labels">this post</a>.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;I also remove three variables that are not needed further.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">b=</span><span class="fu">ifelse</span>(p.bonf<span class="sc">&lt;</span><span class="fl">0.05</span>,intercept,<span class="cn">NA</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">m=</span><span class="fu">ifelse</span>(p.bonf<span class="sc">&lt;</span><span class="fl">0.05</span>,slope,<span class="cn">NA</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">lbl=</span><span class="fu">ifelse</span>(p.bonf<span class="sc">&lt;</span><span class="fl">0.05</span>,<span class="fu">paste0</span>(<span class="st">"slope = "</span>,<span class="fu">round</span>(slope,<span class="dv">3</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"&lt;br&gt;R^2^ = "</span>,<span class="fu">round</span>(rsq,<span class="dv">2</span>)),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">NA</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>slopeSE,<span class="sc">-</span>df,<span class="sc">-</span>t)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     measure     slope   intercept       rsq            p      p.bonf           b
+#R|  1      BDD 1.0314745  0.01070583 0.9930690 5.081712e-04 0.006098055  0.01070583
+#R|  2      CPL 1.0757713  0.15540677 0.9055193 3.423944e-02 0.410873238          NA
+#R|  3      DOH 1.0285700 -0.44887045 0.9481393 2.449833e-01 1.000000000          NA
+#R|  4      HLL 1.0144503  0.44980926 0.9568868 5.102225e-01 1.000000000          NA
+#R|  5      MXL 0.9678116  1.16453067 0.7986760 5.156691e-01 1.000000000          NA
+#R|  6      OOL 0.8135066  1.82831841 0.6757449 1.540325e-03 0.018483900  1.82831841
+#R|  7      PAD 0.9831316  0.18526295 0.9587653 4.171601e-01 1.000000000          NA
+#R|  8      PCL 1.1189512 -5.15899945 0.9350183 1.371816e-04 0.001646179 -5.15899945
+#R|  9      POL 0.8662173  1.78522043 0.7094678 1.941692e-02 0.233002989          NA
+#R|  10     PVL 0.9062721  2.71996110 0.7974891 4.600229e-02 0.552027438          NA
+#R|  11     STL 1.0337756  0.01702215 0.9937626 9.887411e-05 0.001186489  0.01702215
+#R|  12     TTL 1.0228746 -7.17195762 0.9825274 1.018456e-01 1.000000000          NA
+#R|             m                          lbl
+#R|  1  1.0314745 slope = 1.031&lt;br&gt;R^2^ = 0.99
+#R|  2         NA                         &lt;NA&gt;
+#R|  3         NA                         &lt;NA&gt;
+#R|  4         NA                         &lt;NA&gt;
+#R|  5         NA                         &lt;NA&gt;
+#R|  6  0.8135066 slope = 0.814&lt;br&gt;R^2^ = 0.68
+#R|  7         NA                         &lt;NA&gt;
+#R|  8  1.1189512 slope = 1.119&lt;br&gt;R^2^ = 0.94
+#R|  9         NA                         &lt;NA&gt;
+#R|  10        NA                         &lt;NA&gt;
+#R|  11 1.0337756 slope = 1.034&lt;br&gt;R^2^ = 0.99
+#R|  12        NA                         &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>Below, <code>b</code> and <code>m</code> will be used to show regressions lines on each facet, but for <code>measure</code>s where these are <code>NA</code> no line will be shown. This same idea will be true for adding the results labels; i.e., <code>measure</code>s where <code>lbl</code> is NA will not show a label. Thus, the regression line and results will only be shown in facets for measures with slopes significantly different from 1.</p>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="recreating-figure-1" class="level1">
+<h1>Recreating Figure 1</h1>
+<p>Once the data are arranged as above, making Figure 1 is a fairly straight-forward application of techniques used in previous posts. I highlight the steps below.</p>
+<ul>
+<li>Use <code>geom_abline()</code> to make the 1:1 line (i.e., slope of 1, intercept of 0). This is first so that it sits behind the data and potential regression lines.</li>
+<li>Use <code>geom_point()</code> with <code>dat2</code> to add points for each observed <code>specimenBased</code> and <code>imageBased</code> pair. <code>shape=1</code> uses an “open circle” for the point. <code>deepskyblue4</code> was my best guess at the <code>color=</code> that <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> used.</li>
+<li>Use <code>geom_abline()</code> with <code>rsum</code> and <code>b</code> mapped to <code>intercept=</code> and <code>m</code> mapped to <code>slope</code>. Do not use <code>intercept</code> and <code>slope</code> here as that will show the regression line on each facet.</li>
+<li>Use <code>geom_richtext()</code> from <code>ggtext</code> using <code>rsum</code> with <code>lbl</code> mapped to <code>label=</code> to place the regression result labels in the upper-right corner. <code>geom_richtext()</code> is used here rather than <code>geom_text()</code> because the <code>lbl</code> had HTML and markdown code in them.</li>
+<li>Label the x- and y-axes and expand their limits a little more.</li>
+<li>Create three rows of facets based on <code>measure</code> with <code>facet_wrap()</code>. <code>scales="free"</code> is used so that each facet has its own x- and y-axis tick mark labels.</li>
+<li>Apply the <code>theme_bw()</code> theme and remove the default grid lines.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>,<span class="at">intercept=</span><span class="dv">0</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>specimenBased,<span class="at">y=</span>imageBased),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape=</span><span class="dv">1</span>,<span class="at">color=</span><span class="st">"deepskyblue4"</span>) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data=</span>rsum,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">intercept=</span>b,<span class="at">slope=</span>m),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">color=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  ggtext<span class="sc">::</span><span class="fu">geom_richtext</span>(<span class="at">data=</span>rsum,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>lbl),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x=</span><span class="sc">-</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.1</span>,<span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.1</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">size=</span><span class="dv">9</span><span class="sc">/</span>.pt,<span class="at">label.color=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Specimen-based (mm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Image-based (mm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(measure),<span class="at">nrow=</span><span class="dv">3</span>,<span class="at">scales=</span><span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/make-fig2-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="further-thoughts" class="level1 page-columns page-full">
+<h1>Further Thoughts</h1>
+<section id="same-axes-in-each-facet" class="level2">
+<h2 class="anchored" data-anchor-id="same-axes-in-each-facet">Same Axes in Each Facet</h2>
+<p>The last part of Figure 2 in <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> that I could not recreate simply was to ensure that the x- and y-axes were the same (same limits and breaks) in each facet. An especially egregious example of my failure here is for the “OOL” facet.</p>
+<p><a href="https://stackoverflow.com/a/32533219/1123933">This StackOverflow answer</a> provided a method for making the x- and y-axes the same within each facet, but also the same across the facets. A simple modification of that answer results in the x- and y-axes being the same within each facet, but different across facets.</p>
+<p>There are two “tricks” in this process. The first is to create a data fame that finds the minimum and maximum value of <code>imageBased</code> and <code>specimenBased</code> combined for each <code>measure</code>, then place those values in a single variable that is matched against the <code>measure</code> name, and then repeat that column in a second variable.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fctlims <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(measure) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min=</span><span class="fu">min</span>(imageBased,specimenBased),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(imageBased,specimenBased)) <span class="sc">|&gt;</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span>min<span class="sc">:</span>max,<span class="at">values_to=</span><span class="st">"x"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y=</span>x) <span class="sc">|&gt;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>name)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(fctlims)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     measure        x        y
+#R|  1      BDD  33.1800  33.1800
+#R|  2      BDD 104.7049 104.7049
+#R|  3      CPL  15.6600  15.6600
+#R|  22     STL 395.8014 395.8014
+#R|  23     TTL 173.8007 173.8007
+#R|  24     TTL 463.2827 463.2827</code></pre>
+</div>
+</div>
+<p>These “data” are then added to the plot from above using <code>geom_blank()</code> where <code>x=</code> and <code>y=</code> are mapped to the two columns of “min” and “max” values. This then sets the range of data to be presented on the x- and y-axes, and because the two columns are the same then the axes will appear the same. <code>geom_blank()</code> does not plot any actual data so this effectively just sets the x- and y-axis limits and breaks.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_blank</span>(<span class="at">data=</span>fctlims,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>,<span class="at">intercept=</span><span class="dv">0</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>specimenBased,<span class="at">y=</span>imageBased),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape=</span><span class="dv">1</span>,<span class="at">color=</span><span class="st">"deepskyblue4"</span>) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data=</span>rsum,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">intercept=</span>b,<span class="at">slope=</span>m),</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  ggtext<span class="sc">::</span><span class="fu">geom_richtext</span>(<span class="at">data=</span>rsum,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>lbl),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x=</span><span class="sc">-</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.1</span>,<span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.1</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>                        <span class="at">size=</span><span class="dv">9</span><span class="sc">/</span>.pt,<span class="at">label.color=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Specimen-based (mm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Image-based (mm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(measure),<span class="at">nrow=</span><span class="dv">3</span>,<span class="at">scales=</span><span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/make-fig2-2-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is pretty nice, but I still could not get the exact breaks in <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span>. I started to try <code>facetted_pos_scales()</code> from <code>ggh4x</code> but lost my patience with it.</p>
+</section>
+<section id="alternative-multiple-comparison-procedures" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="alternative-multiple-comparison-procedures">Alternative Multiple Comparison Procedures</h2>
+<div class="page-columns page-full"><p>The Bonferroni-correction for multiple comparisons is a “brute-force” method that becomes “too conservative” (i.e., overall error rate less than 0.05), especially as the number of comparisons increases. This, ultimately results in a loss of statistical power (i.e., potentially detecting fewer truly significant results). The Bonferroni method is often employed because it is simple to implement as shown above – you either divide or multiply by the number of tests. However, <code>p.adjust()</code> provides the ability to use a wider variety of other methods that are less conservative than the Bonferroni.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Below, the Holm method is demonstrated.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;See <code>?p.adjust</code> for more explanation of these methods.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p.adjust.methods</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|  [1] "holm"       "hochberg"   "hommel"     "bonferroni" "BH"        
+#R|  [6] "BY"         "fdr"        "none"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p.holm=</span><span class="fu">p.adjust</span>(p,<span class="at">method=</span><span class="st">"holm"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(measure,p,p.bonf,p.holm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output"><code>#R|     measure            p      p.bonf      p.holm
+#R|  1      BDD 5.081712e-04 0.006098055 0.005081712
+#R|  2      CPL 3.423944e-02 0.410873238 0.239676055
+#R|  3      DOH 2.449833e-01 1.000000000 0.979933278
+#R|  4      HLL 5.102225e-01 1.000000000 1.000000000
+#R|  5      MXL 5.156691e-01 1.000000000 1.000000000
+#R|  6      OOL 1.540325e-03 0.018483900 0.013862925
+#R|  7      PAD 4.171601e-01 1.000000000 1.000000000
+#R|  8      PCL 1.371816e-04 0.001646179 0.001508997
+#R|  9      POL 1.941692e-02 0.233002989 0.155335326
+#R|  10     PVL 4.600229e-02 0.552027438 0.276013719
+#R|  11     STL 9.887411e-05 0.001186489 0.001186489
+#R|  12     TTL 1.018456e-01 1.000000000 0.509227920</code></pre>
+</div>
+</div>
+<p>In this situation the Bonferroni and Holm methods did not provide different conclusions, so I did not recreate the <code>b</code>, <code>m</code>, and <code>lbl</code> variables. However, alternative correction methods may provide different conclusions in other situations.</p>
+</section>
+<section id="descriptive-facet-labels" class="level2">
+<h2 class="anchored" data-anchor-id="descriptive-facet-labels">Descriptive Facet Labels</h2>
+<p>I believe that <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> used the measure abbreviations in their Figure 2 to tie the results to their Figure 1, which showed the measures on a schematic fish. However, there may be situations where more descriptive facet labels may be useful. For example, below a named vector is created where the name (before the <code>=</code>) is the measure abbreviation used in <code>measure</code> and the “value” (after the <code>=</code>) is a more descriptive name for the measure.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>longnames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDD"</span><span class="ot">=</span><span class="st">"Body Depth"</span>,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>               <span class="st">"CPL"</span><span class="ot">=</span><span class="st">"Caudal Peduncle Length"</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">"DOH"</span><span class="ot">=</span><span class="st">"Dorsal Fin Height"</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"HLL"</span><span class="ot">=</span><span class="st">"Head Length"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">"MXL"</span><span class="ot">=</span><span class="st">"Maxillary Length"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>               <span class="st">"OOL"</span><span class="ot">=</span><span class="st">"Orbital Length"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>               <span class="st">"PAD"</span><span class="ot">=</span><span class="st">"Pelvic-Anal Fin Length"</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>               <span class="st">"PCL"</span><span class="ot">=</span><span class="st">"Pectoral Fin Length"</span>,</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>               <span class="st">"POL"</span><span class="ot">=</span><span class="st">"Preorbital Length"</span>,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>               <span class="st">"PVL"</span><span class="ot">=</span><span class="st">"Pelvic Fin Length"</span>,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>               <span class="st">"STL"</span><span class="ot">=</span><span class="st">"Standard Length"</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>               <span class="st">"TTL"</span><span class="ot">=</span><span class="st">"Total Length"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The abbreviations in the facet strip can be replaced with the longer names by setting <code>labeller=</code> in <code>facet_wrap()</code> to <code>labeller()</code> which has the variable name that creates the facets (i.e., <code>measure</code> here) set equal to the named vector just created.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>,<span class="at">intercept=</span><span class="dv">0</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>specimenBased,<span class="at">y=</span>imageBased),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape=</span><span class="dv">1</span>,<span class="at">color=</span><span class="st">"deepskyblue4"</span>) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">data=</span>rsum,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">intercept=</span>b,<span class="at">slope=</span>m),</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">color=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  ggtext<span class="sc">::</span><span class="fu">geom_richtext</span>(<span class="at">data=</span>rsum,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>lbl),</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x=</span><span class="sc">-</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="cn">Inf</span>,<span class="at">vjust=</span><span class="fl">1.1</span>,<span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.1</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">size=</span><span class="dv">9</span><span class="sc">/</span>.pt,<span class="at">label.color=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Specimen-based (mm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Image-based (mm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(measure),<span class="at">nrow=</span><span class="dv">3</span>,<span class="at">scales=</span><span class="st">"free"</span>,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller=</span><span class="fu">labeller</span>(<span class="at">measure=</span>longnames)) <span class="sc">+</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/make-fig2-alt-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
+
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-omalleyetal_2021" class="csl-entry" role="doc-biblioentry">
+O’Malley, B. P., J. D. Schmitt, J. P. Holden, and B. C. Weidel. 2021. <a href="https://doi.org/10.3996/JFWM-20-029">Comparison of specimen- and image-based morphometrics for <span>Cisco</span></a>. Journal of Fish and Wildlife Management 12(1):208–215.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2023,
+  author = {Derek H. Ogle},
+  title = {O’Malley Et Al. (2021) {Regression} {Plots}},
+  date = {2023-04-06},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2023" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2023, April 6. O’Malley et al. (2021) Regression Plots.
+<a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+  </li>  
+</ul>
+    </div>   
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
