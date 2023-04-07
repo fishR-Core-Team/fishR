@@ -212,6 +212,7 @@ These "data" are then added to the plot from above using `geom_blank()` where `x
 #| label: make-fig2-2
 #| fig-height: 6
 #| fig-width: 8
+#| source-line-numbers: "2"
 ggplot() +
   geom_blank(data=fctlims,mapping=aes(x=x,y=y)) +
   geom_abline(slope=1,intercept=0,linetype="dashed",linewidth=0.75,color="gray50") +
@@ -269,6 +270,7 @@ The abbreviations in the facet strip can be replaced with the longer names by se
 #| label: make-fig2-alt
 #| fig-height: 6
 #| fig-width: 8
+#| source-line-numbers: "12-13"
 ggplot() +
   geom_abline(slope=1,intercept=0,linetype="dashed",linewidth=0.75,color="gray50") +
   geom_point(data=dat2,mapping=aes(x=specimenBased,y=imageBased),

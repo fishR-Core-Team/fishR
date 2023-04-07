@@ -47,3 +47,8 @@ format:
     code-link: false
     link-external-icon: true
     link-external-newwindow: true
+
+filters: 
+  - line-highlight
+  
+  

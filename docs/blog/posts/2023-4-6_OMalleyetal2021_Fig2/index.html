@@ -125,6 +125,8 @@ div.csl-indent {
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -329,7 +331,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Apr 6, 2023</p>
+        <p class="date-modified">Apr 7, 2023</p>
       </div>
     </div>
       
@@ -371,7 +373,7 @@ div.csl-indent {
 <p><span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> compared morphometric measurements made directly on Cisco (<em>Coregonus artedi</em>) to those made from digitized images. Their <a href="https://meridian.allenpress.com/view-large/figure/13413231/i1944-687X-12-1-208-f02.tif">Figure 2</a> displayed the relationship between the two measurements for 12 morphometric measures. They tested whether the slope of the relationship between two measurements was equal to 1 for all 12 measures, but only showed the regression result on the plot if the slope was significantly different from 1. I use <code>ggplot2</code> here to recreate their figure.</p>
 <p>The following packages are loaded for use below. A few functions from each of <code>FSA</code>, <code>tibble</code>, <code>scales</code>, <code>ggtext</code>, and <code>smatr</code> are used with <code>::</code> such that the entire packages are not attached here.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, ggplot2 packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, ggplot2 packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
 </section>
@@ -381,12 +383,12 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="individual-measures">Individual Measures</h2>
 <p><span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> provided the raw data for producing Figure 1 in their Archived Material A1, which I loaded below. I retained only the variables needed for this post and renamed them to be shorter.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"CiscoMethodMSDataset_20200929.csv"</span>) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"CiscoMethodMSDataset_20200929.csv"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">id=</span>SpecimenID,<span class="at">measure=</span>MorphometricAbbreviation,<span class="at">method=</span>Method,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">measurer=</span>MeasurerInitials,<span class="at">value=</span>Value)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|                   id measure        method measurer     value
+<pre class="output" data-code-line-numbers="nil"><code>#R|                   id measure        method measurer     value
 #R|  1    2018-50-886-20     BDD specimenBased      BPO  66.88000
 #R|  2    2018-50-886-20     CPL specimenBased      BPO  26.59000
 #R|  3    2018-50-886-20     DOH specimenBased      BPO  42.61000
@@ -397,11 +399,11 @@ div.csl-indent {
 </div>
 <p>The image-based measurements were made by two <code>measurer</code>s. Figure 2 uses only those measurements made by the same <code>measurer</code> as for the specimen-based measurements (i.e., “BPO”).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(measurer<span class="sc">==</span><span class="st">"BPO"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|                   id measure        method measurer     value
+<pre class="output" data-code-line-numbers="nil"><code>#R|                   id measure        method measurer     value
 #R|  1    2018-50-886-20     BDD specimenBased      BPO  66.88000
 #R|  2    2018-50-886-20     CPL specimenBased      BPO  26.59000
 #R|  3    2018-50-886-20     DOH specimenBased      BPO  42.61000
@@ -412,11 +414,11 @@ div.csl-indent {
 </div>
 <p>These data need to be made “wider” by placing the two <code>method</code>s of measurement into their own columns, rather than in different rows.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span>method,<span class="at">values_from=</span>value)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|                   id measure measurer specimenBased imageBased
+<pre class="output" data-code-line-numbers="nil"><code>#R|                   id measure measurer specimenBased imageBased
 #R|  1    2018-50-886-20     BDD      BPO         66.88   69.05096
 #R|  2    2018-50-886-20     CPL      BPO         26.59   28.61097
 #R|  3    2018-50-886-20     DOH      BPO         42.61   44.97137
@@ -432,11 +434,11 @@ div.csl-indent {
 <div class="page-columns page-full"><p>Figure 2, however, also shows summary results from the linear regression of <code>imageBased</code> on <code>specimenBased</code> for each <code>measure</code> for which the slope was significantly different from 1. Thus, these regressions must be conducted for each <code>measure</code> and the results stored in a data frame for use when plotting. There are a variety of ways to do this, but <code>sapply()</code> is used below.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<code>lmList()</code> from <code>nlme</code> is another option, though manipulation of results afterwards is still required to produce the needed data frame.</p></li></div></div>
 <p>The original data frame is split on <code>measure</code> to form a list with a data frame for each measure. The result is too big to show here.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dat2.split <span class="ot">&lt;-</span> <span class="fu">split</span>(dat2,dat2<span class="sc">$</span>measure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dat2.split <span class="ot">&lt;-</span> <span class="fu">split</span>(dat2,dat2<span class="sc">$</span>measure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="page-columns page-full"><p>A function is then defined that will take a data frame as its sole argument, fit the regression of <code>imageBased</code> on <code>specimenBased</code>, extract certain results about the regression and combine them into a vector, and then return that vector.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This function is created below and called <code>regfun()</code>.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;To see how this works, run the <code>tmp</code> line below but with <code>data=dat2</code> instead and then use <code>str(tmp)</code> to see what is stored from this result and then extracted in the following lines.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>regfun <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>regfun <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(imageBased<span class="sc">~</span>specimenBased,<span class="at">data=</span>d))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">slope=</span>tmp<span class="sc">$</span>coefficients[<span class="st">"specimenBased"</span>,<span class="st">"Estimate"</span>],</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">slopeSE=</span>tmp<span class="sc">$</span>coefficients[<span class="st">"specimenBased"</span>,<span class="st">"Std. Error"</span>],</span>
@@ -447,17 +449,17 @@ div.csl-indent {
 </div>
 <p>As an example, <code>regfun</code> is called below with only the data for the “BDD” morphometric measurement in <code>dat2.split</code>. Here you can see that <code>regfun()</code> returns the estimated intercept and slope, the standard error for the slope, the r-squared value, and the residual degrees-of-freedom for the regression.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">regfun</span>(dat2.split<span class="sc">$</span>BDD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">regfun</span>(dat2.split<span class="sc">$</span>BDD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         slope      slopeSE    intercept          rsq           df 
+<pre class="output" data-code-line-numbers="nil"><code>#R|         slope      slopeSE    intercept          rsq           df 
 #R|   1.031474479  0.008749461  0.010705827  0.993068986 97.000000000</code></pre>
 </div>
 </div>
 <p><code>regfun()</code> can be applied to each item in <code>dat2.split</code> with <code>sapply()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>regfun)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>regfun)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|                     BDD        CPL         DOH         HLL         MXL
+<pre class="output" data-code-line-numbers="nil"><code>#R|                     BDD        CPL         DOH         HLL         MXL
 #R|  slope      1.031474479  1.0757713  1.02856998  1.01445030  0.96781162
 #R|  slopeSE    0.008749461  0.0352823  0.02442481  0.02186351  0.04933639
 #R|  intercept  0.010705827  0.1554068 -0.44887045  0.44980926  1.16453067
@@ -479,12 +481,12 @@ div.csl-indent {
 </div>
 <p>However, the result needs to be transposed with <code>t()</code> so that the summary statistics form the columns and the <code>measure</code>s form the rows. The transposed matrix is converted to a data frame for further manipulation.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> <span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>regfun) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> <span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>regfun) <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|          slope     slopeSE   intercept       rsq df
+<pre class="output" data-code-line-numbers="nil"><code>#R|          slope     slopeSE   intercept       rsq df
 #R|  BDD 1.0314745 0.008749461  0.01070583 0.9930690 97
 #R|  CPL 1.0757713 0.035282303  0.15540677 0.9055193 97
 #R|  DOH 1.0285700 0.024424812 -0.44887045 0.9481393 97
@@ -501,13 +503,13 @@ div.csl-indent {
 </div>
 <p>This data frame is modified by converting the rownames to a variable name (i.e., <code>measure</code>) with <code>rownames_to_column()</code> from <code>tibble</code>. In addition, a t test statistic for the comparison of the estimated slope to 1 is computed and a two-tailed p-value is computed from that test statistic using <code>pt()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">"measure"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t=</span>(slope<span class="dv">-1</span>)<span class="sc">/</span>slopeSE,</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">p=</span><span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(t),<span class="at">df=</span>df,<span class="at">lower.tail=</span><span class="cn">FALSE</span>))</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     measure     slope     slopeSE   intercept       rsq df          t
+<pre class="output" data-code-line-numbers="nil"><code>#R|     measure     slope     slopeSE   intercept       rsq df          t
 #R|  1      BDD 1.0314745 0.008749461  0.01070583 0.9930690 97  3.5973049
 #R|  2      CPL 1.0757713 0.035282303  0.15540677 0.9055193 97  2.1475736
 #R|  3      DOH 1.0285700 0.024424812 -0.44887045 0.9481393 97  1.1697113
@@ -537,11 +539,11 @@ div.csl-indent {
 </div>
 <div class="page-columns page-full"><p>The authors determined the significance of the regression with a Bonferroni correction, which they implemented by comparing the calculated p-value to 0.05/12, where 0.05 is the overall rejection criterion value and 12 is the number of p-values calculated. An alternative to this is to multiply the calculated p-values by 12 and then compare those adjusted p-values to 0.05 to determine significance. Either method produces the same result, but the second method, when implemented with <code>p.adjust()</code> provides flexibility to try methods other than Bonferroni (see Further Comments below).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Bonferroni-corrected p-values greater than 1 are displayed as 1.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p.bonf=</span><span class="fu">p.adjust</span>(p,<span class="at">method=</span><span class="st">"bonferroni"</span>))</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     measure     slope     slopeSE   intercept       rsq df          t
+<pre class="output" data-code-line-numbers="nil"><code>#R|     measure     slope     slopeSE   intercept       rsq df          t
 #R|  1      BDD 1.0314745 0.008749461  0.01070583 0.9930690 97  3.5973049
 #R|  2      CPL 1.0757713 0.035282303  0.15540677 0.9055193 97  2.1475736
 #R|  3      DOH 1.0285700 0.024424812 -0.44887045 0.9481393 97  1.1697113
@@ -571,13 +573,13 @@ div.csl-indent {
 </div>
 <p>The authors used <code>slope.test()</code> from <code>smatr</code> to compute the p-value for the comparison of the estimated slope to 1. The code below uses <code>sapply()</code> to compute these p-values for each group. A comparison of the <code>p</code> column below to the one above shows that the results above are the same as those from <code>smatr</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sth <span class="ot">&lt;-</span> <span class="cf">function</span>(d) <span class="fu">with</span>(d,smatr<span class="sc">::</span><span class="fu">slope.test</span>(imageBased,specimenBased,</span>
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sth <span class="ot">&lt;-</span> <span class="cf">function</span>(d) <span class="fu">with</span>(d,smatr<span class="sc">::</span><span class="fu">slope.test</span>(imageBased,specimenBased,</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">test.value=</span><span class="dv">1</span>,<span class="at">method=</span><span class="st">"OLS"</span>))<span class="sc">$</span>p</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(dat2.split,<span class="at">FUN=</span>sth) <span class="sc">|&gt;</span> </span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">p=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|                 p
+<pre class="output" data-code-line-numbers="nil"><code>#R|                 p
 #R|  BDD 5.081712e-04
 #R|  CPL 3.423944e-02
 #R|  DOH 2.449833e-01
@@ -594,7 +596,7 @@ div.csl-indent {
 </div>
 <div class="page-columns page-full"><p>Figure 2 in <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> showed the regression line, its slope, and the corresponding r<sup>2</sup> value only for those measures for which the slope was significantly different from 1. To facilitate this, three new variables are created that contain the slope, the intercept, and the regression label <strong>only</strong> for those measures with slopes that differed significantly from 1.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Use of HTML and markdown code in the label was described in <a href="../2023-3-29_Milleretal2022_Fig1/#reservoir-and-regression-result-labels">this post</a>.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;I also remove three variables that are not needed further.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="ot">&lt;-</span> rsum <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">b=</span><span class="fu">ifelse</span>(p.bonf<span class="sc">&lt;</span><span class="fl">0.05</span>,intercept,<span class="cn">NA</span>),</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">m=</span><span class="fu">ifelse</span>(p.bonf<span class="sc">&lt;</span><span class="fl">0.05</span>,slope,<span class="cn">NA</span>),</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">lbl=</span><span class="fu">ifelse</span>(p.bonf<span class="sc">&lt;</span><span class="fl">0.05</span>,<span class="fu">paste0</span>(<span class="st">"slope = "</span>,<span class="fu">round</span>(slope,<span class="dv">3</span>),</span>
@@ -603,7 +605,7 @@ div.csl-indent {
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>slopeSE,<span class="sc">-</span>df,<span class="sc">-</span>t)</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>rsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     measure     slope   intercept       rsq            p      p.bonf           b
+<pre class="output" data-code-line-numbers="nil"><code>#R|     measure     slope   intercept       rsq            p      p.bonf           b
 #R|  1      BDD 1.0314745  0.01070583 0.9930690 5.081712e-04 0.006098055  0.01070583
 #R|  2      CPL 1.0757713  0.15540677 0.9055193 3.423944e-02 0.410873238          NA
 #R|  3      DOH 1.0285700 -0.44887045 0.9481393 2.449833e-01 1.000000000          NA
@@ -648,7 +650,7 @@ div.csl-indent {
 <li>Apply the <code>theme_bw()</code> theme and remove the default grid lines.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>,<span class="at">intercept=</span><span class="dv">0</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>specimenBased,<span class="at">y=</span>imageBased),</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape=</span><span class="dv">1</span>,<span class="at">color=</span><span class="st">"deepskyblue4"</span>) <span class="sc">+</span></span>
@@ -680,7 +682,7 @@ div.csl-indent {
 <p><a href="https://stackoverflow.com/a/32533219/1123933">This StackOverflow answer</a> provided a method for making the x- and y-axes the same within each facet, but also the same across the facets. A simple modification of that answer results in the x- and y-axes being the same within each facet, but different across facets.</p>
 <p>There are two “tricks” in this process. The first is to create a data fame that finds the minimum and maximum value of <code>imageBased</code> and <code>specimenBased</code> combined for each <code>measure</code>, then place those values in a single variable that is matched against the <code>measure</code> name, and then repeat that column in a second variable.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fctlims <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fctlims <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(measure) <span class="sc">|&gt;</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min=</span><span class="fu">min</span>(imageBased,specimenBased),</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(imageBased,specimenBased)) <span class="sc">|&gt;</span></span>
@@ -689,7 +691,7 @@ div.csl-indent {
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>name)</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(fctlims)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     measure        x        y
+<pre class="output" data-code-line-numbers="nil"><code>#R|     measure        x        y
 #R|  1      BDD  33.1800  33.1800
 #R|  2      BDD 104.7049 104.7049
 #R|  3      CPL  15.6600  15.6600
@@ -699,8 +701,8 @@ div.csl-indent {
 </div>
 </div>
 <p>These “data” are then added to the plot from above using <code>geom_blank()</code> where <code>x=</code> and <code>y=</code> are mapped to the two columns of “min” and “max” values. This then sets the range of data to be presented on the x- and y-axes, and because the two columns are the same then the axes will appear the same. <code>geom_blank()</code> does not plot any actual data so this effectively just sets the x- and y-axis limits and breaks.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<div class="cell" data-layout-align="center" data-source-line-numbers="2">
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_blank</span>(<span class="at">data=</span>fctlims,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>,<span class="at">intercept=</span><span class="dv">0</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>specimenBased,<span class="at">y=</span>imageBased),</span>
@@ -729,16 +731,16 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="alternative-multiple-comparison-procedures">Alternative Multiple Comparison Procedures</h2>
 <div class="page-columns page-full"><p>The Bonferroni-correction for multiple comparisons is a “brute-force” method that becomes “too conservative” (i.e., overall error rate less than 0.05), especially as the number of comparisons increases. This, ultimately results in a loss of statistical power (i.e., potentially detecting fewer truly significant results). The Bonferroni method is often employed because it is simple to implement as shown above – you either divide or multiply by the number of tests. However, <code>p.adjust()</code> provides the ability to use a wider variety of other methods that are less conservative than the Bonferroni.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Below, the Holm method is demonstrated.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;See <code>?p.adjust</code> for more explanation of these methods.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p.adjust.methods</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p.adjust.methods</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  [1] "holm"       "hochberg"   "hommel"     "bonferroni" "BH"        
+<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] "holm"       "hochberg"   "hommel"     "bonferroni" "BH"        
 #R|  [6] "BY"         "fdr"        "none"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rsum <span class="sc">|&gt;</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p.holm=</span><span class="fu">p.adjust</span>(p,<span class="at">method=</span><span class="st">"holm"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(measure,p,p.bonf,p.holm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     measure            p      p.bonf      p.holm
+<pre class="output" data-code-line-numbers="nil"><code>#R|     measure            p      p.bonf      p.holm
 #R|  1      BDD 5.081712e-04 0.006098055 0.005081712
 #R|  2      CPL 3.423944e-02 0.410873238 0.239676055
 #R|  3      DOH 2.449833e-01 1.000000000 0.979933278
@@ -759,7 +761,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="descriptive-facet-labels">Descriptive Facet Labels</h2>
 <p>I believe that <span class="citation" data-cites="omalleyetal_2021">O’Malley et al. (<a href="#ref-omalleyetal_2021" role="doc-biblioref">2021</a>)</span> used the measure abbreviations in their Figure 2 to tie the results to their Figure 1, which showed the measures on a schematic fish. However, there may be situations where more descriptive facet labels may be useful. For example, below a named vector is created where the name (before the <code>=</code>) is the measure abbreviation used in <code>measure</code> and the “value” (after the <code>=</code>) is a more descriptive name for the measure.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>longnames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDD"</span><span class="ot">=</span><span class="st">"Body Depth"</span>,</span>
+<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>longnames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDD"</span><span class="ot">=</span><span class="st">"Body Depth"</span>,</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>               <span class="st">"CPL"</span><span class="ot">=</span><span class="st">"Caudal Peduncle Length"</span>,</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">"DOH"</span><span class="ot">=</span><span class="st">"Dorsal Fin Height"</span>,</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"HLL"</span><span class="ot">=</span><span class="st">"Head Length"</span>,</span>
@@ -773,8 +775,8 @@ div.csl-indent {
 <span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>               <span class="st">"TTL"</span><span class="ot">=</span><span class="st">"Total Length"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The abbreviations in the facet strip can be replaced with the longer names by setting <code>labeller=</code> in <code>facet_wrap()</code> to <code>labeller()</code> which has the variable name that creates the facets (i.e., <code>measure</code> here) set equal to the named vector just created.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<div class="cell" data-layout-align="center" data-source-line-numbers="12-13">
+<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="12-13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope=</span><span class="dv">1</span>,<span class="at">intercept=</span><span class="dv">0</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>,<span class="at">linewidth=</span><span class="fl">0.75</span>,<span class="at">color=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>specimenBased,<span class="at">y=</span>imageBased),</span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape=</span><span class="dv">1</span>,<span class="at">color=</span><span class="st">"deepskyblue4"</span>) <span class="sc">+</span></span>
