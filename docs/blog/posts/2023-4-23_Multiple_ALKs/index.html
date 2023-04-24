@@ -330,7 +330,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Apr 23, 2023</p>
+        <p class="date-modified">Apr 24, 2023</p>
       </div>
     </div>
       
@@ -367,10 +367,10 @@ div.csl-indent {
 
 
 
-<section id="introduction" class="level1">
+<section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
-<p>An age-length key (ALK) describes the relationship between length (category) and age of fish. An estimated age may be assigned to unaged fish in a sample based on the ALK derived from aged fish from the same (or very closely related) sample as described by <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> and implemented in the <code>FSA</code> package <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">(<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">Ogle 2016</a>)</span>. It is critical to this process that the ALK is representative of the fish to which ages will be assigned. Thus, for example, it is not recommended to use an ALK developed from fish collected in one year to assign age to fish collected in another year, or for fish collected from different areas.</p>
-<p>This recommendation can lead to cumbersome data wrangling during analysis. For example, suppose that samples of fish were collected from two different areas over a five year period. In this case separate age-length keys would be required to be developed and applied to the ten combinations of locations and years. For each location-year the specific data would need to be isolated and for that data the ALK developed and applied, which has several steps as was shown in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and will be outlined below. The final data produced for each location-year would then need to be combined back together to make an overall data set. In other words, using the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method to assign estimated ages to unaged fish for multiple groups of fish is quite a bit of work. The goal of this post is to provide a more efficient method to accomplish this task.</p>
+<div class="page-columns page-full"><p>An age-length key (ALK) describes the relationship between length (category) and age of fish. An estimated age may be assigned to unaged fish in a sample based on the ALK derived from aged fish from the same (or very closely related) sample as described by <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> and implemented in <code>FSA</code> <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">(<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">Ogle 2016</a>)</span>. It is critical to this process that the ALK is representative of the fish to which ages will be assigned. Thus, for example, it is not recommended to use an ALK developed from fish collected in one year to assign age to fish collected in another year.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;The same argument can be made for fish from different areas.</p></li></div></div>
+<p>This recommendation can lead to cumbersome data wrangling during analysis. For example, suppose that samples of fish were collected from two different areas over a five year period. In this case separate age-length keys would be required to be developed and applied for the ten combinations of locations and years. For each location-year the specific data would need to be isolated and for that data the ALK developed and applied, which has several steps as was shown in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and will be outlined below. The final data produced for each location-year would then need to be combined back together to make an overall data set. In other words, using the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method to assign estimated ages to unaged fish for multiple groups of fish is quite a bit of work. The goal of this post is to provide a more efficient method to accomplish this task.</p>
 <p>The following packages are loaded for use below.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, tidyr, purr packages</span></span>
@@ -386,40 +386,45 @@ div.csl-indent {
 <h1>Age-Length Keys in FSA</h1>
 <section id="original-example-from-ogle-2016" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="original-example-from-ogle-2016">Original Example from Ogle (2016)</h3>
-<div class="page-columns page-full"><p><span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> demonstrated how to use the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method to assign ages to unaged Creek Chubs (<em>Semotilus atromaculatus</em>). The portion of the script used there to produce a final data frame with ages for all sampled fish is shown below.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;This code was extracted from the script provided <a href="https://derekogle.com/IFAR/">here</a>. It is slightly modified here to maintain the original unaltered data frame in <code>cc</code>.</p></li></div></div>
+<div class="page-columns page-full"><p><span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> demonstrated the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method for assigning ages to unaged Creek Chubs (<em>Semotilus atromaculatus</em>). The portion of the script used there to produce a final data frame with ages for all sampled fish is shown below.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;This code was extracted from the script provided <a href="https://derekogle.com/IFAR/">here</a>. It is slightly modified here to maintain the original unaltered data frame in <code>cc</code>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://derekogle.com/IFAR/scripts/CreekChub.csv"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cc1 <span class="ot">&lt;-</span> cc <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">lcat10=</span><span class="fu">lencat</span>(len,<span class="at">w=</span><span class="dv">10</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cc1.unaged <span class="ot">&lt;-</span> <span class="fu">filter</span>(cc1,<span class="fu">is.na</span>(age))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>cc1.aged <span class="ot">&lt;-</span> <span class="fu">filter</span>(cc1,<span class="sc">!</span><span class="fu">is.na</span>(age))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>alk.freq <span class="ot">&lt;-</span> <span class="fu">xtabs</span>(<span class="sc">~</span>lcat10<span class="sc">+</span>age,<span class="at">data=</span>cc1.aged)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>alk <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(alk.freq,<span class="at">margin=</span><span class="dv">1</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>cc1.unaged.mod <span class="ot">&lt;-</span> <span class="fu">alkIndivAge</span>(alk,age<span class="sc">~</span>len,<span class="at">data=</span>cc1.unaged)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>cc1.fnl <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cc1.aged,cc1.unaged.mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://derekogle.com/IFAR/scripts/CreekChub.csv"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Add length category variable</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>cc1 <span class="ot">&lt;-</span> cc <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">lcat10=</span><span class="fu">lencat</span>(len,<span class="at">w=</span><span class="dv">10</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Separate aged and unaged fish</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>cc1.unaged <span class="ot">&lt;-</span> <span class="fu">filter</span>(cc1,<span class="fu">is.na</span>(age))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>cc1.aged <span class="ot">&lt;-</span> <span class="fu">filter</span>(cc1,<span class="sc">!</span><span class="fu">is.na</span>(age))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Develop ALK from aged fish</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>alk.freq <span class="ot">&lt;-</span> <span class="fu">xtabs</span>(<span class="sc">~</span>lcat10<span class="sc">+</span>age,<span class="at">data=</span>cc1.aged)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>alk <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(alk.freq,<span class="at">margin=</span><span class="dv">1</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Use I-K method to assign ages to unaged fish</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>cc1.unaged.mod <span class="ot">&lt;-</span> <span class="fu">alkIndivAge</span>(alk,age<span class="sc">~</span>len,<span class="at">data=</span>cc1.unaged)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Create overall data frame with ages for all fish</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>cc1.fnl <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cc1.aged,cc1.unaged.mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The lengths-at-age in this final data frame were summarized in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> as follows.</p>
+<p>The lengths-at-age in this final data frame may be summarized as follows.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cc1.fnl <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(age) <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span>FSA<span class="sc">::</span><span class="fu">validn</span>(len),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mn=</span><span class="fu">mean</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd=</span><span class="fu">sd</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">se=</span>FSA<span class="sc">::</span><span class="fu">se</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd=</span><span class="fu">sd</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|    age   n        mn       sd       se
-#R|  1   0  20  48.65000  5.62209 1.257138
-#R|  2   1 142  74.64789 16.82163 1.411640
-#R|  3   2  43 113.41860 15.77405 2.405520
-#R|  4   3   8 151.87500 11.17954 3.952565
-#R|  5   4   5 183.20000 17.25399 7.716217</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|    age   n        mn       sd
+#R|  1   0  20  48.65000  5.62209
+#R|  2   1 142  74.64789 16.82163
+#R|  3   2  43 113.41860 15.77405
+#R|  4   3   8 151.87500 11.17954
+#R|  5   4   5 183.20000 17.25399</code></pre>
 </div>
 </div>
 </section>
 <section id="simplifying-function" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="simplifying-function">Simplifying Function</h3>
-<div class="page-columns page-full"><p>I have resisted writing a function that would combine all of the steps above, as I did not want to create a “black-box” function for this analysis that could be implemented without much thought. However, such a function would be useful for efficiently applying ALKs to multiple groups of fish. Thus, I create such a function and demonstrate how it can be used to produce the same<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> results as those shown for Creek Chub in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>. In the next section, I demonstrate how this new function can then be used to efficiently apply ALKs for multiple groups of fish.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;At least within rounding because of the inherent randomization in the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method.</p></li></div></div>
-<div class="page-columns page-full"><p>The <code>applyALK()</code> function created below performs the code shown above to create a “final” data frame that has ages assigned to the unaged fish based on the ALK. The function largely repeats the code above but uses some “advanced” code (e.g., <code>deparse(substitute())</code> and <code>{{}}</code>) to handle the use of unquoted variables names.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;This allows the variable names to be supplied by user in the function call, rather than hard-coded in the function.</p></li></div></div>
+<div class="page-columns page-full"><p>I have resisted writing a function that would combine all the steps above, as I did not want to create a “black-box” function for this analysis that could be implemented without much thought. However, such a function would be useful for efficiently applying ALKs to multiple groups of fish. Thus, I create such a function and demonstrate how it can be used to produce the same results as those shown for Creek Chub in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> In the next section, I demonstrate how this new function can then be used to efficiently apply ALKs for multiple groups of fish.</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;he same at least within rounding because of the inherent randomization in the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method.</p></li></div></div>
+<div class="page-columns page-full"><p>The <code>applyALK()</code> function created below performs the code shown above to create a “final” data frame that has ages assigned to the unaged fish based on the ALK. The function largely repeats the code above but uses some “advanced” code (e.g., <code>deparse(substitute())</code> and <code>{{}}</code>) to handle the use of unquoted variables names.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;This allows the variable names to be supplied by user in the function call, rather than hard-coded in the function.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Computes and applies an ALK</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   data: The data frame with, at least, the age &amp; length variables</span></span>
@@ -445,26 +450,25 @@ div.csl-indent {
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(aged,tmp)</span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>With this new function the final data frame can be created by supplying the original data frame (with aged and unaged fish) as the first argument, the names of the age and length variables in <code>avar=</code> and <code>lvar=</code> respectively, and the width for the length categories/bins in <code>w=</code>. For example, the final data frame for the Creek Chub case study can be created as follows.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;Note the use the original <code>cc</code> data frame without the length categorization variable.</p></li></div></div>
+<div class="page-columns page-full"><p>With this new function the final data frame can be created by supplying the original data frame (with aged and unaged fish) as the first argument, the names of the age and length variables in <code>avar=</code> and <code>lvar=</code> respectively, and the width for the length categories/bins in <code>w=</code>. For example, the final data frame for the Creek Chub case study can be created as follows.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;Note the use the original <code>cc</code> data frame without the length categorization variable.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cc.fnl <span class="ot">&lt;-</span> <span class="fu">applyALK</span>(cc,<span class="at">avar=</span>age,<span class="at">lvar=</span>len,<span class="at">w=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>The lengths-at-age summary for this final data frame is similar<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> to that from <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> as repeated above.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;Again, not exact because of the inherent randomization in the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method.</p></li></div></div>
+<div class="page-columns page-full"><p>The lengths-at-age summary for this final data frame is similar to that from above.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;Again, not exact because of the inherent randomization in the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cc.fnl <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(age) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span>FSA<span class="sc">::</span><span class="fu">validn</span>(len),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mn=</span><span class="fu">mean</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd=</span><span class="fu">sd</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">se=</span>FSA<span class="sc">::</span><span class="fu">se</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd=</span><span class="fu">sd</span>(len,<span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|    age   n        mn        sd       se
-#R|  1   0  20  48.95000  6.012925 1.344531
-#R|  2   1 142  74.66197 16.955046 1.422836
-#R|  3   2  43 113.23256 15.929663 2.429251
-#R|  4   3   8 151.87500 11.179541 3.952565
-#R|  5   4   5 183.20000 17.253985 7.716217</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|    age   n        mn        sd
+#R|  1   0  20  48.95000  6.012925
+#R|  2   1 142  74.66197 16.955046
+#R|  3   2  43 113.23256 15.929663
+#R|  4   3   8 151.87500 11.179541
+#R|  5   4   5 183.20000 17.253985</code></pre>
 </div>
 </div>
 <div class="callout-important callout callout-style-default callout-captioned">
@@ -487,33 +491,32 @@ Important
 <h1>Efficiently Applying ALKs to Multiple Groups</h1>
 <section id="example-data" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="example-data">Example Data</h3>
-<p><span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> examined the effect of season (Spring and Fall) on the vital statistics of Channel Catfish (<em>Ictalurus punctatus</em>) and Walleye (<em>Sander vitreus</em>) in a large Nebraska reservoir. One part of their analysis required computing mortality rates from catch curves for each species and season combination. Prior to constructing the catch curve they used the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method to assign estimated ages to unaged fish. <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> provided the raw data as a CSV file in their Supplement Material Data S1. Note that I removed some variables just for simplicity of presentation in this post and that their <code>Month</code> completely defined <code>Season</code>.</p>
+<p><span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> examined the effect of season (Spring and Fall) on the vital statistics of Channel Catfish (<em>Ictalurus punctatus</em>) and Walleye (<em>Sander vitreus</em>) in a large Nebraska reservoir. One part of their analysis required computing mortality rates from catch curves for each species and season combination. Prior to constructing the catch curve they used the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method to assign estimated ages to unaged fish. <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> provided the raw data as a CSV file in their Supplement Material Data S1. Note that I removed some variables here for simplicity of presentation in this post, and that their <code>Month</code> completely defined <code>Season</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"JFWM-20-027.S1.csv"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Weight,<span class="sc">-</span>Sex,<span class="sc">-</span>BCAge,<span class="sc">-</span>BCLength) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Year,<span class="sc">-</span>Weight,<span class="sc">-</span>Sex,<span class="sc">-</span>BCAge,<span class="sc">-</span>BCLength) <span class="sc">|&gt;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Season=</span><span class="fu">case_when</span>(</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    Month<span class="sc">==</span><span class="st">"May"</span> <span class="sc">~</span> <span class="st">"Spring"</span>,</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    Month<span class="sc">==</span><span class="st">"September"</span> <span class="sc">~</span> <span class="st">"Fall"</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  ))</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|       Spp Length Year     Month Age Season
-#R|  1    CCF    279 2015       May   3 Spring
-#R|  2    CCF    334 2015       May   4 Spring
-#R|  3    CCF    351 2015       May   4 Spring
-#R|  2377 WAE     NA 2016 September  NA   Fall
-#R|  2378 WAE     NA 2016 September  NA   Fall
-#R|  2379 WAE     NA 2016 September  NA   Fall</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|       Spp Length     Month Age Season
+#R|  1    CCF    279       May   3 Spring
+#R|  2    CCF    334       May   4 Spring
+#R|  3    CCF    351       May   4 Spring
+#R|  2377 WAE     NA September  NA   Fall
+#R|  2378 WAE     NA September  NA   Fall
+#R|  2379 WAE     NA September  NA   Fall</code></pre>
 </div>
 </div>
-<p>While it is not clear from their methods, I assume that they used a separate ALK for each species and season combination.</p>
 <p>A common “issue” with using the ALK to assign ages to unaged fish is that the lengths of some unaged fish are not represented within the lengths of aged fish used to derive the ALK. In other words, the ALK does not contain information for fish of those lengths. The summary below is used to find the sample size and valid sample size (i.e., after excluding fish with no length measurement) and minimum and maximum length for each combination of species, season, and whether an age was assigned or not.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Aged=</span><span class="sc">!</span><span class="fu">is.na</span>(Age)) <span class="sc">|&gt;</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Spp,Season,Aged) <span class="sc">|&gt;</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(),</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">validn=</span><span class="fu">validn</span>(Length),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">validn=</span>FSA<span class="sc">::</span><span class="fu">validn</span>(Length),</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">minL=</span><span class="fu">min</span>(Length,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">maxL=</span><span class="fu">max</span>(Length,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -531,7 +534,7 @@ Important
 #R|  8 WAE   Spring TRUE    213    213   191   753</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>It is seen from this that there are some missing length measurements (<code>n</code> does not equal <code>validn</code> in all cases) and that the minimum length of unaged fish is less than the minimum length of aged fish for Channel Catfish in both the Spring and Fall. Thus, to appropriately use the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method as implemented in <code>alkIndivAge()</code> of <code>FSA</code> with these data, those records with missing lengths must be removed, as well as those records for Channel Catfish that are less than the minimum length for aged Channel Catfish in their respective season.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;It is not clear that <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> did this, but it is required when using <code>alkIndivAge()</code>.</p></li></div></div>
+<div class="page-columns page-full"><p>It is seen from this that there are some missing length measurements (<code>n</code> does not equal <code>validn</code> in all cases) and that the minimum length of unaged fish is less than the minimum length of aged fish for Channel Catfish in both the Spring and Fall. Thus, to appropriately use the <span class="citation" data-cites="isermannknight_2005">Isermann and Knight (<a href="#ref-isermannknight_2005" role="doc-biblioref">2005</a>)</span> method as implemented in <code>alkIndivAge()</code> of <code>FSA</code>, those records with missing lengths must be removed, as well as those records for Channel Catfish that are less than the minimum length for aged Channel Catfish in their respective season.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;It is not clear that <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> did this, but it is required when using <code>alkIndivAge()</code>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Length)) <span class="sc">|&gt;</span></span>
@@ -539,7 +542,7 @@ Important
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Fall"</span> <span class="sc">&amp;</span> Length<span class="sc">&lt;</span><span class="dv">200</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="method-specific-data-wrangling" class="level3">
+<section id="method-specific-data-wrangling" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="method-specific-data-wrangling">Method-Specific Data Wrangling</h3>
 <p>The first step in efficiently applying the ALK to all groups is to “split” the original data frame based on the “groups” with <code>split()</code>. Below <code>dat</code> is split by the combination of <code>Spp</code> (species) and <code>Season</code>.</p>
 <div class="cell" data-layout-align="center">
@@ -552,23 +555,23 @@ Important
 <pre class="output" data-code-line-numbers="nil"><code>#R|  [1] "CCF.Fall"   "WAE.Fall"   "CCF.Spring" "WAE.Spring"</code></pre>
 </div>
 </div>
-<p>The specifics of one of these items is examined by appending one of the item names to <code>dat2</code>, separated by a <code>$</code>. Below, as an example, are a few rows from the beginning and end of the data frame in the <code>CCF.Spring</code> (Channel Catfish in Spring) item. Note here that it appears that all <code>Spp</code> values are “CCF”, all <code>Season</code> values are “Spring”, and that some fish have ages (the top three) and some do not (the bottom three).</p>
+<div class="page-columns page-full"><p>The specifics of one of these items is examined by appending the item name to <code>dat2</code>, separated by a <code>$</code>. Below, as an example, are a few rows from the beginning and end of the data frame in <code>CCF.Spring</code> (Channel Catfish in Spring).<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;Note here that it appears that all <code>Spp</code> values are “CCF”, all <code>Season</code> values are “Spring”, and that some fish have ages (the top three) and some do not (the bottom three).</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(dat2<span class="sc">$</span>CCF.Spring)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|      Spp Length Year Month Age Season
-#R|  1   CCF    279 2015   May   3 Spring
-#R|  2   CCF    334 2015   May   4 Spring
-#R|  3   CCF    351 2015   May   4 Spring
-#R|  491 CCF    701 2015   May  NA Spring
-#R|  492 CCF    730 2015   May  NA Spring
-#R|  493 CCF    733 2015   May  NA Spring</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|      Spp Length Month Age Season
+#R|  1   CCF    279   May   3 Spring
+#R|  2   CCF    334   May   4 Spring
+#R|  3   CCF    351   May   4 Spring
+#R|  491 CCF    701   May  NA Spring
+#R|  492 CCF    730   May  NA Spring
+#R|  493 CCF    733   May  NA Spring</code></pre>
 </div>
 </div>
 </section>
 <section id="applying-alk" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="applying-alk">Applying ALK</h3>
-<p>The idea now is to “apply” <code>applyALK()</code> to each data frame in each item of the list in <code>dat2</code>. This can be done with <code>lapply()</code> where the list is the first argument, the function to apply is the second argument, and the remaining arguments are further arguments to the function in the second argument. The result is a list with data frames in the items as before, but now with ages for all fish.</p>
+<p>The idea now is to “apply” <code>applyALK()</code> to each data frame in each item of the list in <code>dat2</code>. This can be done with <code>lapply()</code> where the list of data frames is the first argument, the function to apply is the second argument, and the remaining arguments are further arguments to the function being applied. The result is a list with data frames in the items as before, but now with ages for all fish.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb20" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dat3 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(dat2,applyALK,<span class="at">avar=</span>Age,<span class="at">lvar=</span>Length,<span class="at">w=</span><span class="dv">10</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -577,16 +580,16 @@ Important
 </div>
 <div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(dat3<span class="sc">$</span>CCF.Spring)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|      Spp Length Year Month Age Season lcat
-#R|  1   CCF    279 2015   May   3 Spring  270
-#R|  2   CCF    334 2015   May   4 Spring  330
-#R|  3   CCF    351 2015   May   4 Spring  350
-#R|  491 CCF    701 2015   May  17 Spring  700
-#R|  492 CCF    730 2015   May  17 Spring  730
-#R|  493 CCF    733 2015   May  17 Spring  730</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|      Spp Length Month Age Season lcat
+#R|  1   CCF    279   May   3 Spring  270
+#R|  2   CCF    334   May   4 Spring  330
+#R|  3   CCF    351   May   4 Spring  350
+#R|  491 CCF    701   May  17 Spring  700
+#R|  492 CCF    730   May  17 Spring  730
+#R|  493 CCF    733   May  17 Spring  730</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The exact same result<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> is also obtained with <code>map()</code> from the <code>purr</code> package, which was loaded with <code>library(tidyverse)</code>. The arguments to <code>map()</code> and the resulting list are the same as those for <code>lapply()</code>.</p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;Disregarding the randomization inherent in <code>alkIndivAge()</code>.</p></li></div></div>
+<div class="page-columns page-full"><p>The exact same result<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> is also obtained with <code>map()</code> from the <code>purr</code> package, which was loaded with <code>library(tidyverse)</code>. The arguments to <code>map()</code> and the resulting list are the same as those for <code>lapply()</code>.</p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;Disregarding the randomization inherent in <code>alkIndivAge()</code>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dat3 <span class="ot">&lt;-</span> <span class="fu">map</span>(dat2,applyALK,<span class="at">avar=</span>Age,<span class="at">lvar=</span>Length,<span class="at">w=</span><span class="dv">10</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -595,13 +598,13 @@ Important
 </div>
 <div class="sourceCode cell-code" id="cb26" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(dat3<span class="sc">$</span>CCF.Spring)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|      Spp Length Year Month Age Season lcat
-#R|  1   CCF    279 2015   May   3 Spring  270
-#R|  2   CCF    334 2015   May   4 Spring  330
-#R|  3   CCF    351 2015   May   4 Spring  350
-#R|  491 CCF    701 2015   May  17 Spring  700
-#R|  492 CCF    730 2015   May  17 Spring  730
-#R|  493 CCF    733 2015   May  17 Spring  730</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|      Spp Length Month Age Season lcat
+#R|  1   CCF    279   May   3 Spring  270
+#R|  2   CCF    334   May   4 Spring  330
+#R|  3   CCF    351   May   4 Spring  350
+#R|  491 CCF    701   May  17 Spring  700
+#R|  492 CCF    730   May  17 Spring  730
+#R|  493 CCF    733   May  17 Spring  730</code></pre>
 </div>
 </div>
 <p>The reason for introducing <code>map()</code> from <code>purr()</code> is that ultimately the four data frames in <code>dat3</code> need to be “row-bound” together to form a single data frame. There are multiple ways to do this, but the simplest is to use <code>map_df()</code> from <code>purr</code>. <code>map_df()</code> has the same arguments as <code>map()</code> and <code>lapply()</code> but it returns a single combined data frame, rather than a list with multiple data frames.</p>
@@ -609,17 +612,17 @@ Important
 <div class="sourceCode cell-code" id="cb28" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dat3 <span class="ot">&lt;-</span> <span class="fu">map_df</span>(dat2,applyALK,<span class="at">avar=</span>Age,<span class="at">lvar=</span>Length,<span class="at">w=</span><span class="dv">10</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat3)  <span class="co"># now column names of the single data frame</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] "Spp"    "Length" "Year"   "Month"  "Age"    "Season" "lcat"</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] "Spp"    "Length" "Month"  "Age"    "Season" "lcat"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb30" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(dat3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|       Spp Length Year     Month Age Season lcat
-#R|  1    CCF    232 2016 September   1   Fall  230
-#R|  2    CCF    216 2016 September   1   Fall  210
-#R|  3    CCF    238 2016 September   1   Fall  230
-#R|  2355 WAE    632 2015       May  10 Spring  630
-#R|  2356 WAE    653 2015       May  10 Spring  650
-#R|  2357 WAE    720 2015       May  13 Spring  720</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|       Spp Length     Month Age Season lcat
+#R|  1    CCF    232 September   1   Fall  230
+#R|  2    CCF    216 September   1   Fall  210
+#R|  3    CCF    238 September   1   Fall  230
+#R|  2355 WAE    632       May  10 Spring  630
+#R|  2356 WAE    653       May  10 Spring  650
+#R|  2357 WAE    720       May  13 Spring  720</code></pre>
 </div>
 </div>
 <div class="callout-warning callout callout-style-default callout-captioned">

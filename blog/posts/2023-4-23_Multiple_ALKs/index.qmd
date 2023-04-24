@@ -11,9 +11,9 @@ categories:
 ---
 
 # Introduction
-An age-length key (ALK) describes the relationship between length (category) and age of fish. An estimated age may be assigned to unaged fish in a sample based on the ALK derived from aged fish from the same (or very closely related) sample as described by @isermannknight_2005 and implemented in the `FSA` package [@ogleIntroductoryFisheriesAnalyses2016]. It is critical to this process that the ALK is representative of the fish to which ages will be assigned. Thus, for example, it is not recommended to use an ALK developed from fish collected in one year to assign age to fish collected in another year, or for fish collected from different areas.
+An age-length key (ALK) describes the relationship between length (category) and age of fish. An estimated age may be assigned to unaged fish in a sample based on the ALK derived from aged fish from the same (or very closely related) sample as described by @isermannknight_2005 and implemented in `FSA` [@ogleIntroductoryFisheriesAnalyses2016]. It is critical to this process that the ALK is representative of the fish to which ages will be assigned. Thus, for example, it is not recommended to use an ALK developed from fish collected in one year to assign age to fish collected in another year.^[The same argument can be made for fish from different areas.]
 
-This recommendation can lead to cumbersome data wrangling during analysis. For example, suppose that samples of fish were collected from two different areas over a five year period. In this case separate age-length keys would be required to be developed and applied to the ten combinations of locations and years. For each location-year the specific data would need to be isolated and for that data the ALK developed and applied, which has several steps as was shown in @ogleIntroductoryFisheriesAnalyses2016 and will be outlined below. The final data produced for each location-year would then need to be combined back together to make an overall data set. In other words, using the @isermannknight_2005 method to assign estimated ages to unaged fish for multiple groups of fish is quite a bit of work. The goal of this post is to provide a more efficient method to accomplish this task.
+This recommendation can lead to cumbersome data wrangling during analysis. For example, suppose that samples of fish were collected from two different areas over a five year period. In this case separate age-length keys would be required to be developed and applied for the ten combinations of locations and years. For each location-year the specific data would need to be isolated and for that data the ALK developed and applied, which has several steps as was shown in @ogleIntroductoryFisheriesAnalyses2016 and will be outlined below. The final data produced for each location-year would then need to be combined back together to make an overall data set. In other words, using the @isermannknight_2005 method to assign estimated ages to unaged fish for multiple groups of fish is quite a bit of work. The goal of this post is to provide a more efficient method to accomplish this task.
 
 The following packages are loaded for use below.
 
@@ -34,35 +34,40 @@ set.seed(14354454)
 
 # Age-Length Keys in FSA
 ### Original Example from Ogle (2016)
-@ogleIntroductoryFisheriesAnalyses2016 demonstrated how to use the @isermannknight_2005 method to assign ages to unaged Creek Chubs (*Semotilus atromaculatus*). The portion of the script used there to produce a final data frame with ages for all sampled fish is shown below.^[This code was extracted from the script provided [here](https://derekogle.com/IFAR/). It is slightly modified here to maintain the original unaltered data frame in `cc`.]
+@ogleIntroductoryFisheriesAnalyses2016 demonstrated the @isermannknight_2005 method for assigning ages to unaged Creek Chubs (*Semotilus atromaculatus*). The portion of the script used there to produce a final data frame with ages for all sampled fish is shown below.^[This code was extracted from the script provided [here](https://derekogle.com/IFAR/). It is slightly modified here to maintain the original unaltered data frame in `cc`.]
 
 ```{r}
 #| label: Ogle-CreekChub-ALK
+## Load data
 cc <- read.csv("https://derekogle.com/IFAR/scripts/CreekChub.csv")
+## Add length category variable
 cc1 <- cc |> mutate(lcat10=lencat(len,w=10))
+## Separate aged and unaged fish
 cc1.unaged <- filter(cc1,is.na(age))
 cc1.aged <- filter(cc1,!is.na(age))
+## Develop ALK from aged fish
 alk.freq <- xtabs(~lcat10+age,data=cc1.aged)
 alk <- prop.table(alk.freq,margin=1)
+## Use I-K method to assign ages to unaged fish
 cc1.unaged.mod <- alkIndivAge(alk,age~len,data=cc1.unaged)
+## Create overall data frame with ages for all fish
 cc1.fnl <- rbind(cc1.aged,cc1.unaged.mod)
 ```
 
-The lengths-at-age in this final data frame were summarized in @ogleIntroductoryFisheriesAnalyses2016 as follows.
+The lengths-at-age in this final data frame may be summarized as follows.
 
 ```{r}
 #| label: Ogle-CreekChub-summary
 cc1.fnl |>
   group_by(age) |>
-  summarize(n=FSA::validn(len),
+  summarize(n=n(),
             mn=mean(len,na.rm=TRUE),
-            sd=sd(len,na.rm=TRUE),
-            se=FSA::se(len,na.rm=TRUE)) |>
+            sd=sd(len,na.rm=TRUE)) |>
   as.data.frame()
 ```
 
 ### Simplifying Function
-I have resisted writing a function that would combine all of the steps above, as I did not want to create a "black-box" function for this analysis that could be implemented without much thought. However, such a function would be useful for efficiently applying ALKs to multiple groups of fish. Thus, I create such a function and demonstrate how it can be used to produce the same^[At least within rounding because of the inherent randomization in the @isermannknight_2005 method.] results as those shown for Creek Chub in @ogleIntroductoryFisheriesAnalyses2016. In the next section, I demonstrate how this new function can then be used to efficiently apply ALKs for multiple groups of fish.
+I have resisted writing a function that would combine all the steps above, as I did not want to create a "black-box" function for this analysis that could be implemented without much thought. However, such a function would be useful for efficiently applying ALKs to multiple groups of fish. Thus, I create such a function and demonstrate how it can be used to produce the same results as those shown for Creek Chub in @ogleIntroductoryFisheriesAnalyses2016.^[he same at least within rounding because of the inherent randomization in the @isermannknight_2005 method.] In the next section, I demonstrate how this new function can then be used to efficiently apply ALKs for multiple groups of fish.
 
 The `applyALK()` function created below performs the code shown above to create a "final" data frame that has ages assigned to the unaged fish based on the ALK. The function largely repeats the code above but uses some "advanced" code (e.g., `deparse(substitute())` and `{{}}`) to handle the use of unquoted variables names.^[This allows the variable names to be supplied by user in the function call, rather than hard-coded in the function.]
 
@@ -100,16 +105,15 @@ With this new function the final data frame can be created by supplying the orig
 cc.fnl <- applyALK(cc,avar=age,lvar=len,w=10)
 ```
 
-The lengths-at-age summary for this final data frame is similar^[Again, not exact because of the inherent randomization in the @isermannknight_2005 method.] to that from @ogleIntroductoryFisheriesAnalyses2016 as repeated above.
+The lengths-at-age summary for this final data frame is similar to that from above.^[Again, not exact because of the inherent randomization in the @isermannknight_2005 method.]
 
 ```{r}
 #| label: CreekChub-summary
 cc.fnl |>
   group_by(age) |>
-  summarize(n=FSA::validn(len),
+  summarize(n=n(),
             mn=mean(len,na.rm=TRUE),
-            sd=sd(len,na.rm=TRUE),
-            se=FSA::se(len,na.rm=TRUE)) |>
+            sd=sd(len,na.rm=TRUE)) |>
   as.data.frame()
 ```
 
@@ -121,20 +125,18 @@ One still needs to carefully consider the application of ALKs for each of the gr
 
 # Efficiently Applying ALKs to Multiple Groups
 ### Example Data
-@schalletal_2020 examined the effect of season (Spring and Fall) on the vital statistics of Channel Catfish (*Ictalurus punctatus*) and Walleye (*Sander vitreus*) in a large Nebraska reservoir. One part of their analysis required computing mortality rates from catch curves for each species and season combination. Prior to constructing the catch curve they used the @isermannknight_2005 method to assign estimated ages to unaged fish. @schalletal_2020 provided the raw data as a CSV file in their Supplement Material Data S1. Note that I removed some variables just for simplicity of presentation in this post and that their `Month` completely defined `Season`.
+@schalletal_2020 examined the effect of season (Spring and Fall) on the vital statistics of Channel Catfish (*Ictalurus punctatus*) and Walleye (*Sander vitreus*) in a large Nebraska reservoir. One part of their analysis required computing mortality rates from catch curves for each species and season combination. Prior to constructing the catch curve they used the @isermannknight_2005 method to assign estimated ages to unaged fish. @schalletal_2020 provided the raw data as a CSV file in their Supplement Material Data S1. Note that I removed some variables here for simplicity of presentation in this post, and that their `Month` completely defined `Season`.
 
 ```{r}
 #| label: data-wrangling-1
 dat <- read.csv("JFWM-20-027.S1.csv") |>
-  select(-Weight,-Sex,-BCAge,-BCLength) |>
+  select(-Year,-Weight,-Sex,-BCAge,-BCLength) |>
   mutate(Season=case_when(
     Month=="May" ~ "Spring",
     Month=="September" ~ "Fall"
   ))
 headtail(dat)
 ```
-
-While it is not clear from their methods, I assume that they used a separate ALK for each species and season combination.
 
 A common "issue" with using the ALK to assign ages to unaged fish is that the lengths of some unaged fish are not represented within the lengths of aged fish used to derive the ALK. In other words, the ALK does not contain information for fish of those lengths. The summary below is used to find the sample size and valid sample size (i.e., after excluding fish with no length measurement) and minimum and maximum length for each combination of species, season, and whether an age was assigned or not.
 
@@ -144,12 +146,12 @@ dat |>
   mutate(Aged=!is.na(Age)) |>
   group_by(Spp,Season,Aged) |>
   summarize(n=n(),
-            validn=validn(Length),
+            validn=FSA::validn(Length),
             minL=min(Length,na.rm=TRUE),
             maxL=max(Length,na.rm=TRUE))
 ```
 
-It is seen from this that there are some missing length measurements (`n` does not equal `validn` in all cases) and that the minimum length of unaged fish is less than the minimum length of aged fish for Channel Catfish in both the Spring and Fall. Thus, to appropriately use the @isermannknight_2005 method as implemented in `alkIndivAge()` of `FSA` with these data, those records with missing lengths must be removed, as well as those records for Channel Catfish that are less than the minimum length for aged Channel Catfish in their respective season.^[It is not clear that @schalletal_2020 did this, but it is required when using `alkIndivAge()`.]
+It is seen from this that there are some missing length measurements (`n` does not equal `validn` in all cases) and that the minimum length of unaged fish is less than the minimum length of aged fish for Channel Catfish in both the Spring and Fall. Thus, to appropriately use the @isermannknight_2005 method as implemented in `alkIndivAge()` of `FSA`, those records with missing lengths must be removed, as well as those records for Channel Catfish that are less than the minimum length for aged Channel Catfish in their respective season.^[It is not clear that @schalletal_2020 did this, but it is required when using `alkIndivAge()`.]
 
 ```{r}
 #| label: data-wrangling-2
@@ -174,7 +176,7 @@ The result, in `dat2`, is a list with four items. Each item in the list is a dat
 names(dat2)
 ```
 
-The specifics of one of these items is examined by appending one of the item names to `dat2`, separated by a `$`. Below, as an example, are a few rows from the beginning and end of the data frame in the `CCF.Spring` (Channel Catfish in Spring) item. Note here that it appears that all `Spp` values are "CCF", all `Season` values are "Spring", and that some fish have ages (the top three) and some do not (the bottom three).
+The specifics of one of these items is examined by appending the item name to `dat2`, separated by a `$`. Below, as an example, are a few rows from the beginning and end of the data frame in `CCF.Spring` (Channel Catfish in Spring).^[Note here that it appears that all `Spp` values are "CCF", all `Season` values are "Spring", and that some fish have ages (the top three) and some do not (the bottom three).]
 
 ```{r}
 #| label: data-wrangling-5
@@ -182,7 +184,7 @@ headtail(dat2$CCF.Spring)
 ```
 
 ### Applying ALK
-The idea now is to "apply" `applyALK()` to each data frame in each item of the list in `dat2`. This can be done with `lapply()` where the list is the first argument, the function to apply is the second argument, and the remaining arguments are further arguments to the function in the second argument. The result is a list with data frames in the items as before, but now with ages for all fish.
+The idea now is to "apply" `applyALK()` to each data frame in each item of the list in `dat2`. This can be done with `lapply()` where the list of data frames is the first argument, the function to apply is the second argument, and the remaining arguments are further arguments to the function being applied. The result is a list with data frames in the items as before, but now with ages for all fish.
 
 ```{r}
 #| label: applying-ALK-1
