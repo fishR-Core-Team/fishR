@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="Computing mortality from catch curves for multiple groups.">
+
+<title>fishR - Working with Multiple Catch Curves</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../..//helpers/img/fishRlogo_Tight_Light_trans.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../helpers/styles.css">
+<meta property="og:title" content="fishR - Working with Multiple Catch Curves">
+<meta property="og:description" content="Computing mortality from catch curves for multiple groups.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2023-4-24_Multiple_CatchCurves\preview.png">
+<meta property="og:site-name" content="fishR">
+<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="1000">
+<meta name="citation_title" content="Working with Multiple Catch Curves">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2023-04-24">
+<meta name="citation_cover_date" content="2023-04-24">
+<meta name="citation_year" content="2023">
+<meta name="citation_online_date" content="2023-04-24">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
+<meta name="citation_reference" content="citation_title=Relative Weight (Wr) Status and Current Use in Fisheries Assessment and Management;,citation_author=Brian Blackwell;,citation_author=Michael Brown;,citation_author=David Willis;,citation_publication_date=2000-01-01;,citation_cover_date=2000-01-01;,citation_year=2000;,citation_fulltext_html_url=https://www.researchgate.net/publication/248945465_Relative_Weight_Wr_Status_and_Current_Use_in_Fisheries_Assessment_and_Management;,citation_doi=10.1080/10641260091129161;,citation_volume=8;,citation_journal_title=Reviews in Fisheries Science;,citation_journal_abbrev=REV FISH SCI;">
+<meta name="citation_reference" content="citation_title=Statistical methods for assessing agreement between two methods of clinical measurement;,citation_author=J Martin Bland;,citation_author=Douglas G Altman;,citation_publication_date=1986;,citation_cover_date=1986;,citation_year=1986;,citation_fulltext_html_url=https://www-users.york.ac.uk/~mb55/meas/ba.pdf;,citation_volume=i;,citation_language=en-US;,citation_journal_title=Lancet;">
+<meta name="citation_reference" content="citation_title=Growth, reproduction, mortality, distribution, and biomass of Freshwater Drum in Lake Erie;,citation_author=Michael T. Bur;,citation_publication_date=1984-01-01;,citation_cover_date=1984-01-01;,citation_year=1984;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133084718065;,citation_doi=10.1016/S0380-1330(84)71806-5;,citation_issn=0380-1330;,citation_volume=10;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Graphical and statistical methods for determining the consistency of age determinations;,citation_author=Steven Campana;,citation_author=M. Annand;,citation_author=James McMillan;,citation_publication_date=1995-01-01;,citation_cover_date=1995-01-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/254328508_Graphical_and_Statistical_Methods_for_Determining_the_Consistency_of_Age_Determinations;,citation_doi=10.1577/1548-8659(1995)124&amp;amp;amp;lt;0131:GASMFD&amp;gt;2.3.CO;2;,citation_volume=124;,citation_journal_title=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;,citation_journal_abbrev=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;">
+<meta name="citation_reference" content="citation_title=A novel “triple drawdown” method highlights deficiencies in invasive alien crayfish survey and control techniques;,citation_author=Daniel D. A. Chadwick;,citation_author=Eleri G. Pritchard;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Michael A. Chadwick;,citation_author=Lawrence J. B. Eagle;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/1365-2664.13758;,citation_doi=10.1111/1365-2664.13758;,citation_issn=1365-2664;,citation_volume=58;,citation_language=en-US;,citation_journal_title=Journal of Applied Ecology;">
+<meta name="citation_reference" content="citation_title=Warmwater Temperatures (≥ 20°C) as a Threat to Pacific Lamprey: Implications of Climate Change;,citation_author=Benjamin J. Clemens;,citation_publication_date=2022-07-07;,citation_cover_date=2022-07-07;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-087;,citation_issue=2;,citation_doi=10.3996/JFWM-21-087;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Creel limits in Minnesota: A proposal for change;,citation_author=Mark Cook;,citation_author=Timothy Goeman;,citation_author=Paul Radomski;,citation_author=Jerry Younk;,citation_author=Peter Jacobson;,citation_publication_date=2001-05-01;,citation_cover_date=2001-05-01;,citation_year=2001;,citation_fulltext_html_url=https://www.researchgate.net/publication/250017402_Creel_Limits_in_Minnesota_A_Proposal_for_Change;,citation_volume=26;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Recovery of an offshore Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus Namaycush&amp;lt;/i&amp;gt;) population in eastern Lake Superior;,citation_author=Gary L. Curtis;,citation_publication_date=1990-01-01;,citation_cover_date=1990-01-01;,citation_year=1990;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133090714219;,citation_issue=2;,citation_doi=10.1016/S0380-1330(90)71421-9;,citation_issn=0380-1330;,citation_volume=16;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Evaluating the physical removal of Ruffe (&amp;amp;amp;lt;i&amp;gt;Gymnocephalus&amp;lt;/i&amp;gt; <i>cernuus</i>) with bottom trawling;,citation_author=Gary D. Czypinski;,citation_author=Derek H. Ogle;,citation_publication_date=2011-09;,citation_cover_date=2011-09;,citation_year=2011;,citation_fulltext_html_url=https://derekogle.com/resources/pubs/CzypinskiOgle_2011.pdf;,citation_doi=10.1080/02705060.2011.569336;,citation_issn=0270-5060, 2156-6941;,citation_volume=26;,citation_language=en-US;,citation_journal_title=Journal of Freshwater Ecology;,citation_journal_abbrev=Journal of Freshwater Ecology;">
+<meta name="citation_reference" content="citation_title=Energy storage, growth, and maturation of Yellow Perch from different locations in Saginaw Bay, Michigan;,citation_author=James S. Diana;,citation_author=Ronald Salz;,citation_publication_date=1990-11;,citation_cover_date=1990-11;,citation_year=1990;,citation_fulltext_html_url=https://deepblue.lib.umich.edu/bitstream/handle/2027.42/142193/tafs0976.pdf?sequence=1;,citation_volume=119;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Understanding Bland Altman analysis;,citation_author=Davide Giavarina;,citation_publication_date=2015-06-05;,citation_cover_date=2015-06-05;,citation_year=2015;,citation_fulltext_html_url=https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4470095/;,citation_issue=2;,citation_doi=10.11613/BM.2015.015;,citation_issn=1330-0962;,citation_volume=25;,citation_journal_title=Biochemia Medica;,citation_journal_abbrev=Biochem Med (Zagreb);">
+<meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_volume=44;,citation_language=en-US;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
+<meta name="citation_reference" content="citation_title=Factors affecting recruitment of Walleyes in Escanaba Lake, Wisconsin, 1958–1996;,citation_author=Michael Hansen;,citation_author=Michael Bozek;,citation_author=Raimant Justine;,citation_author=Steven Newman;,citation_author=Michael Staggs;,citation_publication_date=1998-11-01;,citation_cover_date=1998-11-01;,citation_year=1998;,citation_fulltext_html_url=https://www.researchgate.net/profile/Michael-Hansen-44/publication/228588197_Factors_Affecting_Recruitment_of_Walleyes_in_Escanaba_Lake_Wisconsin_1958-1996/links/54638b9d0cf2c0c6aec4f0b0/Factors-Affecting-Recruitment-of-Walleyes-in-Escanaba-Lake-Wisconsin-1958-1996.pdf;,citation_volume=18;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Comparison of precision and bias of scale, fin ray, and otolith age estimates for Lake Whitefish (&amp;amp;amp;lt;i&amp;gt;Coregonus&amp;lt;/i&amp;gt; <i>clupeaformis</i>) in Lake Champlain;,citation_author=Seth J. Herbst;,citation_author=J. Ellen Marsden;,citation_publication_date=2011-06-01;,citation_cover_date=2011-06-01;,citation_year=2011;,citation_fulltext_html_url=https://www.academia.edu/54703943/Comparison_of_precision_and_bias_of_scale_fin_ray_and_otolith_age_estimates_for_lake_whitefish_Coregonus_clupeaformis_in_Lake_Champlain;,citation_doi=10.1016/j.jglr.2011.02.001;,citation_issn=0380-1330;,citation_volume=37;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=A computer program for age–length keys incorporating age assignment to individual fish;,citation_author=Daniel Isermann;,citation_author=C. Knight;,citation_publication_date=2005-08-01;,citation_cover_date=2005-08-01;,citation_year=2005;,citation_fulltext_html_url=https://www.researchgate.net/publication/233185504_A_Computer_Program_for_Age-Length_Keys_Incorporating_Age_Assignment_to_Individual_Fish;,citation_volume=25;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=A comparison of methods for estimating ages of unexploited Walleyes;,citation_author=Patrick M. Kocovsky;,citation_author=Robert F. Carline;,citation_publication_date=2000-11-01;,citation_cover_date=2000-11-01;,citation_year=2000;,citation_fulltext_html_url=https://www.tandfonline.com/doi/abs/10.1577/1548-8675%282000%29020%3C1044%3AACOMFE%3E2.0.CO%3B2;,citation_doi=10.1577/1548-8675(2000)020&amp;amp;amp;lt;1044:ACOMFE&amp;gt;2.0.CO;2;,citation_issn=0275-5947;,citation_volume=20;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Dietary patterns suggest West Virginia Bobcats are generalist carnivores;,citation_author=Stephanie M. Landry;,citation_author=Jordan E. Roof;,citation_author=Richard E. Rogers;,citation_author=Amy B. Welsh;,citation_author=Christopher W. Ryan;,citation_author=James T. Anderson;,citation_publication_date=2022-07-08;,citation_cover_date=2022-07-08;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-22-001;,citation_issue=2;,citation_doi=10.3996/JFWM-22-001;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=What’s the main idea behind Bland-Altman plots?;,citation_author=Bernhard Lehnert;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_fulltext_html_url=https://cran.r-project.org/web/packages/BlandAltmanLeh/vignettes/Intro.html;">
+<meta name="citation_reference" content="citation_title=BlandAltmanLeh: Plots (Slightly Extended) Bland-Altman Plots;,citation_author=Bernhard Lehnert;,citation_publication_date=2015-12-23;,citation_cover_date=2015-12-23;,citation_year=2015;,citation_fulltext_html_url=https://CRAN.R-project.org/package=BlandAltmanLeh;">
+<meta name="citation_reference" content="citation_title=Age, year-class strength variability, and partial age validation of Kiyis from Lake Superior;,citation_author=T. A. Lepak;,citation_author=D. H. Ogle;,citation_author=M. R. Vinson;,citation_publication_date=2017-09;,citation_cover_date=2017-09;,citation_year=2017;,citation_doi=10.1080/02755947.2017.1350222;,citation_issn=0275-5947, 1548-8675;,citation_volume=37;,citation_language=en-US;,citation_journal_title=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Estimating harvestable Largemouth Bass abundance in a reservoir with an electrofishing catch depletion technique;,citation_author=Michael Maceina;,citation_author=William Wrenn;,citation_author=Donny Lowery;,citation_publication_date=1995-02-01;,citation_cover_date=1995-02-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/233240780_Estimating_Harvestable_Largemouth_Bass_Abundance_in_a_Reservoir_with_an_Electrofishing_Catch_Depletion_Technique;,citation_volume=15;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
+<meta name="citation_reference" content="citation_title=Generalizing trends in upstream american eel movements at four east coast hydropower projects;,citation_author=Kevin Mack;,citation_author=Twyla Cheatwood;,citation_publication_date=2022-12-05;,citation_cover_date=2022-12-05;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-066;,citation_issue=2;,citation_doi=10.3996/JFWM-21-066;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10-01;,citation_cover_date=2015-10-01;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;,citation_journal_abbrev=ICES Journal of Marine Science;">
+<meta name="citation_reference" content="citation_title=Population dynamics of Yellowstone Cutthroat Trout in Henrys Lake, Idaho;,citation_author=Darcy K. McCarrick;,citation_author=Jeffrey C. Dillon;,citation_author=Brett High;,citation_author=Michael C. Quist;,citation_publication_date=2022-03-25;,citation_cover_date=2022-03-25;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-074;,citation_issue=1;,citation_doi=10.3996/JFWM-21-074;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=An evaluation of Goldeye life history characteristics in two Kansas reservoirs;,citation_author=Brett T. Miller;,citation_author=Ernesto Flores;,citation_author=D. Scott Waters;,citation_author=Ben C. Neely;,citation_publication_date=2022-02-02;,citation_cover_date=2022-02-02;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-090;,citation_issue=1;,citation_doi=10.3996/JFWM-21-090;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sexual dimorphism in Eurasian Perch as an example;,citation_author=W Mooij;,citation_author=Jules Rooij;,citation_author=Sander Wijnhoven;,citation_publication_date=1999-05-01;,citation_cover_date=1999-05-01;,citation_year=1999;,citation_fulltext_html_url=https://www.researchgate.net/profile/Sander-Wijnhoven/publication/230807448_Analysis_and_Comparison_of_Fish_Growth_from_Small_Samples_of_Length-at-Age_Data_Detection_of_Sexual_Dimorphism_in_Eurasian_Perch_as_an_Example/links/09e41504a07e30d58b000000/Analysis-and-Comparison-of-Fish-Growth-from-Small-Samples-of-Length-at-Age-Data-Detection-of-Sexual-Dimorphism-in-Eurasian-Perch-as-an-Example.pdf;,citation_volume=128;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Recruitment, growth, exploitation and management of walleyes in a southeastern Wisconsin lake;,citation_author=Donald Mraz;,citation_publication_date=1968;,citation_cover_date=1968;,citation_year=1968;,citation_fulltext_html_url=https://search.library.wisc.edu/digital/AA7LF2GR2E3E5385/pages;,citation_technical_report_institution=Wisconsin Department of Natural Resources;">
+<meta name="citation_reference" content="citation_title=A comparison of the scale and otolith methods of age estimation for lake whitefish in lake huron;,citation_author=Andrew M. Muir;,citation_author=Mark P. Ebener;,citation_author=Ji X. He;,citation_author=James E. Johnson;,citation_publication_date=2008-06-01;,citation_cover_date=2008-06-01;,citation_year=2008;,citation_fulltext_html_url=https://doi.org/10.1577/M06-160.1;,citation_issue=3;,citation_doi=10.1577/M06-160.1;,citation_issn=0275-5947;,citation_volume=28;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Can landsat thermal imagery and environmental data accurately estimate water temperatures in small streams?;,citation_author=Robert D. Murphy;,citation_author=John A. Hagan;,citation_author=Bradley P. Harris;,citation_author=Suresh A. Sethi;,citation_author=T. Scott Smeltz;,citation_author=Felipe Restrepo;,citation_publication_date=2021-02-16;,citation_cover_date=2021-02-16;,citation_year=2021;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-048;,citation_issue=1;,citation_doi=10.3996/JFWM-20-048;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_author=Derek H. Ogle;,citation_publication_date=2017-01-01;,citation_cover_date=2017-01-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_language=en-US;,citation_journal_title=Fisheries Research;,citation_journal_abbrev=Fisheries Research;">
+<meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
+<meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/;">
+<meta name="citation_reference" content="citation_title=Comparison of specimen- and image-based morphometrics for Cisco;,citation_author=Brian P. O’Malley;,citation_author=Joseph D. Schmitt;,citation_author=Jeremy P. Holden;,citation_author=Brian C. Weidel;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-029;,citation_issue=1;,citation_doi=10.3996/JFWM-20-029;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
+<meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Assessing methods to improve benthic fish sampling in a stony headwater stream;,citation_author=Eleri G. Pritchard;,citation_author=Daniel D. A. Chadwick;,citation_author=Michael A. Chadwick;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/2688-8319.12111;,citation_issue=4;,citation_doi=10.1002/2688-8319.12111;,citation_issn=2688-8319;,citation_volume=2;,citation_language=en-US;,citation_journal_title=Ecological Solutions and Evidence;">
+<meta name="citation_reference" content="citation_title=Comparison of structures used to estimate age and growth of Yellowstone Cutthroat Trout;,citation_author=Michael C. Quist;,citation_author=Darcy K. McCarrick;,citation_author=Lynsey M. Harris;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-095;,citation_issue=2;,citation_doi=10.3996/JFWM-21-095;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Age and Growth of Fishes: Principles and Techniques;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://fisheries.org/bookstore/all-titles/professional-and-trade/55078c/;,citation_doi=10.47886/9781934874486;,citation_isbn=978-1-934874-48-6;">
+<meta name="citation_reference" content="citation_title=Computation and Interpretation of Biological Statistics of Fish Populations;,citation_author=William Edwin Ricker;,citation_publication_date=1975;,citation_cover_date=1975;,citation_year=1975;,citation_fulltext_html_url=https://books.google.com?id=33VRAAAAMAAJ;,citation_isbn=978-0-662-01440-9;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Population Biology of the Tan Riffleshell (&amp;amp;amp;lt;i&amp;gt;Epioblasma&amp;lt;/i&amp;gt; <i>florentina walkeri</i>) and the Effects of Substratum and Light on Juvenile Propagation;,citation_author=Susan Owen Rogers;,citation_publication_date=1999-12-06;,citation_cover_date=1999-12-06;,citation_year=1999;,citation_fulltext_html_url=https://vtechworks.lib.vt.edu/handle/10919/36143;,citation_language=en-US;,citation_dissertation_institution=Virginia Tech;">
+<meta name="citation_reference" content="citation_title=How many Ciscoes are needed for stocking in the Laurentian Great Lakes?;,citation_author=Benjamin J. Rook;,citation_author=Michael J. Hansen;,citation_author=Charles R. Bronte;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-025;,citation_issue=1;,citation_doi=10.3996/JFWM-21-025;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Population biology of Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus&amp;lt;/i&amp;gt; <i>namaycush</i>) of Lake Superior before 1950;,citation_author=Gary T. Sakagawa;,citation_author=Richard L. Pycha;,citation_publication_date=1971-01;,citation_cover_date=1971-01;,citation_year=1971;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/abs/10.1139/f71-011;,citation_doi=10.1139/f71-011;,citation_issn=0015-296X;,citation_volume=28;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Seasonal sampling influence on population dynamics and yield of Channel Catfish and Walleye in a large Great Plains reservoir;,citation_author=Benjamin J. Schall;,citation_author=Casey W. Schoenebeck;,citation_author=Keith D. Koupal;,citation_publication_date=2020-12-07;,citation_cover_date=2020-12-07;,citation_year=2020;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-027;,citation_issue=1;,citation_doi=10.3996/JFWM-20-027;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {}Assessment{} of {}Fish{} {}Populations{};">
+<meta name="citation_reference" content="citation_title=Management goals for conserving White Sturgeon in the Sacramento–San Joaquin River Basin;,citation_author=Marta E. Ulaski;,citation_author=Shannon E. Blackburn;,citation_author=Zachary J. Jackson;,citation_author=Michael C. Quist;,citation_publication_date=2022-05-03;,citation_cover_date=2022-05-03;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-070;,citation_issue=2;,citation_doi=10.3996/JFWM-21-070;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Water-level fluctuations and water temperature effects on young-of-year Largemouth Bass in a Southwest irrigation reservoir;,citation_author=Alexander Vaisvil;,citation_author=Colleen A. Caldwell;,citation_author=Eric Frey;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-071;,citation_issue=2;,citation_doi=10.3996/JFWM-21-071;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Use of anthropogenic nest materials by Black-Crested Titmice along an urban gradient;,citation_author=Madi P. Vasquez;,citation_author=Rebekah J. Rylander;,citation_author=Jacquelyn M. Tleimat;,citation_author=Sarah R. Fritts;,citation_publication_date=2022-01-11;,citation_cover_date=2022-01-11;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-058;,citation_issue=1;,citation_doi=10.3996/JFWM-21-058;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Regional fisheries management investigations - Magic Valley region;,citation_author=Charels D Warren;,citation_author=Karen A Frank;,citation_author=Fred E Partridge;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_fulltext_html_url=https://collaboration.idfg.idaho.gov/FisheriesTechnicalReports/Mgt04-04Warren2001%20Regional%20Fisheries%20Management%20Investigations%20Magic%20Valley%20Region.pdf;,citation_language=en-US;,citation_publisher=Completion Report;">
+<meta name="citation_reference" content="citation_title=ggplot2: Elegant Graphics for Data Analysis;,citation_author=Hadley Wickham;,citation_author=Danielle Navarro;,citation_author=Thomas Lin Pedersen;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://ggplot2-book.org/index.html;,citation_language=en-US;">
+<meta name="citation_reference" content="citation_title=Age and growth of Rock Bass in eastern Lake Ontario;,citation_author=David R. Wolfert;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=http://pubs.er.usgs.gov/publication/1000461;,citation_volume=27;,citation_journal_title=New York Fish and Game Journal;">
+<meta name="citation_reference" content="citation_title=Thin plate regression splines;,citation_author=Simon N. Wood;,citation_publication_date=2003;,citation_cover_date=2003;,citation_year=2003;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00374;,citation_issue=1;,citation_doi=10.1111/1467-9868.00374;,citation_issn=1467-9868;,citation_volume=65;,citation_language=en-US;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Generalized Additive Models: An Introduction with R;,citation_author=Simon N. Wood;,citation_publication_date=2017-05-02;,citation_cover_date=2017-05-02;,citation_year=2017;,citation_fulltext_html_url=https://www.taylorfrancis.com/books/mono/10.1201/9781315370279/generalized-additive-models-simon-wood;,citation_doi=10.1201/9781315370279;,citation_isbn=978-1-315-37027-9;">
+<meta name="citation_reference" content="citation_title=Assessing the accuracy of drift‐dive estimates of brown trout ( &amp;amp;amp;lt;i&amp;gt;Salmo&amp;lt;/i&amp;gt; <i>trutta</i> ) abundance in two New Zealand rivers: A mark‐resighting study;,citation_author=Roger G. Young;,citation_author=John W. Hayes;,citation_publication_date=2001-06;,citation_cover_date=2001-06;,citation_year=2001;,citation_fulltext_html_url=http://www.tandfonline.com/doi/abs/10.1080/00288330.2001.9516997;,citation_issue=2;,citation_doi=10.1080/00288330.2001.9516997;,citation_issn=0028-8330, 1175-8805;,citation_volume=35;,citation_language=en-US;,citation_journal_title=New Zealand Journal of Marine and Freshwater Research;,citation_journal_abbrev=New Zealand Journal of Marine and Freshwater Research;">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/books.html">
+ <span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/packages.html">
+ <span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+ <span class="dropdown-text">fishR (alphabetical)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+ <span class="dropdown-text">fishR (by topic)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+ <span class="dropdown-text">Comprehensive (by package)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+ <span class="dropdown-text">Comprehensive (by topic)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching/index.html">
+ <span class="menu-text">Teaching</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pages/contribute.html">
+ <span class="menu-text">Get Involved</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Working with Multiple Catch Curves</h1>
+                  <div>
+        <div class="description">
+          Computing mortality from catch curves for multiple groups.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Data Wrangling</div>
+                <div class="quarto-category">Age-Length Key</div>
+                <div class="quarto-category">Mortality</div>
+                <div class="quarto-category">Catch Curve</div>
+                <div class="quarto-category">purr</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Derek H. Ogle </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">Apr 24, 2023</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">Apr 24, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#initial-wrangling-catch-at-age-summary" id="toc-initial-wrangling-catch-at-age-summary" class="nav-link" data-scroll-target="#initial-wrangling-catch-at-age-summary">Initial Wrangling &amp; Catch-at-Age Summary</a></li>
+  <li><a href="#handling-zero-catches" id="toc-handling-zero-catches" class="nav-link" data-scroll-target="#handling-zero-catches">Handling Zero Catches</a>
+  <ul class="collapse">
+  <li><a href="#a-helper-function" id="toc-a-helper-function" class="nav-link" data-scroll-target="#a-helper-function">A Helper Function</a></li>
+  <li><a href="#adding-the-zeroes" id="toc-adding-the-zeroes" class="nav-link" data-scroll-target="#adding-the-zeroes">Adding the Zeroes</a></li>
+  </ul></li>
+  <li><a href="#catch-curve-analysis-for-multiple-groups" id="toc-catch-curve-analysis-for-multiple-groups" class="nav-link" data-scroll-target="#catch-curve-analysis-for-multiple-groups">Catch Curve Analysis for Multiple Groups</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
+  <li><a href="#catch-curve-results" id="toc-catch-curve-results" class="nav-link" data-scroll-target="#catch-curve-results">Catch Curve Results</a></li>
+  <li><a href="#catch-curve-figure" id="toc-catch-curve-figure" class="nav-link" data-scroll-target="#catch-curve-figure">Catch Curve Figure</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-4-24_Multiple_CatchCurves/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In <a href="../2023-4-23_Multiple_ALKs/">a previous post</a> a helper function was created and some of the <code>map</code> family of functions from <code>purr</code> were used to efficiently create and apply an age-length key (ALK) to assign estimated ages to unaged fish in a sample. That post will be extended here by using functions from <code>purr</code> and <code>FSA</code> to efficiently compute mortality estimates from catch curves for multiple groups of fish.</p>
+<p>The following packages are loaded for use below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, tidyr, purr packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)        <span class="co"># for catchCurve functionality</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The random number seed was set to ensure repeatability for the random components of <code>alkIndivAge()</code> below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">14354454</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="initial-wrangling-catch-at-age-summary" class="level1 page-columns page-full">
+<h1>Initial Wrangling &amp; Catch-at-Age Summary</h1>
+<div class="page-columns page-full"><p>This post begins with the final data frame from <a href="../2023-4-23_Multiple_ALKs/">the previous post</a> of lengths and ages for all sampled Channel Catfish (<em>Ictalurus punctatus</em>) and Walleye (<em>Sander vitreus</em>) data. A portion of the resultant data frame is shown below, but the code is folded to save space.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Note here that the final data frame is called <code>dat</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;Please see the previous post for a thorough description of this process.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;Rather than <code>dat3</code> as in the previous post.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Computes and applies an ALK</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   data: The data frame with, at least, the age &amp; length variables</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   avar: The name (without quotes) of the age variable in data</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   lvar: The name (without quotes) of the length variable in data</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   w: The width of length categories/bins for use in the ALK</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Returns the data data frame with ages in avar assigned from the ALK for</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="do">##   unaged fish and a new length category (lcat) variable derived from w</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>applyALK <span class="ot">&lt;-</span> <span class="cf">function</span>(data,avar,lvar,w) {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Get avar variable name as character for non-tidyverse functions below</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  avarn <span class="ot">&lt;-</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(avar))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Add length category variable</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">lcat=</span>FSA<span class="sc">::</span><span class="fu">lencat</span>({{lvar}},<span class="at">w=</span>w))</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Separate into aged and unaged dataframes</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  aged <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{avar}}))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  unaged <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">is.na</span>({{avar}}))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Make ALK (find frequencies, convert to row proportions)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ALK <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">xtabs</span>(<span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"~lcat+"</span>,avarn)),<span class="at">data=</span>aged),<span class="at">margin=</span><span class="dv">1</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Apply ALK according to Isermann-Knight method</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> FSA<span class="sc">::</span><span class="fu">alkIndivAge</span>(ALK,<span class="fu">as.formula</span>(<span class="fu">paste0</span>(avarn,<span class="st">"~lcat"</span>)),<span class="at">data=</span>unaged)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Put aged and newly assigned age data frames together to return</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(aged,tmp)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Wrangle the data</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../2023-4-23_Multiple_ALKs/JFWM-20-027.S1.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Weight,<span class="sc">-</span>Sex,<span class="sc">-</span>BCAge,<span class="sc">-</span>BCLength,<span class="sc">-</span>Year) <span class="sc">|&gt;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Season=</span><span class="fu">case_when</span>(</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    Month<span class="sc">==</span><span class="st">"May"</span> <span class="sc">~</span> <span class="st">"Spring"</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    Month<span class="sc">==</span><span class="st">"September"</span> <span class="sc">~</span> <span class="st">"Fall"</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Length)) <span class="sc">|&gt;</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Spring"</span> <span class="sc">&amp;</span> Length<span class="sc">&lt;</span><span class="dv">279</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Fall"</span> <span class="sc">&amp;</span> Length<span class="sc">&lt;</span><span class="dv">200</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(<span class="sc">~</span>Spp<span class="sc">+</span>Season) <span class="sc">|&gt;</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_df</span>(applyALK,<span class="at">avar=</span>Age,<span class="at">lvar=</span>Length,<span class="at">w=</span><span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Spp,Season,Age,Length,lcat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|       Spp Season Age Length lcat
+#R|  1    CCF   Fall   1    232  230
+#R|  2    CCF   Fall   1    216  210
+#R|  3    CCF   Fall   1    238  230
+#R|  2355 WAE Spring  10    632  630
+#R|  2356 WAE Spring  10    653  650
+#R|  2357 WAE Spring  13    720  720</code></pre>
+</div>
+</div>
+<p>These data are summarized to provide total catches at each <strong>OBSERVED</strong> age for each species and season combination.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>CatAge <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Spp,Season,Age) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Catch=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>CatAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 53 × 4
+#R|     Spp   Season   Age Catch
+#R|     &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt;
+#R|   1 CCF   Fall       1    15
+#R|   2 CCF   Fall       2    22
+#R|   3 CCF   Fall       3     3
+#R|   4 CCF   Fall       4    16
+#R|   5 CCF   Fall       5    29
+#R|   6 CCF   Fall       6    23
+#R|   7 CCF   Fall       7    20
+#R|   8 CCF   Fall       8    29
+#R|   9 CCF   Fall       9    22
+#R|  10 CCF   Fall      10    12
+#R|  # … with 43 more rows</code></pre>
+</div>
+</div>
+<p>A quick summary of the age range and number of observed ages for each species and season combination indicates that some ages within the age range were <strong>not</strong> observed.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>CatAge <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Spp,Season) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">agerng=</span><span class="fu">max</span>(Age)<span class="sc">-</span><span class="fu">min</span>(Age)<span class="sc">+</span><span class="dv">1</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">agesobs=</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 4 × 4
+#R|  # Groups:   Spp [2]
+#R|    Spp   Season agerng agesobs
+#R|    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;int&gt;
+#R|  1 CCF   Fall       17      14
+#R|  2 CCF   Spring     16      14
+#R|  3 WAE   Fall       11      10
+#R|  4 WAE   Spring     18      15</code></pre>
+</div>
+</div>
+<p>For example, the age range for Channel Catfish in the Fall was from 1 to 17, but no age 12, 13, or 16 fish were caught.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>CatAge <span class="sc">|&gt;</span> <span class="fu">filter</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span>,Season<span class="sc">==</span><span class="st">"Fall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 14 × 4
+#R|     Spp   Season   Age Catch
+#R|     &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt;
+#R|   1 CCF   Fall       1    15
+#R|   2 CCF   Fall       2    22
+#R|   3 CCF   Fall       3     3
+#R|   4 CCF   Fall       4    16
+#R|   5 CCF   Fall       5    29
+#R|   6 CCF   Fall       6    23
+#R|   7 CCF   Fall       7    20
+#R|   8 CCF   Fall       8    29
+#R|   9 CCF   Fall       9    22
+#R|  10 CCF   Fall      10    12
+#R|  11 CCF   Fall      11     2
+#R|  12 CCF   Fall      14     1
+#R|  13 CCF   Fall      15     2
+#R|  14 CCF   Fall      17     3</code></pre>
+</div>
+</div>
+<p><span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> assumed a catch of 0 for ages that were not observed within the range of observed ages for each species and season. Thus, the first “issue” encountered with these data was how to insert 0s into the data frames for these “unobserved” ages.</p>
+</section>
+<section id="handling-zero-catches" class="level1 page-columns page-full">
+<h1>Handling Zero Catches</h1>
+<section id="a-helper-function" class="level3">
+<h3 class="anchored" data-anchor-id="a-helper-function">A Helper Function</h3>
+<p>A helper function, <code>add0CatchByAge()</code>, was created to facilitate the adding of zero catches for the appropriate ages. This function looks complicated because I chose to allow the age and catch variables to be given without quotes. However, the general algorithm in this function is to use <code>full_seq()</code> from <code>tidyr</code> to create a sequence of sequential ages over the range of observed ages, then use <code>left_join()</code> from <code>dplyr</code> to join the original data frame to the sequence of ages, and use <code>remove_na()</code> from <code>tidyr</code> to replace missing “catch” data with zero and missing non-age and non-catch data with values from the first row of the original data frame. It is important to note that this function will <strong>only work if the non-age and non-catch variables are constant across rows.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Adds a row with catch=0 for unobserved ages within the range of observed ages</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   data: The data frame with, at least, the age &amp; catch variables</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   avar: The name (without quotes) of the age variable in data</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   cvar: The name (without quotes) of the catch variable in data</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   fill: The value to use for the catch of unobserved ages (defaults to 0)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Returns the data data frame with previoulsy unobserved ages in avar, the fill</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="do">##   value for those ages in cvar, and values in other variables repeated for</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="do">##   those ages</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>add0CatchByAge <span class="ot">&lt;-</span> <span class="cf">function</span>(data,avar,cvar,<span class="at">fill=</span>0L) {</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Get variable names as characters for non-tidyverse functions</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  avarn <span class="ot">&lt;-</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(avar))</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  cvarn <span class="ot">&lt;-</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(cvar))</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Get names of variables in data</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  dnms <span class="ot">&lt;-</span> <span class="fu">names</span>(data) <span class="co"># all</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  dnms2 <span class="ot">&lt;-</span> dnms[<span class="sc">!</span>dnms <span class="sc">%in%</span> <span class="fu">c</span>(avarn,cvarn)]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create sequence of ages that cover full range of ages</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  tmpages <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(tidyr<span class="sc">::</span><span class="fu">full_seq</span>(<span class="fu">as.data.frame</span>(data)[,avarn],<span class="dv">1</span>))</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(tmpages) <span class="ot">&lt;-</span> avarn</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create fill list for unobserved ages</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  fills <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.list</span>(data[<span class="dv">1</span>,dnms2]),fill)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(fills) <span class="ot">&lt;-</span> <span class="fu">c</span>(dnms2,cvarn)  </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Add zeroes to ages not observed</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">left_join</span>(tmpages,data,<span class="at">by=</span>avarn) <span class="sc">|&gt;</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">replace_na</span>(fills)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Return data frame with columns ordered as in original data</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  tmp[,dnms]</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>add0CatchByAge()</code> takes a data frame (with at least age and catch variables) as the first argument, unquoted names for “age” and “catch” variables in <code>avar=</code> and <code>cvar=</code>, and the value to fill in for the catch of unobserved ages in <code>fill=</code> (defaults to 0). The example below shows how zeroes are filled in for the unobserved ages of Channel Catfish captured in the Fall.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tmpex <span class="ot">&lt;-</span> CatAge <span class="sc">|&gt;</span> <span class="fu">filter</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span>,Season<span class="sc">==</span><span class="st">"Fall"</span>) <span class="do">## temporary data frame for example</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">add0CatchByAge</span>(tmpex,<span class="at">avar=</span>Age,<span class="at">cvar=</span>Catch)            <span class="do">## example result</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|     Spp Season Age Catch
+#R|  1  CCF   Fall   1    15
+#R|  2  CCF   Fall   2    22
+#R|  3  CCF   Fall   3     3
+#R|  4  CCF   Fall   4    16
+#R|  5  CCF   Fall   5    29
+#R|  6  CCF   Fall   6    23
+#R|  7  CCF   Fall   7    20
+#R|  8  CCF   Fall   8    29
+#R|  9  CCF   Fall   9    22
+#R|  10 CCF   Fall  10    12
+#R|  11 CCF   Fall  11     2
+#R|  12 CCF   Fall  12     0
+#R|  13 CCF   Fall  13     0
+#R|  14 CCF   Fall  14     1
+#R|  15 CCF   Fall  15     2
+#R|  16 CCF   Fall  16     0
+#R|  17 CCF   Fall  17     3</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-the-zeroes" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="adding-the-zeroes">Adding the Zeroes</h3>
+<div class="page-columns page-full"><p>Adding the zeroes must be done on a <em>per-group</em> basis, which is by species-season combination here. Thus, the <code>CatAge</code> summary data frame is <code>split()</code> by <code>Spp</code> and <code>Season</code> into a list of four data frames.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> This list of data frames is then given to <code>map_df()</code> which applies <code>add0CatchByAge()</code> to each of the four data frames using <code>Age</code> for <code>avar=</code> and <code>Catch</code> for <code>cvar=</code>. The four data frames are then row-bound together to return one overall data frame.</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;The process of using <code>split()</code> was defined more thoroughly in <a href="../2023-4-23_Multiple_ALKs/">this post</a>.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>CatAge <span class="ot">&lt;-</span> CatAge <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(<span class="sc">~</span>Spp<span class="sc">+</span>Season) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_df</span>(add0CatchByAge,<span class="at">avar=</span>Age,<span class="at">cvar=</span>Catch)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(CatAge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|     Spp Season Age Catch
+#R|  1  CCF   Fall   1    15
+#R|  2  CCF   Fall   2    22
+#R|  3  CCF   Fall   3     3
+#R|  60 WAE Spring  16     2
+#R|  61 WAE Spring  17     0
+#R|  62 WAE Spring  18     2</code></pre>
+</div>
+</div>
+<p>The result is a single data frame with the same variables as the original <code>CatAge</code>, but with new rows of <code>Catch</code>=0 for unobserved <code>Age</code>s. This is best seen by examining the portion of the new <code>CatAge</code> summary data frame for Channel Catfish captured in the Fall.</p>
+<div class="cell" data-layout-align="center" data-output-line-numbers="1,13,14,17">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CatAge <span class="sc">|&gt;</span> <span class="fu">filter</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span>,Season<span class="sc">==</span><span class="st">"Fall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb18" data-code-line-numbers="1,13,14,17"><pre class="sourceCode numberSource highlight numberLines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a href="#cb18-1"></a>#R|     Spp Season Age Catch</span>
+<span id="cb18-2"><a href="#cb18-2"></a>#R|  1  CCF   Fall   1    15</span>
+<span id="cb18-3"><a href="#cb18-3"></a>#R|  2  CCF   Fall   2    22</span>
+<span id="cb18-4"><a href="#cb18-4"></a>#R|  3  CCF   Fall   3     3</span>
+<span id="cb18-5"><a href="#cb18-5"></a>#R|  4  CCF   Fall   4    16</span>
+<span id="cb18-6"><a href="#cb18-6"></a>#R|  5  CCF   Fall   5    29</span>
+<span id="cb18-7"><a href="#cb18-7"></a>#R|  6  CCF   Fall   6    23</span>
+<span id="cb18-8"><a href="#cb18-8"></a>#R|  7  CCF   Fall   7    20</span>
+<span id="cb18-9"><a href="#cb18-9"></a>#R|  8  CCF   Fall   8    29</span>
+<span id="cb18-10"><a href="#cb18-10"></a>#R|  9  CCF   Fall   9    22</span>
+<span id="cb18-11"><a href="#cb18-11"></a>#R|  10 CCF   Fall  10    12</span>
+<span id="cb18-12"><a href="#cb18-12"></a>#R|  11 CCF   Fall  11     2</span>
+<span id="cb18-13"><a href="#cb18-13"></a>#R|  12 CCF   Fall  12     0</span>
+<span id="cb18-14"><a href="#cb18-14"></a>#R|  13 CCF   Fall  13     0</span>
+<span id="cb18-15"><a href="#cb18-15"></a>#R|  14 CCF   Fall  14     1</span>
+<span id="cb18-16"><a href="#cb18-16"></a>#R|  15 CCF   Fall  15     2</span>
+<span id="cb18-17"><a href="#cb18-17"></a>#R|  16 CCF   Fall  16     0</span>
+<span id="cb18-18"><a href="#cb18-18"></a>#R|  17 CCF   Fall  17     3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>This data frame is now ready for catch curve analysis.</p>
+<p>&nbsp;</p>
+</section>
+</section>
+<section id="catch-curve-analysis-for-multiple-groups" class="level1 page-columns page-full">
+<h1>Catch Curve Analysis for Multiple Groups</h1>
+<section id="data-preparation" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="data-preparation">Data Preparation</h3>
+<div class="page-columns page-full"><p>A catch curve plots log catch versus age, though in this case, because of the presence of zero catches for some ages, log catch plus 1 was used.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Below a new variable called <code>Catch1</code> is added to <code>CatAge</code> that contains the catch plus 1 value and the log of this is taken to create <code>logCatch1</code>. <code>Catch1</code> is needed because <code>catchCurve()</code> from <code>FSA</code> requires the raw “catch” data. <code>logCatch1</code> is needed for plotting.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;In <a href="../2023-4-1_Milleretal2022_Fig4/">this previous post</a> I question whether it is appropriate to add 1 to the catch data for this purpose.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>CatAge <span class="ot">&lt;-</span> CatAge <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Catch1=</span>Catch<span class="sc">+</span><span class="dv">1</span>,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">logCatch1=</span><span class="fu">log</span>(Catch1))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(CatAge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|     Spp Season Age Catch Catch1 logCatch1
+#R|  1  CCF   Fall   1    15     16  2.772589
+#R|  2  CCF   Fall   2    22     23  3.135494
+#R|  3  CCF   Fall   3     3      4  1.386294
+#R|  60 WAE Spring  16     2      3  1.098612
+#R|  61 WAE Spring  17     0      1  0.000000
+#R|  62 WAE Spring  18     2      3  1.098612</code></pre>
+</div>
+</div>
+<p>In general, instantaneous mortality (<span class="math inline">\(Z\)</span>) is only estimated from the slope of the “descending limb” of the catch curve. The plot below is used to identify the “descending limb”, though I ultimately used the ages defined by <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span>:</p>
+<ul>
+<li><em>Channel Catfish, Fall</em> – ages 5 and older</li>
+<li><em>Channel Catfish, Spring</em> – ages 6 and older</li>
+<li><em>Walleye, Fall</em> – ages 1 and older</li>
+<li><em>Walleye, Spring</em> – ages 2 and older</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">dat=</span>CatAge,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Age,<span class="at">y=</span>logCatch1,<span class="at">color=</span>Season)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha=</span><span class="fl">0.1</span>,<span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">rows=</span><span class="fu">vars</span>(Spp),<span class="at">cols=</span><span class="fu">vars</span>(Season)) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/preliminary-catch-curve-plot-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From this, a new summary data frame (i.e., <code>CatAgeReduced</code>) is created that is the same as <code>CatAge</code> but with all ages <strong>not on the descending limb removed</strong>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>CatAgeReduced <span class="ot">&lt;-</span> CatAge <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Fall"</span> <span class="sc">&amp;</span> Age<span class="sc">&lt;</span><span class="dv">5</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"CCF"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Spring"</span> <span class="sc">&amp;</span> Age<span class="sc">&lt;</span><span class="dv">6</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"WAE"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Fall"</span> <span class="sc">&amp;</span> Age<span class="sc">&lt;</span><span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Spp<span class="sc">==</span><span class="st">"WAE"</span> <span class="sc">&amp;</span> Season<span class="sc">==</span><span class="st">"Spring"</span> <span class="sc">&amp;</span> Age<span class="sc">&lt;</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data were plotted with this new data frame to ensure that the descending limbs were retained as defined in <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span>.</p>
+<div class="cell" data-layout-align="center">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">dat=</span>CatAgeReduced,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Age,<span class="at">y=</span>logCatch1,<span class="at">color=</span>Season)) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha=</span><span class="fl">0.1</span>,<span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">rows=</span><span class="fu">vars</span>(Spp),<span class="at">cols=</span><span class="fu">vars</span>(Season)) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/preliminary-catch-curve-plot-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, the overall number of fish for each species and season was computed to compare to results in <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span>. The number of Channel Catfish retained here was the same for Fall, but one fewer for Spring than in <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span>. The number of Walleye retained here was one more for Fall and eight more for Spring than in <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span>. Thus, my mortality calculations in the next section will likely differ slightly from those published in <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>CatAgeReduced <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Spp,Season) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">sum</span>(Catch)) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Schall_n=</span><span class="fu">c</span>(<span class="dv">143</span>,<span class="dv">423</span>,<span class="dv">1217</span>,<span class="dv">293</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 4 × 4
+#R|    Spp   Season     n Schall_n
+#R|    &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;    &lt;dbl&gt;
+#R|  1 CCF   Fall     143      143
+#R|  2 CCF   Spring   422      423
+#R|  3 WAE   Fall    1218     1217
+#R|  4 WAE   Spring   301      293</code></pre>
+</div>
+</div>
+</section>
+<section id="catch-curve-results" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="catch-curve-results">Catch Curve Results</h3>
+<p>The catch curve calculations for one data frame can be performed efficiently with <code>catchCurve()</code> from <code>FSA</code>. Thus, to use this function for multiple groups of data, the reduced catch-at-age data frame must be <code>split()</code> into a list of separate data frames by <code>Spp</code> and <code>Season</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>CatAgeRedSplit <span class="ot">&lt;-</span> CatAgeReduced <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(<span class="sc">~</span>Spp<span class="sc">+</span>Season)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="page-columns page-full"><p>A helper function was then created that performs the catch curve analysis with <code>catchCurve()</code> and extracts the instantaneous and total (<span class="math inline">\(A\)</span>) mortality rate estimates, along with their 95% confidence intervals. This function takes the data frame (with at least the catch and age data) as its first argument and a formula of the form <code>cvar~avar</code>. Additional named arguments to <code>catchCurve()</code>, for example <code>weighted=TRUE</code>, can also be included.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;See <code>?catchCurve</code> for more information on <code>catchCurve()</code>.</p></li></div></div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Performs catch curve analysis, extracts A &amp; Z estimates and CIs</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   data: The data frame with, at least, the age &amp; catch variables</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   formula: A formula of the form `cvar~avar` where cvar is the catch variable</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="do">##            in data and avar is the age variable in data</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   ...: Additional arguments for FSA::catchCurve()</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Returns a named vector with the A &amp; Z estimates and CIs</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>getCCresults <span class="ot">&lt;-</span> <span class="cf">function</span>(data,formula,...) {</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> FSA<span class="sc">::</span><span class="fu">catchCurve</span>(formula,data,...)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">coef</span>(tmp),<span class="fu">confint</span>(tmp,<span class="at">parm=</span><span class="st">"Z"</span>),<span class="fu">confint</span>(tmp,<span class="at">parm=</span><span class="st">"A"</span>))</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(res) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Z"</span>,<span class="st">"A"</span>,<span class="st">"Z.LCI"</span>,<span class="st">"Z.UCI"</span>,<span class="st">"A.LCI"</span>,<span class="st">"A.UCI"</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  res[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">6</span>)]</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As an example, this function is used below to fit a weighted catch curve to Channel Catfish captured in the Spring. Note the use of <code>Catch1</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getCCresults</span>(CatAgeRedSplit<span class="sc">$</span>CCF.Spring,<span class="at">formula=</span>Catch1<span class="sc">~</span>Age,<span class="at">weighted=</span><span class="cn">TRUE</span>)  <span class="do">## example</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|           Z      Z.LCI      Z.UCI          A      A.LCI      A.UCI 
+#R|   0.3466275  0.1303087  0.5629463 29.2931353 12.2175614 43.0471425</code></pre>
+</div>
+</div>
+<p>Similar to before, <code>getCCresults()</code> is applied to each data frame in <code>CatAgeRedSplit</code> with <code>map_df()</code> to return a data frame of catch curve analysis results by group. <code>.id</code> is used here in <code>map_df()</code> to create a variable in the returned data frame that contains the names of “items” from <code>CatAgeRedSplit</code>. This is required because <code>getCCresults()</code> does not return any identifier for which group the result is for.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ccresults <span class="ot">&lt;-</span> CatAgeRedSplit <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_df</span>(getCCresults,<span class="at">formula=</span>Catch1<span class="sc">~</span>Age,<span class="at">weighted=</span><span class="cn">TRUE</span>,<span class="at">.id=</span><span class="st">"Group"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>ccresults</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 4 × 7
+#R|    Group          Z  Z.LCI Z.UCI     A A.LCI A.UCI
+#R|    &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#R|  1 CCF.Fall   0.359 0.221  0.496  30.2 19.9   39.1
+#R|  2 WAE.Fall   0.741 0.509  0.973  52.3 39.9   62.2
+#R|  3 CCF.Spring 0.347 0.130  0.563  29.3 12.2   43.0
+#R|  4 WAE.Spring 0.229 0.0906 0.367  20.5  8.67  30.7</code></pre>
+</div>
+</div>
+<p>The point and interval estimates for <span class="math inline">\(A\)</span> are reasonably close to those published in <span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> given the inherent randomization in applying the ALK and the minor differences in sample sizes here versus what they reported.</p>
+<p>While it is not needed in this post, it will be common to need to “split” the <code>Group</code> variable in <code>ccresults</code> back into its constituent parts (i.e., <code>Spp</code> and <code>Season</code>). As the constituent parts in <code>Group</code> are consistently separated with a <code>.</code>, this can be easily accomplished with <code>separate_wider_delim()</code> from <code>tidyr</code> as shown below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ccresults <span class="ot">&lt;-</span> ccresults <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(Group,<span class="st">"."</span>,<span class="at">names=</span><span class="fu">c</span>(<span class="st">"Spp"</span>,<span class="st">"Season"</span>))</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>ccresults</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 4 × 8
+#R|    Spp   Season     Z  Z.LCI Z.UCI     A A.LCI A.UCI
+#R|    &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#R|  1 CCF   Fall   0.359 0.221  0.496  30.2 19.9   39.1
+#R|  2 WAE   Fall   0.741 0.509  0.973  52.3 39.9   62.2
+#R|  3 CCF   Spring 0.347 0.130  0.563  29.3 12.2   43.0
+#R|  4 WAE   Spring 0.229 0.0906 0.367  20.5  8.67  30.7</code></pre>
+</div>
+</div>
+</section>
+<section id="catch-curve-figure" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="catch-curve-figure">Catch Curve Figure</h3>
+<p><span class="citation" data-cites="schalletal_2020">Schall et al. (<a href="#ref-schalletal_2020" role="doc-biblioref">2020</a>)</span> displayed their catch curve results in their <a href="https://meridian.allenpress.com/view-large/figure/13413355/i1944-687X-12-1-223-f03.tif">Figure 3</a>. The biggest challenge to recreating this figure is that their regression lines are from the <strong>weighted</strong> regression on the descending limb. The weights used are stored in the result from <code>catchCurve()</code>, but again this functions needs to be applied on a <em>per-group</em> basis. As such, a helper function was created below that performs the catch curve analysis as above, but instead of extracting results it extracts the weights used, appends them to the data frame given to the function, and returns the modified data frame. Thus, this function serves to append the weights used to the original data used.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb34" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Performs catch curve analysis and adds estimated weights to data</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="do">##   data: The data frame with, at least, the age &amp; catch variables</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   formula: A formula of the form `cvar~avar` where cvar is the catch variable</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="do">##            in data and avar is the age variable in data</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   ...: Additional arguments for FSA::catchCurve()</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Returns the data data frame with the catch curve weights in wts variable</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>addCCweights <span class="ot">&lt;-</span> <span class="cf">function</span>(data,formula,...) {</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> FSA<span class="sc">::</span><span class="fu">catchCurve</span>(formula,data,...)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">wts=</span>tmp<span class="sc">$</span>w)</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  data</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This function is then applied to each data frame in <code>CatAgeRedSplit</code> with <code>map_df()</code> to produce a modified data frame with the weights used.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>CatAgeRedWts<span class="ot">&lt;-</span> CatAgeRedSplit <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_df</span>(addCCweights,<span class="at">formula=</span>Catch1<span class="sc">~</span>Age,<span class="at">weighted=</span><span class="cn">TRUE</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(CatAgeRedWts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|     Spp Season Age Catch Catch1 logCatch1       wts
+#R|  1  CCF   Fall   5    29     30  3.401197 3.5075254
+#R|  2  CCF   Fall   6    23     24  3.178054 3.2178363
+#R|  3  CCF   Fall   7    20     21  3.044522 2.9281472
+#R|  51 WAE Spring  16     2      3  1.098612 0.6867394
+#R|  52 WAE Spring  17     0      1  0.000000 0.4800235
+#R|  53 WAE Spring  18     2      3  1.098612 0.2733075</code></pre>
+</div>
+</div>
+<p>The main part of reproducing Figure 3 consists of creating three “layers” of data:</p>
+<ul>
+<li>Plot <code>logCatch1</code> versus <code>Age</code> from <code>CatAge</code> with an open circle (i.e., <code>pch=21</code>) with different outline colors based on <code>Season</code>. This will produce an open circle for the log catch at all ages across the range of observed ages.</li>
+<li>Over plot <code>logCatch</code> versus <code>Age</code> from <code>CatAgeRedWts</code> with a circle (i.e., <code>pch=21</code>) with different outline <strong>and</strong> fill colors based on <code>Season</code>. This will “fill” the open circles for ages on the descending limb of the catch curve.</li>
+<li>Over plot the weighted regression line with colors based on <code>Season</code> and using <code>weight=</code>s given in <code>wts</code>, but which will be separated by season.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></li>
+<li>Create separate facets by <code>Spp</code>.</li>
+</ul>
+<div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;This use of the <code>weight=</code> <code>aes()</code>thetic was described in <a href="../2023-4-1_Milleretal2022_Fig4/#recreating-figure-4">this post</a>.</p></li></div><div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">dat=</span>CatAge,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Age,<span class="at">y=</span>logCatch1,<span class="at">color=</span>Season),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">pch=</span><span class="dv">21</span>,<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">dat=</span>CatAgeRedWts,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Age,<span class="at">y=</span>logCatch1,<span class="at">color=</span>Season,<span class="at">fill=</span>Season),</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">pch=</span><span class="dv">21</span>,<span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">dat=</span>CatAgeRedWts,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Age,<span class="at">y=</span>logCatch1,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">color=</span>Season,<span class="at">fill=</span>Season,<span class="at">weight=</span>wts),</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">method=</span>lm) <span class="sc">+</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (yrs)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"log (Catch+1)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"Fall"</span><span class="ot">=</span><span class="st">"black"</span>,<span class="st">"Spring"</span><span class="ot">=</span><span class="st">"gray60"</span>),</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">aesthetics=</span><span class="fu">c</span>(<span class="st">"color"</span>,<span class="st">"fill"</span>)) <span class="sc">+</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(Spp),<span class="at">labeller=</span><span class="fu">labeller</span>(<span class="at">Spp=</span><span class="fu">c</span>(<span class="st">"CCF"</span><span class="ot">=</span><span class="st">"Channel Catfish"</span>,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"WAE"</span><span class="ot">=</span><span class="st">"Walleye"</span>))) <span class="sc">+</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification=</span><span class="fu">c</span>(<span class="fl">1.1</span>,<span class="fl">1.1</span>),</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text=</span><span class="fu">element_text</span>(<span class="at">face=</span><span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/schall-figure-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<div class="cell" data-layout-align="center">
+
+</div>
+
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-schalletal_2020" class="csl-entry" role="doc-biblioentry">
+Schall, B. J., C. W. Schoenebeck, and K. D. Koupal. 2020. <a href="https://doi.org/10.3996/JFWM-20-027">Seasonal sampling influence on population dynamics and yield of <span>Channel Catfish</span> and <span>Walleye</span> in a large <span>Great Plains</span> reservoir</a>. Journal of Fish and Wildlife Management 12(1):223–233.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2023,
+  author = {Derek H. Ogle},
+  title = {Working with {Multiple} {Catch} {Curves}},
+  date = {2023-04-24},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2023" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Derek H. Ogle. 2023, April 24. Working with Multiple Catch Curves. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+  </li>  
+</ul>
+    </div>   
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
