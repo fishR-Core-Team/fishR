@@ -64,6 +64,7 @@ You may submit additions or corrections to the list of packages by using the lin
 * [shapeR](https://github.com/lisalibungan/shapeR): *Study otolith shape variation among fish populations*
 * [simecol](http://simecol.r-forge.r-project.org/): *Implementation of dynamic simulation models*
 * [ss3sim](https://cran.r-project.org/web/packages/ss3sim/index.html): *Framework for fisheries stock assessment simulation testing with Stock Synthesis 3*
+* [SSplots](https://cran.r-project.org/package=SSplots): *Stock status plots as suggested by Pauly et al. (2008), Kleisner and Pauly (2011), and Kleisner et al. (2013).*
 * [stacomiR](https://cran.r-project.org/web/packages/stacomiR/index.html): *Graphical outputs and treatment for a database of fish pass monitoring*
 * [swfscDAS](https://cran.r-project.org/web/packages/swfscDAS/index.html): *Southwest Fisheries Science Center shipboard DAS data processing*
 * [swfscMisc](https://cran.r-project.org/web/packages/swfscMisc/index.html): *Collection of conversion, analytical, geodesic, mapping, and plotting functions used by the Southwest Fisheries Science Center*
