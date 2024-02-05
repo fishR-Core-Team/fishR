@@ -307,7 +307,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Feb 4, 2024</p>
+        <p class="date-modified">Feb 5, 2024</p>
       </div>
     </div>
       
@@ -347,7 +347,8 @@ div.csl-indent {
 <p>Both methods will fit the typical three parameter von Bertalanffy growth model</p>
 <p><span class="math display">\[
 TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} )
-\]</span> 2here <span class="math inline">\(TL_i\)</span> is total length of individual <em>i</em>, <span class="math inline">\(L_\infty\)</span> is the average maximum length obtained, <span class="math inline">\(\kappa\)</span> is the Brody growth coefficient, <span class="math inline">\(t_i\)</span> is the age of individual <em>i</em>, and <span class="math inline">\(t_0\)</span> is the theoretical age at zero length. To finish the model, an error term is added:</p>
+\]</span></p>
+<p>where <span class="math inline">\(TL_i\)</span> is total length of individual <em>i</em>, <span class="math inline">\(L_\infty\)</span> is the average maximum length obtained, <span class="math inline">\(\kappa\)</span> is the Brody growth coefficient, <span class="math inline">\(t_i\)</span> is the age of individual <em>i</em>, and <span class="math inline">\(t_0\)</span> is the theoretical age at zero length. To finish the model, an error term is added:</p>
 <p><span class="math display">\[
 TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} + \epsilon_i)
 \]</span> <span class="math display">\[
@@ -449,7 +450,7 @@ TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} + \epsilon_i)
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> age[N] ;      <span class="co">// Age of individual fish</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The second block in our model is a parameters block. This block will declare all the estimated parameters in the model. Our model has four parameters. <code>sigma_y</code> is the standard deviation, <span class="math inline">\(\sigma\)</span>, of the individual observations; <code>t0</code> is the <span class="math inline">\(t_0\)</span> LVB parameter; <code>Linf</code> is the <span class="math inline">\(L_\infty\)</span> parameter; and <code>k</code> is the <span class="math inline">\(\kappa\)</span> parameter. Each is declared as a single real value. All of the parameters are constrained in at least one direction. <code>sigma_y</code> is constrained to be positive using the &lt;lower=0&gt; argument because standard deviations must be positive. <code>t0</code> is being constrained to be between -5 and 5 using the <code>\&lt;lower=-5\&gt;</code> and <code>\&lt;upper=5\&gt;</code> arguments. This is declared based on prior knowledge to prevent the sampler from searching outside these bounds. The remaining two, <code>Linf</code> and <code>k</code>, are only constrained to be positive using <code>\&lt;lower=0\&gt;</code>.</p>
+<p>The second block in our model is a parameters block. This block will declare all the estimated parameters in the model. Our model has four parameters. <code>sigma_y</code> is the standard deviation, <span class="math inline">\(\sigma\)</span>, of the individual observations; <code>t0</code> is the <span class="math inline">\(t_0\)</span> LVB parameter; <code>Linf</code> is the <span class="math inline">\(L_\infty\)</span> parameter; and <code>k</code> is the <span class="math inline">\(\kappa\)</span> parameter. Each is declared as a single real value. All of the parameters are constrained in at least one direction. <code>sigma_y</code> is constrained to be positive using the <code>&lt;lower=0&gt;</code> argument because standard deviations must be positive. <code>t0</code> is being constrained to be between -5 and 5 using the <code>&lt;lower=-5&gt;</code> and <code>&lt;upper=5&gt;</code> arguments. This is declared based on prior knowledge to prevent the sampler from searching outside these bounds. The remaining two, <code>Linf</code> and <code>k</code>, are only constrained to be positive using <code>&lt;lower=0&gt;</code>.</p>
 <p>Setting bounds can help the sampler find the posterior distribution, particularly with complex models. So it is recommended to always set bounds that “make sense”. Use your knowledge of the system and the model to declare these bounds. This is separate from declare your prior probability distribution but setting bounds will influence your prior probability distributions. The priors are set in the model block.</p>
 <div class="cell" data-layout-align="center" data-output.var="LVBmodel">
 <div class="sourceCode cell-code" id="cb7" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
@@ -551,18 +552,18 @@ TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} + \epsilon_i)
 #R|  3 chains, each with iter=3000; warmup=1000; thin=1; 
 #R|  post-warmup draws per chain=2000, total post-warmup draws=6000.
 #R|  
-#R|                mean  se_mean       sd       2.5%        50%      97.5% n_eff
-#R|  sigma_y  18.375510 0.015013 0.728324  16.991915  18.356850  19.863256  2354
-#R|  Linf    648.525800 0.245133 9.889823 629.908299 648.309777 668.551357  1628
-#R|  k         0.361858 0.000531 0.020774   0.321784   0.361293   0.403543  1529
-#R|  t0       -1.286204 0.002160 0.086174  -1.459206  -1.284131  -1.121483  1592
+#R|                mean  se_mean        sd       2.5%        50%      97.5% n_eff
+#R|  sigma_y  18.352312 0.015136  0.736475  16.945576  18.330150  19.882500  2368
+#R|  Linf    648.606391 0.240547 10.034202 629.432697 648.304389 668.848961  1740
+#R|  k         0.361698 0.000519  0.021020   0.322883   0.361042   0.405635  1642
+#R|  t0       -1.286832 0.002090  0.086734  -1.462565  -1.286549  -1.115442  1721
 #R|              Rhat
-#R|  sigma_y 1.002453
-#R|  Linf    1.008203
-#R|  k       1.008982
-#R|  t0      1.007506
+#R|  sigma_y 0.999861
+#R|  Linf    1.001330
+#R|  k       1.001418
+#R|  t0      1.000857
 #R|  
-#R|  Samples were drawn using NUTS(diag_e) at Sun Feb  4 20:31:13 2024.
+#R|  Samples were drawn using NUTS(diag_e) at Mon Feb  5 09:10:01 2024.
 #R|  For each parameter, n_eff is a crude measure of effective sample size,
 #R|  and Rhat is the potential scale reduction factor on split chains (at 
 #R|  convergence, Rhat=1).</code></pre>
