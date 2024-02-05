@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/index.html</loc>
-    <lastmod>2023-06-15T01:07:54.924Z</lastmod>
+    <lastmod>2024-02-05T02:31:51.601Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2015-9-5_Age_Comparison_Results/index.html</loc>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2019-12-31_vonB_plots_1/index.html</loc>
-    <lastmod>2023-06-15T01:08:11.753Z</lastmod>
+    <lastmod>2024-02-05T01:36:13.415Z</lastmod>
   </url>
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2020-1-2_vonB_plots_2/index.html</loc>
@@ -395,5 +395,13 @@
   <url>
     <loc>https://fishr-core-team.github.io/fishR/blog/posts/2023-4-24_Multiple_CatchCurves/index.html</loc>
     <lastmod>2023-04-24T14:31:36.310Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2024-2-5_LVB_brms/index.html</loc>
+    <lastmod>2024-02-05T02:29:38.787Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/index.html</loc>
+    <lastmod>2024-02-05T02:31:41.890Z</lastmod>
   </url>
 </urlset>

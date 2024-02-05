@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Derek H. Ogle">
-<meta name="description" content="How to plot one von Bertalanffy growth model with data.">
+<meta name="author" content="Jason Doll">
+<meta name="description" content="Tutorial on how to estimate parameters of the LVB model with Bayesian inference and rstan">
 
-<title>fishR - von Bertalanffy Growth Plots I</title>
+<title>fishR - Bayesian LVB II - rstan</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -124,19 +124,19 @@ div.csl-indent {
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../helpers/styles.css">
-<meta property="og:title" content="fishR - von Bertalanffy Growth Plots I">
-<meta property="og:description" content="How to plot one von Bertalanffy growth model with data.">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2019-12-31_vonB_plots_1/preview.png">
+<meta property="og:title" content="fishR - Bayesian LVB II - rstan">
+<meta property="og:description" content="Tutorial on how to estimate parameters of the LVB model with Bayesian inference and rstan">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/preview.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
-<meta name="citation_title" content="von Bertalanffy Growth Plots I">
-<meta name="citation_author" content="Derek H. Ogle">
-<meta name="citation_publication_date" content="2019-12-31">
-<meta name="citation_cover_date" content="2019-12-31">
-<meta name="citation_year" content="2019">
-<meta name="citation_online_date" content="2019-12-31">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2019-12-31_vonB_plots_1">
+<meta name="citation_title" content="Bayesian LVB II - rstan">
+<meta name="citation_author" content="Jason Doll">
+<meta name="citation_publication_date" content="2024-02-06">
+<meta name="citation_cover_date" content="2024-02-06">
+<meta name="citation_year" content="2024">
+<meta name="citation_online_date" content="2024-02-06">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR//blog/posts/2024-2-6_LVB_Stan">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
 <meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
@@ -273,17 +273,16 @@ div.csl-indent {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">von Bertalanffy Growth Plots I</h1>
+      <h1 class="title">Bayesian LVB II - rstan</h1>
                   <div>
         <div class="description">
-          How to plot one von Bertalanffy growth model with data.
+          Tutorial on how to estimate parameters of the LVB model with Bayesian inference and rstan
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">Age</div>
-                <div class="quarto-category">Growth</div>
-                <div class="quarto-category">Size</div>
-                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">growth</div>
+                <div class="quarto-category">Bayesian</div>
+                <div class="quarto-category">Stan</div>
               </div>
                   </div>
   </div>
@@ -294,21 +293,21 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Derek H. Ogle </p>
+               <p>Jason Doll </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Dec 31, 2019</p>
+        <p class="date">Feb 6, 2024</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Jun 14, 2023</p>
+        <p class="date-modified">Feb 4, 2024</p>
       </div>
     </div>
       
@@ -324,49 +323,89 @@ div.csl-indent {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#fitting-the-vbgf" id="toc-fitting-the-vbgf" class="nav-link" data-scroll-target="#fitting-the-vbgf">Fitting the VBGF</a></li>
-  <li><a href="#model-fit-using-stat_function" id="toc-model-fit-using-stat_function" class="nav-link" data-scroll-target="#model-fit-using-stat_function">Model Fit Using <code>stat_function()</code></a></li>
-  <li><a href="#model-fit-using-geom_smooth" id="toc-model-fit-using-geom_smooth" class="nav-link" data-scroll-target="#model-fit-using-geom_smooth">Model Fit Using <code>geom_smooth()</code></a></li>
-  <li><a href="#model-fit-from-predicted-values" id="toc-model-fit-from-predicted-values" class="nav-link" data-scroll-target="#model-fit-from-predicted-values">Model Fit from Predicted Values</a></li>
-  <li><a href="#model-fit-with-confidence-band" id="toc-model-fit-with-confidence-band" class="nav-link" data-scroll-target="#model-fit-with-confidence-band">Model Fit with Confidence Band</a></li>
-  <li><a href="#add-equation-to-plot" id="toc-add-equation-to-plot" class="nav-link" data-scroll-target="#add-equation-to-plot">Add Equation to Plot</a></li>
+  <li><a href="#prior-probabilities" id="toc-prior-probabilities" class="nav-link" data-scroll-target="#prior-probabilities">Prior probabilities</a></li>
+  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link" data-scroll-target="#preliminaries">Preliminaries</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#initial-values" id="toc-initial-values" class="nav-link" data-scroll-target="#initial-values">Initial values</a></li>
+  <li><a href="#stan" id="toc-stan" class="nav-link" data-scroll-target="#stan">Stan</a></li>
+  <li><a href="#assess-convergence" id="toc-assess-convergence" class="nav-link" data-scroll-target="#assess-convergence">Assess convergence</a></li>
+  <li><a href="#posterior-summary" id="toc-posterior-summary" class="nav-link" data-scroll-target="#posterior-summary">Posterior summary</a></li>
+  <li><a href="#posterior-plotting" id="toc-posterior-plotting" class="nav-link" data-scroll-target="#posterior-plotting">Posterior plotting</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2019-12-31_vonB_plots_1/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2024-2-6_LVB_Stan/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The following packages are loaded for use below. One function from <code>investr</code> is also used but the whole package is not loaded here. The data are also from <code>FSAdata</code>, which is not loaded below. I also set the default <code>ggplot</code> theme to <code>theme_bw()</code> for a classic “black-and-white” plot (rather than the default plot with a gray background).</p>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)     <span class="co"># for vbFuns(), vbStarts(), headtail()</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)   <span class="co"># for filter(), mutate()</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>&nbsp;</p>
-<section id="introduction" class="level1 page-columns page-full">
+<section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>The most common questions that I receive through the <strong>fishR</strong> website are related to fitting a von Bertalanffy growth function (VBGF) to data and viewing the results. In this post, I briefly demonstrate how to fit a VBGF to a single group of data and then provide several options for how to view the fit of the function to those data.</p>
-<div class="page-columns page-full"><p>I will use lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a> package. These data formed many of the examples in <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm) and <code>age</code> variables<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I focus on female Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> and <code>sex</code> as they only had one category after filtering and three variables related to the <code>loc</code>ation of capture.</p></li></div></div>
+<p>The use of Bayesian inference in fisheries biology has been increasing. For good reason, as there are many benefits to taking a Bayesian approach. I won’t go into those reasons here but you can read about them in <span class="citation" data-cites="dorazio_2016">Dorazio (<a href="#ref-dorazio_2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="dolljacquemin_2018">Doll and Jacquemin (<a href="#ref-dolljacquemin_2018" role="doc-biblioref">2018</a>)</span>. This post assumes you have already decided to use Bayesian methods and will present how to estimate parameters of the von Bertalanffy growth model. Previous posts describe frequentist methods <a href="../2019-12-31_vonB_plots_1/">here</a> and <a href="../2020-1-2_vonB_plots_2/">here</a></p>
+<p>This is the second post where I describe how to fit a model using Bayesian inference. The <a href="../2024-2-5_LVB_brms/">first post</a> used Stan with the <code>brms</code> package. This post will use <code>rstan</code> and I will write the full Stan model code.</p>
+<p>Both methods will fit the typical three parameter von Bertalanffy growth model</p>
+<p><span class="math display">\[
+TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} )
+\]</span> 2here <span class="math inline">\(TL_i\)</span> is total length of individual <em>i</em>, <span class="math inline">\(L_\infty\)</span> is the average maximum length obtained, <span class="math inline">\(\kappa\)</span> is the Brody growth coefficient, <span class="math inline">\(t_i\)</span> is the age of individual <em>i</em>, and <span class="math inline">\(t_0\)</span> is the theoretical age at zero length. To finish the model, an error term is added:</p>
+<p><span class="math display">\[
+TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} + \epsilon_i)
+\]</span> <span class="math display">\[
+\epsilon_i \sim normal(0,\sigma)
+\]</span> where <span class="math inline">\(\epsilon_i\)</span> is a random error term for individual <em>i</em> with a mean of 0 and standard deviation <span class="math inline">\(\sigma\)</span>.</p>
+</section>
+<section id="prior-probabilities" class="level1">
+<h1>Prior probabilities</h1>
+<p>At the heart of Bayesian analysis is the prior probability distribution.This post will use non-informative prior probability distributions. When and how to use informative priors when fitting a von Bertalanffy growth model will be discussed in a future post. However, you can read about it in <span class="citation" data-cites="dolljacquemin_2018">Doll and Jacquemin (<a href="#ref-dolljacquemin_2018" role="doc-biblioref">2018</a>)</span>. The prior probability distributions used in this post are:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Prior Probability Distribution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(L_\infty\)</span></td>
+<td>normal(0,1000)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\kappa\)</span></td>
+<td>normal(0,10)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(t_0\)</span></td>
+<td>normal(0,10)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>student-t(3,0,30)</td>
+</tr>
+</tbody>
+</table>
+<p>Stan parameterizes the normal distribution with the mean and standard deviation and the student-t distribution with the degrees of freedom, mean, and standard deviation</p>
+</section>
+<section id="preliminaries" class="level1">
+<h1>Preliminaries</h1>
+<p>First step is to load the necessary packages</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSAdata)   <span class="co"># for data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)     <span class="co"># for filter(), select()</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)     <span class="co"># for transposing data wide to long</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)   <span class="co"># for potting</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)     <span class="co"># for fitting Stan models</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes) <span class="co"># for plotting posterior results</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot) <span class="co"># for plotting posterior predictive checks</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<p>The <code>WalleyeErie2</code> data available in the <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a> package was used in previous posts demonstrating von Bertalanffy growth models and will once again be used here. These data are Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014. As before, the primary interest here is in the tl (total length in mm) and age variables. The data will also be filtered to focus only on female Walleye from location <code>1</code> captured in 2014.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wf14T <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">|&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2014</span>,sex<span class="sc">==</span><span class="st">"female"</span>,loc<span class="sc">==</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wf14T <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2014</span>,sex<span class="sc">==</span><span class="st">"female"</span>,loc<span class="sc">==</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>year,<span class="sc">-</span>sex,<span class="sc">-</span>setID,<span class="sc">-</span>loc,<span class="sc">-</span>grid)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(wf14T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -379,283 +418,183 @@ Note
 #R|  325 565 1745   mature   3</code></pre>
 </div>
 </div>
-<p>&nbsp;</p>
+<p>Next step is to create a list to hold the data used in the model. One important note, the items in this list must match the data used in the model code. For example, we will use <code>tl</code> for total length in the data list and <code>tl</code> must be specified in the Stan data block exactly as <code>tl</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dataList<span class="ot">=</span><span class="fu">list</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">tl=</span>wf14T<span class="sc">$</span>tl,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">age=</span>wf14T<span class="sc">$</span>age ,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">N=</span><span class="fu">length</span>((wf14T<span class="sc">$</span>age))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="fitting-the-vbgf" class="level1 page-columns page-full">
-<h1>Fitting the VBGF</h1>
-<p>Methods for fitting a von Bertalannfy growth function (VBGF) are detailed in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. Thus, this methodology will only be briefly explained here.</p>
-<div class="page-columns page-full"><p>A function for the typical VBGF is constructed with <code>vbFuns()</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></li></div></div>
+<section id="initial-values" class="level1">
+<h1>Initial values</h1>
+<p>An optional step is to specify initial values for the parameters. It is always good practice to specify initial values, particularly with non-linear and other complex models. I will fit the model using multiple chains and it is advisable to use different starting values for each chain. To accomplish this, we will specify a function and use a random number generator for each parameter Adjust the range for the uniform distribution to cover a large range of values that make sense for your data. You can use other distributions as long as they match the declared range in the model code. In this example, I am using the random uniform function because <span class="math inline">\(L_\infty\)</span> and <span class="math inline">\(\kappa\)</span> are restricted to be positive in the model. Therefore, the starting value must be positive.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>( vb <span class="ot">&lt;-</span> <span class="fu">vbFuns</span>(<span class="at">param=</span><span class="st">"Typical"</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|  function (t, Linf, K = NULL, t0 = NULL) 
-#R|  {
-#R|      if (length(Linf) == 3) {
-#R|          K &lt;- Linf[[2]]
-#R|          t0 &lt;- Linf[[3]]
-#R|          Linf &lt;- Linf[[1]]
-#R|      }
-#R|      Linf * (1 - exp(-K * (t - t0)))
-#R|  }
-#R|  &lt;bytecode: 0x000001ece829d0a8&gt;
-#R|  &lt;environment: 0x000001ece82dbdb8&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>initsLst <span class="ot">&lt;-</span> <span class="cf">function</span>() <span class="fu">list</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Linf=</span><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="dv">800</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">K=</span><span class="fu">runif</span>(<span class="dv">1</span>, <span class="fl">0.05</span>, <span class="fl">3.00</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">t0 =</span><span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="stan" class="level1">
+<h1>Stan</h1>
+<p>Now we can introduce the Stan model code. Stan models are structured with “blocks”. Generally, the minimum number of blocks used is three; data, parameters, and model blocks. In our example, we will use a fourth block, the generated quantities block. All of the blocks must be in a single .stan file. The blocks are presented separately here for demonstration. Other blocks that can be used in Stan are; functions, transformed data, and transformed parameters. See the Stan manual for a description of each.</p>
+<p>The data block declares all of the data needed for the model and the data object must match how they are entered in the data list above. There are several different types of data that can be declared. For this example, I use <code>int</code> to declare <code>N</code>, which is the number of observations, as an integer. You’ll also notice that I include a lower bounds for this variable. This isn’t necessary but good practice if your variable has a floor or ceiling. <code>tl</code> is declared as a <code>real</code> data type. The <code>real</code> data type is typically used for single numbers or a vector of numbers. This example declares the real data type as a vector of length <code>N</code>. <code>age</code> is another vector of length <code>N</code> but it is a vector of integers, <code>int</code>.</p>
+<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N ;  <span class="co">// number of observations</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> tl[N] ;      <span class="co">// Total lengths of individual fish</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> age[N] ;      <span class="co">// Age of individual fish</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>Some of the methods below use the fact that the three parameters of the typical VBGF (<span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(t_{0}\)</span>) can be given to this function separately (in that order) or as a vector (still in that order). For example, both lines below can be used to predict the mean length for an age-3 fish with the given VBGF parameters.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The parameters could be given in a different order but would need to be named; e.g., <code>vb(3,t0=-0.5,K=0.3,Linf=300)</code>.</p></li></div></div>
+<p>The second block in our model is a parameters block. This block will declare all the estimated parameters in the model. Our model has four parameters. <code>sigma_y</code> is the standard deviation, <span class="math inline">\(\sigma\)</span>, of the individual observations; <code>t0</code> is the <span class="math inline">\(t_0\)</span> LVB parameter; <code>Linf</code> is the <span class="math inline">\(L_\infty\)</span> parameter; and <code>k</code> is the <span class="math inline">\(\kappa\)</span> parameter. Each is declared as a single real value. All of the parameters are constrained in at least one direction. <code>sigma_y</code> is constrained to be positive using the &lt;lower=0&gt; argument because standard deviations must be positive. <code>t0</code> is being constrained to be between -5 and 5 using the <code>\&lt;lower=-5\&gt;</code> and <code>\&lt;upper=5\&gt;</code> arguments. This is declared based on prior knowledge to prevent the sampler from searching outside these bounds. The remaining two, <code>Linf</code> and <code>k</code>, are only constrained to be positive using <code>\&lt;lower=0\&gt;</code>.</p>
+<p>Setting bounds can help the sampler find the posterior distribution, particularly with complex models. So it is recommended to always set bounds that “make sense”. Use your knowledge of the system and the model to declare these bounds. This is separate from declare your prior probability distribution but setting bounds will influence your prior probability distributions. The priors are set in the model block.</p>
+<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_y;              <span class="co">//LVB standard deviation</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=-<span class="dv">5</span>, <span class="kw">upper</span>=<span class="dv">5</span>&gt; t0;         <span class="co">//LVB t0 parameter</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; Linf;                 <span class="co">//LVB Linf parameter</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; k;                    <span class="co">//LVB k parameter</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The third block declares the model. The model block starts off with declaring any local variables that might be needed. Note that any variables declared in the model block can’t be referenced in other blocks. In this case, I need a vector <code>ypred</code> of length <code>N</code> to hold the mean total length which is a function of the von Bertlanffy growth model. This is followed by our declaration of prior probability distributions. Stan will automatically assign uniform prior probabilities if a prior is not specified here. I don’t recommend letting Stan declare uniform priors by default. Always be explicit in the prior probability distribution in your model and assign prior probability distributions that are suitable for the parameter and defensible against a skeptical audience. A future post will dive deeper into setting and selecting informative vs non-informative prior probability distribution.</p>
+<p>The final part of the model block is the likelihood. This will include a for loop that will iterate through each of the observed values and include the model. Following this is the <code>normal()</code> distribution which specifies the distribution of our observations and is parameterized with the mean <code>y_mean</code> and standard deviation <code>sigma_y</code>. This last line can be indexed over individuals and included in the for loop. Or vectorized outside the loop, as it is written here.</p>
+<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] ypred; <span class="co">//variable used in the model block only</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">//The next three lines of code specify reference prior probability distributions.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  sigma_y ~ student_t(<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">40</span>);  </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  Linf ~ normal(<span class="dv">0</span>, <span class="dv">1000</span>);</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  k ~ normal(<span class="dv">0</span>, <span class="dv">100</span>);</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  t0 ~ normal(<span class="dv">0</span>, <span class="dv">10</span>); </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// calculate likelihood of data</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N){</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    y_mean[i]= Linf * (<span class="dv">1</span>-exp(-(k * (age[i]-t0) )) );</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  tl~normal(y_mean, sigma_y);</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The last block needed is a generated quantities block. This block is used to calculate derived variables, posterior predictions, and to generate model predictions. I will use it here to generate a vector named <code>y_rep</code> of length <code>N</code> that will hold individual predicted observations. <code>y_rep</code> is the posterior predicted values of total length that will be used to plot the observed and model predicted total length. The posterior predicted distribution is generated using the <code>normal_rng</code> function which generates a random value from the normal distribution based on a mean (the model) and standard deviation. The posterior predicted distribution generated in in a for loop to iterate through each observed individual.</p>
+<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span>{</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//the next four lines of code generate predicted values to use for inspecting model fit</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y_rep;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N){</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    y_rep[i] = normal_rng(Linf * (<span class="dv">1</span>-exp(-(k * (age[i]-t0) )) ) ,sigma_y);</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Before sending the model to <code>rstan</code>, the full model code needs to be saved into a file with the .stan extension. For example “Walleye_lvb.stan”. The .stan file also has to be saved in the working directory.</p>
+<p>Now it is time to bundle all the pieces together.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vb</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="fl">0.3</span>,<span class="sc">-</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] 195.0187</code></pre>
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Compile and fit model using Stan </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>LVBfit <span class="ot">&lt;-</span> <span class="fu">stan</span>(<span class="at">file=</span><span class="st">'Walleye_lvb.stan'</span>, <span class="co"># The file containing the Stan model</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data=</span>dataList,          <span class="co"># a list containing the data</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">init=</span>initsLst,          <span class="co"># a list containing initial values </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">chains=</span><span class="dv">3</span>,               <span class="co"># number of chains, typically 3 to 4</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">cores=</span><span class="dv">3</span>,                <span class="co"># number of cores for multi-core processing;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                        <span class="co">#  Typically set to match number of chains</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">iter=</span><span class="dv">3000</span> ,             <span class="co"># number of iterations</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">warmup=</span><span class="dv">1000</span> ,           <span class="co"># number of warm up steps to discard</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">control=</span><span class="fu">list</span>(<span class="at">adapt_delta=</span><span class="fl">0.80</span>,  <span class="co"># Adjustments to the algorithm</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max_treedepth=</span><span class="dv">15</span>)) <span class="co"># to improve convergence.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">300</span>,<span class="fl">0.3</span>,<span class="sc">-</span><span class="fl">0.5</span>) </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vb</span>(<span class="dv">3</span>,tmp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] 195.0187</code></pre>
-</div>
-</div>
-<p>Reasonable starting values for the optimization algorithm may be obtained with <code>vbStarts()</code>, where the first argument is a formula of the form <code>lengths~ages</code> where <code>lengths</code> and <code>ages</code> are replaced with the actual variable names that contain the observed lengths and ages, respectively, and <code>data=</code> is set to the data frame that contains those variables.</p>
+</section>
+<section id="assess-convergence" class="level1">
+<h1>Assess convergence</h1>
+<p>Let’s inspect convergence and how well the model fits the data. The first thing to do is to examine the trace plots and histograms of the important model parameters.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>( sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>wf14T) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(LVBfit, <span class="at">plotfun=</span><span class="st">"trace"</span>, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"sigma_y"</span>,<span class="st">"Linf"</span>,<span class="st">"k"</span>,<span class="st">"t0"</span>), <span class="at">inc_warmup=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="528"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(LVBfit, <span class="at">plotfun=</span><span class="st">"hist"</span>, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"sigma_y"</span>,<span class="st">"Linf"</span>,<span class="st">"k"</span>,<span class="st">"t0"</span>), <span class="at">inc_warmup=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="528"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The chains appear to have mixed well for all parameters and reached a stationary posterior. This is seen by a unimodal distribution in the histograms and caterpillar plots for each parameter appear “on top” of each other. We can move on to assessing how well the model fits the data using a posterior predictive check.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>y_rep <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(LVBfit, <span class="at">pars=</span><span class="st">"y_rep"</span>) <span class="co">#Extract the posterior predicted observations</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ppc_dens_overlay</span>(wf14T<span class="sc">$</span>tl, y_rep[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ])  <span class="co">#Density plot of y and y_rep</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="336"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The y_rep curves do a good job at covering our observations and we can conclude the model does a sufficient job at representing the data. Now we can move on to look at individual parameters.</p>
+</section>
+<section id="posterior-summary" class="level1">
+<h1>Posterior summary</h1>
+<p>Because we included a generated quantities block and are calculating the posterior predicted distribution, our output if very long. The <code>summary(LVBfit)</code> command would return a vary long summary of all the parameters and individual predicted total lengths. Instead, I use the <code>print()</code> function here and only specify the parameters of interest.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LVBfit, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"sigma_y"</span>,<span class="st">"Linf"</span>,<span class="st">"k"</span>,<span class="st">"t0"</span>), <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.5</span>,<span class="fl">0.975</span>),<span class="at">digits_summary=</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|  $Linf
-#R|  [1] 645.2099
+<pre class="output" data-code-line-numbers="nil"><code>#R|  Inference for Stan model: anon_model.
+#R|  3 chains, each with iter=3000; warmup=1000; thin=1; 
+#R|  post-warmup draws per chain=2000, total post-warmup draws=6000.
 #R|  
-#R|  $K
-#R|  [1] 0.3482598
+#R|                mean  se_mean       sd       2.5%        50%      97.5% n_eff
+#R|  sigma_y  18.375510 0.015013 0.728324  16.991915  18.356850  19.863256  2354
+#R|  Linf    648.525800 0.245133 9.889823 629.908299 648.309777 668.551357  1628
+#R|  k         0.361858 0.000531 0.020774   0.321784   0.361293   0.403543  1529
+#R|  t0       -1.286204 0.002160 0.086174  -1.459206  -1.284131  -1.121483  1592
+#R|              Rhat
+#R|  sigma_y 1.002453
+#R|  Linf    1.008203
+#R|  k       1.008982
+#R|  t0      1.007506
 #R|  
-#R|  $t0
-#R|  [1] -1.548925</code></pre>
+#R|  Samples were drawn using NUTS(diag_e) at Sun Feb  4 20:31:13 2024.
+#R|  For each parameter, n_eff is a crude measure of effective sample size,
+#R|  and Rhat is the potential scale reduction factor on split chains (at 
+#R|  convergence, Rhat=1).</code></pre>
 </div>
 </div>
-<p>The <code>nls()</code> function is typically used to estimate parameters of the VBGF from observed data. The first argument is a formula that has <code>lengths</code> on the left-hand-side and the VBGF function created above on the right-hand-side. The VBGF function has the <code>ages</code> variable as its first argument and then <code>Linf</code>, <code>K</code>, and <code>t0</code> as the remaining arguments (just as they appear here). Again, the data frame with the observed lengths and ages is given to <code>data=</code> and the starting values derived above are given to <code>start=</code>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fit0 <span class="ot">&lt;-</span> <span class="fu">nls</span>(tl<span class="sc">~</span><span class="fu">vb</span>(age,Linf,K,t0),<span class="at">data=</span>wf14T,<span class="at">start=</span>sv0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="page-columns page-full"><p>The parameter estimates and confidence intervals are extracted from the saved <code>nls()</code> object with <code>coef()</code> and <code>confint()</code>, respectively.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> They are column-bound together here for aesthetic reasons.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;This <code>confint()</code> requires the <code>MASS</code> package which is usually loaded automatically with base R.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">Est=</span><span class="fu">coef</span>(fit0),<span class="fu">confint</span>(fit0))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|              Est        2.5%       97.5%
-#R|  Linf 648.208364 629.6754671 669.0341553
-#R|  K      0.361540   0.3223327   0.4043957
-#R|  t0    -1.283632  -1.4592315  -1.1207317</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
+<p>The summary table provides the point estimates, 95% credible intervals, Rhat values, and n_eff. The Rhat values are another check to assess model convergence. It is generally accepted that you want Rhat values less than 1.10. The n_eff is also used to assess convergence. n_eff refers to “Effective Sample Size”. Because of the nature of MCMC methods, each successive sample from the posterior will typically be autocorrelated within a chain. Autocorrelation within the chains can increase uncertainty in the estimates. One way to assessing how much autocorrelation is present and big of an effect it might be, is with the “Effective Sample Size”. ESS represents the number of independent draws from the posterior. The ESS will be lower than the actual number of draws and you are looking for a high ESS. It has been recommended that an ESS of 1,000 for each parameter is sufficient <span class="citation" data-cites="burkner_2017">Bürkner (<a href="#ref-burkner_2017" role="doc-biblioref">2017</a>)</span>.</p>
 </section>
-<section id="model-fit-using-stat_function" class="level1 page-columns page-full">
-<h1>Model Fit Using <code>stat_function()</code></h1>
-<div class="page-columns page-full"><p>Here all “layers” of the plot will use the same data; thus, <code>data=</code> and the <code>aes()</code>thetic mappings are defined in <code>ggplot()</code>. Observed lengths and ages are added to the plot with <code>geom_point()</code>. The points in <a href="#fig-vbfit1">Figure&nbsp;1</a> were made slightly larger than the default (with <code>size=</code>) and also with a fairly low transparency value to handle considerable over-plotting. <code>scale_y_continuous()</code> and <code>scale_x_continuous()</code> control aspects of y- and x-axes, respectively – labels for axes are given in <code>name=</code>, minimum and maximum limits for the axis are in <code>limits=</code>, and specific major breaks for the axis are in <code>breaks=</code>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Finally, the fitted model line is added to the plot with <code>stat_function()</code> with the VBGF function created above in <code>fun=</code> and a list of arguments to this function in <code>args=</code>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> In <a href="#fig-vbfit1">Figure&nbsp;1</a> I made the model line a little wider than the default. Finally the <code>theme()</code> was modified to remove the minor grid lines from both axes.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;<code>seq(0,700,100)</code> makes a vector of numbers from 0 to 700 in increments of 100 and <code>0:11</code> makes a vector of integers from 0 to 11.</p></li><li id="fn7"><p><sup>7</sup>&nbsp;The usage here exploits the fact that all three parameters of the VBGF can be given in the first parameter argument, <code>Linf=</code>.</p></li><li id="fn8"><p><sup>8</sup>&nbsp;Thus the gridlines only appear for labelled axis breaks.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">700</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>vb,<span class="at">args=</span><span class="fu">list</span>(<span class="at">Linf=</span><span class="fu">coef</span>(fit0)),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit1-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;1: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-<div class="page-columns page-full"><p>The model line can be displayed outside the range of observed ages by including minimum and maximum values in <code>xlim=</code> over which the function in <code>fun=</code> will be evaluated. In <a href="#fig-vbfit1a">Figure&nbsp;2</a> I add a dashed line for the model that includes evaluation at ages outside the observed range of ages (first <code>stat_function()</code>) and then plotted the model line for observed ages on top of that (second <code>stat_function()</code>). This gives the impression of using a dashed line only for the ages that would be extrapolated.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;I would usually change the axis expansion factors here to clean this plot up a bit.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>vb,<span class="at">args=</span><span class="fu">list</span>(<span class="at">Linf=</span><span class="fu">coef</span>(fit0)),</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>vb,<span class="at">args=</span><span class="fu">list</span>(<span class="at">Linf=</span><span class="fu">coef</span>(fit0)),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit1a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit1a-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;2: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="model-fit-using-geom_smooth" class="level1 page-columns page-full">
-<h1>Model Fit Using <code>geom_smooth()</code></h1>
-<div class="page-columns page-full"><p><code>geom_smooth()</code> can use <code>nls()</code> to fit the VBGF “behind the scenes” and then add the resultant model line to the plot. For this purpose <code>geom_smooth()</code> requires <code>method="nls"</code> and <code>se=FALSE</code>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> In addition, arguments for fitting the VBGF required by <code>nls()</code> must be in a list given to <code>methods.args=</code>. Minimum required arguments for fitting the VBGF are the VBGF <code>formula=</code> and <code>start=</code>ing values as shown for <code>nls()</code> above. <a href="#fig-vbfit2">Figure&nbsp;3</a> uses <code>geom_smooth()</code> in this way to reproduce <a href="#fig-vbfit1">Figure&nbsp;1</a>.</p><div class="no-row-height column-margin column-container"><li id="fn10"><p><sup>10</sup>&nbsp;<code>se=FALSE</code> is required because this argument is not implemented in <code>nls()</code>.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl)) <span class="sc">+</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"nls"</span>,<span class="at">se=</span><span class="cn">FALSE</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">formula=</span>y<span class="sc">~</span><span class="fu">vb</span>(x,Linf,K,t0),<span class="at">start=</span>sv0),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit2-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;3: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="model-fit-from-predicted-values" class="level1 page-columns page-full">
-<h1>Model Fit from Predicted Values</h1>
-<div class="page-columns page-full"><p><a href="#fig-vbfit1">Figure&nbsp;1</a> and <a href="#fig-vbfit1a">Figure&nbsp;2</a> can also be constructed from lengths predicted at a variety of ages “outside” of any <code>ggplot()</code> layers. I find it easier when using this method to first create a vector of ages over which the fitted model will be evaluated is then constructed. In this case the ages extend beyond the observed range of ages. The <code>seq()</code>uence produced here will have 101 age values between -1 and 12.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></li></div></div>
+<section id="posterior-plotting" class="level1">
+<h1>Posterior plotting</h1>
+<p>The final part is to create a figure with observed and predicted values. This code block is a little different than what was used with brms. Instead of <code>add_predicted_draw()</code>, I have to combine the predicted draws manually then convert them from wide to long.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>,<span class="at">length.out=</span><span class="dv">101</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="page-columns page-full"><p>The mean length at each of these ages is predicted with <code>predict()</code>, where the age vector just created is set equal to the name of the age variable in the <code>nls()</code> object inside of <code>data.frame()</code>. The vector of ages and predicted mean lengths are put into a data frame for plotting below.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Here the data frame is called <code>preds</code> and it has two variables named <code>age</code> and <code>fit</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age=</span>ages,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fit=</span><span class="fu">predict</span>(fit0,<span class="fu">data.frame</span>(<span class="at">age=</span>ages)))</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|        age       fit
-#R|  1   -1.00  63.17547
-#R|  2   -0.87  90.03596
-#R|  3   -0.74 115.66322
-#R|  99  11.74 642.36300
-#R|  100 11.87 642.63138
-#R|  101 12.00 642.88743</code></pre>
-</div>
-</div>
-<p>&nbsp;</p>
-<div class="page-columns page-full"><p>These predicted mean lengths-at-age are then used to add a fitted model line to a plot of observed lengths-at-age with <code>geom_line()</code>. However, because the observed and predicted data are in different data frames, the <code>data=</code> and mapped <code>aes()</code>thetics are declared within the appropriate <code>geom</code>s rather than within <code>ggplot()</code>. For example, <code>geom_point()</code> is used below to add the observed data to the plot and <code>geom_line()</code> is used below to add the modeled line. Note below that separate <code>geom_line()</code>s are used to show the modeled line over extrapolated and observed ages.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> The results in <a href="#fig-vbfit3a">Figure&nbsp;4</a> reproduce <a href="#fig-vbfit1a">Figure&nbsp;2</a>.</p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;Also note the use of <code>filter()</code> to reduce the predicted lengths-at-age to the observed ages.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,age<span class="sc">&gt;=</span><span class="dv">0</span>,age<span class="sc">&lt;=</span><span class="dv">11</span>),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit3a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit3a-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;4: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.</figcaption>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">tl=</span>wf14T<span class="sc">$</span>tl, <span class="at">age=</span>wf14T<span class="sc">$</span>age,<span class="fu">data.frame</span>(<span class="fu">t</span>(y_rep))) <span class="sc">%&gt;%</span>   <span class="co"># Combine observed data with predictions</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">pivot_longer</span>(<span class="at">col=</span><span class="sc">-</span><span class="fu">c</span>(tl,age),<span class="at">values_to=</span><span class="st">".prediction"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>tl)) <span class="sc">+</span>  </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y=</span>.prediction), <span class="at">.width=</span><span class="fu">c</span>(.<span class="dv">95</span>, .<span class="dv">80</span>, .<span class="dv">50</span>),  <span class="co"># regression line and CI</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T, <span class="at">colour=</span><span class="st">"darkblue"</span>, <span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span>   <span class="co"># raw data</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Greys"</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Total length (mm)</span><span class="sc">\n</span><span class="st">"</span>) <span class="sc">+</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Age (years)"</span>) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.85</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="336"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>&nbsp;</p>
-</section>
-<section id="model-fit-with-confidence-band" class="level1 page-columns page-full">
-<h1>Model Fit with Confidence Band</h1>
-<p>The main reason for introducing the idea of constructing a graphic from predicted values is that it allows for the opportunity to add confidence and prediction bands around the fitted model line (<a href="#fig-vbfit4a">Figure&nbsp;5</a>).</p>
-<div class="page-columns page-full"><p>Creation of this plot requires modifying the data frame of predicted mean lengths at age with confidence (or prediction) intervals for the mean length at each age. As mentioned previously, constructing these intervals is not straightforward with non-linear models. However, confidence (or prediction) intervals can be estimated with Taylor series approximations as implemented in <code>predFit()</code> of <code>investr</code>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> <code>predFit()</code> requires the saved <code>nls()</code> object as its first argument, a data frame of ages over which to make predictions as the second argument, and either <code>interval="confidence"</code> for confidence intervals or <code>interval="prediction"</code> for prediction intervals.</p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;Use of <code>::</code> here allows <code>predFit()</code> from <code>investr</code> to be used without loading all of <code>investr</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age=</span>ages,</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                    investr<span class="sc">::</span><span class="fu">predFit</span>(fit0,<span class="fu">data.frame</span>(<span class="at">age=</span>ages),</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">interval=</span><span class="st">"confidence"</span>))</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|        age       fit       lwr       upr
-#R|  1   -1.00  63.17547  32.40761  93.94334
-#R|  2   -0.87  90.03596  62.76575 117.30618
-#R|  3   -0.74 115.66322  91.59342 139.73301
-#R|  99  11.74 642.36300 625.59243 659.13357
-#R|  100 11.87 642.63138 625.76065 659.50210
-#R|  101 12.00 642.88743 625.91982 659.85504</code></pre>
-</div>
-</div>
-<div class="page-columns page-full"><p>A confidence band for mean lengths at age is added to the plot with <code>geom_ribbon()</code> where the lower part of the ribbon is at the lower confidence values (i.e., <code>ymin=lwr</code>) and the upper part is at the upper confidence value (i.e., <code>ymax=upr</code>).<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> <code>fill=</code> gives the color of the enclosed ribbon.</p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;Add <code>geom_ribbon()</code> first so that it is behind the points and model lines.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr),<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">y=</span>tl,<span class="at">x=</span>age),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,age<span class="sc">&gt;=</span><span class="dv">0</span>,age<span class="sc">&lt;=</span><span class="dv">11</span>),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit4a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit4a-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;5: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>&nbsp;</p>
-</section>
-<section id="add-equation-to-plot" class="level1 page-columns page-full">
-<h1>Add Equation to Plot</h1>
-<p>The following function can be used to extract the model coefficients from an <code>nls()</code> object and place them into a “plotmath” format to be added to the <code>ggplot</code> graph.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>makeVBEqnLabel <span class="ot">&lt;-</span> <span class="cf">function</span>(fit,<span class="at">digits=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>)) {</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Isolate coefficients (and control decimals)</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  cfs <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  Linf <span class="ot">&lt;-</span> <span class="fu">formatC</span>(cfs[[<span class="st">"Linf"</span>]],<span class="at">format=</span><span class="st">"f"</span>,<span class="at">digits=</span>digits[<span class="dv">1</span>])</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  K <span class="ot">&lt;-</span> <span class="fu">formatC</span>(cfs[[<span class="st">"K"</span>]],<span class="at">format=</span><span class="st">"f"</span>,<span class="at">digits=</span>digits[<span class="dv">2</span>])</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Handle t0 differently because of minus in the equation</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  t0 <span class="ot">&lt;-</span> cfs[[<span class="st">"t0"</span>]]</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  sgn <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(t0<span class="sc">&lt;</span><span class="dv">0</span>,<span class="st">"+"</span>,<span class="st">"-"</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  t0 <span class="ot">&lt;-</span> <span class="fu">formatC</span>(<span class="fu">abs</span>(t0),<span class="at">format=</span><span class="st">"f"</span>,<span class="at">digits=</span>digits[<span class="dv">3</span>])</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Put together and return</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"TL=='"</span>,Linf,<span class="st">"'~bgroup('[',1-e^{-'"</span>,K,<span class="st">"'~(age"</span>,sgn,<span class="st">"'"</span>,t0,<span class="st">"')},']')"</span>)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>&nbsp;</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The function above was modified on 14-Jun-23 to correct an issue with <code>plotmath</code> dropping trailing zeroes in the rounded coefficient values. For example a K of 0.250 would be printed as 0.25 when the string returned from <code>makeVBEqnLabel()</code> was parsed in <code>annotate()</code> below. The correction follows the suggestion in <a href="https://stackoverflow.com/questions/15397789/keeping-trailing-zeroes-with-plotmath">this StackOverflow post</a>.</p>
-</div>
-</div>
-<p>&nbsp;</p>
-<div class="page-columns page-full"><p>The object returned from this function can be added to the <code>ggplot</code> graph with <code>annotate()</code> as shown below.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn16"><p><sup>16</sup>&nbsp;The <code>x=</code>, <code>y=</code>, <code>hjust=</code>, and <code>vjust=</code> arguments are used to position and justify the text and may take some trial-and-error to get what you want.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr),<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">y=</span>tl,<span class="at">x=</span>age),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span><span class="fu">filter</span>(preds,age<span class="sc">&gt;=</span><span class="dv">0</span>,age<span class="sc">&lt;=</span><span class="dv">11</span>),<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"text"</span>,<span class="at">label=</span><span class="fu">makeVBEqnLabel</span>(fit0),<span class="at">parse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">size=</span><span class="dv">4</span>,<span class="at">x=</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="sc">-</span><span class="cn">Inf</span>,<span class="at">hjust=</span><span class="fl">1.1</span>,<span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit4-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The large parentheses created by <code>bgroup</code> in the equation will not render properly under Windows using R v4.2.2. I posted about this <a href="https://stackoverflow.com/questions/74738827/bgroup-does-not-render-properly-on-ggplot">on StackOverlow</a> and was told that it was a Windows-only bug in v4.2.2. It has been fixed in v4.2.3 under which this post was rendered.</p>
-</div>
-</div>
+<p>The figure above shows the observed data in blue circles, the prediction line as a solid black line, and the posterior prediction intervals (0.50, 0.80, and 0.95) in different shades of gray.</p>
 <div class="cell" data-layout-align="center">
 
 </div>
@@ -663,24 +602,26 @@ Warning
 
 
 </section>
-
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry" role="listitem">
-Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
+<div id="ref-burkner_2017" class="csl-entry" role="listitem">
+Bürkner, P.-C. 2017. <a href="https://doi.org/10.18637/jss.v080.i01">Brms: <span>An R Package</span> for <span>Bayesian Multilevel Models Using Stan</span></a>. Journal of Statistical Software 80:1–28.
 </div>
-<div id="ref-ogleetal_2017" class="csl-entry" role="listitem">
-Ogle, D. H., T. O. Brenden, and J. L. McCormick. 2017. <a href="https://derekogle.com/AGF/">Growth <span>Estimation</span>: <span>Growth Models</span> and <span>Statistical Inference</span></a>. Pages 265–359 <em>in</em> M. C. Quist and D. A. Isermann, editors. Age and <span>Growth</span> of <span>Fishes</span>: <span>Principles</span> and <span>Techniques</span>. <span>American Fisheries Society</span>, <span>Bethesda, MD</span>.
+<div id="ref-dolljacquemin_2018" class="csl-entry" role="listitem">
+Doll, J. C., and S. J. Jacquemin. 2018. <a href="https://doi.org/10.1002/fsh.10038">Introduction to <span>Bayesian</span> modeling and inference for fisheries scientists</a>. Fisheries 43(3):152–161.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2019,
-  author = {H. Ogle, Derek},
-  title = {Von {Bertalanffy} {Growth} {Plots} {I}},
-  date = {2019-12-31},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2019-12-31_vonB_plots_1},
+<div id="ref-dorazio_2016" class="csl-entry" role="listitem">
+Dorazio, R. M. 2016. <a href="https://doi.org/10.1007/s10144-015-0503-4">Bayesian data analysis in population ecology: Motivations, methods, and benefits</a>. Population Ecology 58:31–44.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{doll2024,
+  author = {Doll, Jason},
+  title = {Bayesian {LVB} {II} - Rstan},
+  date = {2024-02-06},
+  url = {https://fishr-core-team.github.io/fishR//blog/posts/2024-2-6_LVB_Stan},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2019" class="csl-entry quarto-appendix-citeas" role="listitem">
-H. Ogle, D. 2019, December 31. von Bertalanffy Growth Plots I. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2019-12-31_vonB_plots_1">https://fishr-core-team.github.io/fishR//blog/posts/2019-12-31_vonB_plots_1</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-doll2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Doll, J. 2024, February 6. Bayesian LVB II - rstan. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2024-2-6_LVB_Stan">https://fishr-core-team.github.io/fishR//blog/posts/2024-2-6_LVB_Stan</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
