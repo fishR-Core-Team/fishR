@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,9 +19,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -48,43 +49,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -106,6 +77,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -122,7 +95,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
@@ -131,7 +105,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../../helpers/styles.css">
 <meta property="og:title" content="fishR - Nested X-Axis Labels">
 <meta property="og:description" content="Creating nested labels for the x-axis in ggplot2.">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog\posts\2023-3-30_Nested_xaxis\preview.png">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-30_Nested_xaxis/preview.png">
 <meta property="og:site-name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
@@ -148,6 +122,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_reference" content="citation_title=Relative Weight (Wr) Status and Current Use in Fisheries Assessment and Management;,citation_author=Brian Blackwell;,citation_author=Michael Brown;,citation_author=David Willis;,citation_publication_date=2000-01-01;,citation_cover_date=2000-01-01;,citation_year=2000;,citation_fulltext_html_url=https://www.researchgate.net/publication/248945465_Relative_Weight_Wr_Status_and_Current_Use_in_Fisheries_Assessment_and_Management;,citation_doi=10.1080/10641260091129161;,citation_volume=8;,citation_journal_title=Reviews in Fisheries Science;,citation_journal_abbrev=REV FISH SCI;">
 <meta name="citation_reference" content="citation_title=Statistical methods for assessing agreement between two methods of clinical measurement;,citation_author=J Martin Bland;,citation_author=Douglas G Altman;,citation_publication_date=1986;,citation_cover_date=1986;,citation_year=1986;,citation_fulltext_html_url=https://www-users.york.ac.uk/~mb55/meas/ba.pdf;,citation_volume=i;,citation_language=en-US;,citation_journal_title=Lancet;">
 <meta name="citation_reference" content="citation_title=Growth, reproduction, mortality, distribution, and biomass of Freshwater Drum in Lake Erie;,citation_author=Michael T. Bur;,citation_publication_date=1984-01-01;,citation_cover_date=1984-01-01;,citation_year=1984;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133084718065;,citation_doi=10.1016/S0380-1330(84)71806-5;,citation_issn=0380-1330;,citation_volume=10;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
+<meta name="citation_reference" content="citation_title=Brms: An R Package for Bayesian Multilevel Models Using Stan;,citation_abstract=The brms package implements Bayesian multilevel models in R using the probabilistic programming language Stan. A wide range of distributions and link functions are supported, allowing users to fit - among others - linear, robust linear, binomial, Poisson, survival, ordinal, zero-inflated, hurdle, and even non-linear models all in a multilevel context. Further modeling options include autocorrelation of the response variable, user defined covariance structures, censored data, as well as meta-analytic standard errors. Prior specifications are flexible and explicitly encourage users to apply prior distributions that actually reflect their beliefs. In addition, model fit can easily be assessed and compared with the Watanabe-Akaike information criterion and leave-one-out cross-validation.;,citation_author=Paul-Christian Bürkner;,citation_publication_date=2017-08-29;,citation_cover_date=2017-08-29;,citation_year=2017;,citation_fulltext_html_url=https://doi.org/10.18637/jss.v080.i01;,citation_doi=10.18637/jss.v080.i01;,citation_issn=1548-7660;,citation_volume=80;,citation_language=en-US;,citation_journal_title=Journal of Statistical Software;">
 <meta name="citation_reference" content="citation_title=Graphical and statistical methods for determining the consistency of age determinations;,citation_author=Steven Campana;,citation_author=M. Annand;,citation_author=James McMillan;,citation_publication_date=1995-01-01;,citation_cover_date=1995-01-01;,citation_year=1995;,citation_fulltext_html_url=https://www.researchgate.net/publication/254328508_Graphical_and_Statistical_Methods_for_Determining_the_Consistency_of_Age_Determinations;,citation_doi=10.1577/1548-8659(1995)124&amp;amp;amp;lt;0131:GASMFD&amp;gt;2.3.CO;2;,citation_volume=124;,citation_journal_title=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;,citation_journal_abbrev=Transactions of The American Fisheries Society - TRANS AMER FISH SOC;">
 <meta name="citation_reference" content="citation_title=A novel “triple drawdown” method highlights deficiencies in invasive alien crayfish survey and control techniques;,citation_author=Daniel D. A. Chadwick;,citation_author=Eleri G. Pritchard;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Michael A. Chadwick;,citation_author=Lawrence J. B. Eagle;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/1365-2664.13758;,citation_doi=10.1111/1365-2664.13758;,citation_issn=1365-2664;,citation_volume=58;,citation_language=en-US;,citation_journal_title=Journal of Applied Ecology;">
 <meta name="citation_reference" content="citation_title=Warmwater Temperatures (≥ 20°C) as a Threat to Pacific Lamprey: Implications of Climate Change;,citation_author=Benjamin J. Clemens;,citation_publication_date=2022-07-07;,citation_cover_date=2022-07-07;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-087;,citation_issue=2;,citation_doi=10.3996/JFWM-21-087;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
@@ -155,6 +130,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_reference" content="citation_title=Recovery of an offshore Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus Namaycush&amp;lt;/i&amp;gt;) population in eastern Lake Superior;,citation_author=Gary L. Curtis;,citation_publication_date=1990-01-01;,citation_cover_date=1990-01-01;,citation_year=1990;,citation_fulltext_html_url=https://www.sciencedirect.com/science/article/pii/S0380133090714219;,citation_issue=2;,citation_doi=10.1016/S0380-1330(90)71421-9;,citation_issn=0380-1330;,citation_volume=16;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
 <meta name="citation_reference" content="citation_title=Evaluating the physical removal of Ruffe (&amp;amp;amp;lt;i&amp;gt;Gymnocephalus&amp;lt;/i&amp;gt; <i>cernuus</i>) with bottom trawling;,citation_author=Gary D. Czypinski;,citation_author=Derek H. Ogle;,citation_publication_date=2011-09;,citation_cover_date=2011-09;,citation_year=2011;,citation_fulltext_html_url=https://derekogle.com/resources/pubs/CzypinskiOgle_2011.pdf;,citation_doi=10.1080/02705060.2011.569336;,citation_issn=0270-5060, 2156-6941;,citation_volume=26;,citation_language=en-US;,citation_journal_title=Journal of Freshwater Ecology;,citation_journal_abbrev=Journal of Freshwater Ecology;">
 <meta name="citation_reference" content="citation_title=Energy storage, growth, and maturation of Yellow Perch from different locations in Saginaw Bay, Michigan;,citation_author=James S. Diana;,citation_author=Ronald Salz;,citation_publication_date=1990-11;,citation_cover_date=1990-11;,citation_year=1990;,citation_fulltext_html_url=https://deepblue.lib.umich.edu/bitstream/handle/2027.42/142193/tafs0976.pdf?sequence=1;,citation_volume=119;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
+<meta name="citation_reference" content="citation_title=Introduction to Bayesian modeling and inference for fisheries scientists;,citation_abstract=Bayesian inference is everywhere, from one of the most recent journal articles in Transactions of the American Fisheries Society to the decision-making process you undergo when selecting a new fishing spot. Bayesian inference is the only statistical paradigm that synthesizes prior knowledge with newly collected data to facilitate a more informed decision—and it is being used at an increasing rate in almost every area of our profession. Thus, the goal of this article is to provide fisheries managers, educators, and students with a conceptual introduction to Bayesian inference. We do not assume that the reader is familiar with Bayesian inference; however, we do assume that the reader has completed an introductory biostatistics course. To this end, we review the conceptual foundation of Bayesian inference without the use of complex equations; present one example of using Bayesian inference to compare relative weight between two time periods; present one example of using prior information about von Bertalanffy growth parameters to improve parameter estimation; and, finally, suggest literature that can help to develop the skills needed to use Bayesian inference in your own management or research program.;,citation_author=Jason C. Doll;,citation_author=Stephen J. Jacquemin;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/fsh.10038;,citation_issue=3;,citation_doi=10.1002/fsh.10038;,citation_issn=1548-8446;,citation_volume=43;,citation_language=en-US;,citation_journal_title=Fisheries;">
+<meta name="citation_reference" content="citation_title=Bayesian data analysis in population ecology: Motivations, methods, and benefits;,citation_abstract=During the 20th century ecologists largely relied on the frequentist system of inference for the analysis of their data. However, in the past few decades ecologists have become increasingly interested in the use of Bayesian methods of data analysis. In this article I provide guidance to ecologists who would like to decide whether Bayesian methods can be used to improve their conclusions and predictions. I begin by providing a concise summary of Bayesian methods of analysis, including a comparison of differences between Bayesian and frequentist approaches to inference when using hierarchical models. Next I provide a list of problems where Bayesian methods of analysis may arguably be preferred over frequentist methods. These problems are usually encountered in analyses based on hierarchical models of data. I describe the essentials required for applying modern methods of Bayesian computation, and I use real-world examples to illustrate these methods. I conclude by summarizing what I perceive to be the main strengths and weaknesses of using Bayesian methods to solve ecological inference problems.;,citation_author=Robert M. Dorazio;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1007/s10144-015-0503-4;,citation_doi=10.1007/s10144-015-0503-4;,citation_issn=1438-390X;,citation_volume=58;,citation_language=en-US;,citation_journal_title=Population Ecology;">
 <meta name="citation_reference" content="citation_title=Understanding Bland Altman analysis;,citation_author=Davide Giavarina;,citation_publication_date=2015-06-05;,citation_cover_date=2015-06-05;,citation_year=2015;,citation_fulltext_html_url=https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4470095/;,citation_issue=2;,citation_doi=10.11613/BM.2015.015;,citation_issn=1330-0962;,citation_volume=25;,citation_journal_title=Biochemia Medica;,citation_journal_abbrev=Biochem Med (Zagreb);">
 <meta name="citation_reference" content="citation_title=Creating figures in r that meet the afs style guide: Standardization and supporting script;,citation_author=Hayley C. Glassic;,citation_author=Kurt C. Heim;,citation_author=Christopher S. Guy;,citation_publication_date=2019-11;,citation_cover_date=2019-11;,citation_year=2019;,citation_fulltext_html_url=http://www.mtcfru.org/wp-content/uploads/2021/03/Glassic_et_al_2019_figures_R.pdf;,citation_volume=44;,citation_language=en-US;,citation_journal_title=Fisheries;,citation_journal_abbrev=Fisheries;">
 <meta name="citation_reference" content="citation_title=Factors affecting recruitment of Walleyes in Escanaba Lake, Wisconsin, 1958–1996;,citation_author=Michael Hansen;,citation_author=Michael Bozek;,citation_author=Raimant Justine;,citation_author=Steven Newman;,citation_author=Michael Staggs;,citation_publication_date=1998-11-01;,citation_cover_date=1998-11-01;,citation_year=1998;,citation_fulltext_html_url=https://www.researchgate.net/profile/Michael-Hansen-44/publication/228588197_Factors_Affecting_Recruitment_of_Walleyes_in_Escanaba_Lake_Wisconsin_1958-1996/links/54638b9d0cf2c0c6aec4f0b0/Factors-Affecting-Recruitment-of-Walleyes-in-Escanaba-Lake-Wisconsin-1958-1996.pdf;,citation_volume=18;,citation_journal_title=North American Journal of Fisheries Management;,citation_journal_abbrev=North American Journal of Fisheries Management;">
@@ -169,14 +146,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_reference" content="citation_title=Generalizing trends in upstream american eel movements at four east coast hydropower projects;,citation_author=Kevin Mack;,citation_author=Twyla Cheatwood;,citation_publication_date=2022-12-05;,citation_cover_date=2022-12-05;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-066;,citation_issue=2;,citation_doi=10.3996/JFWM-21-066;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Diagnosis of paired age agreement: A simulation of accuracy and precision effects;,citation_author=Richard S. McBride;,citation_publication_date=2015-10-01;,citation_cover_date=2015-10-01;,citation_year=2015;,citation_fulltext_html_url=https://doi.org/10.1093/icesjms/fsv047;,citation_issue=7;,citation_doi=10.1093/icesjms/fsv047;,citation_issn=1054-3139;,citation_volume=72;,citation_journal_title=ICES Journal of Marine Science;,citation_journal_abbrev=ICES Journal of Marine Science;">
 <meta name="citation_reference" content="citation_title=Population dynamics of Yellowstone Cutthroat Trout in Henrys Lake, Idaho;,citation_author=Darcy K. McCarrick;,citation_author=Jeffrey C. Dillon;,citation_author=Brett High;,citation_author=Michael C. Quist;,citation_publication_date=2022-03-25;,citation_cover_date=2022-03-25;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-074;,citation_issue=1;,citation_doi=10.3996/JFWM-21-074;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
-<meta name="citation_reference" content="citation_title=An Evaluation of Goldeye Life History Characteristics in Two Kansas Reservoirs;,citation_author=Brett T. Miller;,citation_author=Ernesto Flores;,citation_author=D. Scott Waters;,citation_author=Ben C. Neely;,citation_publication_date=2022-02-02;,citation_cover_date=2022-02-02;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-090;,citation_issue=1;,citation_doi=10.3996/JFWM-21-090;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=An evaluation of Goldeye life history characteristics in two Kansas reservoirs;,citation_author=Brett T. Miller;,citation_author=Ernesto Flores;,citation_author=D. Scott Waters;,citation_author=Ben C. Neely;,citation_publication_date=2022-02-02;,citation_cover_date=2022-02-02;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-090;,citation_issue=1;,citation_doi=10.3996/JFWM-21-090;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Analysis and comparison of fish growth from small samples of length-at-age data: Detection of sexual dimorphism in Eurasian Perch as an example;,citation_author=W Mooij;,citation_author=Jules Rooij;,citation_author=Sander Wijnhoven;,citation_publication_date=1999-05-01;,citation_cover_date=1999-05-01;,citation_year=1999;,citation_fulltext_html_url=https://www.researchgate.net/profile/Sander-Wijnhoven/publication/230807448_Analysis_and_Comparison_of_Fish_Growth_from_Small_Samples_of_Length-at-Age_Data_Detection_of_Sexual_Dimorphism_in_Eurasian_Perch_as_an_Example/links/09e41504a07e30d58b000000/Analysis-and-Comparison-of-Fish-Growth-from-Small-Samples-of-Length-at-Age-Data-Detection-of-Sexual-Dimorphism-in-Eurasian-Perch-as-an-Example.pdf;,citation_volume=128;,citation_journal_title=Transactions of the American Fisheries Society;,citation_journal_abbrev=Transactions of the American Fisheries Society;">
-<meta name="citation_reference" content="citation_title=Recruitment, growth, exploitation and management of walleyes in a southeastern Wisconsin lake;,citation_author=Donald Mraz;,citation_publication_date=1968;,citation_cover_date=1968;,citation_year=1968;,citation_fulltext_html_url=https://search.library.wisc.edu/digital/AA7LF2GR2E3E5385/pages;,citation_technical_report_institution=Wisconsin Department of Natural Resources;,citation_series_title=Technical Bulletin;">
+<meta name="citation_reference" content="citation_title=Recruitment, growth, exploitation and management of walleyes in a southeastern Wisconsin lake;,citation_author=Donald Mraz;,citation_publication_date=1968;,citation_cover_date=1968;,citation_year=1968;,citation_fulltext_html_url=https://search.library.wisc.edu/digital/AA7LF2GR2E3E5385/pages;,citation_technical_report_institution=Wisconsin Department of Natural Resources;">
 <meta name="citation_reference" content="citation_title=A comparison of the scale and otolith methods of age estimation for lake whitefish in lake huron;,citation_author=Andrew M. Muir;,citation_author=Mark P. Ebener;,citation_author=Ji X. He;,citation_author=James E. Johnson;,citation_publication_date=2008-06-01;,citation_cover_date=2008-06-01;,citation_year=2008;,citation_fulltext_html_url=https://doi.org/10.1577/M06-160.1;,citation_issue=3;,citation_doi=10.1577/M06-160.1;,citation_issn=0275-5947;,citation_volume=28;,citation_journal_title=North American Journal of Fisheries Management;,citation_publisher=Taylor &amp;amp;amp; Francis;">
+<meta name="citation_reference" content="citation_title=Can landsat thermal imagery and environmental data accurately estimate water temperatures in small streams?;,citation_author=Robert D. Murphy;,citation_author=John A. Hagan;,citation_author=Bradley P. Harris;,citation_author=Suresh A. Sethi;,citation_author=T. Scott Smeltz;,citation_author=Felipe Restrepo;,citation_publication_date=2021-02-16;,citation_cover_date=2021-02-16;,citation_year=2021;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-048;,citation_issue=1;,citation_doi=10.3996/JFWM-20-048;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Errors in estimating mean weight and other statistics from mean length;,citation_author=Larry A. Nielsen;,citation_author=William F. Schoch;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1577/1548-8659%281980%29109%3C319%3AEIEMWA%3E2.0.CO%3B2;,citation_issue=3;,citation_doi=10.1577/1548-8659(1980)109&amp;amp;amp;lt;319:EIEMWA&amp;gt;2.0.CO;2;,citation_issn=1548-8659;,citation_volume=109;,citation_language=en-US;,citation_journal_title=Transactions of the American Fisheries Society;">
 <meta name="citation_reference" content="citation_title=An algorithm for the von Bertalanffy seasonal cessation in growth function of Pauly et al. (1992);,citation_author=Derek H. Ogle;,citation_publication_date=2017-01-01;,citation_cover_date=2017-01-01;,citation_year=2017;,citation_fulltext_html_url=https://github.com/droglenc/droglenc.github.io/blob/master/resources/pubs/Ogle_2017_PaulyetalModel.pdf;,citation_issn=0165-7836;,citation_volume=185;,citation_language=en-US;,citation_journal_title=Fisheries Research;,citation_journal_abbrev=Fisheries Research;">
 <meta name="citation_reference" content="citation_title=Growth Estimation: Growth Models and Statistical Inference;,citation_author=Derek H. Ogle;,citation_author=Travis O. Brenden;,citation_author=Joshua L. McCormick;,citation_editor=Michael C. Quist;,citation_editor=Daniel A. Isermann;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_fulltext_html_url=https://derekogle.com/AGF/;,citation_inbook_title=Age and Growth of Fishes: Principles and Techniques;">
 <meta name="citation_reference" content="citation_title=Introductory Fisheries Analyses with R;,citation_author=Derek H. Ogle;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_fulltext_html_url=http://derekogle.com/IFAR/;">
+<meta name="citation_reference" content="citation_title=Comparison of specimen- and image-based morphometrics for Cisco;,citation_author=Brian P. O’Malley;,citation_author=Joseph D. Schmitt;,citation_author=Jeremy P. Holden;,citation_author=Brian C. Weidel;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-029;,citation_issue=1;,citation_doi=10.3996/JFWM-20-029;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=A new model accounting for seasonal cessation of growth in fishes;,citation_author=Daniel Pauly;,citation_author=Mina Soriano-Bartz;,citation_author=Jacques Moreau;,citation_author=Astrid Jarre-Teichmann;,citation_publication_date=1992;,citation_cover_date=1992;,citation_year=1992;,citation_fulltext_html_url=https://s3-us-west-2.amazonaws.com/legacy.seaaroundus/doc/Researcher+Publications/dpauly/PDF/1992/Journal+Articles/NewModelAccountingSeasonalGrowthOfJuvenilleAndAdultFishes.pdf;,citation_volume=43;,citation_journal_title=Australian Journal of Marine and Freshwater Research;">
 <meta name="citation_reference" content="citation_title=Estimating mean weight from length statistics;,citation_abstract=not available;,citation_author=J. V. Pienaar;,citation_author=W. K. Ricker;,citation_publication_date=1968-12;,citation_cover_date=1968-12;,citation_year=1968;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/10.1139/f68-253;,citation_issue=12;,citation_doi=10.1139/f68-253;,citation_issn=0015-296X;,citation_volume=25;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
 <meta name="citation_reference" content="citation_title=Assessing methods to improve benthic fish sampling in a stony headwater stream;,citation_author=Eleri G. Pritchard;,citation_author=Daniel D. A. Chadwick;,citation_author=Michael A. Chadwick;,citation_author=Paul Bradley;,citation_author=Carl D. Sayer;,citation_author=Jan C. Axmacher;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1002/2688-8319.12111;,citation_issue=4;,citation_doi=10.1002/2688-8319.12111;,citation_issn=2688-8319;,citation_volume=2;,citation_language=en-US;,citation_journal_title=Ecological Solutions and Evidence;">
@@ -186,9 +165,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="citation_reference" content="citation_title=Population Biology of the Tan Riffleshell (&amp;amp;amp;lt;i&amp;gt;Epioblasma&amp;lt;/i&amp;gt; <i>florentina walkeri</i>) and the Effects of Substratum and Light on Juvenile Propagation;,citation_author=Susan Owen Rogers;,citation_publication_date=1999-12-06;,citation_cover_date=1999-12-06;,citation_year=1999;,citation_fulltext_html_url=https://vtechworks.lib.vt.edu/handle/10919/36143;,citation_language=en-US;,citation_dissertation_institution=Virginia Tech;">
 <meta name="citation_reference" content="citation_title=How many Ciscoes are needed for stocking in the Laurentian Great Lakes?;,citation_author=Benjamin J. Rook;,citation_author=Michael J. Hansen;,citation_author=Charles R. Bronte;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-025;,citation_issue=1;,citation_doi=10.3996/JFWM-21-025;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Population biology of Lake Trout (&amp;amp;amp;lt;i&amp;gt;Salvelinus&amp;lt;/i&amp;gt; <i>namaycush</i>) of Lake Superior before 1950;,citation_author=Gary T. Sakagawa;,citation_author=Richard L. Pycha;,citation_publication_date=1971-01;,citation_cover_date=1971-01;,citation_year=1971;,citation_fulltext_html_url=https://cdnsciencepub.com/doi/abs/10.1139/f71-011;,citation_doi=10.1139/f71-011;,citation_issn=0015-296X;,citation_volume=28;,citation_journal_title=Journal of the Fisheries Research Board of Canada;,citation_journal_abbrev=J. Fish. Res. Bd. Can.;,citation_publisher=NRC Research Press;">
+<meta name="citation_reference" content="citation_title=Seasonal sampling influence on population dynamics and yield of Channel Catfish and Walleye in a large Great Plains reservoir;,citation_author=Benjamin J. Schall;,citation_author=Casey W. Schoenebeck;,citation_author=Keith D. Koupal;,citation_publication_date=2020-12-07;,citation_cover_date=2020-12-07;,citation_year=2020;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-20-027;,citation_issue=1;,citation_doi=10.3996/JFWM-20-027;,citation_issn=1944-687X;,citation_volume=12;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Age and Growth;,citation_author=F. W. Tesch;,citation_editor=William Edwin Ricker;,citation_publication_date=1971;,citation_cover_date=1971;,citation_year=1971;,citation_inbook_title=Methods for {}Assessment{} of {}Fish{} {}Populations{};">
 <meta name="citation_reference" content="citation_title=Management goals for conserving White Sturgeon in the Sacramento–San Joaquin River Basin;,citation_author=Marta E. Ulaski;,citation_author=Shannon E. Blackburn;,citation_author=Zachary J. Jackson;,citation_author=Michael C. Quist;,citation_publication_date=2022-05-03;,citation_cover_date=2022-05-03;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-070;,citation_issue=2;,citation_doi=10.3996/JFWM-21-070;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Water-level fluctuations and water temperature effects on young-of-year Largemouth Bass in a Southwest irrigation reservoir;,citation_author=Alexander Vaisvil;,citation_author=Colleen A. Caldwell;,citation_author=Eric Frey;,citation_publication_date=2022-06-27;,citation_cover_date=2022-06-27;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-071;,citation_issue=2;,citation_doi=10.3996/JFWM-21-071;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
+<meta name="citation_reference" content="citation_title=Use of anthropogenic nest materials by Black-Crested Titmice along an urban gradient;,citation_author=Madi P. Vasquez;,citation_author=Rebekah J. Rylander;,citation_author=Jacquelyn M. Tleimat;,citation_author=Sarah R. Fritts;,citation_publication_date=2022-01-11;,citation_cover_date=2022-01-11;,citation_year=2022;,citation_fulltext_html_url=https://doi.org/10.3996/JFWM-21-058;,citation_issue=1;,citation_doi=10.3996/JFWM-21-058;,citation_issn=1944-687X;,citation_volume=13;,citation_journal_title=Journal of Fish and Wildlife Management;,citation_journal_abbrev=Journal of Fish and Wildlife Management;">
 <meta name="citation_reference" content="citation_title=Regional fisheries management investigations - Magic Valley region;,citation_author=Charels D Warren;,citation_author=Karen A Frank;,citation_author=Fred E Partridge;,citation_publication_date=2004;,citation_cover_date=2004;,citation_year=2004;,citation_fulltext_html_url=https://collaboration.idfg.idaho.gov/FisheriesTechnicalReports/Mgt04-04Warren2001%20Regional%20Fisheries%20Management%20Investigations%20Magic%20Valley%20Region.pdf;,citation_language=en-US;,citation_publisher=Completion Report;">
 <meta name="citation_reference" content="citation_title=ggplot2: Elegant Graphics for Data Analysis;,citation_author=Hadley Wickham;,citation_author=Danielle Navarro;,citation_author=Thomas Lin Pedersen;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_fulltext_html_url=https://ggplot2-book.org/index.html;,citation_language=en-US;">
 <meta name="citation_reference" content="citation_title=Age and growth of Rock Bass in eastern Lake Ontario;,citation_author=David R. Wolfert;,citation_publication_date=1980;,citation_cover_date=1980;,citation_year=1980;,citation_fulltext_html_url=http://pubs.er.usgs.gov/publication/1000461;,citation_volume=27;,citation_journal_title=New York Fish and Game Journal;">
@@ -208,61 +189,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html">
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
  <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/books.html">
+    <a class="nav-link" href="../../../pages/books.html" rel="" target="">
  <span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/packages.html">
+    <a class="nav-link" href="../../../pages/packages.html" rel="" target="">
  <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Data</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html" rel="" target="">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html" rel="" target="">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html" rel="" target="">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html" rel="" target="">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../../teaching/index.html">
+    <a class="nav-link" href="../../../teaching/index.html" rel="" target="">
  <span class="menu-text">Teaching</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/contribute.html">
+    <a class="nav-link" href="../../../pages/contribute.html" rel="" target="">
  <span class="menu-text">Get Involved</span></a>
   </li>  
 </ul>
-              <div class="quarto-toggle-container">
-                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
-              </div>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -359,7 +340,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here I explore a few different ways to do this.</p>
 <p>The following packages are used here. Also note that a few functions from <code>FSA</code> and <code>scales</code> are used with <code>::</code> so that the entire package is not attached here.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for ggplot2 and dplyr</span></span>
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for ggplot2 and dplyr</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggh4x)      <span class="co"># for a variety of "hacks" described below</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
@@ -374,14 +355,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-layout-align="center">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">family=</span><span class="fu">c</span>(<span class="st">"Centrarchid"</span>,<span class="st">"Centrarchid"</span>,<span class="st">"Percid"</span>,<span class="st">"Percid"</span>,<span class="st">"Esocid"</span>),</span>
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">family=</span><span class="fu">c</span>(<span class="st">"Centrarchid"</span>,<span class="st">"Centrarchid"</span>,<span class="st">"Percid"</span>,<span class="st">"Percid"</span>,<span class="st">"Esocid"</span>),</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">species=</span><span class="fu">c</span>(<span class="st">"Bluegill"</span>,<span class="st">"Pumpkinseed"</span>,<span class="st">"Walleye"</span>,<span class="st">"Sauger"</span>,<span class="st">"Muskellunge"</span>),</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">catch=</span><span class="fu">c</span>(<span class="dv">34</span>,<span class="dv">45</span>,<span class="dv">23</span>,<span class="dv">36</span>,<span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">family=</span><span class="fu">factor</span>(family,<span class="at">levels=</span><span class="fu">c</span>(<span class="st">"Centrarchid"</span>,<span class="st">"Percid"</span>,<span class="st">"Esocid"</span>)))</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>dat1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         family     species catch
+<pre class="output" data-code-line-numbers="nil"><code>#R|         family     species catch
 #R|  1 Centrarchid    Bluegill    34
 #R|  2 Centrarchid Pumpkinseed    45
 #R|  3      Percid     Walleye    23
@@ -391,7 +372,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>A simple bar chart of these data is created with <code>geom_col()</code> with <code>species</code> mapped to the x-axis and <code>catch</code> mapped to the y-axis. Here I provided a title for the y-axis, removed the lower expansion and reduce the upper expansion of the y-axis, applied the classic theme, increased the size of the axis title and tick mark text, made the axis titles bold, made the tick mark text black, and removed the x-axis title.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -412,7 +393,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="specifying-facets">Specifying Facets</h3>
 <p>Faceting provides one option for applying these labels. Below I added one row of facets based on the family name with <code>facet_grid()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols=</span><span class="fu">vars</span>(family)) <span class="sc">+</span></span>
@@ -430,7 +411,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>This does not look immediately helpful!! However, adding <code>scales="free_x"</code> to <code>facet_grid()</code> reduces each x-axis to only the species present in that facet (i.e., family).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols=</span><span class="fu">vars</span>(family),<span class="at">scales=</span><span class="st">"free_x"</span>) <span class="sc">+</span></span>
@@ -448,7 +429,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Adding <code>space=free_x</code> to <code>facet_grid()</code> ensures that the “bars” in each facet are the same width by adjusting the facet width to match the space needed to show just the data for that facet.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols=</span><span class="fu">vars</span>(family),<span class="at">scales=</span><span class="st">"free_x"</span>,<span class="at">space=</span><span class="st">"free_x"</span>) <span class="sc">+</span></span>
@@ -466,7 +447,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Finally, adding <code>switch="x"</code> to <code>facet_grid()</code> moves the facet strip labels to the bottom of the plot area for each facet.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols=</span><span class="fu">vars</span>(family),<span class="at">scales=</span><span class="st">"free_x"</span>,<span class="at">space=</span><span class="st">"free_x"</span>,<span class="at">switch=</span><span class="st">"x"</span>) <span class="sc">+</span></span>
@@ -484,7 +465,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="page-columns page-full"><p>The next step is to move the facet strip labels “outside”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> the axis tick mark labels with <code>strip.placement='outside'</code> in <code>theme()</code>. The facet strip “box” was also removed with <code>strip.background.x=</code> and the facet strip text was altered with <code>strip.text=</code>.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;Rather than the default “inside”.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols=</span><span class="fu">vars</span>(family),<span class="at">scales=</span><span class="st">"free_x"</span>,<span class="at">space=</span><span class="st">"free_x"</span>,<span class="at">switch=</span><span class="st">"x"</span>) <span class="sc">+</span></span>
@@ -505,7 +486,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Finally, facets were “smushed” together so that the x-axis looks continuous by reducing <code>panel.spacing.x=</code> to 0.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols=</span><span class="fu">vars</span>(family),<span class="at">scales=</span><span class="st">"free_x"</span>,<span class="at">space=</span><span class="st">"free_x"</span>,<span class="at">switch=</span><span class="st">"x"</span>) <span class="sc">+</span></span>
@@ -527,7 +508,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The family categorization could be further highlighted with a <code>fill=</code> color mapped to <code>family</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch,<span class="at">fill=</span>family)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch,<span class="at">fill=</span>family)) <span class="sc">+</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_grey</span>(<span class="at">start=</span><span class="fl">0.1</span>,<span class="at">end=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
@@ -549,12 +530,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Open Question
 </div>
 </div>
@@ -570,7 +551,7 @@ Open Question
 <div class="cell" data-layout-align="center">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sample_date=</span><span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2020-8-12"</span>),</span>
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sample_date=</span><span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2020-8-12"</span>),</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">as.Date</span>(<span class="st">"2022-4-7"</span>),<span class="at">by=</span><span class="st">"month"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_date=</span>sample_date<span class="sc">-</span><span class="fu">sample</span>((<span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span>),<span class="fu">length</span>(sample_date),<span class="at">replace=</span><span class="cn">TRUE</span>),</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">catch=</span><span class="fu">round</span>(<span class="fu">runif</span>(<span class="fu">length</span>(sample_date),<span class="dv">50</span>,<span class="dv">150</span>)))</span>
@@ -578,7 +559,7 @@ Open Question
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     sample_date catch
+<pre class="output" data-code-line-numbers="nil"><code>#R|     sample_date catch
 #R|  1   2020-08-14    73
 #R|  2   2020-09-15   110
 #R|  3   2020-10-15   149
@@ -589,12 +570,12 @@ Open Question
 </div>
 <p>Now extract the month and year from the sample dates.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mon=</span><span class="fu">month</span>(sample_date,<span class="at">label=</span><span class="cn">TRUE</span>),</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">yr=</span><span class="fu">year</span>(sample_date))</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     sample_date catch mon   yr
+<pre class="output" data-code-line-numbers="nil"><code>#R|     sample_date catch mon   yr
 #R|  1   2020-08-14    73 Aug 2020
 #R|  2   2020-09-15   110 Sep 2020
 #R|  3   2020-10-15   149 Oct 2020
@@ -605,7 +586,7 @@ Open Question
 </div>
 <p>A plot using the faceting method is created below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>mon,<span class="at">y=</span>catch,<span class="at">fill=</span><span class="fu">factor</span>(yr))) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>mon,<span class="at">y=</span>catch,<span class="at">fill=</span><span class="fu">factor</span>(yr))) <span class="sc">+</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>))) <span class="sc">+</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">begin=</span><span class="fl">0.1</span>,<span class="at">end=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
@@ -636,11 +617,11 @@ Open Question
 <h2 class="anchored" data-anchor-id="example-1---bar-chart-1">Example 1 - Bar Chart</h2>
 <p>The <code>ggh4x</code> package provides <code>guide_axis_nested()</code> and related helpers for creating the secondary x-axis. This function, however, is predicated on plotting the <em>interaction</em> between the variables that defined the primary and secondary labels on the x-axis. An “interaction” is created with <code>interaction()</code> with, for these purposes, the nested variable listed second. For further below it is important to note that the parts of the interactions are separated by a single dot/period.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> dat1 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> dat1 <span class="sc">|&gt;</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sfint=</span><span class="fu">interaction</span>(species,family))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>dat1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|         family     species catch                   sfint
+<pre class="output" data-code-line-numbers="nil"><code>#R|         family     species catch                   sfint
 #R|  1 Centrarchid    Bluegill    34    Bluegill.Centrarchid
 #R|  2 Centrarchid Pumpkinseed    45 Pumpkinseed.Centrarchid
 #R|  3      Percid     Walleye    23          Walleye.Percid
@@ -650,7 +631,7 @@ Open Question
 </div>
 <p>The basic bar chart from above is modified by mapping this interaction variable, rather than <code>species</code>, to the x-axis.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sfint,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sfint,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -667,7 +648,7 @@ Open Question
 </div>
 <p>The parts of the interactions can be disentangled and turned into nested axes by setting <code>guide_axis_nested()</code> equal to <code>guide=</code> in <code>scale_x_discrete()</code>. Note that <code>delim="."</code> is used in <code>guide_axis_nested()</code> because the parts of the interaction were separated with a single dot/period.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sfint,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sfint,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">guide=</span><span class="fu">guide_axis_nested</span>(<span class="at">delim=</span><span class="st">"."</span>)) <span class="sc">+</span></span>
@@ -685,7 +666,7 @@ Open Question
 </div>
 <div class="page-columns page-full"><p>The primary tick mark labels are controlled with <code>axis.text.x=</code> which inherits from <code>axis.text=</code> if not given. Thus, the “species” labels are 10 pt black as defined above. The secondary tick mark labels inherit from <code>axis.text.x=</code> unless modifications are made in <code>ggh4x.axis.nesttext.x=</code> using <code>element_text()</code>. Below the “family” labels are set to 12 pt bold text.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Finally, the line that separates the levels of labels is controlled with <code>element_line()</code> in <code>ggh4x.axis.nestline.x=</code>. The line is made slightly heavier below for illustration.</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;And will be black because <code>axis.text=</code> was set to black.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sfint,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sfint,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">guide=</span><span class="fu">guide_axis_nested</span>(<span class="at">delim=</span><span class="st">"."</span>)) <span class="sc">+</span></span>
@@ -703,12 +684,12 @@ Open Question
 </div>
 </div>
 </div>
-<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Open Question
 </div>
 </div>
@@ -721,11 +702,11 @@ Open Question
 <h2 class="anchored" data-anchor-id="example-2-bar-chart-with-dates">Example 2 – Bar Chart with Dates</h2>
 <p>The data frame used for Option 1 must be modified to include the interaction between the <code>mon</code> and <code>yr</code> for use with <code>ggh4x</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat2 <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">myint=</span><span class="fu">interaction</span>(mon,yr))</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(dat2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|     sample_date catch mon   yr    myint
+<pre class="output" data-code-line-numbers="nil"><code>#R|     sample_date catch mon   yr    myint
 #R|  1   2020-08-14    73 Aug 2020 Aug.2020
 #R|  2   2020-09-15   110 Sep 2020 Sep.2020
 #R|  3   2020-10-15   149 Oct 2020 Oct.2020
@@ -736,7 +717,7 @@ Open Question
 </div>
 <p>A plot using <code>ggh4x</code> is created below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>myint,<span class="at">y=</span>catch,<span class="at">fill=</span><span class="fu">factor</span>(yr))) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>myint,<span class="at">y=</span>catch,<span class="at">fill=</span><span class="fu">factor</span>(yr))) <span class="sc">+</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>))) <span class="sc">+</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">begin=</span><span class="fl">0.1</span>,<span class="at">end=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
@@ -765,14 +746,14 @@ Open Question
 <h2 class="anchored" data-anchor-id="example-1---bar-chart-2">Example 1 - Bar Chart</h2>
 <p>A third options is to create space below the x-axis and “place” the secondary axis “manually.” Before creating this space it is important to order primary axis labels so that categories to be grouped by the secondary level are next to each other. In this example, the species variable must be converted to a factor with the levels controlled so that families are grouped together.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> dat1 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dat1 <span class="ot">&lt;-</span> dat1 <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species=</span><span class="fu">factor</span>(species,<span class="at">levels=</span><span class="fu">c</span>(<span class="st">"Bluegill"</span>,<span class="st">"Pumpkinseed"</span>,</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">"Walleye"</span>,<span class="st">"Sauger"</span>,</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">"Muskellunge"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="page-columns page-full"><p>Space below the x-axis is created by increasing the <code>b</code>ottom margin around the plot with <code>plot.margin=</code> in <code>theme()</code>. Below the bottom margin was increased to two “lines” and the other margins were set to one “line”.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The top, left, and right margins are defined by <code>t=</code>, <code>l=</code> and <code>r=</code> in <code>margin()</code>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -790,7 +771,7 @@ Open Question
 </div>
 <div class="page-columns page-full"><p>Plot “clipping” must be turned off with <code>clip="off"</code> in <code>coord_caresian()</code> to be able to place “objects” in the space just created.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> In addition, the y-axis limits should be set with <code>ylim=</code> in <code>coord_cartesian()</code> so that the y-axis limits do not change as labels are added beneath the x-axis. As a demonstration, I placed my name at the x=1.5 and y=-5 coordinate.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;Because that space is outside of the main plot area.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -811,11 +792,11 @@ Open Question
 <p>Choosing a value for the y-coordinate beneath the axis is largely a matter of trial-and-error after an initial first guess. The x-coordinate, though, can largely be determined from the x-axis. The levels for a factor such as <code>species</code> are recorded as integers “behind-the-scenes.” In this example, a “Bluegill” is defined with a “1” as it is the first level and its bar will be above an invisible “1” on the x-axis. Thus, placing my name at x=1.5 centers it between the first and second bars.</p>
 <p>Here I want to create a secondary axis similar to what <code>ggh4x</code> produced – a line segment with a label underneath it. The first segment for the secondary axis should cover “Bluegill” and “Pumpkinseed.” Thus, it should start a little below 1 and end a little above 2. Other segments are defined similarly and stored in a data frame below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span><span class="fu">c</span>(<span class="fl">0.55</span>,<span class="fl">2.55</span>,<span class="fl">4.55</span>),</span>
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span><span class="fu">c</span>(<span class="fl">0.55</span>,<span class="fl">2.55</span>,<span class="fl">4.55</span>),</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">xend=</span><span class="fu">c</span>(<span class="fl">2.45</span>,<span class="fl">4.45</span>,<span class="fl">5.45</span>))</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>x2lns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|    xstart xend
+<pre class="output" data-code-line-numbers="nil"><code>#R|    xstart xend
 #R|  1   0.55 2.45
 #R|  2   2.55 4.45
 #R|  3   4.55 5.45</code></pre>
@@ -823,7 +804,7 @@ Open Question
 </div>
 <p>At first, I roughly guess at starting and ending points and then come back to adjust these values if the lines need to be extended or shortened to look good. These segments are added to the plot with <code>geom_segment()</code> using this new data frame with the variables mapped appropriately. I set <code>y=</code> and <code>yend=</code> outside of <code>aes()</code> as the y-coordinate is constant for all these segments. Finally, the segment was made slightly heavier.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -844,14 +825,14 @@ Open Question
 </div>
 <div class="page-columns page-full"><p>Once the segments are set as desired, another data frame is created that has the x-axis coordinate and text for the secondary axis label. Below, the coordinate was found by averaging <code>xstart</code> and <code>xend</code> for each segment in <code>x2lns</code>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> The text for the labels was then entered manually.</p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;This x coordinates in this data frame could have been entered manually, but computing the average makes it easier to put the label in the center of the segment.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x2lbls <span class="ot">&lt;-</span> x2lns <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x2lbls <span class="ot">&lt;-</span> x2lns <span class="sc">|&gt;</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">x=</span><span class="fu">mean</span>(<span class="fu">c</span>(xstart,xend))) <span class="sc">|&gt;</span></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lbl=</span><span class="fu">c</span>(<span class="st">"Centrarchid"</span>,<span class="st">"Percid"</span>,<span class="st">"Esocid"</span>))</span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>x2lbls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  # A tibble: 3 × 2
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 3 × 2
 #R|        x lbl        
 #R|    &lt;dbl&gt; &lt;chr&gt;      
 #R|  1   1.5 Centrarchid
@@ -861,7 +842,7 @@ Open Question
 </div>
 <p>These labels are then added with <code>geom_text()</code> using the new data frame with the variables mapped appropriately. Again, <code>y=</code> was set outside of <code>aes()</code> as this coordinate is constant for all labels. The text was adjusted to be a 12 pt bold.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat1,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>species,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total catch"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
@@ -882,12 +863,12 @@ Open Question
 </div>
 </div>
 </div>
-<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Important
 </div>
 </div>
@@ -900,7 +881,7 @@ Important
 <h2 class="anchored" data-anchor-id="example-3---line-plot">Example 3 - Line Plot</h2>
 <div class="page-columns page-full"><p>Options 1 and 2 cannot handle situations where the plot is not “discrete.”<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> For example, suppose that a line plot of total catch in <code>dat2</code> by <em>sample date</em> (rather than month) is desired.</p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;At least, I could not make them work for these situations.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sample_date,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb34" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sample_date,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="st">"month"</span>),</span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_date</span>(<span class="st">"%b %y"</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>)) <span class="sc">+</span></span>
@@ -919,7 +900,7 @@ Important
 </div>
 <p>However, the x-axis is cluttered and suppose that a reviewer wants the months shown on the x-axis ticks with years as a secondary axis below that. The methods from above may be tried, but faceting clearly does not work (see below) and I could not get the <code>ggh4x</code> method to work with <code>scale_x_date()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sample_date,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sample_date,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="st">"month"</span>),</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_date</span>(<span class="st">"%b"</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>)) <span class="sc">+</span></span>
@@ -943,7 +924,7 @@ Important
 </div>
 <p>Option 3, however, will work for situations like this. For this example, segments should “cover” Sep-Dec for 2021, Jan-Dec for 2022, and Jan-Mar for 2023. Starting (in <code>xstart</code>) and ending (in <code>xend</code>) dates for these segments are put in a data frame below. A data frame of labels is then constructed from it similar to before, except that the label is the year extracted from the x-coordinate date.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span><span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"20-Aug-2020"</span>,<span class="st">"20-Dec-2020"</span>,<span class="st">"20-Dec-2021"</span>),</span>
+<div class="sourceCode cell-code" id="cb36" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span><span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"20-Aug-2020"</span>,<span class="st">"20-Dec-2020"</span>,<span class="st">"20-Dec-2021"</span>),</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">format=</span><span class="st">"%d-%B-%Y"</span>),</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">xend=</span><span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"15-Dec-2020"</span>,<span class="st">"15-Dec-2021"</span>,<span class="st">"15-Mar-2022"</span>),</span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">format=</span><span class="st">"%d-%B-%Y"</span>))</span>
@@ -956,7 +937,7 @@ Important
 </div>
 <div class="page-columns page-full"><p>Segments and labels are then added as before.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;Note the use of <code>coord_cartesian()</code>, <code>geom_segment()</code>, <code>geom_text()</code>, and <code>plot.margin=</code>.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sample_date,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>sample_date,<span class="at">y=</span>catch)) <span class="sc">+</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">breaks=</span>scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="st">"month"</span>),</span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_date</span>(<span class="st">"%b"</span>),<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>)) <span class="sc">+</span></span>
@@ -986,13 +967,13 @@ Important
 <div class="cell" data-layout-align="center">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
+<div class="sourceCode cell-code" id="cb38" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>waedat <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">|&gt;</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(loc<span class="sc">==</span><span class="dv">2</span>,year<span class="sc">==</span><span class="dv">2010</span>,sex<span class="sc">==</span><span class="st">"female"</span>)</span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>FSA<span class="sc">::</span><span class="fu">headtail</span>(waedat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|        setID loc grid year  tl    w    sex    mat age
+<pre class="output" data-code-line-numbers="nil"><code>#R|        setID loc grid year  tl    w    sex    mat age
 #R|  1   2010019   2 1005 2010 642 3138 female mature   7
 #R|  2   2010019   2 1005 2010 686 3360 female mature   7
 #R|  3   2010019   2 1005 2010 685 3489 female mature  11
@@ -1003,7 +984,7 @@ Important
 </div>
 <div class="page-columns page-full"><p>Suppose we want to make a simple length frequency histogram like that below,<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> but with Gabelhouse length categories (“stock”, “quality”, etc.) listed below the lengths but above the title on the x-axis.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;See <a href="../2019-12-28_Length_Frequency_Histograms/">this post</a> about making length frequency histograms in <code>ggplot2</code>.</p></li><li id="fn10"><p><sup>10</sup>&nbsp;There are probably better ways to create these labels, but this works as a demonstration of the secondary x-axis.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb40" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">closed=</span><span class="st">"left"</span>,</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Frequency"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
@@ -1020,32 +1001,32 @@ Important
 </div>
 <p>The values for the Gabelhouse length categories are obtained from <code>psdVal()</code> in <code>FSA</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>( waepsd <span class="ot">&lt;-</span> FSA<span class="sc">::</span><span class="fu">psdVal</span>(<span class="st">"Walleye"</span>,<span class="at">incl.zero=</span><span class="cn">FALSE</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>( waepsd <span class="ot">&lt;-</span> FSA<span class="sc">::</span><span class="fu">psdVal</span>(<span class="st">"Walleye"</span>,<span class="at">incl.zero=</span><span class="cn">FALSE</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|      stock   quality preferred memorable    trophy 
+<pre class="output" data-code-line-numbers="nil"><code>#R|      stock   quality preferred memorable    trophy 
 #R|        250       380       510       630       760</code></pre>
 </div>
 </div>
 <p>These values are used to make the endpoints of the segment lines, noting that each stops 2 mm before the next segment starts so as to provide a visible break in the segments. A data frame of labels was created as above, except that the text for the labels came from the names provided with <code>psdVal()</code>. Also note that 810 (i.e., the end of the x-axis) was appended to the segment ends so that the “trophy” segment would have an end point.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span>waepsd,<span class="at">xend=</span><span class="fu">c</span>(waepsd[<span class="sc">-</span><span class="dv">1</span>]<span class="sc">-</span><span class="dv">2</span>,<span class="dv">810</span>))</span>
+<div class="sourceCode cell-code" id="cb43" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span>waepsd,<span class="at">xend=</span><span class="fu">c</span>(waepsd[<span class="sc">-</span><span class="dv">1</span>]<span class="sc">-</span><span class="dv">2</span>,<span class="dv">810</span>))</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>x2lns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|            xstart xend
+<pre class="output" data-code-line-numbers="nil"><code>#R|            xstart xend
 #R|  stock        250  378
 #R|  quality      380  508
 #R|  preferred    510  628
 #R|  memorable    630  758
 #R|  trophy       760  810</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>x2lbls <span class="ot">&lt;-</span> x2lns <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb45" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>x2lbls <span class="ot">&lt;-</span> x2lns <span class="sc">|&gt;</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">x=</span><span class="fu">mean</span>(<span class="fu">c</span>(xstart,xend))) <span class="sc">|&gt;</span></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lbl=</span><span class="fu">names</span>(waepsd))</span>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>x2lbls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output"><code>#R|  # A tibble: 5 × 2
+<pre class="output" data-code-line-numbers="nil"><code>#R|  # A tibble: 5 × 2
 #R|        x lbl      
 #R|    &lt;dbl&gt; &lt;chr&gt;    
 #R|  1   314 stock    
@@ -1057,7 +1038,7 @@ Important
 </div>
 <p>Making room for the secondary labels is a little different here because the x-axis title is maintained. Thus, instead of changing <code>plot.margin()</code> as above, more space is added by increasing the top margin of the x-axis title with <code>axis.title.x=</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb47" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">closed=</span><span class="st">"left"</span>,</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Frequency"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
@@ -1076,7 +1057,7 @@ Important
 </div>
 <p>This space is then filled with the secondary axis labels as before.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb48" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">closed=</span><span class="st">"left"</span>,</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Frequency"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
@@ -1104,7 +1085,7 @@ Important
 <h1>Further Thoughts</h1>
 <p>Option 3 provides a great deal of flexibility. For example, suppose for the length frequency histogram that the segments are separated with vertical lines rather than breaks. To accomplish this, the 2 mm spacing in the segments data frame must be removed.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span>waepsd,<span class="at">xend=</span><span class="fu">c</span>(waepsd[<span class="sc">-</span><span class="dv">1</span>],<span class="dv">810</span>))</span>
+<div class="sourceCode cell-code" id="cb49" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>x2lns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">xstart=</span>waepsd,<span class="at">xend=</span><span class="fu">c</span>(waepsd[<span class="sc">-</span><span class="dv">1</span>],<span class="dv">810</span>))</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>x2lbls <span class="ot">&lt;-</span> x2lns <span class="sc">|&gt;</span></span>
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
@@ -1114,7 +1095,7 @@ Important
 </div>
 <div class="page-columns page-full"><p>Then, for the segments, arrows are added at the beginning, but with a 90<sup>o</sup> angle so that they look like vertical lines.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;“Arrows” only at the beginning of the segments will make the last “trophy” segment appear open-ended, as it should.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb50" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl)) <span class="sc">+</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">closed=</span><span class="st">"left"</span>,</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
 <span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Frequency"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.025</span>))) <span class="sc">+</span></span>
@@ -1139,7 +1120,7 @@ Important
 </div>
 <div class="page-columns page-full"><p>As another example, <code>geom_rect()</code> with judicious choices for <code>ymin=</code> and <code>ymax=</code> can be used to provide more options for the secondary axis labels.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Note here that <code>data=</code> and <code>mapping=</code> had to moved out of <code>ggplot()</code> and put into <code>geom_histogram()</code> for this to work.</p></li></div></div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb51" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">data=</span>waedat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>tl),</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">closed=</span><span class="st">"left"</span>,</span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray50"</span>) <span class="sc">+</span></span>
@@ -1171,15 +1152,15 @@ Important
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h.ogle2023,
-  author = {Derek H. Ogle},
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+  author = {H. Ogle, Derek},
   title = {Nested {X-Axis} {Labels}},
   date = {2023-03-30},
   url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h.ogle2023" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Derek H. Ogle. 2023, March 30. Nested X-Axis Labels. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+H. Ogle, D. 2023, March 30. Nested X-Axis Labels. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1323,9 +1304,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1390,6 +1385,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1428,12 +1509,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp(/https:\/\/fishr-core-team\.github\.io\/fishR\//);
+      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
-    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -1457,6 +1538,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </li>  
 </ul>
     </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
   </div>
 </footer>
 

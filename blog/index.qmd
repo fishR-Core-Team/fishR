@@ -12,7 +12,12 @@ listing:
     reading-time: Time
     date: Published
     file-modifid: Modified
+  feed: true
 comments: false
 page-layout: full
 date-modified: ""
 ---
+
+::: {.callout-note appearance="minimal"}
+See [r-bloggers](http://r-bloggers.com/) where these and other R-related blog posts are aggregated.
+:::

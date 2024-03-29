@@ -4,6 +4,7 @@ project:
 
 website:
   title: "fishR"
+  description: "Posts using R for fisheries analyses"
   favicon: /helpers/img/fishRlogo_Tight_Light_trans.png
   site-url: https://fishr-core-team.github.io/fishR/
   repo-url: https://github.com/fishR-Core-Team/fishR
