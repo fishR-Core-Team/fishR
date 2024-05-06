@@ -124,7 +124,7 @@ The final part of the model block is the likelihood. This will include a for loo
 
 ```{stan, output.var="LVBmodel", eval=FALSE}
 model {
-  vector[N] ypred; //variable used in the model block only
+  vector[N] y_mean; //variable used in the model block only
 
   //The next three lines of code specify reference prior probability distributions.
   sigma_y ~ student_t(3,0,40);  
@@ -169,7 +169,7 @@ parameters {
 
 
 model {
-  vector[N] ypred; //variable used in the model block only
+  vector[N] y_mean; //variable used in the model block only
 
   //The next three lines of code specify reference prior probability distributions.
   sigma_y ~ student_t(3,0,40);  
@@ -179,9 +179,9 @@ model {
   
   // calculate likelihood of data
   for(i in 1:N){
-    ypred[i] =  Linf * (1-exp(-(k * (age[i]-t0) )) );
+    y_mean[i] =  Linf * (1-exp(-(k * (age[i]-t0) )) );
   }
-  tl~normal(ypred, sigma_y);
+  tl~normal(y_mean, sigma_y);
   
 }
 
