@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -104,7 +105,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,6 +120,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -125,7 +133,7 @@ div.csl-indent {
 <meta property="og:title" content="fishR - McCarrick et al.&nbsp;(2022) CPE Plot">
 <meta property="og:description" content="Using ggplot2 to recreate the cpe by species, year, and length category figure in McCarrick et al.&nbsp;(2022).">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-22_McCarricketal2022_Fig2/preview.png">
-<meta property="og:site-name" content="fishR">
+<meta property="og:site_name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
 <meta name="citation_title" content="McCarrick et al. (2022) CPE Plot">
@@ -200,10 +208,10 @@ div.csl-indent {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
@@ -215,55 +223,55 @@ div.csl-indent {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/books.html" rel="" target="">
- <span class="menu-text">Books</span></a>
+    <a class="nav-link" href="../../../pages/books.html"> 
+<span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/packages.html" rel="" target="">
- <span class="menu-text">Packages</span></a>
+    <a class="nav-link" href="../../../pages/packages.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Data</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../../teaching/index.html" rel="" target="">
- <span class="menu-text">Teaching</span></a>
+    <a class="nav-link" href="../../../teaching/index.html"> 
+<span class="menu-text">Teaching</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/contribute.html" rel="" target="">
- <span class="menu-text">Get Involved</span></a>
+    <a class="nav-link" href="../../../pages/contribute.html"> 
+<span class="menu-text">Get Involved</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -336,10 +344,11 @@ div.csl-indent {
   <li><a href="#recreating-figure-2" id="toc-recreating-figure-2" class="nav-link" data-scroll-target="#recreating-figure-2">Recreating Figure 2</a></li>
   <li><a href="#further-thoughts" id="toc-further-thoughts" class="nav-link" data-scroll-target="#further-thoughts">Further Thoughts</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-3-22_McCarricketal2022_Fig2/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-3-22_McCarricketal2022_Fig2/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
 
 
 
@@ -392,8 +401,8 @@ Note
 <li>Inconsistent “species” abbreviations. [<em>More on this below.</em>]</li>
 <li>Incorrect length and weight measurements (e.g., &lt;10 mm, &gt;2000 mm). [<em>I treated these “as is” (i.e., without correction) for this post.</em>]</li>
 </ul>
-<div class="page-columns page-full"><p>The missing data and oddly named cells were handled with <code>na=</code> below. In addition, the column types were specifically defined in <code>col_types=</code>, primarily so that the first column would be largely correctly read as a date. The year was then extracted from the <code>Date</code> variable using <code>year()</code> from <code>lubridate</code>. However, the dates recorded in the original file as only a year were interpreted as an “Excel date code” rather than a date and, thus, the year was not extracted correctly. Fortunately, this “date” format was only used for one year (2002) such that the extracted year was consistently “1905.” Thus, the “1905” was replaced with “2002” for the extracted year with <code>ifelse()</code> as shown below. Several years did not exist (because the date was not recorded) and were removed with <code>filter()</code>. Finally, the variables were rearranged slightly, <code>Species</code> was changed to <code>species</code> for consistency with other variables, and the long effort variable was changed to the shorter <code>netNights</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;Note that this code still produced a large number of warnings, all related to the “2002” “date”.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The missing data and oddly named cells were handled with <code>na=</code> below. In addition, the column types were specifically defined in <code>col_types=</code>, primarily so that the first column would be largely correctly read as a date. The year was then extracted from the <code>Date</code> variable using <code>year()</code> from <code>lubridate</code>. However, the dates recorded in the original file as only a year were interpreted as an “Excel date code” rather than a date and, thus, the year was not extracted correctly. Fortunately, this “date” format was only used for one year (2002) such that the extracted year was consistently “1905.” Thus, the “1905” was replaced with “2002” for the extracted year with <code>ifelse()</code> as shown below. Several years did not exist (because the date was not recorded) and were removed with <code>filter()</code>. Finally, the variables were rearranged slightly, <code>Species</code> was changed to <code>species</code> for consistency with other variables, and the long effort variable was changed to the shorter <code>netNights</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Note that this code still produced a large number of warnings, all related to the “2002” “date”.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="st">"download.xlsx"</span>,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">na=</span><span class="fu">c</span>(<span class="st">""</span>,<span class="st">"??"</span>,<span class="st">"QTY ="</span>,<span class="st">"QTY="</span>,<span class="st">"UNK"</span>,<span class="st">"NO TAG"</span>),</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">col_types=</span><span class="fu">c</span>(<span class="st">"date"</span>,<span class="st">"numeric"</span>,<span class="st">"text"</span>,</span>
@@ -531,8 +540,8 @@ Note
 #R|    2020    0    0  414    0  198</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>Thus, <code>species</code> is modified below by combining “YCT” and “Yct” into “YCT”, and combining “UTC”, “CHB”, and “CHUB” into “UTC”.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The data frame was subsequently reduced to just these two species.</p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;And leaving all other species “names” as-is.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Thus, <code>species</code> is modified below by combining “YCT” and “Yct” into “YCT”, and combining “UTC”, “CHB”, and “CHUB” into “UTC”.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The data frame was subsequently reduced to just these two species.</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;And leaving all other species “names” as-is.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species=</span><span class="fu">case_when</span>(</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"YCT"</span>,<span class="st">"Yct"</span>) <span class="sc">~</span> <span class="st">"YCT"</span>,</span>
@@ -608,8 +617,8 @@ Note
 #R|  # … with 152 more rows</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>Note in the previous output that <code>catch_gcat</code> is still “grouped” by year within species. Thus, <code>catch</code> can summed from this data frame to find the total catch per year for each species.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Ungroup this data frame as we will not summarize it further.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Note in the previous output that <code>catch_gcat</code> is still “grouped” by year within species. Thus, <code>catch</code> can summed from this data frame to find the total catch per year for each species.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Ungroup this data frame as we will not summarize it further.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb23" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>catch_all <span class="ot">&lt;-</span> catch_gcat <span class="sc">|&gt;</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">catch=</span><span class="fu">sum</span>(catch)) <span class="sc">|&gt;</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
@@ -631,8 +640,8 @@ Note
 #R|  # … with 26 more rows</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>As Figure 2 displays all fish and fish by length category, these two data frames should be row-bound (i.e., stacked) together. Figure 2 does <em>not</em> have panels for “substock”, “memorable”, or “trophy” sized fish so fish in those length categories were removed from the resultant data frame. Finally, a new variable called <code>type</code> was created that has the names from <code>gcat</code>, or “All” if <code>gcat</code> was <code>NA</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;<code>gcat</code> for “all fish” after <code>bind_rows()</code> was <code>NA</code> as <code>gcat</code> was not present in <code>catch_all</code></p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>As Figure 2 displays all fish and fish by length category, these two data frames should be row-bound (i.e., stacked) together. Figure 2 does <em>not</em> have panels for “substock”, “memorable”, or “trophy” sized fish so fish in those length categories were removed from the resultant data frame. Finally, a new variable called <code>type</code> was created that has the names from <code>gcat</code>, or “All” if <code>gcat</code> was <code>NA</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;<code>gcat</code> for “all fish” after <code>bind_rows()</code> was <code>NA</code> as <code>gcat</code> was not present in <code>catch_all</code></p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb25" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cpe_dat <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(catch_all,catch_gcat) <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(gcat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"substock"</span>,<span class="st">"memorable"</span>,<span class="st">"trophy"</span>))) <span class="sc">|&gt;</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type=</span><span class="fu">ifelse</span>(<span class="fu">is.na</span>(gcat),<span class="st">"All"</span>,<span class="fu">as.character</span>(gcat)))</span>
@@ -698,8 +707,8 @@ Note
 </section>
 <section id="recreating-figure-2" class="level1 page-columns page-full">
 <h1>Recreating Figure 2</h1>
-<div class="page-columns page-full"><p>My general strategy for recreating Figure 2 was to create the left and right panels of subplots separately and then combine them using <code>patchwork</code>. Each side can be constructed via faceting on <code>type</code>, but I will use <code>facet_rep_wrap()</code> from <code>lemon</code> so as to have the x-axis tick marks on each panel.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Each panel will be create with <code>geom_col()</code> using <code>width=1</code> so that the bars touch and <code>geom_text()</code> to place the labels.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> The x- and y-axes were modified as is commonly done.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Finally, I used <code>theme_bw()</code> as a base, removed the gridlines and removed the facet labels and background.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> As you examine the code below, make sure to realize that the data was filtered to just “YCT”.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;See <a href="../2023-3-15-Axis_Magic/#axes-for-each-facet">this post</a> about <code>facet_rep_wrap()</code>.</p></li><li id="fn6"><p><sup>6</sup>&nbsp;See <a href="../2023-3-18-Rooketal2022_CiscoHarvest/#recreating-figure-2">this post</a> for more explanation of how to use <code>geom_text()</code> in this way.</p></li><li id="fn7"><p><sup>7</sup>&nbsp;And is described more in <a href="../2023-3-15-Axis_Magic/">this post</a>.</p></li><li id="fn8"><p><sup>8</sup>&nbsp;As described in <a href="../2023-3-18-Rooketal2022_CiscoHarvest/#recreating-figure-2">this post</a>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>My general strategy for recreating Figure 2 was to create the left and right panels of subplots separately and then combine them using <code>patchwork</code>. Each side can be constructed via faceting on <code>type</code>, but I will use <code>facet_rep_wrap()</code> from <code>lemon</code> so as to have the x-axis tick marks on each panel.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Each panel will be create with <code>geom_col()</code> using <code>width=1</code> so that the bars touch and <code>geom_text()</code> to place the labels.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> The x- and y-axes were modified as is commonly done.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Finally, I used <code>theme_bw()</code> as a base, removed the gridlines and removed the facet labels and background.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> As you examine the code below, make sure to realize that the data was filtered to just “YCT”.</p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;See <a href="../2023-3-15-Axis_Magic/#axes-for-each-facet">this post</a> about <code>facet_rep_wrap()</code>.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;See <a href="../2023-3-18-Rooketal2022_CiscoHarvest/#recreating-figure-2">this post</a> for more explanation of how to use <code>geom_text()</code> in this way.</p></div><div id="fn7"><p><sup>7</sup>&nbsp;And is described more in <a href="../2023-3-15-Axis_Magic/">this post</a>.</p></div><div id="fn8"><p><sup>8</sup>&nbsp;As described in <a href="../2023-3-18-Rooketal2022_CiscoHarvest/#recreating-figure-2">this post</a>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb31" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>YCT <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span><span class="fu">filter</span>(cpe_dat,species<span class="sc">==</span><span class="st">"YCT"</span>),</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span>cpe)) <span class="sc">+</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray70"</span>,<span class="at">width=</span><span class="dv">1</span>) <span class="sc">+</span></span>
@@ -720,7 +729,7 @@ Note
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/make-fig2-YCT-1.png" class="img-fluid figure-img" width="432"></p>
+<p><img src="index_files/figure-html/make-fig2-YCT-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="432"></p>
 </figure>
 </div>
 </div>
@@ -749,7 +758,7 @@ Note
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/make-fig2-1.png" class="img-fluid figure-img" width="864"></p>
+<p><img src="index_files/figure-html/make-fig2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
 </figure>
 </div>
 </div>
@@ -773,8 +782,8 @@ Note
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>UTC_brks <span class="ot">&lt;-</span> scales<span class="sc">::</span><span class="fu">breaks_width</span>(<span class="dv">10</span>)</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>yexp <span class="ot">&lt;-</span> <span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>The basic plot uses the same <code>ggplot()</code> (except the data is not filtered), <code>geom_col()</code>, <code>scale_x_continous()</code>, and <code>theme_bw()</code> as before. The <code>geom_text()</code> has been eliminated because the “type” labels are going to be in the facet labels rather than “on the plot.” The part of <code>theme()</code> that removed the facet labels has been eliminated as facet labels are needed here. The spacing between panels was increased in <code>theme()</code> here. <code>facet_rep_wrap()</code> was replaced with <code>facet_grid2()</code> from <code>ggh4x</code>, where the rows are defined by <code>type</code>, the columns are defined by <code>species</code>, the y-axes are “free” and “independent” from facet to facet.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Finally, <code>facetted_pos_scales()</code> from <code>ggh4x</code> is used to apply a different <code>scale_y_continous()</code> to each panel.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;The <code>independent="y"</code> part is the main thing that <code>facet_grid2()</code> adds over <code>facet_grid()</code> from <code>ggplot2</code>.</p></li><li id="fn10"><p><sup>10</sup>&nbsp;<code>facetted_pos_scales()</code> is described in more detail in <a href="../2023-3-15-Axis_Magic/#axis-limits-for-each-facet">this post</a>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The basic plot uses the same <code>ggplot()</code> (except the data is not filtered), <code>geom_col()</code>, <code>scale_x_continous()</code>, and <code>theme_bw()</code> as before. The <code>geom_text()</code> has been eliminated because the “type” labels are going to be in the facet labels rather than “on the plot.” The part of <code>theme()</code> that removed the facet labels has been eliminated as facet labels are needed here. The spacing between panels was increased in <code>theme()</code> here. <code>facet_rep_wrap()</code> was replaced with <code>facet_grid2()</code> from <code>ggh4x</code>, where the rows are defined by <code>type</code>, the columns are defined by <code>species</code>, the y-axes are “free” and “independent” from facet to facet.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Finally, <code>facetted_pos_scales()</code> from <code>ggh4x</code> is used to apply a different <code>scale_y_continous()</code> to each panel.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;The <code>independent="y"</code> part is the main thing that <code>facet_grid2()</code> adds over <code>facet_grid()</code> from <code>ggplot2</code>.</p></div><div id="fn10"><p><sup>10</sup>&nbsp;<code>facetted_pos_scales()</code> is described in more detail in <a href="../2023-3-15-Axis_Magic/#axis-limits-for-each-facet">this post</a>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb36" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>cpe_dat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span>cpe)) <span class="sc">+</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray70"</span>,<span class="at">width=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Year"</span>,</span>
@@ -801,7 +810,7 @@ Note
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/make-fig2-alt-1.png" class="img-fluid figure-img" width="864"></p>
+<p><img src="index_files/figure-html/make-fig2-alt-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
 </figure>
 </div>
 </div>
@@ -816,11 +825,11 @@ Note
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-mccarricketal_2022" class="csl-entry" role="listitem">
 McCarrick, D. K., J. C. Dillon, B. High, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-074">Population dynamics of <span>Yellowstone Cutthroat Trout</span> in <span>Henrys Lake</span>, <span>Idaho</span></a>. Journal of Fish and Wildlife Management 13(1):169–181.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
   author = {H. Ogle, Derek},
   title = {McCarrick Et Al. (2022) {CPE} {Plot}},
   date = {2023-03-22},
@@ -871,6 +880,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -939,13 +975,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1024,10 +1062,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1037,8 +1099,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1050,7 +1121,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1094,6 +1288,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1119,6 +1314,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1176,44 +1397,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 <script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="preferred_color_scheme">
+<input type="hidden" id="giscus-alt-theme" value="preferred_color_scheme">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">
+<p>fishR Core Team</p>
+</a>
   </li>  
 </ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-3-22_McCarricketal2022_Fig2/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

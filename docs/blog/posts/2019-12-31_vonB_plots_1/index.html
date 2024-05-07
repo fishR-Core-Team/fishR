@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -104,7 +105,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,6 +120,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -123,11 +131,38 @@ div.csl-indent {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../helpers/styles.css">
 <meta property="og:title" content="fishR - von Bertalanffy Growth Plots I">
 <meta property="og:description" content="How to plot one von Bertalanffy growth model with data.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2019-12-31_vonB_plots_1/preview.png">
-<meta property="og:site-name" content="fishR">
+<meta property="og:site_name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
 <meta name="citation_title" content="von Bertalanffy Growth Plots I">
@@ -202,10 +237,10 @@ div.csl-indent {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
@@ -217,55 +252,55 @@ div.csl-indent {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/books.html" rel="" target="">
- <span class="menu-text">Books</span></a>
+    <a class="nav-link" href="../../../pages/books.html"> 
+<span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/packages.html" rel="" target="">
- <span class="menu-text">Packages</span></a>
+    <a class="nav-link" href="../../../pages/packages.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Data</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../../teaching/index.html" rel="" target="">
- <span class="menu-text">Teaching</span></a>
+    <a class="nav-link" href="../../../teaching/index.html"> 
+<span class="menu-text">Teaching</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/contribute.html" rel="" target="">
- <span class="menu-text">Get Involved</span></a>
+    <a class="nav-link" href="../../../pages/contribute.html"> 
+<span class="menu-text">Get Involved</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -331,10 +366,11 @@ div.csl-indent {
   <li><a href="#model-fit-with-confidence-band" id="toc-model-fit-with-confidence-band" class="nav-link" data-scroll-target="#model-fit-with-confidence-band">Model Fit with Confidence Band</a></li>
   <li><a href="#add-equation-to-plot" id="toc-add-equation-to-plot" class="nav-link" data-scroll-target="#add-equation-to-plot">Add Equation to Plot</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2019-12-31_vonB_plots_1/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2019-12-31_vonB_plots_1/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
 
 
 
@@ -362,8 +398,8 @@ Note
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
 <p>The most common questions that I receive through the <strong>fishR</strong> website are related to fitting a von Bertalanffy growth function (VBGF) to data and viewing the results. In this post, I briefly demonstrate how to fit a VBGF to a single group of data and then provide several options for how to view the fit of the function to those data.</p>
-<div class="page-columns page-full"><p>I will use lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a> package. These data formed many of the examples in <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm) and <code>age</code> variables<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I focus on female Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> and <code>sex</code> as they only had one category after filtering and three variables related to the <code>loc</code>ation of capture.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>I will use lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a> package. These data formed many of the examples in <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm) and <code>age</code> variables<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I focus on female Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></div><div id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> and <code>sex</code> as they only had one category after filtering and three variables related to the <code>loc</code>ation of capture.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wf14T <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">|&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2014</span>,sex<span class="sc">==</span><span class="st">"female"</span>,loc<span class="sc">==</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
@@ -384,8 +420,8 @@ Note
 <section id="fitting-the-vbgf" class="level1 page-columns page-full">
 <h1>Fitting the VBGF</h1>
 <p>Methods for fitting a von Bertalannfy growth function (VBGF) are detailed in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. Thus, this methodology will only be briefly explained here.</p>
-<div class="page-columns page-full"><p>A function for the typical VBGF is constructed with <code>vbFuns()</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>A function for the typical VBGF is constructed with <code>vbFuns()</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>( vb <span class="ot">&lt;-</span> <span class="fu">vbFuns</span>(<span class="at">param=</span><span class="st">"Typical"</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output" data-code-line-numbers="nil"><code>#R|  function (t, Linf, K = NULL, t0 = NULL) 
@@ -401,8 +437,8 @@ Note
 #R|  &lt;environment: 0x000001ece82dbdb8&gt;</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>Some of the methods below use the fact that the three parameters of the typical VBGF (<span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(t_{0}\)</span>) can be given to this function separately (in that order) or as a vector (still in that order). For example, both lines below can be used to predict the mean length for an age-3 fish with the given VBGF parameters.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The parameters could be given in a different order but would need to be named; e.g., <code>vb(3,t0=-0.5,K=0.3,Linf=300)</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Some of the methods below use the fact that the three parameters of the typical VBGF (<span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(t_{0}\)</span>) can be given to this function separately (in that order) or as a vector (still in that order). For example, both lines below can be used to predict the mean length for an age-3 fish with the given VBGF parameters.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;The parameters could be given in a different order but would need to be named; e.g., <code>vb(3,t0=-0.5,K=0.3,Linf=300)</code>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vb</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="fl">0.3</span>,<span class="sc">-</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output" data-code-line-numbers="nil"><code>#R|  [1] 195.0187</code></pre>
@@ -431,8 +467,8 @@ Note
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fit0 <span class="ot">&lt;-</span> <span class="fu">nls</span>(tl<span class="sc">~</span><span class="fu">vb</span>(age,Linf,K,t0),<span class="at">data=</span>wf14T,<span class="at">start=</span>sv0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>The parameter estimates and confidence intervals are extracted from the saved <code>nls()</code> object with <code>coef()</code> and <code>confint()</code>, respectively.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> They are column-bound together here for aesthetic reasons.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;This <code>confint()</code> requires the <code>MASS</code> package which is usually loaded automatically with base R.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The parameter estimates and confidence intervals are extracted from the saved <code>nls()</code> object with <code>coef()</code> and <code>confint()</code>, respectively.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> They are column-bound together here for aesthetic reasons.</p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;This <code>confint()</code> requires the <code>MASS</code> package which is usually loaded automatically with base R.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb13" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">Est=</span><span class="fu">coef</span>(fit0),<span class="fu">confint</span>(fit0))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output" data-code-line-numbers="nil"><code>#R|              Est        2.5%       97.5%
@@ -445,8 +481,8 @@ Note
 </section>
 <section id="model-fit-using-stat_function" class="level1 page-columns page-full">
 <h1>Model Fit Using <code>stat_function()</code></h1>
-<div class="page-columns page-full"><p>Here all “layers” of the plot will use the same data; thus, <code>data=</code> and the <code>aes()</code>thetic mappings are defined in <code>ggplot()</code>. Observed lengths and ages are added to the plot with <code>geom_point()</code>. The points in <a href="#fig-vbfit1">Figure&nbsp;1</a> were made slightly larger than the default (with <code>size=</code>) and also with a fairly low transparency value to handle considerable over-plotting. <code>scale_y_continuous()</code> and <code>scale_x_continuous()</code> control aspects of y- and x-axes, respectively – labels for axes are given in <code>name=</code>, minimum and maximum limits for the axis are in <code>limits=</code>, and specific major breaks for the axis are in <code>breaks=</code>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Finally, the fitted model line is added to the plot with <code>stat_function()</code> with the VBGF function created above in <code>fun=</code> and a list of arguments to this function in <code>args=</code>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> In <a href="#fig-vbfit1">Figure&nbsp;1</a> I made the model line a little wider than the default. Finally the <code>theme()</code> was modified to remove the minor grid lines from both axes.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;<code>seq(0,700,100)</code> makes a vector of numbers from 0 to 700 in increments of 100 and <code>0:11</code> makes a vector of integers from 0 to 11.</p></li><li id="fn7"><p><sup>7</sup>&nbsp;The usage here exploits the fact that all three parameters of the VBGF can be given in the first parameter argument, <code>Linf=</code>.</p></li><li id="fn8"><p><sup>8</sup>&nbsp;Thus the gridlines only appear for labelled axis breaks.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>Here all “layers” of the plot will use the same data; thus, <code>data=</code> and the <code>aes()</code>thetic mappings are defined in <code>ggplot()</code>. Observed lengths and ages are added to the plot with <code>geom_point()</code>. The points in <a href="#fig-vbfit1" class="quarto-xref">Figure&nbsp;1</a> were made slightly larger than the default (with <code>size=</code>) and also with a fairly low transparency value to handle considerable over-plotting. <code>scale_y_continuous()</code> and <code>scale_x_continuous()</code> control aspects of y- and x-axes, respectively – labels for axes are given in <code>name=</code>, minimum and maximum limits for the axis are in <code>limits=</code>, and specific major breaks for the axis are in <code>breaks=</code>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Finally, the fitted model line is added to the plot with <code>stat_function()</code> with the VBGF function created above in <code>fun=</code> and a list of arguments to this function in <code>args=</code>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> In <a href="#fig-vbfit1" class="quarto-xref">Figure&nbsp;1</a> I made the model line a little wider than the default. Finally the <code>theme()</code> was modified to remove the minor grid lines from both axes.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;<code>seq(0,700,100)</code> makes a vector of numbers from 0 to 700 in increments of 100 and <code>0:11</code> makes a vector of integers from 0 to 11.</p></div><div id="fn7"><p><sup>7</sup>&nbsp;The usage here exploits the fact that all three parameters of the VBGF can be given in the first parameter argument, <code>Linf=</code>.</p></div><div id="fn8"><p><sup>8</sup>&nbsp;Thus the gridlines only appear for labelled axis breaks.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl)) <span class="sc">+</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,</span>
@@ -455,17 +491,21 @@ Note
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>vb,<span class="at">args=</span><span class="fu">list</span>(<span class="at">Linf=</span><span class="fu">coef</span>(fit0)),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit1-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;1: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014.</figcaption>
+<div id="fig-vbfit1" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vbfit1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-vbfit1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vbfit1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>The model line can be displayed outside the range of observed ages by including minimum and maximum values in <code>xlim=</code> over which the function in <code>fun=</code> will be evaluated. In <a href="#fig-vbfit1a">Figure&nbsp;2</a> I add a dashed line for the model that includes evaluation at ages outside the observed range of ages (first <code>stat_function()</code>) and then plotted the model line for observed ages on top of that (second <code>stat_function()</code>). This gives the impression of using a dashed line only for the ages that would be extrapolated.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;I would usually change the axis expansion factors here to clean this plot up a bit.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>The model line can be displayed outside the range of observed ages by including minimum and maximum values in <code>xlim=</code> over which the function in <code>fun=</code> will be evaluated. In <a href="#fig-vbfit1a" class="quarto-xref">Figure&nbsp;2</a> I add a dashed line for the model that includes evaluation at ages outside the observed range of ages (first <code>stat_function()</code>) and then plotted the model line for observed ages on top of that (second <code>stat_function()</code>). This gives the impression of using a dashed line only for the ages that would be extrapolated.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;I would usually change the axis expansion factors here to clean this plot up a bit.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl)) <span class="sc">+</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
@@ -475,10 +515,14 @@ Note
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>vb,<span class="at">args=</span><span class="fu">list</span>(<span class="at">Linf=</span><span class="fu">coef</span>(fit0)),<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit1a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit1a-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;2: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.</figcaption>
+<div id="fig-vbfit1a" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vbfit1a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-vbfit1a-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vbfit1a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -487,8 +531,8 @@ Note
 </section>
 <section id="model-fit-using-geom_smooth" class="level1 page-columns page-full">
 <h1>Model Fit Using <code>geom_smooth()</code></h1>
-<div class="page-columns page-full"><p><code>geom_smooth()</code> can use <code>nls()</code> to fit the VBGF “behind the scenes” and then add the resultant model line to the plot. For this purpose <code>geom_smooth()</code> requires <code>method="nls"</code> and <code>se=FALSE</code>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> In addition, arguments for fitting the VBGF required by <code>nls()</code> must be in a list given to <code>methods.args=</code>. Minimum required arguments for fitting the VBGF are the VBGF <code>formula=</code> and <code>start=</code>ing values as shown for <code>nls()</code> above. <a href="#fig-vbfit2">Figure&nbsp;3</a> uses <code>geom_smooth()</code> in this way to reproduce <a href="#fig-vbfit1">Figure&nbsp;1</a>.</p><div class="no-row-height column-margin column-container"><li id="fn10"><p><sup>10</sup>&nbsp;<code>se=FALSE</code> is required because this argument is not implemented in <code>nls()</code>.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p><code>geom_smooth()</code> can use <code>nls()</code> to fit the VBGF “behind the scenes” and then add the resultant model line to the plot. For this purpose <code>geom_smooth()</code> requires <code>method="nls"</code> and <code>se=FALSE</code>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> In addition, arguments for fitting the VBGF required by <code>nls()</code> must be in a list given to <code>methods.args=</code>. Minimum required arguments for fitting the VBGF are the VBGF <code>formula=</code> and <code>start=</code>ing values as shown for <code>nls()</code> above. <a href="#fig-vbfit2" class="quarto-xref">Figure&nbsp;3</a> uses <code>geom_smooth()</code> in this way to reproduce <a href="#fig-vbfit1" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn10"><p><sup>10</sup>&nbsp;<code>se=FALSE</code> is required because this argument is not implemented in <code>nls()</code>.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl)) <span class="sc">+</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
@@ -498,10 +542,14 @@ Note
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color=</span><span class="st">"black"</span>,<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor.x=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit2-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;3: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014.</figcaption>
+<div id="fig-vbfit2" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vbfit2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-vbfit2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vbfit2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -510,12 +558,12 @@ Note
 </section>
 <section id="model-fit-from-predicted-values" class="level1 page-columns page-full">
 <h1>Model Fit from Predicted Values</h1>
-<div class="page-columns page-full"><p><a href="#fig-vbfit1">Figure&nbsp;1</a> and <a href="#fig-vbfit1a">Figure&nbsp;2</a> can also be constructed from lengths predicted at a variety of ages “outside” of any <code>ggplot()</code> layers. I find it easier when using this method to first create a vector of ages over which the fitted model will be evaluated is then constructed. In this case the ages extend beyond the observed range of ages. The <code>seq()</code>uence produced here will have 101 age values between -1 and 12.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p><a href="#fig-vbfit1" class="quarto-xref">Figure&nbsp;1</a> and <a href="#fig-vbfit1a" class="quarto-xref">Figure&nbsp;2</a> can also be constructed from lengths predicted at a variety of ages “outside” of any <code>ggplot()</code> layers. I find it easier when using this method to first create a vector of ages over which the fitted model will be evaluated is then constructed. In this case the ages extend beyond the observed range of ages. The <code>seq()</code>uence produced here will have 101 age values between -1 and 12.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn11"><p><sup>11</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>,<span class="at">length.out=</span><span class="dv">101</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>The mean length at each of these ages is predicted with <code>predict()</code>, where the age vector just created is set equal to the name of the age variable in the <code>nls()</code> object inside of <code>data.frame()</code>. The vector of ages and predicted mean lengths are put into a data frame for plotting below.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Here the data frame is called <code>preds</code> and it has two variables named <code>age</code> and <code>fit</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The mean length at each of these ages is predicted with <code>predict()</code>, where the age vector just created is set equal to the name of the age variable in the <code>nls()</code> object inside of <code>data.frame()</code>. The vector of ages and predicted mean lengths are put into a data frame for plotting below.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn12"><p><sup>12</sup>&nbsp;Here the data frame is called <code>preds</code> and it has two variables named <code>age</code> and <code>fit</code>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb19" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age=</span>ages,</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fit=</span><span class="fu">predict</span>(fit0,<span class="fu">data.frame</span>(<span class="at">age=</span>ages)))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(preds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -530,8 +578,8 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>These predicted mean lengths-at-age are then used to add a fitted model line to a plot of observed lengths-at-age with <code>geom_line()</code>. However, because the observed and predicted data are in different data frames, the <code>data=</code> and mapped <code>aes()</code>thetics are declared within the appropriate <code>geom</code>s rather than within <code>ggplot()</code>. For example, <code>geom_point()</code> is used below to add the observed data to the plot and <code>geom_line()</code> is used below to add the modeled line. Note below that separate <code>geom_line()</code>s are used to show the modeled line over extrapolated and observed ages.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> The results in <a href="#fig-vbfit3a">Figure&nbsp;4</a> reproduce <a href="#fig-vbfit1a">Figure&nbsp;2</a>.</p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;Also note the use of <code>filter()</code> to reduce the predicted lengths-at-age to the observed ages.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>These predicted mean lengths-at-age are then used to add a fitted model line to a plot of observed lengths-at-age with <code>geom_line()</code>. However, because the observed and predicted data are in different data frames, the <code>data=</code> and mapped <code>aes()</code>thetics are declared within the appropriate <code>geom</code>s rather than within <code>ggplot()</code>. For example, <code>geom_point()</code> is used below to add the observed data to the plot and <code>geom_line()</code> is used below to add the modeled line. Note below that separate <code>geom_line()</code>s are used to show the modeled line over extrapolated and observed ages.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> The results in <a href="#fig-vbfit3a" class="quarto-xref">Figure&nbsp;4</a> reproduce <a href="#fig-vbfit1a" class="quarto-xref">Figure&nbsp;2</a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn13"><p><sup>13</sup>&nbsp;Also note the use of <code>filter()</code> to reduce the predicted lengths-at-age to the observed ages.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>fit),<span class="at">linewidth=</span><span class="dv">1</span>,<span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
@@ -540,10 +588,14 @@ Note
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit3a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit3a-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;4: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.</figcaption>
+<div id="fig-vbfit3a" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vbfit3a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-vbfit3a-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vbfit3a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014. The dashed line shows the model fit outside the range of observed ages.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -552,9 +604,9 @@ Note
 </section>
 <section id="model-fit-with-confidence-band" class="level1 page-columns page-full">
 <h1>Model Fit with Confidence Band</h1>
-<p>The main reason for introducing the idea of constructing a graphic from predicted values is that it allows for the opportunity to add confidence and prediction bands around the fitted model line (<a href="#fig-vbfit4a">Figure&nbsp;5</a>).</p>
-<div class="page-columns page-full"><p>Creation of this plot requires modifying the data frame of predicted mean lengths at age with confidence (or prediction) intervals for the mean length at each age. As mentioned previously, constructing these intervals is not straightforward with non-linear models. However, confidence (or prediction) intervals can be estimated with Taylor series approximations as implemented in <code>predFit()</code> of <code>investr</code>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> <code>predFit()</code> requires the saved <code>nls()</code> object as its first argument, a data frame of ages over which to make predictions as the second argument, and either <code>interval="confidence"</code> for confidence intervals or <code>interval="prediction"</code> for prediction intervals.</p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;Use of <code>::</code> here allows <code>predFit()</code> from <code>investr</code> to be used without loading all of <code>investr</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The main reason for introducing the idea of constructing a graphic from predicted values is that it allows for the opportunity to add confidence and prediction bands around the fitted model line (<a href="#fig-vbfit4a" class="quarto-xref">Figure&nbsp;5</a>).</p>
+<p>Creation of this plot requires modifying the data frame of predicted mean lengths at age with confidence (or prediction) intervals for the mean length at each age. As mentioned previously, constructing these intervals is not straightforward with non-linear models. However, confidence (or prediction) intervals can be estimated with Taylor series approximations as implemented in <code>predFit()</code> of <code>investr</code>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> <code>predFit()</code> requires the saved <code>nls()</code> object as its first argument, a data frame of ages over which to make predictions as the second argument, and either <code>interval="confidence"</code> for confidence intervals or <code>interval="prediction"</code> for prediction intervals.</p>
+<div class="no-row-height column-margin column-container"><div id="fn14"><p><sup>14</sup>&nbsp;Use of <code>::</code> here allows <code>predFit()</code> from <code>investr</code> to be used without loading all of <code>investr</code>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age=</span>ages,</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                    investr<span class="sc">::</span><span class="fu">predFit</span>(fit0,<span class="fu">data.frame</span>(<span class="at">age=</span>ages),</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">interval=</span><span class="st">"confidence"</span>))</span>
@@ -569,8 +621,8 @@ Note
 #R|  101 12.00 642.88743 625.91982 659.85504</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>A confidence band for mean lengths at age is added to the plot with <code>geom_ribbon()</code> where the lower part of the ribbon is at the lower confidence values (i.e., <code>ymin=lwr</code>) and the upper part is at the upper confidence value (i.e., <code>ymax=upr</code>).<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> <code>fill=</code> gives the color of the enclosed ribbon.</p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;Add <code>geom_ribbon()</code> first so that it is behind the points and model lines.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>A confidence band for mean lengths at age is added to the plot with <code>geom_ribbon()</code> where the lower part of the ribbon is at the lower confidence values (i.e., <code>ymin=lwr</code>) and the upper part is at the upper confidence value (i.e., <code>ymax=upr</code>).<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> <code>fill=</code> gives the color of the enclosed ribbon.</p>
+<div class="no-row-height column-margin column-container"><div id="fn15"><p><sup>15</sup>&nbsp;Add <code>geom_ribbon()</code> first so that it is behind the points and model lines.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr),<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">y=</span>tl,<span class="at">x=</span>age),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
@@ -580,10 +632,14 @@ Note
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Age (years)"</span>,<span class="at">breaks=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit4a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit4a-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;5: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.</figcaption>
+<div id="fig-vbfit4a" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vbfit4a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-vbfit4a-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vbfit4a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -622,8 +678,8 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>The object returned from this function can be added to the <code>ggplot</code> graph with <code>annotate()</code> as shown below.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn16"><p><sup>16</sup>&nbsp;The <code>x=</code>, <code>y=</code>, <code>hjust=</code>, and <code>vjust=</code> arguments are used to position and justify the text and may take some trial-and-error to get what you want.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>The object returned from this function can be added to the <code>ggplot</code> graph with <code>annotate()</code> as shown below.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn16"><p><sup>16</sup>&nbsp;The <code>x=</code>, <code>y=</code>, <code>hjust=</code>, and <code>vjust=</code> arguments are used to position and justify the text and may take some trial-and-error to get what you want.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb26" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr),<span class="at">fill=</span><span class="st">"gray80"</span>) <span class="sc">+</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T,<span class="fu">aes</span>(<span class="at">y=</span>tl,<span class="at">x=</span>age),<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
@@ -635,10 +691,14 @@ Note
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"text"</span>,<span class="at">label=</span><span class="fu">makeVBEqnLabel</span>(fit0),<span class="at">parse=</span><span class="cn">TRUE</span>,</span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">size=</span><span class="dv">4</span>,<span class="at">x=</span><span class="cn">Inf</span>,<span class="at">y=</span><span class="sc">-</span><span class="cn">Inf</span>,<span class="at">hjust=</span><span class="fl">1.1</span>,<span class="at">vjust=</span><span class="sc">-</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-vbfit4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-vbfit4-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.</figcaption>
+<div id="fig-vbfit4" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vbfit4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-vbfit4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vbfit4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2014 with a 95% confidence band. The dashed line shows the model fit outside the range of observed ages.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -665,14 +725,14 @@ Warning
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry" role="listitem">
 Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
 </div>
 <div id="ref-ogleetal_2017" class="csl-entry" role="listitem">
 Ogle, D. H., T. O. Brenden, and J. L. McCormick. 2017. <a href="https://derekogle.com/AGF/">Growth <span>Estimation</span>: <span>Growth Models</span> and <span>Statistical Inference</span></a>. Pages 265–359 <em>in</em> M. C. Quist and D. A. Isermann, editors. Age and <span>Growth</span> of <span>Fishes</span>: <span>Principles</span> and <span>Techniques</span>. <span>American Fisheries Society</span>, <span>Bethesda, MD</span>.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2019,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2019,
   author = {H. Ogle, Derek},
   title = {Von {Bertalanffy} {Growth} {Plots} {I}},
   date = {2019-12-31},
@@ -723,6 +783,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -791,13 +878,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -876,10 +965,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -889,8 +1002,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -902,7 +1024,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -946,6 +1191,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -971,6 +1217,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1028,44 +1300,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 <script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="preferred_color_scheme">
+<input type="hidden" id="giscus-alt-theme" value="preferred_color_scheme">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">
+<p>fishR Core Team</p>
+</a>
   </li>  
 </ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2019-12-31_vonB_plots_1/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

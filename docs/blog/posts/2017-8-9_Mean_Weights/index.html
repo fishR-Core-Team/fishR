@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -104,7 +105,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,6 +120,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -123,11 +131,38 @@ div.csl-indent {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../helpers/styles.css">
 <meta property="og:title" content="fishR - Mean Weights at Ages From Lengths">
 <meta property="og:description" content="Demonstrates concerns and corrections with estimating mean weight from observed lengths and a weight-length relationship.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2017-8-9_Mean_Weights/preview.png">
-<meta property="og:site-name" content="fishR">
+<meta property="og:site_name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
 <meta name="citation_title" content="Mean Weights at Ages From Lengths">
@@ -202,10 +237,10 @@ div.csl-indent {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
@@ -217,55 +252,55 @@ div.csl-indent {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/books.html" rel="" target="">
- <span class="menu-text">Books</span></a>
+    <a class="nav-link" href="../../../pages/books.html"> 
+<span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/packages.html" rel="" target="">
- <span class="menu-text">Packages</span></a>
+    <a class="nav-link" href="../../../pages/packages.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Data</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../../teaching/index.html" rel="" target="">
- <span class="menu-text">Teaching</span></a>
+    <a class="nav-link" href="../../../teaching/index.html"> 
+<span class="menu-text">Teaching</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/contribute.html" rel="" target="">
- <span class="menu-text">Get Involved</span></a>
+    <a class="nav-link" href="../../../pages/contribute.html"> 
+<span class="menu-text">Get Involved</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -330,10 +365,11 @@ div.csl-indent {
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#appendix-summaries-using-different-values-of-b-and-sds" id="toc-appendix-summaries-using-different-values-of-b-and-sds" class="nav-link" data-scroll-target="#appendix-summaries-using-different-values-of-b-and-sds">Appendix: Summaries Using Different Values of b and SDs</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2017-8-9_Mean_Weights/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2017-8-9_Mean_Weights/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
 
 
 
@@ -363,8 +399,8 @@ Note
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
 <p>Recently I was tasked with estimating mean weights-at-age for data that contained no weights, but did contain lengths and ages (ages were from applying an age-length key). A weight-length relationship was available (derived from a smaller sample from the same population). A question arose about whether the weight-length relationship should be used to predict weights for individual fish and then summarized to estimate mean weights at age or whether the weight-length relationship should be applied to summarized mean lengths-at-age to estimate mean weights-at-age.</p>
-<div class="page-columns page-full"><p>This issue has been addressed in the literature. <span class="citation" data-cites="ricker_1975">Ricker (<a href="#ref-ricker_1975" role="doc-biblioref">1975</a>)</span> states that the true mean weight is always greater, “on the order of 5%,” than the mean weight computed from the weight-length relationship with the mean length. <span class="citation" data-cites="tesch_1971">Tesch (<a href="#ref-tesch_1971" role="doc-biblioref">1971</a>)</span> suggested that the error in predicting mean weight-at-age with the weight-length relationship using mean length-at-age would be about 5-10%. In a simulation study, <span class="citation" data-cites="nielsenschoch_1980">Nielsen and Schoch (<a href="#ref-nielsenschoch_1980" role="doc-biblioref">1980</a>)</span> found that Tesch’s suggestion was too general and that error was less than 10% when the coefficient of variation (CV; standard deviation divided by mean) in lengths was less than 10%, but could be substantially higher when the CV was higher, with the specific result dependent on the weight-length regression exponent (b).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="citation" data-cites="pienaarricker_1968">Pienaar and Ricker (<a href="#ref-pienaarricker_1968" role="doc-biblioref">1968</a>)</span> and <span class="citation" data-cites="beyer_1991">Beyer (<a href="#ref-beyer_1991" role="doc-biblioref">1991</a>)</span> both suggested corrections to reduce the bias in the mean weight-at-age produced by the weight-length regression using the mean length.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;<span class="citation" data-cites="nielsenschoch_1980">Nielsen and Schoch (<a href="#ref-nielsenschoch_1980" role="doc-biblioref">1980</a>)</span> provided a nice geometric description of why this bias occurs.</p></li></div></div>
-<p>In this post, I explore the bias in using the weight-length regression to estimate mean weight-at-age from mean length-at-age and the correction factors suggested by <span class="citation" data-cites="beyer_1991">Beyer (<a href="#ref-beyer_1991" role="doc-biblioref">1991</a>)</span>.</p>
+<p>This issue has been addressed in the literature. <span class="citation" data-cites="ricker_1975">Ricker (<a href="#ref-ricker_1975" role="doc-biblioref">1975</a>)</span> states that the true mean weight is always greater, “on the order of 5%,” than the mean weight computed from the weight-length relationship with the mean length. <span class="citation" data-cites="tesch_1971">Tesch (<a href="#ref-tesch_1971" role="doc-biblioref">1971</a>)</span> suggested that the error in predicting mean weight-at-age with the weight-length relationship using mean length-at-age would be about 5-10%. In a simulation study, <span class="citation" data-cites="nielsenschoch_1980">Nielsen and Schoch (<a href="#ref-nielsenschoch_1980" role="doc-biblioref">1980</a>)</span> found that Tesch’s suggestion was too general and that error was less than 10% when the coefficient of variation (CV; standard deviation divided by mean) in lengths was less than 10%, but could be substantially higher when the CV was higher, with the specific result dependent on the weight-length regression exponent (b).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="citation" data-cites="pienaarricker_1968">Pienaar and Ricker (<a href="#ref-pienaarricker_1968" role="doc-biblioref">1968</a>)</span> and <span class="citation" data-cites="beyer_1991">Beyer (<a href="#ref-beyer_1991" role="doc-biblioref">1991</a>)</span> both suggested corrections to reduce the bias in the mean weight-at-age produced by the weight-length regression using the mean length.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;<span class="citation" data-cites="nielsenschoch_1980">Nielsen and Schoch (<a href="#ref-nielsenschoch_1980" role="doc-biblioref">1980</a>)</span> provided a nice geometric description of why this bias occurs.</p></div></div><p>In this post, I explore the bias in using the weight-length regression to estimate mean weight-at-age from mean length-at-age and the correction factors suggested by <span class="citation" data-cites="beyer_1991">Beyer (<a href="#ref-beyer_1991" role="doc-biblioref">1991</a>)</span>.</p>
 <p>&nbsp;</p>
 </section>
 <section id="sample-data" class="level1 page-columns page-full">
@@ -401,7 +437,7 @@ Note
 #R|  294   8 589 1003 1126</code></pre>
 </div>
 </div>
-<p>Modeling data in this way is simple, but at least somewhat realistic (<a href="#fig-explore1">Figure&nbsp;1</a>).</p>
+<p>Modeling data in this way is simple, but at least somewhat realistic (<a href="#fig-explore1" class="quarto-xref">Figure&nbsp;1</a>).</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/fig-explore1_3a33f752e65c22c0ae06e50f80086efe">
 <div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lenh <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="fu">aes</span>(<span class="at">x=</span>len)) <span class="sc">+</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="dv">10</span>,<span class="at">boundary=</span><span class="dv">0</span>,<span class="at">color=</span><span class="st">"black"</span>,<span class="at">fill=</span><span class="st">"gray70"</span>) <span class="sc">+</span></span>
@@ -421,10 +457,14 @@ Note
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Length (mm)"</span>)</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>(lenh <span class="sc">+</span> lenw) <span class="sc">/</span> (wl <span class="sc">+</span> al)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-explore1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-explore1-1.png" class="img-fluid figure-img" alt="Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right)." width="768"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;1: Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right).</figcaption>
+<div id="fig-explore1" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" alt="Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right)." data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-explore1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-explore1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right)." width="768">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-explore1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Histograms of lengths (upper left) and weights (upper right) and scatterplots of weight versus length (lower left) and length versus age (lower right).
+</figcaption>
 </figure>
 </div>
 </div>
@@ -433,8 +473,8 @@ Note
 </section>
 <section id="explore-the-bias" class="level1 page-columns page-full">
 <h1>Explore the Bias</h1>
-<div class="page-columns page-full"><p>Below the mean length (<code>mnlen</code>) and mean weight without any random erro (i.e., the “true” mean weight for individuals modeled above; <code>true.mnwt</code>) are calculated (using <code>group_by()</code> and <code>summarize()</code>). The predicted mean weight at each age is then computed from the mean length at each age and the weight-length relationship (i.e., <code>pr.mnwt</code> using <code>mutate()</code> and the regression coefficient values from above). Finally a percentage error between the predicted and true mean weights is computed for each age (in <code>dif.minwt</code>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;The <code>as.data.frame()</code> is used here because I don’t like the <code>tibble</code> format that is returned by <code>summarize()</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-3_222b792c5027029ec82a73338f942c40">
+<p>Below the mean length (<code>mnlen</code>) and mean weight without any random erro (i.e., the “true” mean weight for individuals modeled above; <code>true.mnwt</code>) are calculated (using <code>group_by()</code> and <code>summarize()</code>). The predicted mean weight at each age is then computed from the mean length at each age and the weight-length relationship (i.e., <code>pr.mnwt</code> using <code>mutate()</code> and the regression coefficient values from above). Finally a percentage error between the predicted and true mean weights is computed for each age (in <code>dif.minwt</code>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The <code>as.data.frame()</code> is used here because I don’t like the <code>tibble</code> format that is returned by <code>summarize()</code>.</p></div></div><div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-3_222b792c5027029ec82a73338f942c40">
 <div class="sourceCode cell-code" id="cb5" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sum1 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(df,age) <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mnlen=</span><span class="fu">mean</span>(len),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">true.mnwt=</span><span class="fu">mean</span>(wt1)) <span class="sc">|&gt;</span></span>
@@ -442,12 +482,13 @@ Note
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">dif.mnwt=</span>(pr.mnwt<span class="sc">-</span>true.mnwt)<span class="sc">/</span>true.mnwt<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The results from this one sample show that the mean weights computed from the mean lengths and the weight-length regression (i.e., <code>pr.mnwt</code>) are lower at each age then the “true” mean weights (<code>true.mnwt</code>; <a href="#tbl-sum1">Table&nbsp;1</a>).</p>
+<p>The results from this one sample show that the mean weights computed from the mean lengths and the weight-length regression (i.e., <code>pr.mnwt</code>) are lower at each age then the “true” mean weights (<code>true.mnwt</code>; <a href="#tbl-sum1" class="quarto-xref">Table&nbsp;1</a>).</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum1_97bf2688377fa2426463e750e8638b65">
-<div class="cell-output-display page-columns page-full">
-<div id="tbl-sum1" class="anchored page-columns page-full">
-<table class="table table-sm table-striped small">
-
+<div id="tbl-sum1" class="cell quarto-float anchored page-columns page-full" data-hash="index_cache/html/tbl-sum1_97bf2688377fa2426463e750e8638b65" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure page-columns page-full">
+<div aria-describedby="tbl-sum1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">age</th>
@@ -502,16 +543,22 @@ Note
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Table&nbsp;1: Summary table using weights without any error and no correction for the predicted mean weights.</div></div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-tbl margin-caption" id="tbl-sum1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Summary table using weights without any error and no correction for the predicted mean weights.
+</figcaption>
+</figure>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>Of course, weight-length relationships are not without error, so the weights with a small amount of random error were used to determine if the pattern of a negative bias when predicting mean weights from mean lengths persists with more realistic data.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Results from this one set of more realistic data showed a similar, though not as consistent, degree of negative bias when predicting mean weights from mean lengths (<a href="#tbl-sum2">Table&nbsp;2</a>).</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Only a small error was added because the relationship between weight and length is very strong for most fishes. The r-squared for this relationship was a realistic 0.969.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum2_b20e517ab859adb5772fc653f22125e6">
-<div class="cell-output-display page-columns page-full">
-<div id="tbl-sum2" class="anchored page-columns page-full">
-<table class="table table-sm table-striped small">
-
+<p>Of course, weight-length relationships are not without error, so the weights with a small amount of random error were used to determine if the pattern of a negative bias when predicting mean weights from mean lengths persists with more realistic data.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Results from this one set of more realistic data showed a similar, though not as consistent, degree of negative bias when predicting mean weights from mean lengths (<a href="#tbl-sum2" class="quarto-xref">Table&nbsp;2</a>).</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Only a small error was added because the relationship between weight and length is very strong for most fishes. The r-squared for this relationship was a realistic 0.969.</p></div></div><div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sum2_b20e517ab859adb5772fc653f22125e6">
+<div id="tbl-sum2" class="cell quarto-float anchored page-columns page-full" data-hash="index_cache/html/tbl-sum2_b20e517ab859adb5772fc653f22125e6" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure page-columns page-full">
+<div aria-describedby="tbl-sum2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">age</th>
@@ -566,20 +613,26 @@ Note
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Table&nbsp;2: Summary table using weights with a small amount of error and no correction for the predicted mean weights.</div></div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-tbl margin-caption" id="tbl-sum2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Summary table using weights with a small amount of error and no correction for the predicted mean weights.
+</figcaption>
+</figure>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>I then performed the analysis above 1000 times, keeping track of the percent error between the predicted weight and the true mean weight for each age for each sample.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The code here also uses the correction factors discussed above; those results are presented further below.</p></li></div></div>
-<div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-6_3cdf8e9d0a6565412415c08cbd580d9d">
+<p>I then performed the analysis above 1000 times, keeping track of the percent error between the predicted weight and the true mean weight for each age for each sample.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;The code here also uses the correction factors discussed above; those results are presented further below.</p></div></div><div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-6_3cdf8e9d0a6565412415c08cbd580d9d">
 
 </div>
-<p>The results of this simulation suggest an average negative bias near 4% for age-3 fish and between about 1 and 2% for all older fish (<a href="#tbl-sim1">Table&nbsp;3</a>). Note that the CV in length for each age varied between 2.7% and 9.8% in these simulations.</p>
+<p>The results of this simulation suggest an average negative bias near 4% for age-3 fish and between about 1 and 2% for all older fish (<a href="#tbl-sim1" class="quarto-xref">Table&nbsp;3</a>). Note that the CV in length for each age varied between 2.7% and 9.8% in these simulations.</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sim1_959ca319176588df8bc2c7c48c0611fb">
-<div class="cell-output-display page-columns page-full">
-<div id="tbl-sim1" class="anchored page-columns page-full">
-<table class="table table-sm table-striped small">
-
+<div id="tbl-sim1" class="cell quarto-float anchored page-columns page-full" data-hash="index_cache/html/tbl-sim1_959ca319176588df8bc2c7c48c0611fb" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure page-columns page-full">
+<div aria-describedby="tbl-sim1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">age3</th>
@@ -601,7 +654,12 @@ Note
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Table&nbsp;3: Mean percentage difference in uncorrected predicted mean and true mean weights by age class for 1000 simulations.</div></div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-tbl margin-caption" id="tbl-sim1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Mean percentage difference in uncorrected predicted mean and true mean weights by age class for 1000 simulations.
+</figcaption>
+</figure>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -626,12 +684,13 @@ Note
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">dif.mnwt.l=</span>(pr.mnwt.l<span class="sc">-</span>true.mnwt)<span class="sc">/</span>true.mnwt<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>These calculations were again repeated 1000 times and summarized in the bottom two rows of <a href="#tbl-sim2">Table&nbsp;4</a>. These results suggest that the mean bias in predicted weights at age when corrected with a correction factor appear to only be on the order of a quarter to a half a percent. These corrections seems to perform fairly consistently across a few different values of the weight-length regression exponent <span class="math inline">\(b\)</span> and standard deviations in lengths (see Appendix).</p>
+<p>These calculations were again repeated 1000 times and summarized in the bottom two rows of <a href="#tbl-sim2" class="quarto-xref">Table&nbsp;4</a>. These results suggest that the mean bias in predicted weights at age when corrected with a correction factor appear to only be on the order of a quarter to a half a percent. These corrections seems to perform fairly consistently across a few different values of the weight-length regression exponent <span class="math inline">\(b\)</span> and standard deviations in lengths (see Appendix).</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/tbl-sim2_54ab29081ffef6096e62478c5d4d96ac">
-<div class="cell-output-display page-columns page-full">
-<div id="tbl-sim2" class="anchored page-columns page-full">
-<table class="table table-sm table-striped small">
-
+<div id="tbl-sim2" class="cell quarto-float anchored page-columns page-full" data-hash="index_cache/html/tbl-sim2_54ab29081ffef6096e62478c5d4d96ac" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure page-columns page-full">
+<div aria-describedby="tbl-sim2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -673,7 +732,12 @@ Note
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Table&nbsp;4: Mean percentage difference in two types of corrected predicted mean and true mean weights by age class for 1000 simulations.</div></div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-tbl margin-caption" id="tbl-sim2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Mean percentage difference in two types of corrected predicted mean and true mean weights by age class for 1000 simulations.
+</figcaption>
+</figure>
 </div>
 </div>
 <p>&nbsp;</p>
@@ -691,7 +755,7 @@ Note
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-beyer_1991" class="csl-entry" role="listitem">
 Beyer, J. E. 1991. <a href="https://hdl.handle.net/20.500.12348/3103">On length-weight relationships. <span>Part II</span>. <span>Computing</span> mean weights from length statistics</a>. FishByte 9:50–54.
 </div>
@@ -757,7 +821,7 @@ Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E.
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Summary table with everything the same but b=2.5. </div></div>
+<div class="quarto-table-caption margin-caption">Summary table with everything the same but b=2.5.</div></div>
 </div>
 <p>&nbsp;</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb3_92a9b61491e4dca0dd84b69796528480">
@@ -805,7 +869,7 @@ Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E.
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Summary table with everything the same but b=3.0. </div></div>
+<div class="quarto-table-caption margin-caption">Summary table with everything the same but b=3.0.</div></div>
 </div>
 <p>&nbsp;</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/simb35_518a65e8c1527f959c80e84bda51c836">
@@ -853,7 +917,7 @@ Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E.
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Summary table with everything the same but b=3.5. </div></div>
+<div class="quarto-table-caption margin-caption">Summary table with everything the same but b=3.5.</div></div>
 </div>
 <p>&nbsp;</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/sims50_ba31eac60e07bf8c46e8e1679d85653a">
@@ -901,7 +965,7 @@ Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E.
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Summary table with everything the same but SDs at 50. </div></div>
+<div class="quarto-table-caption margin-caption">Summary table with everything the same but SDs at 50.</div></div>
 </div>
 <p>&nbsp;</p>
 <div class="cell page-columns page-full" data-layout-align="center" data-hash="index_cache/html/sims70_fde22b8887e6bbcda78c534c1d2c08ed">
@@ -949,7 +1013,7 @@ Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E.
 </tr>
 </tbody>
 </table>
-<div class="quarto-table-caption margin-caption">Summary table with everything the same but SDs at 70. </div></div>
+<div class="quarto-table-caption margin-caption">Summary table with everything the same but SDs at 70.</div></div>
 </div>
 <div class="cell" data-layout-align="center" data-hash="index_cache/html/unnamed-chunk-15_120def9e6a772972ed0311302b3776de">
 
@@ -959,7 +1023,7 @@ Tesch, F. W. 1971. Age and <span>Growth</span>. Pages 97–130 <em>in</em> W. E.
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2017,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2017,
   author = {H. Ogle, Derek},
   title = {Mean {Weights} at {Ages} {From} {Lengths}},
   date = {2017-08-09},
@@ -1010,6 +1074,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1078,13 +1169,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1163,10 +1256,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1176,8 +1293,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1189,7 +1315,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1233,6 +1482,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1258,6 +1508,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1315,44 +1591,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 <script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="preferred_color_scheme">
+<input type="hidden" id="giscus-alt-theme" value="preferred_color_scheme">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">
+<p>fishR Core Team</p>
+</a>
   </li>  
 </ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2017-8-9_Mean_Weights/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -104,7 +105,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,6 +120,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -123,11 +131,38 @@ div.csl-indent {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../helpers/styles.css">
 <meta property="og:title" content="fishR - Ulaski et al.&nbsp;(2022) Growth-Maturity Figure">
 <meta property="og:description" content="Using ggplot2 to recreate the growth and maturity figure in Ulaski et al.&nbsp;(2022).">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2023-2-16_Ulaskietal_GrowthMortFig/preview.png">
-<meta property="og:site-name" content="fishR">
+<meta property="og:site_name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
 <meta name="citation_title" content="Ulaski et al. (2022) Growth-Maturity Figure">
@@ -202,10 +237,10 @@ div.csl-indent {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
@@ -217,55 +252,55 @@ div.csl-indent {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/books.html" rel="" target="">
- <span class="menu-text">Books</span></a>
+    <a class="nav-link" href="../../../pages/books.html"> 
+<span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/packages.html" rel="" target="">
- <span class="menu-text">Packages</span></a>
+    <a class="nav-link" href="../../../pages/packages.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Data</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../../teaching/index.html" rel="" target="">
- <span class="menu-text">Teaching</span></a>
+    <a class="nav-link" href="../../../teaching/index.html"> 
+<span class="menu-text">Teaching</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/contribute.html" rel="" target="">
- <span class="menu-text">Get Involved</span></a>
+    <a class="nav-link" href="../../../pages/contribute.html"> 
+<span class="menu-text">Get Involved</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -344,7 +379,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#further-thoughts" id="toc-further-thoughts" class="nav-link" data-scroll-target="#further-thoughts">Further Thoughts</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-2-16_Ulaskietal_GrowthMortFig/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-2-16_Ulaskietal_GrowthMortFig/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
@@ -352,11 +387,12 @@ div.csl-indent {
 
 
 
+
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
 <p><span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span> modeled the White Sturgeon (<em>Acipenser transmontanus</em>) population in the Sacramento-San Joaquin River Basin to suggest management goals for the population. Their <a href="https://meridian.allenpress.com/view-large/figure/15050079/i1944-687X-13-2-334-f01.tif">Figure 1</a> showed a modeled von Bertalanffy growth function with shading below the curve that indicated the probability of being mature for each modeled age. I had not seen a plot like this before and set out to recreate it with <code>ggplot2</code>.</p>
-<div class="page-columns page-full"><p>This exercise turned out to be more challenging than I thought and I ultimately reached out to Marta Ulaski, the lead author on the paper, to see if their solution was different or “easier” than mine. It was different but I learned something with both methods; thus, I will present both here.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;I modified the specifics but kept the overall concept of Ulaski’s approach.</p></li></div></div>
-<p>&nbsp;</p>
+<p>This exercise turned out to be more challenging than I thought and I ultimately reached out to Marta Ulaski, the lead author on the paper, to see if their solution was different or “easier” than mine. It was different but I learned something with both methods; thus, I will present both here.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;I modified the specifics but kept the overall concept of Ulaski’s approach.</p></div></div><p>&nbsp;</p>
 </section>
 <section id="getting-setup" class="level1 page-columns page-full">
 <h1>Getting Setup</h1>
@@ -433,8 +469,8 @@ div.csl-indent {
 </div>
 </div>
 <p>The probabilities presented in Figure 1 have been binned into categories. The first category is simply 0% (none mature), but each category after that has a width of 10%. Thus, the next two categories would be from 0.1 to 10%, and 10.1 to 20%. <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span> chose to label these two categories as “0-10%” and “10-20%”, respectively.</p>
-<div class="page-columns page-full"><p>These categories may be created with <code>cut()</code>, which takes the data to categorize as its first argument, the values at which to “cut” the categories in <code>breaks=</code>, and labels for the categories in <code>labels=</code>. It is important to note that <code>cut()</code> makes categories right-inclusive by default. Thus, if the breaks are <code>c(0,10,20)</code> then the first category would be from 0 to 10, with 10 being inclusive. Thus, a value of 9 or 10 would be included in this category, but 0 would not. Thus, to have a category for just the 0 values, the breaks must start at some negative number (in this case, negative infinity was used).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The results of <code>cut()</code> were added to the <code>prcuts</code> variable in <code>dfmat</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup>&nbsp;<code>seq(0,100,10)</code> creates a sequence from 0 to 100 in steps of 10.</p></li><li id="fn3"><p><sup>3</sup>&nbsp;Because using <code>mutate()</code>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>These categories may be created with <code>cut()</code>, which takes the data to categorize as its first argument, the values at which to “cut” the categories in <code>breaks=</code>, and labels for the categories in <code>labels=</code>. It is important to note that <code>cut()</code> makes categories right-inclusive by default. Thus, if the breaks are <code>c(0,10,20)</code> then the first category would be from 0 to 10, with 10 being inclusive. Thus, a value of 9 or 10 would be included in this category, but 0 would not. Thus, to have a category for just the 0 values, the breaks must start at some negative number (in this case, negative infinity was used).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The results of <code>cut()</code> were added to the <code>prcuts</code> variable in <code>dfmat</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;<code>seq(0,100,10)</code> creates a sequence from 0 to 100 in steps of 10.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;Because using <code>mutate()</code>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dfmat <span class="ot">&lt;-</span> dfmat <span class="sc">|&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prcuts=</span><span class="fu">cut</span>(prmat,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">breaks=</span><span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>,<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>)),</span>
@@ -483,8 +519,8 @@ div.csl-indent {
 <h1>My Recreation of Figure 1</h1>
 <section id="plotting-the-von-b-function" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="plotting-the-von-b-function">Plotting the von B function</h3>
-<div class="page-columns page-full"><p>The typical VBGF can be plotted over the range of ages in a data frame with <code>stat_function()</code>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The function to be evaluated (i.e., <code>vb()</code>) is given in <code>fun=</code> and any arguments that it requires are given in a list to <code>args=</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The smoothness of the curve can be controlled with <code>n=</code>, which is the number of ages over the range of ages for which the function will be evaluated.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Finally, I increased the line width slightly.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;Make sure to map the age variable to the <code>x</code> aesthetic.</p></li><li id="fn5"><p><sup>5</sup>&nbsp;Here we can set <code>vbpar</code> to just <code>Linf</code> given that all parameters can be given to this one argument as shown above.</p></li><li id="fn6"><p><sup>6</sup>&nbsp;<code>n=</code> defaults to 101, which appeared adequate for these data, though I increased it here to demonstrate its use.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The typical VBGF can be plotted over the range of ages in a data frame with <code>stat_function()</code>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The function to be evaluated (i.e., <code>vb()</code>) is given in <code>fun=</code> and any arguments that it requires are given in a list to <code>args=</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The smoothness of the curve can be controlled with <code>n=</code>, which is the number of ages over the range of ages for which the function will be evaluated.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Finally, I increased the line width slightly.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;Make sure to map the age variable to the <code>x</code> aesthetic.</p></div><div id="fn5"><p><sup>5</sup>&nbsp;Here we can set <code>vbpar</code> to just <code>Linf</code> given that all parameters can be given to this one argument as shown above.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;<code>n=</code> defaults to 101, which appeared adequate for these data, though I increased it here to demonstrate its use.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb13" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age)) <span class="sc">+</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
@@ -495,13 +531,13 @@ div.csl-indent {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/plot-vonB-line-1.png" class="img-fluid figure-img" width="576"></p>
+<p><img src="index_files/figure-html/plot-vonB-line-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="page-columns page-full"><p>As seen above, <code>stat_function()</code> defaults to drawing a line of the function (i.e., it uses <code>geom_line()</code>). However, other geoms can be used; e.g., <code>geom="area"</code>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;I used <code>fill=</code> here to show the effect, but this also required setting <code>color=</code> because the color for the line took on the fill color.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>As seen above, <code>stat_function()</code> defaults to drawing a line of the function (i.e., it uses <code>geom_line()</code>). However, other geoms can be used; e.g., <code>geom="area"</code>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;I used <code>fill=</code> here to show the effect, but this also required setting <code>color=</code> because the color for the line took on the fill color.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">age=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>)),<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age)) <span class="sc">+</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
@@ -513,7 +549,7 @@ div.csl-indent {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/plot-vonB-area-1.png" class="img-fluid figure-img" width="576"></p>
+<p><img src="index_files/figure-html/plot-vonB-area-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -522,8 +558,8 @@ div.csl-indent {
 </section>
 <section id="adding-the-maturity-scale" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="adding-the-maturity-scale">Adding the Maturity Scale</h3>
-<div class="page-columns page-full"><p>My solutions to recreating Figure 1 of <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span> generally followed the StackOverflow answer at the bottom of <a href="https://stackoverflow.com/questions/33244629/filling-under-the-a-curve-with-ggplot-graphs">this question</a>. This process uses <code>after_stat()</code> and <code>after_scale()</code>, which were introduced to <code>ggplot2</code> in v3.3.0.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> I don’t yet fully understand these two functions, but will try to explain what I think they are doing.</p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;See their introduction <a href="https://www.tidyverse.org/blog/2020/03/ggplot2-3-3-0/#more-control-over-aesthetic-evaluation">here</a>.</p></li></div></div>
-<div class="page-columns page-full"><p>As illustrated above, <code>stat_function()</code> produces a smooth curve by creating <code>n=</code> values of <code>x</code> over the range of the variable mapped to the <code>x=</code> aesthetic. One part of the “trick” to this solution is to first realize that these “age” values created by <code>stat_function()</code> are not integers and, thus, they need to be “cut” into integer age categories. The second part of the “trick” to this solution is that the probability of maturity category labels should be used for the “cuts” of age rather than labels of age. For example, an age of 13.5 created by <code>stat_function()</code> should be categorized as an age of 13 but labeled with “20-30%”.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> This cutting of the age values comes after they have been created by <code>stat_function()</code> in the <code>x=</code> aesthetic and are thus accessed by <code>after_stat(x)</code> which I pipe into <code>cut()</code> and set equal to the <code>fill=</code> aesthetic in <code>stat_function()</code>.</p><div class="no-row-height column-margin column-container"><li id="fn9"><p><sup>9</sup>&nbsp;Examine <code>dfmat</code> to see why.</p></li></div></div>
+<p>My solutions to recreating Figure 1 of <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span> generally followed the StackOverflow answer at the bottom of <a href="https://stackoverflow.com/questions/33244629/filling-under-the-a-curve-with-ggplot-graphs">this question</a>. This process uses <code>after_stat()</code> and <code>after_scale()</code>, which were introduced to <code>ggplot2</code> in v3.3.0.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> I don’t yet fully understand these two functions, but will try to explain what I think they are doing.</p>
+<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;See their introduction <a href="https://www.tidyverse.org/blog/2020/03/ggplot2-3-3-0/#more-control-over-aesthetic-evaluation">here</a>.</p></div><div id="fn9"><p><sup>9</sup>&nbsp;Examine <code>dfmat</code> to see why.</p></div></div><p>As illustrated above, <code>stat_function()</code> produces a smooth curve by creating <code>n=</code> values of <code>x</code> over the range of the variable mapped to the <code>x=</code> aesthetic. One part of the “trick” to this solution is to first realize that these “age” values created by <code>stat_function()</code> are not integers and, thus, they need to be “cut” into integer age categories. The second part of the “trick” to this solution is that the probability of maturity category labels should be used for the “cuts” of age rather than labels of age. For example, an age of 13.5 created by <code>stat_function()</code> should be categorized as an age of 13 but labeled with “20-30%”.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> This cutting of the age values comes after they have been created by <code>stat_function()</code> in the <code>x=</code> aesthetic and are thus accessed by <code>after_stat(x)</code> which I pipe into <code>cut()</code> and set equal to the <code>fill=</code> aesthetic in <code>stat_function()</code>.</p>
 <p>The third part of the “trick” to this solution is to realize that the different colored areas can only be plotted if the <code>group=</code> aesthetic is set to the same categories used in the <code>fill=</code> aesthetic. As the <code>fill=</code> aesthetic was just created and is defined in a <code>scale</code> (see <code>scale_fill_viridis_d()</code> below), the <code>group=</code> aesthetic must be defined with <code>after_scale(fill)</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age)) <span class="sc">+</span></span>
@@ -541,13 +577,13 @@ div.csl-indent {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/figure-1-DHO-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/figure-1-DHO-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="page-columns page-full"><p>This, obviously, is not ideal … largely due to the long name for the legend. However, it is also not the colors used in Figure 1 of <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span>. A custom viridis-based color scheme was used in <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span>,<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> which can be used with <code>scale_fill_viridis_d()</code>.</p><div class="no-row-height column-margin column-container"><li id="fn10"><p><sup>10</sup>&nbsp;I would not have “discovered” this color scheme on my own. This came from seeing Ulaski’s original code.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>This, obviously, is not ideal … largely due to the long name for the legend. However, it is also not the colors used in Figure 1 of <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span>. A custom viridis-based color scheme was used in <span class="citation" data-cites="ulaskietal_2022">Ulaski et al. (<a href="#ref-ulaskietal_2022" role="doc-biblioref">2022</a>)</span>,<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> which can be used with <code>scale_fill_viridis_d()</code>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn10"><p><sup>10</sup>&nbsp;I would not have “discovered” this color scheme on my own. This came from seeing Ulaski’s original code.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age)) <span class="sc">+</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
@@ -564,13 +600,13 @@ div.csl-indent {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/figure-1-DHO-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/figure-1-DHO-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="page-columns page-full"><p>Finally, there are two things with this plot that I don’t like. First, the black line for the growth function appears broken at the color breaks. Second, the linewidth around the colors in the legend is too thick. To correct these issues, I removed <code>linewidth=</code> and <code>color=</code> from <code>stat_function()</code> and then added a second <code>stat_function()</code> that plots just the growth function as a line.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> This second use of <code>stat_function()</code> lays the function line on top of the function “area.”</p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;See the first use of <code>stat_function()</code> further above for how this was done.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Finally, there are two things with this plot that I don’t like. First, the black line for the growth function appears broken at the color breaks. Second, the linewidth around the colors in the legend is too thick. To correct these issues, I removed <code>linewidth=</code> and <code>color=</code> from <code>stat_function()</code> and then added a second <code>stat_function()</code> that plots just the growth function as a line.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> This second use of <code>stat_function()</code> lays the function line on top of the function “area.”</p>
+<div class="no-row-height column-margin column-container"><div id="fn11"><p><sup>11</sup>&nbsp;See the first use of <code>stat_function()</code> further above for how this was done.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>age)) <span class="sc">+</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span>agettl,<span class="at">limits=</span>agelmts,<span class="at">breaks=</span>agelbls,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="dv">0</span>)) <span class="sc">+</span></span>
@@ -589,7 +625,7 @@ div.csl-indent {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/figure-1-DHO-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/figure-1-DHO-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -628,8 +664,8 @@ Acknowledgment
 <p>&nbsp;</p>
 <section id="making-the-data-frame" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="making-the-data-frame">Making the Data Frame</h3>
-<div class="page-columns page-full"><p>Ulaski’s solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what <code>stat_function()</code> did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple <code>dfmat</code> created above.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn12"><p><sup>12</sup>&nbsp;Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.</p></li></div></div>
-<p>Recall what the original <code>dfmat</code> looked like … ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with <code>cut()</code>.</p>
+<p>Ulaski’s solution to making this figure is much simpler to explain (Thank you!) but relies on explicitly creating a data frame that is largely what <code>stat_function()</code> did behind-the-scenes. Specifically, Ulaski created a data frame that repeated the probability of being mature for all ages in increments of 0.1. So, for example, this data frame contained an age of 12.3 with the probability of being mature being the same as that for age 12. To generalize this solution I set out to see if I could create this data frame from the simple <code>dfmat</code> created above.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn12"><p><sup>12</sup>&nbsp;Ulaski had manually created a CSV with these repeated data, which were read in to a data frame.</p></div></div><p>Recall what the original <code>dfmat</code> looked like … ages and probabilities of maturity from Table 1 in the published paper, and categories of probability mature created with <code>cut()</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dfmat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -713,8 +749,8 @@ Acknowledgment
 </section>
 <section id="making-the-figure" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="making-the-figure">Making the Figure</h3>
-<div class="page-columns page-full"><p>Figure 1 is then created by mapping the fractional ages (i.e., <code>agef</code>) to <code>x=</code> and the lengths to <code>y</code>, mapping the probability cuts to <code>fill=</code> in <code>geom_ares()</code>, and including <code>geom_line()</code> (with a slightly larger line width).<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;This will produce a warning because the data frame extends to age 50 but the figure is limited to age 20.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Figure 1 is then created by mapping the fractional ages (i.e., <code>agef</code>) to <code>x=</code> and the lengths to <code>y</code>, mapping the probability cuts to <code>fill=</code> in <code>geom_ares()</code>, and including <code>geom_line()</code> (with a slightly larger line width).<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn13"><p><sup>13</sup>&nbsp;This will produce a warning because the data frame extends to age 50 but the figure is limited to age 20.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb27" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dfmat2,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>agef,<span class="at">y=</span>len)) <span class="sc">+</span> </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">fill=</span>prcuts)) <span class="sc">+</span> </span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
@@ -726,7 +762,7 @@ Acknowledgment
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/figure-1-MU-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/figure-1-MU-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -740,8 +776,8 @@ Acknowledgment
 <section id="further-thoughts" class="level1 page-columns page-full">
 <h1>Further Thoughts</h1>
 <p>There are a few things that I would like to see different in this figure. First, the “white” lines between the colors are too prominent. The size of these lines are a function of the number of “fractional” ages used to produce the plot. Thus, to make these “lines” thinner one could increase <code>n=</code> in my solution or decrease <code>by=</code> in the author’s solution.</p>
-<div class="page-columns page-full"><p>Second, it bothers me that the colors for the probabilities seem equally spaced even though two categories are not represented in the data (e.g., 30-40% and 40-50%). In my mind, there should be a “jump” in colors at the ages where the probability jumps from 20-30% to 50-60% (i.e., between age-13 and age-14).<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> I could not address this issue with my solution, but including <code>drop=FALSE</code> in <code>scale_fill_viridis_d()</code> fixed this in the author’s solution.</p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;This will be a common issue with maturity data as the probability of maturity often increases dramatically over a short range of lengths and, thus, one or very few ages.</p></li></div></div>
-<div class="page-columns page-full"><p>Third, the “line” does not look like a typical VBGF to me as these sturgeon are long-lived and grow so slowly that very little curvature and no asymptote is evident. In some situations is may be useful to extend the x-axis to older ages to better “see” the typical asymptotic growth of the VBGF.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;This is not that useful here given the shape of the VBGF for this species.</p></li></div></div>
+<p>Second, it bothers me that the colors for the probabilities seem equally spaced even though two categories are not represented in the data (e.g., 30-40% and 40-50%). In my mind, there should be a “jump” in colors at the ages where the probability jumps from 20-30% to 50-60% (i.e., between age-13 and age-14).<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> I could not address this issue with my solution, but including <code>drop=FALSE</code> in <code>scale_fill_viridis_d()</code> fixed this in the author’s solution.</p>
+<div class="no-row-height column-margin column-container"><div id="fn14"><p><sup>14</sup>&nbsp;This will be a common issue with maturity data as the probability of maturity often increases dramatically over a short range of lengths and, thus, one or very few ages.</p></div><div id="fn15"><p><sup>15</sup>&nbsp;This is not that useful here given the shape of the VBGF for this species.</p></div></div><p>Third, the “line” does not look like a typical VBGF to me as these sturgeon are long-lived and grow so slowly that very little curvature and no asymptote is evident. In some situations is may be useful to extend the x-axis to older ages to better “see” the typical asymptotic growth of the VBGF.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
 <p>Finally, the authors started their plot at age-1. I am not sure why they did this, but that can be accomplished by filtering the data to only age-1 and older.</p>
 <p>All of these changes (with <code>by=0.05</code> and extending the ages to 30) were made below using the author’s solution.</p>
 <div class="cell" data-layout-align="center">
@@ -769,7 +805,7 @@ Acknowledgment
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/figure-1-MU2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/figure-1-MU2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -781,11 +817,11 @@ Acknowledgment
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-ulaskietal_2022" class="csl-entry" role="listitem">
 Ulaski, M. E., S. E. Blackburn, Z. J. Jackson, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-070">Management goals for conserving <span>White Sturgeon</span> in the <span>Sacramento</span>–<span>San Joaquin River Basin</span></a>. Journal of Fish and Wildlife Management 13(2):334–343.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
   author = {H. Ogle, Derek},
   title = {Ulaski Et Al. (2022) {Growth-Maturity} {Figure}},
   date = {2023-02-16},
@@ -837,6 +873,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -905,13 +968,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -990,10 +1055,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1003,8 +1092,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1016,7 +1114,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1060,6 +1281,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1085,6 +1307,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1142,44 +1390,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 <script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="preferred_color_scheme">
+<input type="hidden" id="giscus-alt-theme" value="preferred_color_scheme">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">
+<p>fishR Core Team</p>
+</a>
   </li>  
 </ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2023-2-16_Ulaskietal_GrowthMortFig/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

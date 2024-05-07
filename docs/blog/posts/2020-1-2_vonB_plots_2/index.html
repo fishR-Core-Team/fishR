@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -104,7 +105,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,6 +120,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -123,11 +131,38 @@ div.csl-indent {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../../../helpers/styles.css">
 <meta property="og:title" content="fishR - von Bertalanffy Growth Plots II">
 <meta property="og:description" content="How to plot multiple von Bertalanffy growth models with data.">
 <meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2020-1-2_vonB_plots_2/preview.png">
-<meta property="og:site-name" content="fishR">
+<meta property="og:site_name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
 <meta name="citation_title" content="von Bertalanffy Growth Plots II">
@@ -202,10 +237,10 @@ div.csl-indent {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../../helpers/img/fishRlogo_Tight_Light_trans.png" alt="" class="navbar-logo">
     </a>
@@ -217,55 +252,55 @@ div.csl-indent {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/books.html" rel="" target="">
- <span class="menu-text">Books</span></a>
+    <a class="nav-link" href="../../../pages/books.html"> 
+<span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/packages.html" rel="" target="">
- <span class="menu-text">Packages</span></a>
+    <a class="nav-link" href="../../../pages/packages.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Data</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-data">    
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_alpha.html">
  <span class="dropdown-text">fishR (alphabetical)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_fishR_byTopic.html">
  <span class="dropdown-text">fishR (by topic)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byPackage.html">
  <span class="dropdown-text">Comprehensive (by package)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html" rel="" target="">
+    <a class="dropdown-item" href="../../../pages/data_Comp_byTopic.html">
  <span class="dropdown-text">Comprehensive (by topic)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../../teaching/index.html" rel="" target="">
- <span class="menu-text">Teaching</span></a>
+    <a class="nav-link" href="../../../teaching/index.html"> 
+<span class="menu-text">Teaching</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../pages/contribute.html" rel="" target="">
- <span class="menu-text">Get Involved</span></a>
+    <a class="nav-link" href="../../../pages/contribute.html"> 
+<span class="menu-text">Get Involved</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -330,10 +365,11 @@ div.csl-indent {
   <li><a href="#model-fit-with-confidence-band" id="toc-model-fit-with-confidence-band" class="nav-link" data-scroll-target="#model-fit-with-confidence-band">Model Fit with Confidence Band</a></li>
   <li><a href="#more-than-two-groups" id="toc-more-than-two-groups" class="nav-link" data-scroll-target="#more-than-two-groups">More than Two Groups</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2020-1-2_vonB_plots_2/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2020-1-2_vonB_plots_2/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
 
 
 
@@ -361,8 +397,8 @@ Note
 <section id="introduction" class="level1 page-columns page-full">
 <h1>Introduction</h1>
 <p>In <a href="../2019-12-31_vonB_plots_1/index.html">a previous post</a> I demonstrated how to plot the fit of a von Bertalanffy growth function (VBGF) for a single group of observed data. In this post, I explore methods to do the same for multiple groups of observed data (e.g., multiple sexes, locations, years).</p>
-<div class="page-columns page-full"><p>I will again use the lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a>. These data formed many of the examples in <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm), <code>age</code>, and <code>sex</code> variables.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I initially focus on Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></li><li id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> as it only had one level after filtering and three variables related to the <code>loc</code>ation of capture.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>I will again use the lengths and ages of Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014 available in <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a>. These data formed many of the examples in <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. My primary interest here is in the <code>tl</code> (total length in mm), <code>age</code>, and <code>sex</code> variables.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I initially focus on Walleye from location “1” captured in 2014 in this example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;See <a href="https://fishr-core-team.github.io/FSAdata/reference/WalleyeErie2.html">more details about the data</a>.</p></div><div id="fn2"><p><sup>2</sup>&nbsp;For succinctness, I removed <code>year</code> as it only had one level after filtering and three variables related to the <code>loc</code>ation of capture.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>w14T <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">|&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2014</span>,loc<span class="sc">==</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
@@ -378,8 +414,8 @@ Note
 #R|  614 530 1553   male   mature   5</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>As in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, a function that uses the typical VBGF to predict mean length given a set of VBGF parameters and age is needed.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>As in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, a function that uses the typical VBGF to predict mean length given a set of VBGF parameters and age is needed.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Other parameterizations of the VBGF can be used with <code>param=</code> in <code>vbFuns()</code> as described in <a href="https://fishr-core-team.github.io/FSA/reference/growthModels.html">its documentation</a>.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>( vb <span class="ot">&lt;-</span> <span class="fu">vbFuns</span>(<span class="at">param=</span><span class="st">"Typical"</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output" data-code-line-numbers="nil"><code>#R|  function(t,Linf,K=NULL,t0=NULL) {
@@ -410,8 +446,8 @@ Note
 #R|  [1] -1.544479</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The use of <code>geom_smooth()</code> to produce separate lines for the groups is exactly as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, except that the variable for identifyng the groups (i.e., <code>sex</code> in this example) must be mapped to the <code>color=</code> <code>aes()</code>thetic. For <a href="#fig-sex1">Figure&nbsp;1</a> I also used <code>scale_color_manual()</code> to demonstrate how to change the default colors of the points and lines. Additionally, in <code>theme()</code> I moved the legend into the plot panel<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and removed the default <code>sex</code> label that would appear on top of the legend.</p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;In this case the legend is placed 80% down the x-axis and 20% up the y-axis.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>The use of <code>geom_smooth()</code> to produce separate lines for the groups is exactly as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>, except that the variable for identifyng the groups (i.e., <code>sex</code> in this example) must be mapped to the <code>color=</code> <code>aes()</code>thetic. For <a href="#fig-sex1" class="quarto-xref">Figure&nbsp;1</a> I also used <code>scale_color_manual()</code> to demonstrate how to change the default colors of the points and lines. Additionally, in <code>theme()</code> I moved the legend into the plot panel<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and removed the default <code>sex</code> label that would appear on top of the legend.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;In this case the legend is placed 80% down the x-axis and 20% up the y-axis.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex)) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
@@ -424,17 +460,21 @@ Note
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-sex1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-sex1-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;1: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014.</figcaption>
+<div id="fig-sex1" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sex1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-sex1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-sex1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>An alternative visualization is to put the two groups into separate panels using <code>facet_wrap()</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Note that color is superfluous in <a href="#fig-sex1a">Figure&nbsp;2</a>, but I kept it for comparison to <a href="#fig-sex1">Figure&nbsp;1</a>. Mapping color to a variable will produce a legend by default. This legend was removed (in <code>theme()</code>), however, because it is redundant with the panel labels.</p><div class="no-row-height column-margin column-container"><li id="fn5"><p><sup>5</sup>&nbsp;Simply put the grouping variable inside of <code>vars()</code> as the argument to <code>facet_wrap()</code>.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p>An alternative visualization is to put the two groups into separate panels using <code>facet_wrap()</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Note that color is superfluous in <a href="#fig-sex1a" class="quarto-xref">Figure&nbsp;2</a>, but I kept it for comparison to <a href="#fig-sex1" class="quarto-xref">Figure&nbsp;1</a>. Mapping color to a variable will produce a legend by default. This legend was removed (in <code>theme()</code>), however, because it is redundant with the panel labels.</p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;Simply put the grouping variable inside of <code>vars()</code> as the argument to <code>facet_wrap()</code>.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex)) <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (mm)"</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">700</span>)) <span class="sc">+</span></span>
@@ -447,10 +487,14 @@ Note
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-sex1a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-sex1a-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;2: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014.</figcaption>
+<div id="fig-sex1a" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sex1a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-sex1a-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-sex1a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -460,8 +504,8 @@ Note
 <section id="fitting-the-vbgf-to-multiple-groups" class="level1 page-columns page-full">
 <h1>Fitting the VBGF to Multiple Groups</h1>
 <p>Methods for fitting a von Bertalanfy growth function (VBGF) to multiple groups are detailed in <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span>. Thus, this methodology will only be briefly explained here.</p>
-<div class="page-columns page-full"><p>Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., <code>tl</code> and <code>age</code>) and assuming different parameters should be estimated for each group.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Identifying the different groups is accomplished here by appending <code>[group]</code>, where <code>group</code> is replaced with the specific variable name that identifies the groups (i.e., <code>sex</code> here). The expression is assigned to an object name (i.e., <code>vbLKt</code> here).</p><div class="no-row-height column-margin column-container"><li id="fn6"><p><sup>6</sup>&nbsp;See <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span> for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Fitting the VBGF to multiple groups requires creating an expression, rather than a function, with the VBGF defined over the multiple groups. The expression below codes the VBGF using the length and age variables from the data set used here (i.e., <code>tl</code> and <code>age</code>) and assuming different parameters should be estimated for each group.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Identifying the different groups is accomplished here by appending <code>[group]</code>, where <code>group</code> is replaced with the specific variable name that identifies the groups (i.e., <code>sex</code> here). The expression is assigned to an object name (i.e., <code>vbLKt</code> here).</p>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;See <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span> for examples of how to fit the VBGF assuming situations where some parameters differ and some do not across groups.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>vbLKt <span class="ot">&lt;-</span> tl<span class="sc">~</span>Linf[sex]<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">exp</span>(<span class="sc">-</span>K[sex]<span class="sc">*</span>(age<span class="sc">-</span>t0[sex])))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
@@ -478,8 +522,8 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p>This model has six parameters – <span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(t_{0}\)</span> for each of the two groups (male and female Walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using <code>vbStarts()</code> as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>) and replicate those starting values for both groups.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn7"><p><sup>7</sup>&nbsp;In some instances using the same starting values for both groups will not result in model convergence. See <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span> for suggestions for handling those cases.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>This model has six parameters – <span class="math inline">\(L_{\infty}\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(t_{0}\)</span> for each of the two groups (male and female Walleye). Starting values must be declared for each of these parameters. Here I find starting values from the data ignoring the groups (using <code>vbStarts()</code> as described in the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a>) and replicate those starting values for both groups.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;In some instances using the same starting values for both groups will not result in model convergence. See <span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span> for suggestions for handling those cases.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>( sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>w14T) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="output" data-code-line-numbers="nil"><code>#R|  $Linf
@@ -506,8 +550,8 @@ Note
 #R|  [1] -1.544479 -1.544479</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The model is fit to the data by including the VBGF expression object, <code>data=</code>, and <code>start=</code> as arguments to <code>nls()</code>. The parameter estimates and confidence intervals may be extracted from the saved <code>nls()</code> object with <code>coef()</code> and <code>confint()</code>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Note that the parameters will be appended with numbers in the alphabetical order of the groups.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Thus, in this example, it is seen that the estimated <span class="math inline">\(L_{\infty}\)</span> for females (appended with a “1”) is greater than that for males.</p><div class="no-row-height column-margin column-container"><li id="fn8"><p><sup>8</sup>&nbsp;Column-bound here for aesthetic reasons.</p></li><li id="fn9"><p><sup>9</sup>&nbsp;Unless your chose to order the levels of the group variable differently.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The model is fit to the data by including the VBGF expression object, <code>data=</code>, and <code>start=</code> as arguments to <code>nls()</code>. The parameter estimates and confidence intervals may be extracted from the saved <code>nls()</code> object with <code>coef()</code> and <code>confint()</code>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Note that the parameters will be appended with numbers in the alphabetical order of the groups.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Thus, in this example, it is seen that the estimated <span class="math inline">\(L_{\infty}\)</span> for females (appended with a “1”) is greater than that for males.</p>
+<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;Column-bound here for aesthetic reasons.</p></div><div id="fn9"><p><sup>9</sup>&nbsp;Unless your chose to order the levels of the group variable differently.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb19" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fitLKt <span class="ot">&lt;-</span> <span class="fu">nls</span>(vbLKt,<span class="at">data=</span>w14T,<span class="at">start=</span>svLKt)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">Ests=</span><span class="fu">coef</span>(fitLKt),<span class="fu">confint</span>(fitLKt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -525,8 +569,8 @@ Note
 <section id="model-fits-from-predicted-values" class="level1 page-columns page-full">
 <h1>Model Fits from Predicted Values</h1>
 <p>The model fit above can be used to predict the mean length at age for all groups, both within and outside the observed range of ages. These results can then be used to show the model fit by group. However, a bit of work outside of <code>ggplot</code> is required to prepare the relevant data.</p>
-<div class="page-columns page-full"><p>A data frame that contains predicted mean lengths at age over a range of ages for all groups is needed. I begin this process by finding (and assigning to an object for later use) the range of ages for each group.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn10"><p><sup>10</sup>&nbsp;<code>as.data.frame()</code> removes the <code>tibble</code> returned by <code>group_by()</code>, which I don’t prefer</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>A data frame that contains predicted mean lengths at age over a range of ages for all groups is needed. I begin this process by finding (and assigning to an object for later use) the range of ages for each group.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn10"><p><sup>10</sup>&nbsp;<code>as.data.frame()</code> removes the <code>tibble</code> returned by <code>group_by()</code>, which I don’t prefer</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>obsagerng <span class="ot">&lt;-</span> w14T <span class="sc">|&gt;</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min=</span><span class="fu">min</span>(age),</span>
@@ -539,8 +583,8 @@ Note
 #R|  2   male   1  11</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>From this, I create a temporary vector of 101 ages<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> evenly spaced over a range of ages larger than what was observed.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn11"><p><sup>11</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></li><li id="fn12"><p><sup>12</sup>&nbsp;Zero was an observed age here, if not I usually make sure it is included.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>From this, I create a temporary vector of 101 ages<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> evenly spaced over a range of ages larger than what was observed.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn11"><p><sup>11</sup>&nbsp;Use a larger value for <code>length.out=</code> to make the line produced further below more smooth.</p></div><div id="fn12"><p><sup>12</sup>&nbsp;Zero was an observed age here, if not I usually make sure it is included.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb23" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">12</span>,<span class="at">length.out=</span><span class="dv">101</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I then create a data frame that has the name of each group repeated as many times as there are ages in the temporary age vector (i.e., 101 here) and has ages from the temporary age vector repeated for each group (i.e., twice here). Note the careful use of <code>each=</code> and <code>times=</code> in <code>rep()</code> below.</p>
@@ -573,8 +617,8 @@ Note
 #R|  202   male 12.00 568.85411</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>Finally, I add a fourth variable that will be <code>TRUE</code> if the age is within the range of observed ages for the group. <code>group_by()</code> below behaves like a loop here in the sense that what follows that line will be completed for the first group, then the second group, and so on. For the <code>mutate()</code> lines suppose that we are working with the first group (i.e., “female”). In this case, <code>unique(sex)</code> will return <code>female</code> such that <code>obsagerng[obsagerng$sex==unique(sex),]</code> will find the row of <code>obsagerng</code> where its <code>sex</code> variable is equal to “female”. The <code>$min</code> appended to that will extract just the value in the <code>min</code> variable of that row (so the minimum observed age for females). The <code>age&gt;=obsagerng[obsagerng$sex==unique(sex),]$min</code> portion is thus asking if the <code>age</code> variable in <code>preds</code> is greater than or equal to the minimum observed age for females. If it is it will return <code>TRUE</code>, otherwise <code>FALSE</code> will be returned. The second part <code>mutate()</code> asks if the <code>age</code> variable in <code>preds</code> is less than or equal to the maximum observed age for females, again returning <code>TRUE</code> or <code>FALSE</code> as appropriate. Those two conditions are connected with an <code>&amp;</code> such that if they are <strong>both</strong> <code>TRUE</code> then a <code>TRUE</code> is returned, otherwise a <code>FALSE</code> is returned. The result is that the new <code>inrng</code> variable will be <code>TRUE</code> if the <code>age</code> variable within <code>preds</code> is within the observed range of ages for each <code>sex</code> in <code>preds</code>.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn13"><p><sup>13</sup>&nbsp;<code>FSA::peek()</code> is used here to show an evenly spaced 20 rows in the data frame. This provides more output than <code>headtail()</code> for observing the results of code.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>Finally, I add a fourth variable that will be <code>TRUE</code> if the age is within the range of observed ages for the group. <code>group_by()</code> below behaves like a loop here in the sense that what follows that line will be completed for the first group, then the second group, and so on. For the <code>mutate()</code> lines suppose that we are working with the first group (i.e., “female”). In this case, <code>unique(sex)</code> will return <code>female</code> such that <code>obsagerng[obsagerng$sex==unique(sex),]</code> will find the row of <code>obsagerng</code> where its <code>sex</code> variable is equal to “female”. The <code>$min</code> appended to that will extract just the value in the <code>min</code> variable of that row (so the minimum observed age for females). The <code>age&gt;=obsagerng[obsagerng$sex==unique(sex),]$min</code> portion is thus asking if the <code>age</code> variable in <code>preds</code> is greater than or equal to the minimum observed age for females. If it is it will return <code>TRUE</code>, otherwise <code>FALSE</code> will be returned. The second part <code>mutate()</code> asks if the <code>age</code> variable in <code>preds</code> is less than or equal to the maximum observed age for females, again returning <code>TRUE</code> or <code>FALSE</code> as appropriate. Those two conditions are connected with an <code>&amp;</code> such that if they are <strong>both</strong> <code>TRUE</code> then a <code>TRUE</code> is returned, otherwise a <code>FALSE</code> is returned. The result is that the new <code>inrng</code> variable will be <code>TRUE</code> if the <code>age</code> variable within <code>preds</code> is within the observed range of ages for each <code>sex</code> in <code>preds</code>.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn13"><p><sup>13</sup>&nbsp;<code>FSA::peek()</code> is used here to show an evenly spaced 20 rows in the data frame. This provides more output than <code>headtail()</code> for observing the results of code.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> preds <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inrng=</span>age<span class="sc">&gt;=</span>obsagerng[obsagerng<span class="sc">$</span>sex<span class="sc">==</span><span class="fu">unique</span>(sex),]<span class="sc">$</span>min <span class="sc">&amp;</span></span>
@@ -605,8 +649,8 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p><a href="#fig-sex2">Figure&nbsp;3</a> is created by combining similar code from the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a> and the use of <code>color=</code> from above. In brief, <code>geom_point()</code> adds points at the observed lengths at age, the first <code>geom_line()</code> adds the fitted models from the predicted mean lengths at <strong>all</strong> ages in <code>preds</code> as dashed lines, and the second <code>geom_line()</code> adds the fitted models from the predicted mean lengths <strong>only</strong> at observed ages for each group as solid lines.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn14"><p><sup>14</sup>&nbsp;Note the use <code>filter()</code> in the second <code>geom_line()</code> so that only data for which <code>inrng==TRUE</code> is used.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p><a href="#fig-sex2" class="quarto-xref">Figure&nbsp;3</a> is created by combining similar code from the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a> and the use of <code>color=</code> from above. In brief, <code>geom_point()</code> adds points at the observed lengths at age, the first <code>geom_line()</code> adds the fitted models from the predicted mean lengths at <strong>all</strong> ages in <code>preds</code> as dashed lines, and the second <code>geom_line()</code> adds the fitted models from the predicted mean lengths <strong>only</strong> at observed ages for each group as solid lines.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn14"><p><sup>14</sup>&nbsp;Note the use <code>filter()</code> in the second <code>geom_line()</code> so that only data for which <code>inrng==TRUE</code> is used.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb30" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex),</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
@@ -621,10 +665,14 @@ Note
 <span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
 <span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-sex2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-sex2-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;3: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption>
+<div id="fig-sex2" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sex2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-sex2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-sex2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -645,8 +693,8 @@ Note
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">max=</span><span class="fu">max</span>(age))</span>
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>sv0 <span class="ot">&lt;-</span> <span class="fu">vbStarts</span>(tl<span class="sc">~</span>age,<span class="at">data=</span>w14T) <span class="do">## Starting values ignoring groups</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>As before, starting values are needed for each group. Here, however, I place the starting values into a data frame where each row corresponds to one group and a variable that identifies the groups is included.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn15"><p><sup>15</sup>&nbsp;For simplicity name this variable the same as it is in the main data frame.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>As before, starting values are needed for each group. Here, however, I place the starting values into a data frame where each row corresponds to one group and a variable that identifies the groups is included.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn15"><p><sup>15</sup>&nbsp;For simplicity name this variable the same as it is in the main data frame.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb32" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>( svLKt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span>grps,</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">Map</span>(rep,sv0,<span class="fu">c</span>(ngrps,ngrps,ngrps))) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -655,16 +703,16 @@ Note
 #R|  2   male 591.1587 0.3930388 -1.544479</code></pre>
 </div>
 </div>
-<div class="page-columns page-full"><p>The starting values created here are the same for each group. This will likely work in most cases (of fish growth data) but likely not all. Starting values can be entered into the data frame manually as shown below.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn16"><p><sup>16</sup>&nbsp;<span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span> discuss alternative methods of finding starting values. But note that this may take some work if there are many groups.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The starting values created here are the same for each group. This will likely work in most cases (of fish growth data) but likely not all. Starting values can be entered into the data frame manually as shown below.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn16"><p><sup>16</sup>&nbsp;<span class="citation" data-cites="ogleIntroductoryFisheriesAnalyses2016">Ogle (<a href="#ref-ogleIntroductoryFisheriesAnalyses2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="ogleetal_2017">Ogle et al. (<a href="#ref-ogleetal_2017" role="doc-biblioref">2017</a>)</span> discuss alternative methods of finding starting values. But note that this may take some work if there are many groups.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb34" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Not run: Demo of manually entering starting values; not needed in this case</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>( svLKt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sex=</span>grps,</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Linf=</span><span class="fu">c</span>(<span class="dv">630</span>,<span class="dv">580</span>),</span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">K=</span><span class="fu">c</span>(<span class="fl">0.34</span>,<span class="fl">0.34</span>),</span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">t0=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="page-columns page-full"><p>The method used here basically loops through the groups, uses the procedures of the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a> (for one group) and above to find fitted values and confidence (or prediction) bands for each group, and then (row) binds those results together to produce a synthetic data frame for all groups. The process for a single group is wrapped into a function called <code>vbLOOP1()</code> below. The ordered arguments to <code>vbLOOP1()</code> are a group name, the original data frame, the data frame of starting values for all groups, the data frame of observed age ranges, and a vector that identifies the overall range over which to predict mean lengths at age. <code>vbLOOP1</code> will default to returning confidence intervals, but prediction intervals can be returned by including <code>interval="prediction"</code>.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn17"><p><sup>17</sup>&nbsp;See code comments for the parts of this function that are specific to this case and, thus, might have to be changed for other data.</p></li></div></div>
-<div class="cell" data-layout-align="center">
+<p>The method used here basically loops through the groups, uses the procedures of the <a href="../2019-12-31_vonB_plots_1/index.html">previous post</a> (for one group) and above to find fitted values and confidence (or prediction) bands for each group, and then (row) binds those results together to produce a synthetic data frame for all groups. The process for a single group is wrapped into a function called <code>vbLOOP1()</code> below. The ordered arguments to <code>vbLOOP1()</code> are a group name, the original data frame, the data frame of starting values for all groups, the data frame of observed age ranges, and a vector that identifies the overall range over which to predict mean lengths at age. <code>vbLOOP1</code> will default to returning confidence intervals, but prediction intervals can be returned by including <code>interval="prediction"</code>.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn17"><p><sup>17</sup>&nbsp;See code comments for the parts of this function that are specific to this case and, thus, might have to be changed for other data.</p></div></div><div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb35" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>vbLOOP1 <span class="ot">&lt;-</span> <span class="cf">function</span>(grp,dat,svs,oagerng,eagerng,<span class="at">interval=</span><span class="st">"confidence"</span>) {</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !! This requires a 'sex', 'tl', and 'age' variable in data frames !!</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="do">## !!   Otherwise need to change 'sex', 'tl', and 'age' below</span></span>
@@ -731,8 +779,8 @@ Note
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="page-columns page-full"><p><a href="#fig-sex3">Figure&nbsp;4</a> is then constructed almost identically to <a href="#fig-sex2">Figure&nbsp;3</a> except that <code>geom_ribbon()</code> is used to produce the confidence bands, with the lower part of the ribbon at the lower confidence values (i.e., <code>ymin=lwr</code>) and the upper part at the upper confidence value (i.e., <code>ymax=upr</code>) produced from the loop above.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> <code>fill=</code> gives the color of the enclosed ribbon. Further note that <code>aesthetics=</code> must be defined in <code>scale_color_manual()</code> because <code>geom_ribbon()</code> used <code>fill=</code>, whereas the other geoms used <code>color=</code>.</p><div class="no-row-height column-margin column-container"><li id="fn18"><p><sup>18</sup>&nbsp;Add <code>geom_ribbon()</code> first so that it is behind the points and model lines.</p></li></div></div>
-<div class="cell page-columns page-full" data-layout-align="center">
+<p><a href="#fig-sex3" class="quarto-xref">Figure&nbsp;4</a> is then constructed almost identically to <a href="#fig-sex2" class="quarto-xref">Figure&nbsp;3</a> except that <code>geom_ribbon()</code> is used to produce the confidence bands, with the lower part of the ribbon at the lower confidence values (i.e., <code>ymin=lwr</code>) and the upper part at the upper confidence value (i.e., <code>ymax=upr</code>) produced from the loop above.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> <code>fill=</code> gives the color of the enclosed ribbon. Further note that <code>aesthetics=</code> must be defined in <code>scale_color_manual()</code> because <code>geom_ribbon()</code> used <code>fill=</code>, whereas the other geoms used <code>color=</code>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn18"><p><sup>18</sup>&nbsp;Add <code>geom_ribbon()</code> first so that it is behind the points and model lines.</p></div></div><div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb40" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr,<span class="at">fill=</span>sex),<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>w14T,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>tl,<span class="at">color=</span>sex),</span>
@@ -749,10 +797,14 @@ Note
 <span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>),</span>
 <span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-sex3" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-sex3-1.png" class="img-fluid figure-img" width="384"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;4: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption>
+<div id="fig-sex3" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sex3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-sex3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-sex3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -761,7 +813,7 @@ Note
 
 </div>
 <p>&nbsp;</p>
-<p>Of course, the graph can also be separated by the grouping variable (<a href="#fig-sex3a">Figure&nbsp;5</a>).</p>
+<p>Of course, the graph can also be separated by the grouping variable (<a href="#fig-sex3a" class="quarto-xref">Figure&nbsp;5</a>).</p>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb41" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data=</span>preds,<span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">ymin=</span>lwr,<span class="at">ymax=</span>upr,<span class="at">fill=</span>sex),<span class="at">alpha=</span><span class="fl">0.25</span>) <span class="sc">+</span></span>
@@ -779,10 +831,14 @@ Note
 <span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-sex3a" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-sex3a-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;5: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption>
+<div id="fig-sex3a" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sex3a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-sex3a-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-sex3a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Fit of typical von Bertalanffy growth function to male and female Lake Erie Walleye in 2014. The dashed lines show the model fits outside the range of observed ages for each sex.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -902,10 +958,14 @@ Note
 <span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-sex4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><img src="index_files/figure-html/fig-sex4-1.png" class="img-fluid figure-img" width="768"></p>
-<figcaption class="figure-caption margin-caption">Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2005, 2008, 2011, and 2014. The dashed lines show the model fits outside the range of observed ages for each sex.</figcaption>
+<div id="fig-sex4" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sex4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-sex4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-sex4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Fit of typical von Bertalanffy growth function to female Lake Erie Walleye in 2005, 2008, 2011, and 2014. The dashed lines show the model fits outside the range of observed ages for each sex.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -920,14 +980,14 @@ Note
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry" role="listitem">
 Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
 </div>
 <div id="ref-ogleetal_2017" class="csl-entry" role="listitem">
 Ogle, D. H., T. O. Brenden, and J. L. McCormick. 2017. <a href="https://derekogle.com/AGF/">Growth <span>Estimation</span>: <span>Growth Models</span> and <span>Statistical Inference</span></a>. Pages 265–359 <em>in</em> M. C. Quist and D. A. Isermann, editors. Age and <span>Growth</span> of <span>Fishes</span>: <span>Principles</span> and <span>Techniques</span>. <span>American Fisheries Society</span>, <span>Bethesda, MD</span>.
 </div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2019,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2019,
   author = {H. Ogle, Derek},
   title = {Von {Bertalanffy} {Growth} {Plots} {II}},
   date = {2019-01-02},
@@ -978,6 +1038,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1046,13 +1133,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1131,10 +1220,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1144,8 +1257,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1157,7 +1279,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1201,6 +1446,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1226,6 +1472,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1283,44 +1555,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/fishr-core-team\.github\.io\/fishR\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 <script src="https://giscus.app/client.js" data-repo="fishR-Core-Team/fishR" data-repo-id="R_kgDOIioeVw" data-category="General" data-category-id="DIC_kwDOIioeV84CS4GW" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="preferred_color_scheme">
+<input type="hidden" id="giscus-alt-theme" value="preferred_color_scheme">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="https://github.com/fishR-Core-Team">fishR Core Team</a>
+    <a class="nav-link" href="https://github.com/fishR-Core-Team">
+<p>fishR Core Team</p>
+</a>
   </li>  
 </ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2020-1-2_vonB_plots_2/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 
