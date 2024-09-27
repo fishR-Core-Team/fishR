@@ -24,7 +24,7 @@ $$
 where $TL_i$ is total length of individual *i*, $L_\infty$ is the average maximum length obtained, $\kappa$ is the Brody growth coefficient, $t_i$ is the age of individual *i*, and $t_0$ is the theoretical age at zero length. To finish the model, an error term is added:
 
 $$
-TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} + \epsilon_i)
+TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} ) + \epsilon_i
 $$
 $$
 \epsilon_i \sim normal(0,\sigma)
