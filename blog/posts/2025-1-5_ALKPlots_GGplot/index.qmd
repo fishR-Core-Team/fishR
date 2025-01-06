@@ -1,0 +1,393 @@
+---
+title: Age-Length Key Plots
+description: Plots similar to alkPlot() from FSA using ggplot2.
+author: Derek H. Ogle
+date: 1/5/2025
+image: preview.png
+categories:
+  - Age-Length Key
+  - ggplot2
+---
+
+# Introduction
+It is often important to examine the structure of an age-length key to ascertain its utility. The plots created with `alkPlot()` from `FSA` ([see here](https://fishr-core-team.github.io/FSA/reference/alkPlot.html#ref-examples)) provide a quick method to create useful plots for this purpose. However, those plots are generally not of "publication-quality" and because some characteristics of the plots are hard-coded in the function, they are difficult (if not impossible) to customize. Modifying `alkPlot()` to be more flexible looked to require more work than benefit to be gained. Thus, here, I will demonstrate how to make similar plots using `ggplot2` that will allow the user great flexibility for customizing the plots for publication (or exploration).
+
+The following packages are loaded for use below.
+
+```{r}
+#| label: packages
+library(tidyverse)  # for dplyr, tibble, and ggplot2 packages
+library(FSA)        # for lencat(), fact2num(), alkPlot() and WR79 data
+```
+
+I made a simple `ggplot2` theme for use below. This can be modified as described, for example, [here](https://fishr-core-team.github.io/fishR/blog/posts/2022-12-22_AFS_Style_Figures/) to further alter the overall appearance of the plots.
+
+```{r}
+#| label: make-theme
+theme_ALK <- function(...) {
+  theme_bw(...) +
+    theme(panel.grid=element_blank(),
+          axis.title=element_text(size=14,face="bold"),
+          axis.text=element_text(size=12))
+} 
+```
+
+&nbsp;
+
+# Construct Example Age-Length Key
+This post uses the same `WR79` from `FSA` ([described here](https://fishr-core-team.github.io/FSA/reference/WR79.html)) to create the same age-length key used in [the examples](https://fishr-core-team.github.io/FSA/reference/alkPlot.html#ref-examples) for `alkPlot()`. The age-length key from these data is created below as demonstrated in [Introductory Fisheries Analsyses with R](https://derekogle.com/IFAR/).
+
+```{r}
+#| label: make-ALK
+WR.age <- droplevels(subset(WR79, !is.na(age)))
+WR.age$LCat <- lencat(WR.age$len,w=5)
+raw <- xtabs(~LCat+age,data=WR.age)
+WR.key <- prop.table(raw, margin=1)
+```
+
+```{r}
+#| label: view-ALK
+round(WR.key,3)
+```
+
+This age-length key is converted to a data.frame for plotting with `ggplot2`.
+
+```{r}
+#| label: make-ALK-df-temp-1
+keydf <- as.data.frame(WR.key)
+str(keydf)
+levels(keydf$age)
+```
+
+By default the `LCat` and `age` variables are factors in the new data.frame.^[One could use `stringsAsFactors=FALSE` in `as.data.frame()` but having those two variables as strings is not helpful.] Having `age` as a factor **is** useful, but the naturally increasing order of the levels (see above) causes the vertical ordering of ages in the plots below to be opposite of what is desired. Thus, the order of the age levels is reversed with `fct_rev()` from `forcats` and the name is changed to `fage` to make it clear that it is a factor. Some of the plots below require `age` as a numeric, rather than a factor, so the numeric ages are added to the data.frame in `nage` using `fact2num()` from `FSA`.^[`fact2num()` is used because it maintains the correct numerical value for each level of the factor.]
+
+```{r}
+#| label: make-ALK-df-temp-2
+keydf <- keydf |>
+  dplyr::mutate(age=forcats::fct_rev(age),
+                nage=FSA::fact2num(age)) |>
+  dplyr::rename(fage=age)
+str(keydf)
+levels(keydf$fage)
+```
+
+There is no value below to having `LCat` as a factor so it is changed to a numeric using `fact2num()`. Finally, `Freq` is a proportion and not a "count" so it is changed to the more accurate `prop` below.
+
+```{r}
+#| label: make-ALK-df-3
+keydf <- keydf |>
+  dplyr::mutate(LCat=FSA::fact2num(LCat)) |>
+  dplyr::rename(prop=Freq)
+str(keydf)
+```
+
+All of the previous modifications to the age-length key data.frame could be performed more efficiently in the following chain of commands.
+
+```{r}
+#| label: make-ALK-df
+#| eval: false
+keydf <- as.data.frame(WR.key) |>
+  dplyr::mutate(age=forcats::fct_rev(age),
+                nage=FSA::fact2num(age),
+                LCat=FSA::fact2num(LCat)) |>
+  dplyr::rename(fage=age,
+                prop=Freq)
+```
+
+Finally, many of the length-age combinations in the age-length key are 0. Some of the plots made below are better made without the zeroes, whereas some are better with the zeroes. Thus, a second data.frame without zeroes is needed.
+
+```{r}
+#| label: make-ALK-df-2
+keydf_nozeroes <- keydf |>
+  dplyr::filter(prop>0)
+```
+
+# Stacked Barplot
+The age-length key may be visualized as a stacked bar (or column) plot with proportion at age on the y-axis, length categories on the x-axis, and stacks colored according to the factored age. Note that the data.frame without zeroes and `fage` is used. Further note that younger ages start at the bottom of the bars because the order of the levels was reversed in `fage`.
+
+```{r}
+#| label: ALK-barplot-1
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_col() +
+  theme_ALK()
+```
+
+This plot can be improved by providing better labels for the axes, providing more length labels on the x-axis, and minimizing the extra vertical and horizontal spaced caused by expanding the x- and y-axes.
+
+```{r}
+#| label: ALK-barplot-2
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_col() +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK()
+```
+
+I also prefer to include age labels in the bars rather than having a legend. These labels may be added with `geom_text()`.^[`geom_label()` provides a slightly different look.] but the position needs to be controlled with `position_stack()` due to the stacking of the bars. `vjust=0.5` is used in `position_stack()` so that the label will be placed at the halfway point (vertically) of the bar. With these labels, the legend is no longer needed and is removed within `theme()`.
+
+```{r}
+#| label: ALK-barplot
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_col() +
+  geom_text(mapping=aes(label=fage),
+            size=3,position=position_stack(vjust=0.5)) +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+#  Bubble Plot
+Another useful plot for visualizing the age-length key is to plot a point at each age-length position (for which fish existed) and scale the size of the point to the proportion found in the age-length key. The start of the plot is shown below, noting that the data.frame without zeroes and `nage` is used.
+
+```{r}
+#| label: ALK-bubbleplot-1
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=nage,x=LCat)) +
+  geom_point() +
+  scale_y_continuous(name="Age",expand=expansion(mult=0.05),breaks=4:11) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.05),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+Two modifications are required to scale the size of the points. First, the size attribute within `geom_point()` should be mapped to "proportions" from the age-length key data.frame (i.e., `prop`). I also mapped color to the factored ages (i.e., `fage`), but that is superfluous as all points corresponding to each age on the y-axis will be the same color.
+
+```{r}
+#| label: ALK-bubbleplot-2
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=nage,x=LCat)) +
+  geom_point(mapping=aes(size=prop,color=fage)) +
+  scale_y_continuous(name="Age",expand=expansion(mult=0.05),breaks=4:11) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.05),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+The second modification is to better control how the sizes of the points are determined with `scale_size()`. Below `breaks=` is used to create breaks in the range of values of the `size=` variable (i.e., `prop`) from 0 to 1 in steps of 0.1 (so, 10 breaks across the range of possible `prop` values). `range=` is then used to set a range of "size" values for the points. Here the range is set from 1 to 10 so that `size=1` would be used for the smallest break in `prop` and `size=10` would be used for the largest break in `prop`. In other words, the size of the points will range from 1 to 10 based on where the value of `prop` is in the `breaks=` sequence.^[You will likely need to try different values for `range=` to get "bubble" sizes that you prefer.]
+
+```{r}
+#| label: ALK-bubbleplot
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=nage,x=LCat)) +
+  geom_point(mapping=aes(size=prop,color=fage)) +
+  scale_size(range=c(1,10),breaks=seq(0,1,0.1)) +
+  scale_y_continuous(name="Age",expand=expansion(mult=0.05),breaks=4:11) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.05),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+# Line Plot
+"Line plots" of the age-length key are easily constructed from the data.frame *with* zeroes using `geom_line()`.^[`size=` is used here to make the lines a little heavier than the default.]
+
+```{r}
+#| label: ALK-lineplot-1
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf,mapping=aes(y=prop,x=LCat,color=fage)) +
+  geom_line(size=1) +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK()
+```
+
+Again I prefer to have labels on the plot rather than in a legend if possible. In `alkPlot()` from `FSA` the line plot has age labels at the peak of each line. Adding these labels requires a separate data.frame that contains the portion of the age-length key data.frame that corresponds to the first instance of the maximum `prop` for each age. This data.frame is constructed below.
+
+```{r}
+#| label: make-agelbldf
+agelbldf <- keydf |>
+  group_by(fage) |>
+  slice(which.max(prop)) |>
+  as.data.frame()   # to remove tibble and grouping
+agelbldf
+```
+
+The age labels are included on the plot by first moving `data=` and `mapping=` from `ggplot()` to `geom_line()`.^[This is needed when separate data.frames are used to make different aspects of the plot.] Then include the second data.frame in `geom_label()`^[`geom_text()` provides a slightly different look.] with the the `label=` aesthetic to place the labels. `fill=` was used to fill the label box with the same color as the line, `size=` was used to increase the size of the text, and `alpha=` was used to make the color of the label box semi-transparent so that the lines behind them could still be seen. Furthermore, the expansion for the x-axis and the top of the y-axis were increased to make room for the labels. and the now unnecessary legend was removed.
+
+```{r}
+#| label: ALK-lineplot
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot() +
+  geom_line(data=keydf,mapping=aes(y=prop,x=LCat,color=fage),
+            size=1) +
+  geom_label(data=agelbldf,mapping=aes(y=prop,x=LCat,label=fage,fill=fage),
+            size=4,alpha=0.5) +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.04))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.04),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+# Area Plot
+Area plots are similar to the barplot from above. However, I have found these plots to be the hardest to make look nice and to modify using base R plotting functions and, thus, I did not use them often. Here is a start for constructing an area plot with `ggplot2` using `geom_area()`.
+
+```{r}
+#| label: ALK-areaplot-1
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_area() +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK()
+```
+
+As before, I prefer to label the agess within the areas, rather than as a legend. I could not find an automated way to do this. Thus, the general method for labeling the lines in the line plot will be followed, except that the data.frame will have to be created by manually filling the `LCat` and `prop` values for where the labels should be placed. In practice this will likely take some trial-and-error as the positions are "eye-balled." Below I use `tribble()` from `tibble` because I like how the data can be entered by rows rather than by columns.
+
+```{r}
+#| label: make-lbls-areaplot
+agelbldf <- tibble::tribble(
+  ~LCat,~prop,~lbl,
+   47, 0.50,  "4",
+   70, 0.50,  "5",
+   83, 0.50,  "6",
+   95, 0.50,  "7",
+  103, 0.62,  "8",
+  101, 0.85,  "9",
+  112, 0.70, "10",
+  110, 0.95, "11"
+)
+```
+
+This data.frame is then used with either `geom_text()` or `geom_label()` to add the labels to the appropriate areas. Note that `vjust=0.5` and `hjust=0.5` center the text label on the given coordinates.
+
+```{r}
+#| label: ALK-areaplot
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot() +
+  geom_area(data=keydf,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_text(data=agelbldf,mapping=aes(y=prop,x=LCat,label=lbl),
+             size=4,vjust=0.5,hjust=0.5) +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+&nbsp;
+
+# Why These Modifications?
+I prefer these plots to those produced by `alkPlot()` (even though I wrote the code for all of those plots) because the full arsenal of ggplot2 commands can be used to modify the plots and because these plots more readily handle some issues with age-length keys.
+
+It is beyond the scope of this post to show all the ways these plots can be modified with `ggplot2` code. A simple example is to replace the rather garish colors used above. For example, the fill color on the barplot can be changed to a scale of blues with `scale_fill_brewer()` as shown below. Many other color schemes can be used (see [this](https://bookdown.dongzhuoer.com/hadley/ggplot2-book/colour-discrete) as one (of many) demonstration of choosing colors.)
+
+```{r}
+#| label: ALK-barplot-modcolor
+#| class-output: "highlight numberLines"
+#| output-line-numbers: "8"
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_col() +
+  geom_text(mapping=aes(label=fage),
+            size=3,position=position_stack(vjust=0.5)) +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  scale_fill_brewer(palette="Blues") +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+You may want to avoid color altogether and use a grey scale when preparing for print publications. One could use `scale_color_brewer(palette="Greys")` but this tends to leave the last age as white, which may not be effective. Instead use `scale_color_grey()` and use `start=` and `end=` to control the levels of grey (note that 0 is black and 1 is white).
+
+```{r}
+#| label: ALK-bubbleplot-colormod
+#| class-output: "highlight numberLines"
+#| output-line-numbers: "7"
+#| fig-width: 6
+#| fig-height: 4.5
+ggplot(data=keydf_nozeroes,mapping=aes(y=nage,x=LCat)) +
+  geom_point(mapping=aes(size=prop,color=fage)) +
+  scale_size(range=c(1,10),breaks=seq(0,1,0.1)) +
+  scale_y_continuous(name="Age",expand=expansion(mult=0.05),breaks=4:11) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.05),
+                     breaks=seq(0,1000,5)) +
+  scale_color_grey(start=0.8,end=0.2) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+This post originally started because a user noted that `alkPlot()` plots were not appropriate when some of the length classes were missing from the age-length key. For example, suppose that no fish existed from 55 to 70 cm in the original data.frame.
+
+```{r}
+#| label: make-ALK-missing-Lcat
+WR.age <- droplevels(subset(WR79, !is.na(age)))
+WR.age <- subset(WR.age,len<55 | len>70)        # remove 55-70 cm fish
+WR.age$LCat <- lencat(WR.age$len,w=5)
+raw <- xtabs(~LCat+age,data=WR.age)
+WR.key <- prop.table(raw, margin=1)
+```
+
+See how the `alkPlot()` plot does not clearly show the gap in the data for those lengths (i.e., the 50- and 70-cm bars are right next to each other).
+
+```{r}
+#| label: make-ALKplot-missing-Lcat
+#| fig-width: 6
+#| fig-height: 4.5
+alkPlot(WR.key)
+```
+
+However, the similar `ggplot2` plot, though clearly requiring more code from the user, properly shows the missing length categories.
+
+```{r}
+#| label: ALK-barplot-missing-Lcat
+#| fig-width: 6
+#| fig-height: 4.5
+WR.keydf <- as.data.frame(WR.key) |>
+  dplyr::mutate(age=forcats::fct_rev(age),
+                nage=FSA::fact2num(age),
+                LCat=FSA::fact2num(LCat)) |>
+  dplyr::rename(fage=age,
+                prop=Freq) |>
+  dplyr::filter(prop>0)
+
+ggplot(data=WR.keydf,mapping=aes(y=prop,x=LCat,fill=fage)) +
+  geom_col() +
+  geom_text(mapping=aes(label=fage),
+            size=3,position=position_stack(vjust=0.5)) +
+  scale_y_continuous(name="Proportion",expand=expansion(mult=c(0,0.01))) + 
+  scale_x_continuous(name="Total Length (cm)",expand=expansion(mult=0.01),
+                     breaks=seq(0,1000,5)) +
+  theme_ALK() +
+  theme(legend.position="none")
+```
+
+&nbsp;
+
+```{r}
+#| label: make-preview
+#| echo: false
+#| fig.show: "hide"
+#| results: "hide"
+# This is used as a work-around for creating a preview image. See the
+#   discussion at https://github.com/quarto-dev/quarto-cli/issues/2042
+png("preview.png",width=1000,height=500,units="px",
+    bg="transparent",res=216)
+## PLOT CONSTRUCTION CODE HERE (usually keep aspect.ratio=1)
+last_plot() +
+  theme(aspect.ratio=1,
+        legend.position="none")
+dev.off()
+```

@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Jason Doll">
-<meta name="description" content="Tutorial on how to estimate parameters of the LVB model with Bayesian inference and rstan">
+<meta name="author" content="Derek H. Ogle">
+<meta name="description" content="Plots similar to alkPlot() from FSA using ggplot2.">
 
-<title>Bayesian LVB II - rstan – fishR</title>
+<title>Age-Length Key Plots – fishR</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -56,27 +56,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -128,50 +108,21 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../../helpers/styles.css">
-<meta property="og:title" content="Bayesian LVB II - rstan – fishR">
-<meta property="og:description" content="Tutorial on how to estimate parameters of the LVB model with Bayesian inference and rstan">
-<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/preview.png">
+<meta property="og:title" content="Age-Length Key Plots – fishR">
+<meta property="og:description" content="Plots similar to alkPlot() from FSA using ggplot2.">
+<meta property="og:image" content="https://fishr-core-team.github.io/fishR/blog/posts/2025-1-5_ALKPlots_GGplot/preview.png">
 <meta property="og:site_name" content="fishR">
 <meta property="og:image:height" content="500">
 <meta property="og:image:width" content="1000">
-<meta name="citation_title" content="Bayesian LVB II - rstan">
-<meta name="citation_author" content="Jason Doll">
-<meta name="citation_publication_date" content="2024-02-06">
-<meta name="citation_cover_date" content="2024-02-06">
-<meta name="citation_year" content="2024">
-<meta name="citation_online_date" content="2024-02-06">
-<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/">
+<meta name="citation_title" content="Age-Length Key Plots">
+<meta name="citation_author" content="Derek H. Ogle">
+<meta name="citation_publication_date" content="2025-01-05">
+<meta name="citation_cover_date" content="2025-01-05">
+<meta name="citation_year" content="2025">
+<meta name="citation_online_date" content="2025-01-05">
+<meta name="citation_fulltext_html_url" content="https://fishr-core-team.github.io/fishR/blog/posts/2025-1-5_ALKPlots_GGplot/">
 <meta name="citation_language" content="en">
 <meta name="citation_reference" content="citation_title=Reduction in Sea Lamprey hatching success due to release of sterilized males;,citation_author=Roger A. Bergstedt;,citation_author=Rodney B. McDonald;,citation_author=Michael B. Twohey;,citation_author=Katherine M. Mullett;,citation_author=Robert J. Young;,citation_author=John W. Heinrich;,citation_publication_date=2003-01;,citation_cover_date=2003-01;,citation_year=2003;,citation_fulltext_html_url=https://d1wqtxts1xzle7.cloudfront.net/47387243/s0380-1330_2803_2970506-120160720-18707-uclq58-libre.pdf?1469051489=&amp;amp;amp;response-content-disposition=inline%3B+filename%3DReduction_in_Sea_Lamprey_Hatching_Succes.pdf&amp;Expires=1671839889&amp;Signature=Cr43e0gsnwhQNCQSSmjFjLFTOXVmjj0DZ0fuOLbU40oi4Uc5qOtYakQyzQrg1PHK5sB5modWbBwk-pOwzKLnFFGhK-80GZ8QdTxAJb6ZaGGkHjH7slikyFsWbSSN-HwODpI5vLuOGG23VaVnsgppdGDzOXTef8pDE3148bPaq7-n1rtLfHDYZyvBKYo5RAs0pLP73U7B9cdVNcMU-2CNrqMe0URzP~-KIJG2gA9oXs7K6UqhUBSrNahU6AJ~fXuhRhVEAZSE7RM~k-J-wgAh8ZyxDT1CoknuGzfYjXzsvGNr2eBBKyR4L1KTeq4z9G1aLAbVIXO4cKOTjBV1bKrULw__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA;,citation_volume=29;,citation_language=en-US;,citation_journal_title=Journal of Great Lakes Research;,citation_journal_abbrev=Journal of Great Lakes Research;">
 <meta name="citation_reference" content="citation_title=On length-weight relationships. Part II. Computing mean weights from length statistics;,citation_author=Jan E. Beyer;,citation_publication_date=1991;,citation_cover_date=1991;,citation_year=1991;,citation_fulltext_html_url=https://hdl.handle.net/20.500.12348/3103;,citation_volume=9;,citation_journal_title=FishByte;">
@@ -308,16 +259,15 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Bayesian LVB II - rstan</h1>
+      <h1 class="title">Age-Length Key Plots</h1>
                   <div>
         <div class="description">
-          Tutorial on how to estimate parameters of the LVB model with Bayesian inference and rstan
+          Plots similar to alkPlot() from FSA using ggplot2.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">growth</div>
-                <div class="quarto-category">Bayesian</div>
-                <div class="quarto-category">Stan</div>
+                <div class="quarto-category">Age-Length Key</div>
+                <div class="quarto-category">ggplot2</div>
               </div>
                   </div>
   </div>
@@ -328,21 +278,21 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Jason Doll </p>
+               <p>Derek H. Ogle </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Feb 6, 2024</p>
+        <p class="date">Jan 5, 2025</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">Nov 1, 2024</p>
+        <p class="date-modified">Jan 6, 2025</p>
       </div>
     </div>
       
@@ -358,19 +308,17 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#prior-probabilities" id="toc-prior-probabilities" class="nav-link" data-scroll-target="#prior-probabilities">Prior probabilities</a></li>
-  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link" data-scroll-target="#preliminaries">Preliminaries</a></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
-  <li><a href="#initial-values" id="toc-initial-values" class="nav-link" data-scroll-target="#initial-values">Initial values</a></li>
-  <li><a href="#stan" id="toc-stan" class="nav-link" data-scroll-target="#stan">Stan</a></li>
-  <li><a href="#assess-convergence" id="toc-assess-convergence" class="nav-link" data-scroll-target="#assess-convergence">Assess convergence</a></li>
-  <li><a href="#posterior-summary" id="toc-posterior-summary" class="nav-link" data-scroll-target="#posterior-summary">Posterior summary</a></li>
-  <li><a href="#posterior-plotting" id="toc-posterior-plotting" class="nav-link" data-scroll-target="#posterior-plotting">Posterior plotting</a></li>
+  <li><a href="#construct-example-age-length-key" id="toc-construct-example-age-length-key" class="nav-link" data-scroll-target="#construct-example-age-length-key">Construct Example Age-Length Key</a></li>
+  <li><a href="#stacked-barplot" id="toc-stacked-barplot" class="nav-link" data-scroll-target="#stacked-barplot">Stacked Barplot</a></li>
+  <li><a href="#bubble-plot" id="toc-bubble-plot" class="nav-link" data-scroll-target="#bubble-plot">Bubble Plot</a></li>
+  <li><a href="#line-plot" id="toc-line-plot" class="nav-link" data-scroll-target="#line-plot">Line Plot</a></li>
+  <li><a href="#area-plot" id="toc-area-plot" class="nav-link" data-scroll-target="#area-plot">Area Plot</a></li>
+  <li><a href="#why-these-modifications" id="toc-why-these-modifications" class="nav-link" data-scroll-target="#why-these-modifications">Why These Modifications?</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2024-2-6_LVB_Stan/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2025-1-5_ALKPlots_GGplot/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
 
 
@@ -378,284 +326,439 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>The use of Bayesian inference in fisheries biology has been increasing. For good reason, as there are many benefits to taking a Bayesian approach. I won’t go into those reasons here but you can read about them in <span class="citation" data-cites="dorazio_2016">Dorazio (<a href="#ref-dorazio_2016" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="dolljacquemin_2018">Doll and Jacquemin (<a href="#ref-dolljacquemin_2018" role="doc-biblioref">2018</a>)</span>. This post assumes you have already decided to use Bayesian methods and will present how to estimate parameters of the von Bertalanffy growth model. Previous posts describe frequentist methods <a href="../2019-12-31_vonB_plots_1/">here</a> and <a href="../2020-1-2_vonB_plots_2/">here</a></p>
-<p>This is the second post where I describe how to fit a model using Bayesian inference. The <a href="../2024-2-5_LVB_brms/">first post</a> used Stan with the <code>brms</code> package. This post will use <code>rstan</code> and I will write the full Stan model code.</p>
-<p>Both methods will fit the typical three parameter von Bertalanffy growth model</p>
-<p><span class="math display">\[
-TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} )
-\]</span></p>
-<p>where <span class="math inline">\(TL_i\)</span> is total length of individual <em>i</em>, <span class="math inline">\(L_\infty\)</span> is the average maximum length obtained, <span class="math inline">\(\kappa\)</span> is the Brody growth coefficient, <span class="math inline">\(t_i\)</span> is the age of individual <em>i</em>, and <span class="math inline">\(t_0\)</span> is the theoretical age at zero length. To finish the model, an error term is added:</p>
-<p><span class="math display">\[
-TL_i=L_\infty * (1-e^{(-\kappa * (t_i-t_0))} + \epsilon_i)
-\]</span> <span class="math display">\[
-\epsilon_i \sim normal(0,\sigma)
-\]</span> where <span class="math inline">\(\epsilon_i\)</span> is a random error term for individual <em>i</em> with a mean of 0 and standard deviation <span class="math inline">\(\sigma\)</span>.</p>
-</section>
-<section id="prior-probabilities" class="level1">
-<h1>Prior probabilities</h1>
-<p>At the heart of Bayesian analysis is the prior probability distribution.This post will use non-informative prior probability distributions. When and how to use informative priors when fitting a von Bertalanffy growth model will be discussed in a future post. However, you can read about it in <span class="citation" data-cites="dolljacquemin_2018">Doll and Jacquemin (<a href="#ref-dolljacquemin_2018" role="doc-biblioref">2018</a>)</span>. The prior probability distributions used in this post are:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Parameter</th>
-<th>Prior Probability Distribution</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(L_\infty\)</span></td>
-<td>normal(0,1000)</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\kappa\)</span></td>
-<td>normal(0,10)</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(t_0\)</span></td>
-<td>normal(0,10)</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\sigma\)</span></td>
-<td>student-t(3,0,30)</td>
-</tr>
-</tbody>
-</table>
-<p>Stan parameterizes the normal distribution with the mean and standard deviation and the student-t distribution with the degrees of freedom, mean, and standard deviation</p>
-</section>
-<section id="preliminaries" class="level1">
-<h1>Preliminaries</h1>
-<p>First step is to load the necessary packages</p>
+<p>It is often important to examine the structure of an age-length key to ascertain its utility. The plots created with <code>alkPlot()</code> from <code>FSA</code> (<a href="https://fishr-core-team.github.io/FSA/reference/alkPlot.html#ref-examples">see here</a>) provide a quick method to create useful plots for this purpose. However, those plots are generally not of “publication-quality” and because some characteristics of the plots are hard-coded in the function, they are difficult (if not impossible) to customize. Modifying <code>alkPlot()</code> to be more flexible looked to require more work than benefit to be gained. Thus, here, I will demonstrate how to make similar plots using <code>ggplot2</code> that will allow the user great flexibility for customizing the plots for publication (or exploration).</p>
+<p>The following packages are loaded for use below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSAdata)   <span class="co"># for data</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)     <span class="co"># for filter(), select()</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)     <span class="co"># for transposing data wide to long</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)   <span class="co"># for potting</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)     <span class="co"># for fitting Stan models</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes) <span class="co"># for plotting posterior results</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot) <span class="co"># for plotting posterior predictive checks</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for dplyr, tibble, and ggplot2 packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)        <span class="co"># for lencat(), fact2num(), alkPlot() and WR79 data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="data" class="level1">
-<h1>Data</h1>
-<p>The <code>WalleyeErie2</code> data available in the <a href="https://fishr-core-team.github.io/FSAdata/"><code>FSAdata</code></a> package was used in previous posts demonstrating von Bertalanffy growth models and will once again be used here. These data are Lake Erie Walleye (<em>Sander vitreus</em>) captured during October-November, 2003-2014. As before, the primary interest here is in the tl (total length in mm) and age variables. The data will also be filtered to focus only on female Walleye from location <code>1</code> captured in 2014.</p>
+<p>I made a simple <code>ggplot2</code> theme for use below. This can be modified as described, for example, <a href="https://fishr-core-team.github.io/fishR/blog/posts/2022-12-22_AFS_Style_Figures/">here</a> to further alter the overall appearance of the plots.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(WalleyeErie2,<span class="at">package=</span><span class="st">"FSAdata"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wf14T <span class="ot">&lt;-</span> WalleyeErie2 <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2014</span>,sex<span class="sc">==</span><span class="st">"female"</span>,loc<span class="sc">==</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>year,<span class="sc">-</span>sex,<span class="sc">-</span>setID,<span class="sc">-</span>loc,<span class="sc">-</span>grid)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">headtail</span>(wf14T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>theme_ALK <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(...) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.grid=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>,<span class="at">face=</span><span class="st">"bold"</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="construct-example-age-length-key" class="level1 page-columns page-full">
+<h1>Construct Example Age-Length Key</h1>
+<p>This post uses the same <code>WR79</code> from <code>FSA</code> (<a href="https://fishr-core-team.github.io/FSA/reference/WR79.html">described here</a>) to create the same age-length key used in <a href="https://fishr-core-team.github.io/FSA/reference/alkPlot.html#ref-examples">the examples</a> for <code>alkPlot()</code>. The age-length key from these data is created below as demonstrated in <a href="https://derekogle.com/IFAR/">Introductory Fisheries Analsyses with R</a>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>WR.age <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(<span class="fu">subset</span>(WR79, <span class="sc">!</span><span class="fu">is.na</span>(age)))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>WR.age<span class="sc">$</span>LCat <span class="ot">&lt;-</span> <span class="fu">lencat</span>(WR.age<span class="sc">$</span>len,<span class="at">w=</span><span class="dv">5</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">xtabs</span>(<span class="sc">~</span>LCat<span class="sc">+</span>age,<span class="at">data=</span>WR.age)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>WR.key <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(raw, <span class="at">margin=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(WR.key,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|       tl    w      mat age
-#R|  1   445  737 immature   2
-#R|  2   528 1571   mature   4
-#R|  3   380  506 immature   1
-#R|  323 488 1089 immature   2
-#R|  324 521 1408   mature   3
-#R|  325 565 1745   mature   3</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|       age
+#R|  LCat      4     5     6     7     8     9    10    11
+#R|    35  1.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    40  1.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    45  1.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    50  1.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    55  1.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    60  0.600 0.400 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    65  0.000 1.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    70  0.000 1.000 0.000 0.000 0.000 0.000 0.000 0.000
+#R|    75  0.000 0.889 0.111 0.000 0.000 0.000 0.000 0.000
+#R|    80  0.000 0.250 0.750 0.000 0.000 0.000 0.000 0.000
+#R|    85  0.000 0.000 0.909 0.091 0.000 0.000 0.000 0.000
+#R|    90  0.000 0.000 0.263 0.632 0.105 0.000 0.000 0.000
+#R|    95  0.000 0.000 0.059 0.706 0.176 0.000 0.059 0.000
+#R|    100 0.000 0.000 0.000 0.556 0.167 0.278 0.000 0.000
+#R|    105 0.000 0.000 0.000 0.286 0.429 0.143 0.143 0.000
+#R|    110 0.000 0.000 0.000 0.200 0.200 0.200 0.200 0.200
+#R|    115 0.000 0.000 0.000 0.000 0.000 0.000 1.000 0.000</code></pre>
 </div>
 </div>
-<p>Next step is to create a list to hold the data used in the model. One important note, the items in this list must match the data used in the model code. For example, we will use <code>tl</code> for total length in the data list and <code>tl</code> must be specified in the Stan data block exactly as <code>tl</code>.</p>
+<p>This age-length key is converted to a data.frame for plotting with <code>ggplot2</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dataList<span class="ot">=</span><span class="fu">list</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">tl=</span>wf14T<span class="sc">$</span>tl,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">age=</span>wf14T<span class="sc">$</span>age ,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">N=</span><span class="fu">length</span>((wf14T<span class="sc">$</span>age))</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="initial-values" class="level1">
-<h1>Initial values</h1>
-<p>An optional step is to specify initial values for the parameters. It is always good practice to specify initial values, particularly with non-linear and other complex models. I will fit the model using multiple chains and it is advisable to use different starting values for each chain. To accomplish this, we will specify a function and use a random number generator for each parameter Adjust the range for the uniform distribution to cover a large range of values that make sense for your data. You can use other distributions as long as they match the declared range in the model code. In this example, I am using the random uniform function because <span class="math inline">\(L_\infty\)</span> and <span class="math inline">\(\kappa\)</span> are restricted to be positive in the model. Therefore, the starting value must be positive.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>initsLst <span class="ot">&lt;-</span> <span class="cf">function</span>() <span class="fu">list</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Linf=</span><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="dv">800</span>),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">K=</span><span class="fu">runif</span>(<span class="dv">1</span>, <span class="fl">0.05</span>, <span class="fl">3.00</span>),</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">t0 =</span><span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="stan" class="level1">
-<h1>Stan</h1>
-<p>Now we can introduce the Stan model code. Stan models are structured with “blocks”. Generally, the minimum number of blocks used is three; data, parameters, and model blocks. In our example, we will use a fourth block, the generated quantities block. All of the blocks must be in a single .stan file. The blocks are presented separately here for demonstration. Other blocks that can be used in Stan are; functions, transformed data, and transformed parameters. See the Stan manual for a description of each.</p>
-<p>The data block declares all of the data needed for the model and the data object must match how they are entered in the data list above. There are several different types of data that can be declared. For this example, I use <code>int</code> to declare <code>N</code>, which is the number of observations, as an integer. You’ll also notice that I include a lower bounds for this variable. This isn’t necessary but good practice if your variable has a floor or ceiling. <code>tl</code> is declared as a <code>real</code> data type. The <code>real</code> data type is typically used for single numbers or a vector of numbers. This example declares the real data type as a vector of length <code>N</code>. <code>age</code> is another vector of length <code>N</code> but it is a vector of integers, <code>int</code>.</p>
-<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N ;  <span class="co">// number of observations</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> tl[N] ;      <span class="co">// Total lengths of individual fish</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> age[N] ;      <span class="co">// Age of individual fish</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The second block in our model is a parameters block. This block will declare all the estimated parameters in the model. Our model has four parameters. <code>sigma_y</code> is the standard deviation, <span class="math inline">\(\sigma\)</span>, of the individual observations; <code>t0</code> is the <span class="math inline">\(t_0\)</span> LVB parameter; <code>Linf</code> is the <span class="math inline">\(L_\infty\)</span> parameter; and <code>k</code> is the <span class="math inline">\(\kappa\)</span> parameter. Each is declared as a single real value. All of the parameters are constrained in at least one direction. <code>sigma_y</code> is constrained to be positive using the <code>&lt;lower=0&gt;</code> argument because standard deviations must be positive. <code>t0</code> is being constrained to be between -5 and 5 using the <code>&lt;lower=-5&gt;</code> and <code>&lt;upper=5&gt;</code> arguments. This is declared based on prior knowledge to prevent the sampler from searching outside these bounds. The remaining two, <code>Linf</code> and <code>k</code>, are only constrained to be positive using <code>&lt;lower=0&gt;</code>.</p>
-<p>Setting bounds can help the sampler find the posterior distribution, particularly with complex models. So it is recommended to always set bounds that “make sense”. Use your knowledge of the system and the model to declare these bounds. This is separate from declare your prior probability distribution but setting bounds will influence your prior probability distributions. The priors are set in the model block.</p>
-<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
-<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_y;              <span class="co">//LVB standard deviation</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=-<span class="dv">5</span>, <span class="kw">upper</span>=<span class="dv">5</span>&gt; t0;         <span class="co">//LVB t0 parameter</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; Linf;                 <span class="co">//LVB Linf parameter</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; k;                    <span class="co">//LVB k parameter</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The third block declares the model. The model block starts off with declaring any local variables that might be needed. Note that any variables declared in the model block can’t be referenced in other blocks. In this case, I need a vector <code>ypred</code> of length <code>N</code> to hold the mean total length which is a function of the von Bertlanffy growth model. This is followed by our declaration of prior probability distributions. Stan will automatically assign uniform prior probabilities if a prior is not specified here. I don’t recommend letting Stan declare uniform priors by default. Always be explicit in the prior probability distribution in your model and assign prior probability distributions that are suitable for the parameter and defensible against a skeptical audience. A future post will dive deeper into setting and selecting informative vs non-informative prior probability distribution.</p>
-<p>The final part of the model block is the likelihood. This will include a for loop that will iterate through each of the observed values and include the model. Following this is the <code>normal()</code> distribution which specifies the distribution of our observations and is parameterized with the mean <code>y_mean</code> and standard deviation <code>sigma_y</code>. This last line can be indexed over individuals and included in the for loop. Or vectorized outside the loop, as it is written here.</p>
-<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y_mean; <span class="co">//variable used in the model block only</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">//The next three lines of code specify reference prior probability distributions.</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  sigma_y ~ student_t(<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">40</span>);  </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  Linf ~ normal(<span class="dv">0</span>, <span class="dv">1000</span>);</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  k ~ normal(<span class="dv">0</span>, <span class="dv">100</span>);</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  t0 ~ normal(<span class="dv">0</span>, <span class="dv">10</span>); </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// calculate likelihood of data</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N){</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    y_mean[i]= Linf * (<span class="dv">1</span>-exp(-(k * (age[i]-t0) )) );</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  tl~normal(y_mean, sigma_y);</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The last block needed is a generated quantities block. This block is used to calculate derived variables, posterior predictions, and to generate model predictions. I will use it here to generate a vector named <code>y_rep</code> of length <code>N</code> that will hold individual predicted observations. <code>y_rep</code> is the posterior predicted values of total length that will be used to plot the observed and model predicted total length. The posterior predicted distribution is generated using the <code>normal_rng</code> function which generates a random value from the normal distribution based on a mean (the model) and standard deviation. The posterior predicted distribution generated in in a for loop to iterate through each observed individual.</p>
-<div class="cell" data-layout-align="center" data-output.var="LVBmodel">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="nil"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span>{</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//the next four lines of code generate predicted values to use for inspecting model fit</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y_rep;</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N){</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    y_rep[i] = normal_rng(Linf * (<span class="dv">1</span>-exp(-(k * (age[i]-t0) )) ) ,sigma_y);</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Before sending the model to <code>rstan</code>, the full model code needs to be saved into a file with the .stan extension. For example “Walleye_lvb.stan”. The .stan file also has to be saved in the working directory.</p>
-<p>Now it is time to bundle all the pieces together.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Compile and fit model using Stan </span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>LVBfit <span class="ot">&lt;-</span> <span class="fu">stan</span>(<span class="at">file=</span><span class="st">'Walleye_lvb.stan'</span>, <span class="co"># The file containing the Stan model</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data=</span>dataList,          <span class="co"># a list containing the data</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">init=</span>initsLst,          <span class="co"># a list containing initial values </span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">chains=</span><span class="dv">3</span>,               <span class="co"># number of chains, typically 3 to 4</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">cores=</span><span class="dv">3</span>,                <span class="co"># number of cores for multi-core processing;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                        <span class="co">#  Typically set to match number of chains</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">iter=</span><span class="dv">3000</span> ,             <span class="co"># number of iterations</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">warmup=</span><span class="dv">1000</span> ,           <span class="co"># number of warm up steps to discard</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">control=</span><span class="fu">list</span>(<span class="at">adapt_delta=</span><span class="fl">0.80</span>,  <span class="co"># Adjustments to the algorithm</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max_treedepth=</span><span class="dv">15</span>)) <span class="co"># to improve convergence.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="assess-convergence" class="level1">
-<h1>Assess convergence</h1>
-<p>Let’s inspect convergence and how well the model fits the data. The first thing to do is to examine the trace plots and histograms of the important model parameters.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(LVBfit, <span class="at">plotfun=</span><span class="st">"trace"</span>, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"sigma_y"</span>,<span class="st">"Linf"</span>,<span class="st">"k"</span>,<span class="st">"t0"</span>), <span class="at">inc_warmup=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="528"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(LVBfit, <span class="at">plotfun=</span><span class="st">"hist"</span>, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"sigma_y"</span>,<span class="st">"Linf"</span>,<span class="st">"k"</span>,<span class="st">"t0"</span>), <span class="at">inc_warmup=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="528"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The chains appear to have mixed well for all parameters and reached a stationary posterior. This is seen by a unimodal distribution in the histograms and caterpillar plots for each parameter appear “on top” of each other. We can move on to assessing how well the model fits the data using a posterior predictive check.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>y_rep <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(LVBfit, <span class="at">pars=</span><span class="st">"y_rep"</span>) <span class="co">#Extract the posterior predicted observations</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ppc_dens_overlay</span>(wf14T<span class="sc">$</span>tl, y_rep[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ])  <span class="co">#Density plot of y and y_rep</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="336"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The y_rep curves do a good job at covering our observations and we can conclude the model does a sufficient job at representing the data. Now we can move on to look at individual parameters.</p>
-</section>
-<section id="posterior-summary" class="level1">
-<h1>Posterior summary</h1>
-<p>Because we included a generated quantities block and are calculating the posterior predicted distribution, our output if very long. The <code>summary(LVBfit)</code> command would return a vary long summary of all the parameters and individual predicted total lengths. Instead, I use the <code>print()</code> function here and only specify the parameters of interest.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(LVBfit, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"sigma_y"</span>,<span class="st">"Linf"</span>,<span class="st">"k"</span>,<span class="st">"t0"</span>), <span class="at">probs=</span><span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.5</span>,<span class="fl">0.975</span>),<span class="at">digits_summary=</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>keydf <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(WR.key)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(keydf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="output" data-code-line-numbers="nil"><code>#R|  Inference for Stan model: anon_model.
-#R|  3 chains, each with iter=3000; warmup=1000; thin=1; 
-#R|  post-warmup draws per chain=2000, total post-warmup draws=6000.
-#R|  
-#R|                mean  se_mean        sd       2.5%        50%     97.5% n_eff
-#R|  sigma_y  18.374523 0.014576  0.697872  17.056527  18.351687  19.78513  2292
-#R|  Linf    648.420363 0.255814 10.053525 629.794538 648.129750 669.59872  1544
-#R|  k         0.361929 0.000548  0.021013   0.321538   0.361925   0.40304  1471
-#R|  t0       -1.286594 0.002216  0.087222  -1.466487  -1.282706  -1.12793  1550
-#R|              Rhat
-#R|  sigma_y 1.002078
-#R|  Linf    1.001539
-#R|  k       1.001829
-#R|  t0      1.001628
-#R|  
-#R|  Samples were drawn using NUTS(diag_e) at Tue May  7 08:07:37 2024.
-#R|  For each parameter, n_eff is a crude measure of effective sample size,
-#R|  and Rhat is the potential scale reduction factor on split chains (at 
-#R|  convergence, Rhat=1).</code></pre>
+<pre class="output" data-code-line-numbers="nil"><code>#R|  'data.frame':  136 obs. of  3 variables:
+#R|   $ LCat: Factor w/ 17 levels "35","40","45",..: 1 2 3 4 5 6 7 8 9 10 ...
+#R|   $ age : Factor w/ 8 levels "4","5","6","7",..: 1 1 1 1 1 1 1 1 1 1 ...
+#R|   $ Freq: num  1 1 1 1 1 0.6 0 0 0 0 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(keydf<span class="sc">$</span>age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] "4"  "5"  "6"  "7"  "8"  "9"  "10" "11"</code></pre>
 </div>
 </div>
-<p>The summary table provides the point estimates, 95% credible intervals, Rhat values, and n_eff. The Rhat values are another check to assess model convergence. It is generally accepted that you want Rhat values less than 1.10. The n_eff is also used to assess convergence. n_eff refers to “Effective Sample Size”. Because of the nature of MCMC methods, each successive sample from the posterior will typically be autocorrelated within a chain. Autocorrelation within the chains can increase uncertainty in the estimates. One way to assessing how much autocorrelation is present and big of an effect it might be, is with the “Effective Sample Size”. ESS represents the number of independent draws from the posterior. The ESS will be lower than the actual number of draws and you are looking for a high ESS. It has been recommended that an ESS of 1,000 for each parameter is sufficient <span class="citation" data-cites="burkner_2017">Bürkner (<a href="#ref-burkner_2017" role="doc-biblioref">2017</a>)</span>.</p>
-</section>
-<section id="posterior-plotting" class="level1">
-<h1>Posterior plotting</h1>
-<p>The final part is to create a figure with observed and predicted values. This code block is a little different than what was used with brms. Instead of <code>add_predicted_draw()</code>, I have to combine the predicted draws manually then convert them from wide to long.</p>
+<p>By default the <code>LCat</code> and <code>age</code> variables are factors in the new data.frame.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Having <code>age</code> as a factor <strong>is</strong> useful, but the naturally increasing order of the levels (see above) causes the vertical ordering of ages in the plots below to be opposite of what is desired. Thus, the order of the age levels is reversed with <code>fct_rev()</code> from <code>forcats</code> and the name is changed to <code>fage</code> to make it clear that it is a factor. Some of the plots below require <code>age</code> as a numeric, rather than a factor, so the numeric ages are added to the data.frame in <code>nage</code> using <code>fact2num()</code> from <code>FSA</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;One could use <code>stringsAsFactors=FALSE</code> in <code>as.data.frame()</code> but having those two variables as strings is not helpful.</p></div><div id="fn2"><p><sup>2</sup>&nbsp;<code>fact2num()</code> is used because it maintains the correct numerical value for each level of the factor.</p></div></div><div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>keydf <span class="ot">&lt;-</span> keydf <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">age=</span>forcats<span class="sc">::</span><span class="fu">fct_rev</span>(age),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nage=</span>FSA<span class="sc">::</span><span class="fu">fact2num</span>(age)) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">fage=</span>age)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(keydf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  'data.frame':  136 obs. of  4 variables:
+#R|   $ LCat: Factor w/ 17 levels "35","40","45",..: 1 2 3 4 5 6 7 8 9 10 ...
+#R|   $ fage: Factor w/ 8 levels "11","10","9",..: 8 8 8 8 8 8 8 8 8 8 ...
+#R|   $ Freq: num  1 1 1 1 1 0.6 0 0 0 0 ...
+#R|   $ nage: num  4 4 4 4 4 4 4 4 4 4 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(keydf<span class="sc">$</span>fage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  [1] "11" "10" "9"  "8"  "7"  "6"  "5"  "4"</code></pre>
+</div>
+</div>
+<p>There is no value below to having <code>LCat</code> as a factor so it is changed to a numeric using <code>fact2num()</code>. Finally, <code>Freq</code> is a proportion and not a “count” so it is changed to the more accurate <code>prop</code> below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">tl=</span>wf14T<span class="sc">$</span>tl, <span class="at">age=</span>wf14T<span class="sc">$</span>age,<span class="fu">data.frame</span>(<span class="fu">t</span>(y_rep))) <span class="sc">%&gt;%</span>   <span class="co"># Combine observed data with predictions</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">pivot_longer</span>(<span class="at">col=</span><span class="sc">-</span><span class="fu">c</span>(tl,age),<span class="at">values_to=</span><span class="st">".prediction"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>tl)) <span class="sc">+</span>  </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y=</span>.prediction), <span class="at">.width=</span><span class="fu">c</span>(.<span class="dv">95</span>, .<span class="dv">80</span>, .<span class="dv">50</span>),  <span class="co"># regression line and CI</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>wf14T, <span class="at">colour=</span><span class="st">"darkblue"</span>, <span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span>   <span class="co"># raw data</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Greys"</span>) <span class="sc">+</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Total length (mm)</span><span class="sc">\n</span><span class="st">"</span>) <span class="sc">+</span> </span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Age (years)"</span>) <span class="sc">+</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.85</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>keydf <span class="ot">&lt;-</span> keydf <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">LCat=</span>FSA<span class="sc">::</span><span class="fu">fact2num</span>(LCat)) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">prop=</span>Freq)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(keydf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|  'data.frame':  136 obs. of  4 variables:
+#R|   $ LCat: num  35 40 45 50 55 60 65 70 75 80 ...
+#R|   $ fage: Factor w/ 8 levels "11","10","9",..: 8 8 8 8 8 8 8 8 8 8 ...
+#R|   $ prop: num  1 1 1 1 1 0.6 0 0 0 0 ...
+#R|   $ nage: num  4 4 4 4 4 4 4 4 4 4 ...</code></pre>
+</div>
+</div>
+<p>All of the previous modifications to the age-length key data.frame could be performed more efficiently in the following chain of commands.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>keydf <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(WR.key) <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">age=</span>forcats<span class="sc">::</span><span class="fu">fct_rev</span>(age),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nage=</span>FSA<span class="sc">::</span><span class="fu">fact2num</span>(age),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">LCat=</span>FSA<span class="sc">::</span><span class="fu">fact2num</span>(LCat)) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">fage=</span>age,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">prop=</span>Freq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, many of the length-age combinations in the age-length key are 0. Some of the plots made below are better made without the zeroes, whereas some are better with the zeroes. Thus, a second data.frame without zeroes is needed.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>keydf_nozeroes <span class="ot">&lt;-</span> keydf <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(prop<span class="sc">&gt;</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="stacked-barplot" class="level1 page-columns page-full">
+<h1>Stacked Barplot</h1>
+<p>The age-length key may be visualized as a stacked bar (or column) plot with proportion at age on the y-axis, length categories on the x-axis, and stacks colored according to the factored age. Note that the data.frame without zeroes and <code>fage</code> is used. Further note that younger ages start at the bottom of the bars because the order of the levels was reversed in <code>fage</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="336"></p>
+<p><img src="index_files/figure-html/ALK-barplot-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The figure above shows the observed data in blue circles, the prediction line as a solid black line, and the posterior prediction intervals (0.50, 0.80, and 0.95) in different shades of gray.</p>
-
+<p>This plot can be improved by providing better labels for the axes, providing more length labels on the x-axis, and minimizing the extra vertical and horizontal spaced caused by expanding the x- and y-axes.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-barplot-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I also prefer to include age labels in the bars rather than having a legend. These labels may be added with <code>geom_text()</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> but the position needs to be controlled with <code>position_stack()</code> due to the stacking of the bars. <code>vjust=0.5</code> is used in <code>position_stack()</code> so that the label will be placed at the halfway point (vertically) of the bar. With these labels, the legend is no longer needed and is removed within <code>theme()</code>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;<code>geom_label()</code> provides a slightly different look.</p></div></div><div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>fage),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,<span class="at">position=</span><span class="fu">position_stack</span>(<span class="at">vjust=</span><span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-barplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="bubble-plot" class="level1 page-columns page-full">
+<h1>Bubble Plot</h1>
+<p>Another useful plot for visualizing the age-length key is to plot a point at each age-length position (for which fish existed) and scale the size of the point to the proportion found in the age-length key. The start of the plot is shown below, noting that the data.frame without zeroes and <code>nage</code> is used.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>nage,<span class="at">x=</span>LCat)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Age"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),<span class="at">breaks=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-bubbleplot-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Two modifications are required to scale the size of the points. First, the size attribute within <code>geom_point()</code> should be mapped to “proportions” from the age-length key data.frame (i.e., <code>prop</code>). I also mapped color to the factored ages (i.e., <code>fage</code>), but that is superfluous as all points corresponding to each age on the y-axis will be the same color.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>nage,<span class="at">x=</span>LCat)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">size=</span>prop,<span class="at">color=</span>fage)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Age"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),<span class="at">breaks=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-bubbleplot-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The second modification is to better control how the sizes of the points are determined with <code>scale_size()</code>. Below <code>breaks=</code> is used to create breaks in the range of values of the <code>size=</code> variable (i.e., <code>prop</code>) from 0 to 1 in steps of 0.1 (so, 10 breaks across the range of possible <code>prop</code> values). <code>range=</code> is then used to set a range of “size” values for the points. Here the range is set from 1 to 10 so that <code>size=1</code> would be used for the smallest break in <code>prop</code> and <code>size=10</code> would be used for the largest break in <code>prop</code>. In other words, the size of the points will range from 1 to 10 based on where the value of <code>prop</code> is in the <code>breaks=</code> sequence.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;You will likely need to try different values for <code>range=</code> to get “bubble” sizes that you prefer.</p></div></div><div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>nage,<span class="at">x=</span>LCat)) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">size=</span>prop,<span class="at">color=</span>fage)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">range=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">10</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Age"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),<span class="at">breaks=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-bubbleplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="line-plot" class="level1 page-columns page-full">
+<h1>Line Plot</h1>
+<p>“Line plots” of the age-length key are easily constructed from the data.frame <em>with</em> zeroes using <code>geom_line()</code>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;<code>size=</code> is used here to make the lines a little heavier than the default.</p></div></div><div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">color=</span>fage)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-lineplot-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Again I prefer to have labels on the plot rather than in a legend if possible. In <code>alkPlot()</code> from <code>FSA</code> the line plot has age labels at the peak of each line. Adding these labels requires a separate data.frame that contains the portion of the age-length key data.frame that corresponds to the first instance of the maximum <code>prop</code> for each age. This data.frame is constructed below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>agelbldf <span class="ot">&lt;-</span> keydf <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(fage) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.max</span>(prop)) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()   <span class="co"># to remove tibble and grouping</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>agelbldf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="output" data-code-line-numbers="nil"><code>#R|    LCat fage      prop nage
+#R|  1  110   11 0.2000000   11
+#R|  2  115   10 1.0000000   10
+#R|  3  100    9 0.2777778    9
+#R|  4  105    8 0.4285714    8
+#R|  5   95    7 0.7058824    7
+#R|  6   85    6 0.9090909    6
+#R|  7   65    5 1.0000000    5
+#R|  8   35    4 1.0000000    4</code></pre>
+</div>
+</div>
+<p>The age labels are included on the plot by first moving <code>data=</code> and <code>mapping=</code> from <code>ggplot()</code> to <code>geom_line()</code>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Then include the second data.frame in <code>geom_label()</code><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> with the the <code>label=</code> aesthetic to place the labels. <code>fill=</code> was used to fill the label box with the same color as the line, <code>size=</code> was used to increase the size of the text, and <code>alpha=</code> was used to make the color of the label box semi-transparent so that the lines behind them could still be seen. Furthermore, the expansion for the x-axis and the top of the y-axis were increased to make room for the labels. and the now unnecessary legend was removed.</p>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;This is needed when separate data.frames are used to make different aspects of the plot.</p></div><div id="fn7"><p><sup>7</sup>&nbsp;<code>geom_text()</code> provides a slightly different look.</p></div></div><div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>keydf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">color=</span>fage),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data=</span>agelbldf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">label=</span>fage,<span class="at">fill=</span>fage),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">4</span>,<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.04</span>))) <span class="sc">+</span> </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.04</span>),</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-lineplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="area-plot" class="level1">
+<h1>Area Plot</h1>
+<p>Area plots are similar to the barplot from above. However, I have found these plots to be the hardest to make look nice and to modify using base R plotting functions and, thus, I did not use them often. Here is a start for constructing an area plot with <code>ggplot2</code> using <code>geom_area()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>() <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-areaplot-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As before, I prefer to label the agess within the areas, rather than as a legend. I could not find an automated way to do this. Thus, the general method for labeling the lines in the line plot will be followed, except that the data.frame will have to be created by manually filling the <code>LCat</code> and <code>prop</code> values for where the labels should be placed. In practice this will likely take some trial-and-error as the positions are “eye-balled.” Below I use <code>tribble()</code> from <code>tibble</code> because I like how the data can be entered by rows rather than by columns.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>agelbldf <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>LCat,<span class="sc">~</span>prop,<span class="sc">~</span>lbl,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>   <span class="dv">47</span>, <span class="fl">0.50</span>,  <span class="st">"4"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>   <span class="dv">70</span>, <span class="fl">0.50</span>,  <span class="st">"5"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>   <span class="dv">83</span>, <span class="fl">0.50</span>,  <span class="st">"6"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>   <span class="dv">95</span>, <span class="fl">0.50</span>,  <span class="st">"7"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">103</span>, <span class="fl">0.62</span>,  <span class="st">"8"</span>,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">101</span>, <span class="fl">0.85</span>,  <span class="st">"9"</span>,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">112</span>, <span class="fl">0.70</span>, <span class="st">"10"</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">110</span>, <span class="fl">0.95</span>, <span class="st">"11"</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This data.frame is then used with either <code>geom_text()</code> or <code>geom_label()</code> to add the labels to the appropriate areas. Note that <code>vjust=0.5</code> and <code>hjust=0.5</code> center the text label on the given coordinates.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">data=</span>keydf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span>agelbldf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">label=</span>lbl),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">4</span>,<span class="at">vjust=</span><span class="fl">0.5</span>,<span class="at">hjust=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-areaplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+</section>
+<section id="why-these-modifications" class="level1">
+<h1>Why These Modifications?</h1>
+<p>I prefer these plots to those produced by <code>alkPlot()</code> (even though I wrote the code for all of those plots) because the full arsenal of ggplot2 commands can be used to modify the plots and because these plots more readily handle some issues with age-length keys.</p>
+<p>It is beyond the scope of this post to show all the ways these plots can be modified with <code>ggplot2</code> code. A simple example is to replace the rather garish colors used above. For example, the fill color on the barplot can be changed to a scale of blues with <code>scale_fill_brewer()</code> as shown below. Many other color schemes can be used (see <a href="https://bookdown.dongzhuoer.com/hadley/ggplot2-book/colour-discrete">this</a> as one (of many) demonstration of choosing colors.)</p>
+<div class="cell" data-layout-align="center" data-output-line-numbers="8">
+<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>fage),</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,<span class="at">position=</span><span class="fu">position_stack</span>(<span class="at">vjust=</span><span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Blues"</span>) <span class="sc">+</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-barplot-modcolor-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You may want to avoid color altogether and use a grey scale when preparing for print publications. One could use <code>scale_color_brewer(palette="Greys")</code> but this tends to leave the last age as white, which may not be effective. Instead use <code>scale_color_grey()</code> and use <code>start=</code> and <code>end=</code> to control the levels of grey (note that 0 is black and 1 is white).</p>
+<div class="cell" data-layout-align="center" data-output-line-numbers="7">
+<div class="sourceCode cell-code" id="cb32" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keydf_nozeroes,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>nage,<span class="at">x=</span>LCat)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">size=</span>prop,<span class="at">color=</span>fage)) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">range=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">10</span>),<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Age"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),<span class="at">breaks=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.05</span>),</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_grey</span>(<span class="at">start=</span><span class="fl">0.8</span>,<span class="at">end=</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-bubbleplot-colormod-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This post originally started because a user noted that <code>alkPlot()</code> plots were not appropriate when some of the length classes were missing from the age-length key. For example, suppose that no fish existed from 55 to 70 cm in the original data.frame.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>WR.age <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(<span class="fu">subset</span>(WR79, <span class="sc">!</span><span class="fu">is.na</span>(age)))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>WR.age <span class="ot">&lt;-</span> <span class="fu">subset</span>(WR.age,len<span class="sc">&lt;</span><span class="dv">55</span> <span class="sc">|</span> len<span class="sc">&gt;</span><span class="dv">70</span>)        <span class="co"># remove 55-70 cm fish</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>WR.age<span class="sc">$</span>LCat <span class="ot">&lt;-</span> <span class="fu">lencat</span>(WR.age<span class="sc">$</span>len,<span class="at">w=</span><span class="dv">5</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">xtabs</span>(<span class="sc">~</span>LCat<span class="sc">+</span>age,<span class="at">data=</span>WR.age)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>WR.key <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(raw, <span class="at">margin=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>See how the <code>alkPlot()</code> plot does not clearly show the gap in the data for those lengths (i.e., the 50- and 70-cm bars are right next to each other).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb34" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">alkPlot</span>(WR.key)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/make-ALKplot-missing-Lcat-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, the similar <code>ggplot2</code> plot, though clearly requiring more code from the user, properly shows the missing length categories.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="nil"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>WR.keydf <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(WR.key) <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">age=</span>forcats<span class="sc">::</span><span class="fu">fct_rev</span>(age),</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">nage=</span>FSA<span class="sc">::</span><span class="fu">fact2num</span>(age),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">LCat=</span>FSA<span class="sc">::</span><span class="fu">fact2num</span>(LCat)) <span class="sc">|&gt;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">fage=</span>age,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">prop=</span>Freq) <span class="sc">|&gt;</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(prop<span class="sc">&gt;</span><span class="dv">0</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>WR.keydf,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">y=</span>prop,<span class="at">x=</span>LCat,<span class="at">fill=</span>fage)) <span class="sc">+</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">label=</span>fage),</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,<span class="at">position=</span><span class="fu">position_stack</span>(<span class="at">vjust=</span><span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">"Proportion"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Total Length (cm)"</span>,<span class="at">expand=</span><span class="fu">expansion</span>(<span class="at">mult=</span><span class="fl">0.01</span>),</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ALK</span>() <span class="sc">+</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ALK-barplot-missing-Lcat-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-burkner_2017" class="csl-entry" role="listitem">
-Bürkner, P.-C. 2017. <a href="https://doi.org/10.18637/jss.v080.i01">Brms: <span>An R Package</span> for <span>Bayesian Multilevel Models Using Stan</span></a>. Journal of Statistical Software 80:1–28.
-</div>
-<div id="ref-dolljacquemin_2018" class="csl-entry" role="listitem">
-Doll, J. C., and S. J. Jacquemin. 2018. <a href="https://doi.org/10.1002/fsh.10038">Introduction to <span>Bayesian</span> modeling and inference for fisheries scientists</a>. Fisheries 43(3):152–161.
-</div>
-<div id="ref-dorazio_2016" class="csl-entry" role="listitem">
-Dorazio, R. M. 2016. <a href="https://doi.org/10.1007/s10144-015-0503-4">Bayesian data analysis in population ecology: Motivations, methods, and benefits</a>. Population Ecology 58:31–44.
-</div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{doll2024,
-  author = {Doll, Jason},
-  title = {Bayesian {LVB} {II} - Rstan},
-  date = {2024-02-06},
-  url = {https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/},
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2025,
+  author = {H. Ogle, Derek},
+  title = {Age-Length {Key} {Plots}},
+  date = {2025-01-05},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2025-1-5_ALKPlots_GGplot/},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-doll2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-Doll, J. 2024, February 6. Bayesian LVB II - rstan. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/">https://fishr-core-team.github.io/fishR/blog/posts/2024-2-6_LVB_Stan/</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+H. Ogle, D. 2025, January 5. Age-Length Key Plots. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2025-1-5_ALKPlots_GGplot/">https://fishr-core-team.github.io/fishR/blog/posts/2025-1-5_ALKPlots_GGplot/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1243,7 +1346,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2024-2-6_LVB_Stan/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fishR-Core-Team/fishR/edit/main/blog/posts/2025-1-5_ALKPlots_GGplot/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/fishR-Core-Team/fishR/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
