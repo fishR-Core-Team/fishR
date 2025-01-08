@@ -1,0 +1,222 @@
+---
+title: FSA Analyses for Multiple Groups
+description: Demonstrate new (or improved) functionality in the FSA package for efficiently performing some analyses across multiple groups.
+author: Derek H. Ogle
+date: 1/8/2025
+image: preview.png
+categories:
+  - Abundance
+  - Catch Curve
+  - Depletion
+  - Removal
+  - group_by
+  - purrr
+---
+
+# Introduction
+A year or so ago a user of `FSA` asked me if there was a way to use `group_by()` from `dplyr()` with `removal()` from `FSA` to efficiently estimate fish abundance from removal data for multiple groups. There was not, as far as either of us could tell. My naive impression was that I would need a new version of `removal()` that used formula notation with a `data=` argument. So, I modified removal to use a formula and `data=`.
+
+However, this was not an adequate solution because I did not want to change the contents of the list that was returned from `removal()`. Furthermore required both `coef()` and `confint()` (S3 extractor functions for `removal()`) to extract the results the user wanted from this list. My solution for this was to modify `confint()` with `incl.est=` that would append the confidence intervals to the point estimate (extracted with `coef()`) when set to `TRUE`.
+
+However, `confint()` returned a matrix which I found difficult to work with within any of the `dplyr` functions. Thus, I further modified `confint()`^[And `coef()` and `summary()` while I was at it.] with `as.df=` to return a data.frame rather than a matrix when set to `TRUE`. Both `incl.est=` and `as.df=` default to `FALSE` so that the original functionality is maintained (by default).^[Trying not to break user's legacy code.] Thus, to get the new functionality both `incl.est=` and `as.df=` must be explicitly set to `TRUE` by the user.
+
+These changes seemed to meet the user's request. Thus, I made similar changes to `depletion()`, `catchCurve()`, and `chapmanRobson()`. In this post, I demonstrate how these new functions work vis-a-vis helper functions from `dplyr` (and, briefly, `purrr`).
+
+The following packages are loaded for use below. Note that the modified `removal()`, `depletion()`, `catchCurve()`, and `chapmanRobson()` functionality **requires FSA v0.9.6 or higher**.^[This version is at CRAN being processed when this post was written.]
+
+```{r}
+#| label: packages
+library(FSA)       # for depletion(), removal(), catchCurve(), chapmanRobson(), headtail()
+library(tidyverse) # for dplyr, tidyr
+```
+
+
+# Abundance
+## Removal Estimates
+The new functionality of `removal()` is demonstrated with the user's (partial) data, entered manually below.^[I usually enter data into a CSV file external to R. This is for demonstration only.]
+
+```{r}
+#| label: removal-data
+d <- data.frame(lake=factor(rep(c("Ash Tree","Bark","Clay"),each=5)),
+                year=factor(rep(c("2010","2011","2010","2011","2010","2011"),
+                                times=c(2,3,3,2,2,3))),
+                pass=factor(c(1,2,1,2,3,1,2,3,1,2,1,2,1,2,3)),
+                catch=c(57,34,65,34,12,54,26,9,54,27,67,34,68,35,12))
+d
+```
+
+There are several things to note with these data. First, they are in "long" format where each row corresponds to one observation -- in this case the catch of fish on a particular `pass` within a given `year` and `lake`. Second, the user wanted to estimated abundance from catches (i.e., removal) on multiple passes for all possible lake-year combinations; thus, "group" is defined by the combination of `lake` and `year`. Third, the number of passes was not consistent, with some year-lake combinations having two and others having three passes. This is not an issue as long as a removal method is used that can handle both numbers of removal. The default Carle-Strub method^[See `method=` argument in `removal()` for other methods.] will be used here, so this will not be an issue. Fourth, it is important when data are in "long" format like this that the passes are ordered consecutively from first to last. That is the case here, but if it was not then the data.frame would need to be sorted on `pass` (within `lake` and `year`).
+
+`removal()` from `FSA` is used to compute estimates of initial population abundance (No) and probability of capture (p) by using a formula of the form `~catch` with the data.frame containing the variable in `data=`.^[If the variable is not called `catch` as it is here, then replace with the actual variable name.] The result of this function is assigned to an object which is then given to `confint()` to extract confidence intervals for the parameters. Including `incl.est=TRUE` in `confint()` will include the point estimate in the result. Below is an example of using `depletion()` for just Ash Tree lake in 2010.
+
+```{r}
+#| label: removal-demo-1
+tmp <- removal(~catch,data=dplyr::filter(d,lake=="Ash Tree",year=="2010"))
+confint(tmp,incl.est=TRUE)
+```
+
+The object returned by `confint()` is a matrix by default, which generally prints nicely. However, the result may be returned as a data.frame, which as described previously will be needed with the `dplyr` functions used below, by including `as.df=TRUE` in `confint()`.
+
+```{r}
+#| label: removal-demo-2
+confint(tmp,incl.est=TRUE,as.df=TRUE)
+```
+
+`removal()` can be used to compute parameter estimates for multiple groups by first giving the variable or variables that identify groups to `group_by()` and then giving that to `group_modify()` from `dplyr`. The first argument to `group_modify()`, when piped together with `%>%`, is an expression that begins with `~` followed by a call to `removal()` nested within a call to `confint()`. In the `removal()` call `data=` **must** be set to `.x`. The call to `confint()` should include `incl.est=TRUE` to get the point estimates of the parameters and **must** include `as.df=TRUE` for `group_modify()` to work properly.^[`group_modify()` requires the function defined after the `~` to return a data.frame.] Below I submit the result to `as.data.frame()` simply to remove the grouping structure and tibble class.^[I prefer to work with data.frames rather than tibbles.]
+
+```{r}
+#| label: removal-calc
+res <- d %>%
+  dplyr::group_by(lake,year) %>%
+  dplyr::group_modify(~confint(removal(~catch,data=.x),
+                               incl.est=TRUE,as.df=TRUE)) %>%
+  as.data.frame() # removes tibble and grouping structure
+```
+
+For display purposes, the results for the two parameters are rounded to different numbers of `digits`.
+
+```{r}
+#| label: removal-display
+res %>% 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("No"), \(x) round(x,digits=0))) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("p"), \(x) round(x,digits=3)))
+```
+
+## Depletion Estimates
+The `Pathfinder` data^[[See description here](https://fishr-core-team.github.io/FSAdata/reference/Pathfinder.html).] from `FSAdata` contains the catch and effort for three Snapper species (*Pristipomoides zonatus*, *Pristipomoides auricilla*, and *Etelis carbunculUs*) in a depletion experiment around Pathfinder Reef in the Mariana Archipelago. @polovina_1985 used these data to demonstrate the need for a Leslie depletion model with variable recruitment (as was evident for *Pristipomoides auricilla*). Here these data are used to demonstrate how to efficiently compute population (No) and catchability (q)  estimates for each species using `depletion()` from `FSA` with help from `dplyr`.
+
+```{r}
+#| label: depletion-data-1
+data(Pathfinder,package="FSAdata")
+headtail(Pathfinder)
+```
+
+The data are provided in "wide" format where the catch of each species is presented as a column or variable in `Pathfinder`. The methods used below require data to be in "long" format where each row corresponds to one observation -- in this case catch (and effort and other associated date) for one species (on one day). In some cases the data may have been entered in long format, but when it is not it must be converted to long format for the process used below.
+
+There are several methods for converting from wide to long formats. In my mind, one of the easiest is `pivot_longer()` from `tidyr`.^[Some alternatives are `reshape()` from base R and `melt()` from `reshape2`.] The names of columns that contain the values to be converted from wide to long are given to `cols=`. In this example, that will be the columns containing the catches of the separate species. Because those columns are contiguous in the original data.frame they can be referred to *en masse* by separating the name of the left-most column from the name for the right-most column with a colon. The three catch columns from the original data.frame will be moved to two columns in the resulting data.frame -- one with the catch values and one with the spcies names. A name for the column of names can be given to `names_to=` and a name for the values column can be given to `values_to=`. Thus, `Pathfinder` is converted from wide to long format below.
+
+```{r}
+#| label: depletion-data-2
+Pathfinder <- Pathfinder |>
+  tidyr::pivot_longer(cols=Pzonatus:Ecarbunculus,
+                      names_to="species",values_to="catch")
+str(Pathfinder)
+```
+
+Once the data are in long format, `depletion()` can be used within `group_modify()` as shown for `removal()`. However, note that `depletion()` requires a formula of the form `catch~effort` and that groups are defined by only the single variable `species` here.
+
+```{r}
+#| label: depletion-calc
+res <- Pathfinder %>%
+  dplyr::group_by(species) %>%
+    dplyr::group_modify(~confint(depletion(catch~effort,data=.x),
+                                 incl.est=TRUE,as.df=TRUE)) %>%
+    as.data.frame() # removes tibble and grouping structure
+```
+
+```{r}
+#| label: depletion-display
+res %>% 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("No"), \(x) round(x,digits=0))) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("p"), \(x) round(x,digits=3)))
+```
+
+# Mortality
+## Catch Curves
+A similar process can be followed with `catchCurve()` to estimate mortality for several groups. However, the "long" format data.frame either needs to contain only data for ages on the descending limb for each group or groups that have the same ages on the descending limb. Both instances are illustrated below.
+
+`FHCatfish` from `FSAdata`^[[See description here.](https://fishr-core-team.github.io/FSAdata/reference/FHCatfish.html)] contains numbers of Flathead Catfish (*Pylodictis olivaris*) captured by electrofishing in three rivers -- Coosa River, AL; Ocmulgee River, GA; and Satilla River, GA -- for ages **ONLY** on the descending limb of the catch curve.
+
+```{r}
+#| label: catchcurve-data-1
+data(FHCatfish,package="FSAdata")
+headtail(FHCatfish)
+```
+
+The process here is essentially the same as it was for `depletion()` except noting that `catchCurve()` uses a formula of the form `catch~age`.
+
+```{r}
+#| label: catchcurve-calc-1
+res <- FHCatfish %>%
+  dplyr::group_by(river) %>%
+  dplyr::group_modify(~confint(catchCurve(abundance~age,data=.x),
+                               incl.est=TRUE,as.df=TRUE)) %>%
+  as.data.frame() # removes tibble and grouping structure
+```
+
+```{r}
+#| label: catchcurve-display-1
+res %>% 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("Z"), \(x) round(x,digits=3))) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("A"), \(x) round(x,digits=1)))
+```
+
+`WalleyeKS` from `FSAdata` contains the catch of Walleye at all observed ages in eight reservoirs in Kansas.^[[See description here.](https://fishr-core-team.github.io/FSAdata/reference/WalleyeKS.html)] The descending limb was determined to start at age-2 for fish from each reservoir, even though other ages appear in the data.frame. Thus, `ages2use=` must be used in `catchCurve()` to identify the ages on the descending limb. Here a sequence of ages beginning with 2 and ending with the maximum observed age was used.^[This will result in a sequence of warnings from `catchCurve()` as some of the groups do not have fish of the maximum age.] Otherwise the code below is similar to that above.
+
+```{r}
+#| label: catchcurve-calc-2
+data(WalleyeKS,package="FSAdata")
+str(WalleyeKS)
+( maxage <- max(WalleyeKS$age) )
+
+res <- WalleyeKS %>%
+  dplyr::group_by(reservoir) %>%
+  dplyr::group_modify(~confint(catchCurve(catch~age,data=.x,ages2use=2:11),
+                               incl.est=TRUE,as.df=TRUE)) %>%
+  as.data.frame() # removes tibble and grouping structure
+
+res %>% 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("Z"), \(x) round(x,digits=3))) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("A"), \(x) round(x,digits=1)))
+```
+
+## Chapman-Robson
+The process for the Chapman-Robson method is the same as that for the catch-curve except that `chapmanRobson()` is used instead of `catchCurve()`.^[Also note that S is returned rather than A.]
+
+```{r}
+#| label: chapmanrobson-calc
+res <- WalleyeKS %>%
+  dplyr::group_by(reservoir) %>%
+  dplyr::group_modify(~confint(chapmanRobson(catch~age,data=.x,ages2use=2:11),
+                               incl.est=TRUE,as.df=TRUE)) %>%
+  as.data.frame() # removes tibble and grouping structure
+
+res %>% 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("S"), \(x) round(x,digits=1))) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("Z"), \(x) round(x,digits=3)))
+```
+
+# Example Using purrr
+It is also possible to use `purrr` functions with these new `FSA` functions, though I am not sure that it is more convenient. Here `purrr` is used to repeat the Chapman-Robson results from above.
+
+First, a new function must be declared that combines the `confint()` and `chapmanRobson()` functions, making sure to include `incl.est=TRUE` and `as.df=TRUE`. Note that `x=x` is used because the argument o `chapmanRobson()` that takes the formulas is `x=`.
+
+```{r}
+#| label: chapmanrobson-calc-purr-1
+chapmanRobson2 <- function(x,...) {confint(chapmanRobson(x=x,...),
+                                           incl.est=TRUE,as.df=TRUE)}
+```
+
+The long form data.frame is then split by groups into a list with a data.frame for each group. Here `WalleyeKS` is split on `reservoir` with `split()`, but `split()` requires the "splitting variable" to be a factor so `reservoir` was coerced to a factor below.
+
+```{r}
+#| label: chapmanrobson-calc-purr-2
+WalleyeKS_list <- split(WalleyeKS,as.factor(WalleyeKS$reservoir))
+```
+
+`map_df()` from `purrr` takes the list as the first argument and the function to apply to each item in the list as the second argument (i.e., our new `chapmanRobson2()`) and returns a data.frame. The `x=` is the formula of form `catch~age` and the `ages2use=` to be given to `chapmanRobson`. The `.id=` provides a name for the group variable in the data.frame returned by `map_df()`.
+
+```{r}
+#| label: chapmanrobson-calc-purr-3
+res <- purrr::map_df(WalleyeKS_list,chapmanRobson2,
+                     x=catch~age,
+                     ages2use=2:11,
+                     .id="reservoir")
+```
+
+```{r}
+#| label: chapmanrobson-display-purr
+res %>% 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("S"), \(x) round(x,digits=1))) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("Z"), \(x) round(x,digits=3)))
+```
