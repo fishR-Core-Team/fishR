@@ -37,7 +37,10 @@ You may submit additions or corrections to the list of packages by using the lin
 * [FESta](https://cran.r-project.org/web/packages/FESta/index.html): *Fishing effort standardization* 
 * [FSAWs](https://github.com/droglenc/FSAWs): *construct and validate standard weight (Ws) equations*
 * [FishFiz](https://james-thorson.shinyapps.io/FishViz/): *A Shiny app to visualize abundance and distribution shifts for fishes globally.*
+* [fishflux](https://nschiett.github.io/fishflux/index.html): *A tool to model fluxes of C (carbon), N (nitrogen) and P (phosphorus) in fishes*
+* [FishLife](https://james-thorson-noaa.github.io/FishLife/): *Contains predictions of life history parameters for all described fishes*
 * [fishMod](https://cran.r-project.org/web/packages/fishMod/index.html); *fits models to catch and effort data*
+* [fishRman](https://shyentist.shinyapps.io/fish-r-man/): *A shiny dashboard improving Global Fishing Watch data availability*
 * [fishStan](https://code.usgs.gov/umesc/quant-ecology/fishstan); *Collection of hierarchical Bayesian models for fisheries analyses written in the Stan language*
 * [fishualize](https://cran.r-project.org/web/packages/fishualize/index.html): *Color palettes based on fish species*
 * [gfplot](https://pbs-assess.github.io/gfplot/index.html): *Data extraction and plotting of British Columbia groundfish data*
