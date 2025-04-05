@@ -6080,9 +6080,6 @@ font-style: inherit;">"bold"</span>))</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -6094,15 +6091,15 @@ font-style: inherit;">"bold"</span>))</span></code></pre></div>
 <div id="ref-schalletal_2020" class="csl-entry">
 Schall, B. J., C. W. Schoenebeck, and K. D. Koupal. 2020. <a href="https://doi.org/10.3996/JFWM-20-027">Seasonal sampling influence on population dynamics and yield of <span>Channel Catfish</span> and <span>Walleye</span> in a large <span>Great Plains</span> reservoir</a>. Journal of Fish and Wildlife Management 12(1):223–233.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Working with {Multiple} {Catch} {Curves}},
   date = {2023-04-24},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-24_Multiple_CatchCurves/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, April 24. Working with Multiple Catch Curves. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-24_Multiple_CatchCurves</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, April 24. Working with Multiple Catch Curves. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-24_Multiple_CatchCurves/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-24_Multiple_CatchCurves/</a>.
 </div></div></section></div> ]]></description>
   <category>Data Wrangling</category>
   <category>Age-Length Key</category>
@@ -7101,20 +7098,20 @@ font-style: inherit;">element_blank</span>())</span></code></pre></div>
 Isermann, D., and C. Knight. 2005. <a href="https://www.researchgate.net/publication/233185504_A_Computer_Program_for_Age-Length_Keys_Incorporating_Age_Assignment_to_Individual_Fish">A computer program for age–length keys incorporating age assignment to individual fish</a>. North American Journal of Fisheries Management 25:1153–1160.
 </div>
 <div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry">
-Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
 </div>
 <div id="ref-schalletal_2020" class="csl-entry">
 Schall, B. J., C. W. Schoenebeck, and K. D. Koupal. 2020. <a href="https://doi.org/10.3996/JFWM-20-027">Seasonal sampling influence on population dynamics and yield of <span>Channel Catfish</span> and <span>Walleye</span> in a large <span>Great Plains</span> reservoir</a>. Journal of Fish and Wildlife Management 12(1):223–233.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Working with {Multiple} {Age-Length} {Keys}},
   date = {2023-04-23},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-23_Multiple_ALKs},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-23_Multiple_ALKs/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, April 23. Working with Multiple Age-Length Keys. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-23_Multiple_ALKs">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-23_Multiple_ALKs</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, April 23. Working with Multiple Age-Length Keys. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-23_Multiple_ALKs/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-23_Multiple_ALKs/</a>.
 </div></div></section></div> ]]></description>
   <category>Data Wrangling</category>
   <category>Age-Length Key</category>
@@ -13191,9 +13188,6 @@ Important
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -13205,16 +13199,16 @@ Important
 <div id="ref-murphyetal_2021" class="csl-entry">
 Murphy, R. D., Jr., J. A. Hagan, B. P. Harris, S. A. Sethi, T. S. Smeltz, and F. Restrepo. 2021. <a href="https://doi.org/10.3996/JFWM-20-048">Can landsat thermal imagery and environmental data accurately estimate water temperatures in small streams?</a> Journal of Fish and Wildlife Management 12(1):12–26.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Murphy Et Al. (2021) {Model} {Comparison} {Plots}},
   date = {2023-04-11},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-11_Murphyetal2021_Fig3},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-11_Murphyetal2021_Fig3/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
 H. Ogle, D. 2023, April 11. Murphy et al. (2021) Model Comparison Plots.
-<a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-11_Murphyetal2021_Fig3">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-11_Murphyetal2021_Fig3</a>.
+<a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-11_Murphyetal2021_Fig3/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-11_Murphyetal2021_Fig3/</a>.
 </div></div></section></div> ]]></description>
   <category>GAMM</category>
   <category>ggplot2</category>
@@ -14624,9 +14618,6 @@ font-style: inherit;">element_blank</span>())</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -14638,15 +14629,15 @@ font-style: inherit;">element_blank</span>())</span></code></pre></div>
 <div id="ref-omalleyetal_2021" class="csl-entry">
 O’Malley, B. P., J. D. Schmitt, J. P. Holden, and B. C. Weidel. 2021. <a href="https://doi.org/10.3996/JFWM-20-029">Comparison of specimen- and image-based morphometrics for <span>Cisco</span></a>. Journal of Fish and Wildlife Management 12(1):208–215.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {O’Malley Et Al. (2021) {Regression} {Plots}},
   date = {2023-04-06},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-6_OMalleyetal2021_Fig2/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, April 6. O’Malley et al. (2021) Regression Plots. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-6_OMalleyetal2021_Fig2</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, April 6. O’Malley et al. (2021) Regression Plots. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-6_OMalleyetal2021_Fig2/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-6_OMalleyetal2021_Fig2/</a>.
 </div></div></section></div> ]]></description>
   <category>Linear Regression</category>
   <category>Data Wrangling</category>
@@ -15440,9 +15431,6 @@ font-style: inherit;">"black"</span>))</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -15454,16 +15442,16 @@ font-style: inherit;">"black"</span>))</span></code></pre></div>
 <div id="ref-vasquezetal_2022" class="csl-entry">
 Vasquez, M. P., R. J. Rylander, J. M. Tleimat, and S. R. Fritts. 2022. <a href="https://doi.org/10.3996/JFWM-21-058">Use of anthropogenic nest materials by <span>Black-Crested Titmice</span> along an urban gradient</a>. Journal of Fish and Wildlife Management 13(1):236–242.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Vasquez Et Al. (2022) {Kuskal-Wallis} {Results}},
   date = {2023-04-05},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-5_Vasquez2022_Fig2},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-5_Vasquez2022_Fig2/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
 H. Ogle, D. 2023, April 5. Vasquez et al. (2022) Kuskal-Wallis Results.
-<a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-5_Vasquez2022_Fig2">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-5_Vasquez2022_Fig2</a>.
+<a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-5_Vasquez2022_Fig2/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-5_Vasquez2022_Fig2/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>confidence intervals</category>
@@ -17105,7 +17093,6 @@ background-color: null;
 font-style: inherit;">"4em"</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
-<div>
 <table class="table table-striped table-hover table-sm small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -17177,7 +17164,6 @@ font-style: inherit;">"4em"</span>)</span></code></pre></div>
 </table>
 
 
-</div>
 </div>
 </div>
 <p>The display below gives an idea of the relative sizes of the different <code>linewidth=</code> values.<sup>8</sup></p>
@@ -18265,9 +18251,6 @@ font-style: inherit;">2</span>))</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 </section>
@@ -18275,15 +18258,15 @@ font-style: inherit;">2</span>))</span></code></pre></div>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {How {Does} {Size} {Work} in Ggplot2},
   date = {2023-04-03},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-4_Size/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, April 3. How Does Size Work in ggplot2. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-4_Size</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, April 3. How Does Size Work in ggplot2. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-4_Size/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-4_Size/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>size</category>
@@ -19138,9 +19121,6 @@ font-style: inherit;">summary</span>(cc1b)</span></code></pre></div>
 </div>
 <p>I am not sure what is the best way to handle this problem, but this exercise suggests to me that the published mortality estimate should be considered cautiously.</p>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -19153,17 +19133,17 @@ font-style: inherit;">summary</span>(cc1b)</span></code></pre></div>
 Miller, B. T., E. Flores, D. S. Waters, and B. C. Neely. 2022. <a href="https://doi.org/10.3996/JFWM-21-090">An evaluation of <span>Goldeye</span> life history characteristics in two <span>Kansas</span> reservoirs</a>. Journal of Fish and Wildlife Management 13(1):243–249.
 </div>
 <div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry">
-Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Miller Et Al. (2022) {Catch} {Curve} {Plot}},
   date = {2023-04-01},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-4-1_Milleretal2022_Fig4},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-4-1_Milleretal2022_Fig4/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, April 1. Miller et al. (2022) Catch Curve Plot. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-4-1_Milleretal2022_Fig4">https://fishr-core-team.github.io/fishR//blog/posts/2023-4-1_Milleretal2022_Fig4</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, April 1. Miller et al. (2022) Catch Curve Plot. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-4-1_Milleretal2022_Fig4/">https://fishr-core-team.github.io/fishR/blog/posts/2023-4-1_Milleretal2022_Fig4/</a>.
 </div></div></section></div> ]]></description>
   <category>Mortality</category>
   <category>Catch Curve</category>
@@ -21243,9 +21223,6 @@ font-style: inherit;">"bold"</span>)</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -21257,15 +21234,15 @@ font-style: inherit;">"bold"</span>)</span></code></pre></div>
 <div id="ref-milleretal_2022" class="csl-entry">
 Miller, B. T., E. Flores, D. S. Waters, and B. C. Neely. 2022. <a href="https://doi.org/10.3996/JFWM-21-090">An evaluation of <span>Goldeye</span> life history characteristics in two <span>Kansas</span> reservoirs</a>. Journal of Fish and Wildlife Management 13(1):243–249.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Miller Et Al. (2022) {Size} {Plots}},
   date = {2023-03-31},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-31_Milleretal2022_Fig23},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-31_Milleretal2022_Fig23/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, March 31. Miller et al. (2022) Size Plots. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-31_Milleretal2022_Fig23">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-31_Milleretal2022_Fig23</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, March 31. Miller et al. (2022) Size Plots. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-31_Milleretal2022_Fig23/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-31_Milleretal2022_Fig23/</a>.
 </div></div></section></div> ]]></description>
   <category>Length Frequency</category>
   <category>Size Structure</category>
@@ -25679,23 +25656,20 @@ font-style: inherit;">/</span>.pt)</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Nested {X-Axis} {Labels}},
   date = {2023-03-30},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-30_Nested_xaxis/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, March 30. Nested X-Axis Labels. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-30_Nested_xaxis</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, March 30. Nested X-Axis Labels. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-30_Nested_xaxis/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-30_Nested_xaxis/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>axes</category>
@@ -27257,9 +27231,6 @@ Tip
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -27271,15 +27242,15 @@ Tip
 <div id="ref-milleretal_2022" class="csl-entry">
 Miller, B. T., E. Flores, D. S. Waters, and B. C. Neely. 2022. <a href="https://doi.org/10.3996/JFWM-21-090">An evaluation of <span>Goldeye</span> life history characteristics in two <span>Kansas</span> reservoirs</a>. Journal of Fish and Wildlife Management 13(1):243–249.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Miller Et Al. (2022) {CPE} {Plot}},
   date = {2023-03-29},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-29_Milleretal2022_Fig1},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-29_Milleretal2022_Fig1/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, March 29. Miller et al. (2022) CPE Plot. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-29_Milleretal2022_Fig1">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-29_Milleretal2022_Fig1</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, March 29. Miller et al. (2022) CPE Plot. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-29_Milleretal2022_Fig1/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-29_Milleretal2022_Fig1/</a>.
 </div></div></section></div> ]]></description>
   <category>CPE</category>
   <category>Linear Regression</category>
@@ -27812,12 +27783,6 @@ background-color: null;
 font-style: inherit;">3000</span>)</span></code></pre></div>
 </div>
 <p>Because the original <code>dat</code> data frame has now been altered, the regression and creation of <code>dat2</code> above needed to be repeated before continuing. <strong>I did not show the repeated code here.</strong></p>
-<div class="cell" data-layout-align="center">
-
-</div>
-<div class="cell" data-layout-align="center">
-
-</div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre class="output" data-code-line-numbers="nil"><code>#R|       Year  ID Structure capAge capTL edge bcAge Radius     bcTL
@@ -28365,9 +28330,6 @@ Warning
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -28378,16 +28340,16 @@ Warning
 <div id="ref-mccarricketal_2022" class="csl-entry">
 McCarrick, D. K., J. C. Dillon, B. High, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-074">Population dynamics of <span>Yellowstone Cutthroat Trout</span> in <span>Henrys Lake</span>, <span>Idaho</span></a>. Journal of Fish and Wildlife Management 13(1):169–181.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {McCarrick Et Al. (2022) {Back-Calculated} {TL} {Plots}},
   date = {2023-03-28},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-28_McCarricketal2022_Fig6},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-28_McCarricketal2022_Fig6/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
 H. Ogle, D. 2023, March 28. McCarrick et al. (2022) Back-Calculated TL
-Plots. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-28_McCarricketal2022_Fig6">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-28_McCarricketal2022_Fig6</a>.
+Plots. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-28_McCarricketal2022_Fig6/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-28_McCarricketal2022_Fig6/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>box plot</category>
@@ -29977,9 +29939,6 @@ font-style: inherit;">"none"</span>)</span></code></pre></div>
 </div>
 <p>In my view, it is much easier to decipher what is going on with age-2 to age-4 fish from this plot.</p>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -29991,16 +29950,16 @@ font-style: inherit;">"none"</span>)</span></code></pre></div>
 <div id="ref-mccarricketal_2022" class="csl-entry">
 McCarrick, D. K., J. C. Dillon, B. High, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-074">Population dynamics of <span>Yellowstone Cutthroat Trout</span> in <span>Henrys Lake</span>, <span>Idaho</span></a>. Journal of Fish and Wildlife Management 13(1):169–181.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {McCarrick Et Al. (2022) {Age} {Composition} {Plot}},
   date = {2023-03-27},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-27_McCarricketal2022_Fig5},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-27_McCarricketal2022_Fig5/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
 H. Ogle, D. 2023, March 27. McCarrick et al. (2022) Age Composition
-Plot. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-27_McCarricketal2022_Fig5">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-27_McCarricketal2022_Fig5</a>.
+Plot. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-27_McCarricketal2022_Fig5/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-27_McCarricketal2022_Fig5/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>area chart</category>
@@ -31065,9 +31024,6 @@ font-style: inherit;">element_markdown</span>())</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -31083,17 +31039,17 @@ Blackwell, B., M. Brown, and D. Willis. 2000. <a href="https://doi.org/10.1080/1
 McCarrick, D. K., J. C. Dillon, B. High, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-074">Population dynamics of <span>Yellowstone Cutthroat Trout</span> in <span>Henrys Lake</span>, <span>Idaho</span></a>. Journal of Fish and Wildlife Management 13(1):169–181.
 </div>
 <div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry">
-Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {McCarrick Et Al. (2022) {Wr} {Plot}},
   date = {2023-03-26},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-26_McCarricketal2022_Fig4},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-26_McCarricketal2022_Fig4/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, March 26. McCarrick et al. (2022) Wr Plot. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-26_McCarricketal2022_Fig4">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-26_McCarricketal2022_Fig4</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, March 26. McCarrick et al. (2022) Wr Plot. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-26_McCarricketal2022_Fig4/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-26_McCarricketal2022_Fig4/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>bar chart</category>
@@ -32834,9 +32790,6 @@ font-style: inherit;">element_blank</span>())</span></code></pre></div>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -32849,17 +32802,17 @@ font-style: inherit;">element_blank</span>())</span></code></pre></div>
 McCarrick, D. K., J. C. Dillon, B. High, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-074">Population dynamics of <span>Yellowstone Cutthroat Trout</span> in <span>Henrys Lake</span>, <span>Idaho</span></a>. Journal of Fish and Wildlife Management 13(1):169–181.
 </div>
 <div id="ref-ogleIntroductoryFisheriesAnalyses2016" class="csl-entry">
-Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. <span>CRC Press</span>, <span>Boca Raton, FL</span>.
+Ogle, D. H. 2016. <a href="http://derekogle.com/IFAR/">Introductory <span>Fisheries Analyses</span> with <span>R</span></a>. CRC Press, Boca Raton, FL.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {McCarrick Et Al. (2022) {PSD} {Plot}},
   date = {2023-03-25},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-25_McCarricketal2022_Fig3},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-25_McCarricketal2022_Fig3/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, March 25. McCarrick et al. (2022) PSD Plot. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-25_McCarricketal2022_Fig3">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-25_McCarricketal2022_Fig3</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, March 25. McCarrick et al. (2022) PSD Plot. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-25_McCarricketal2022_Fig3/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-25_McCarricketal2022_Fig3/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>bar chart</category>
@@ -34400,9 +34353,6 @@ font-style: inherit;">expand=</span>yexp)</span>
 </div>
 </div>
 <p>&nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -34413,15 +34363,15 @@ font-style: inherit;">expand=</span>yexp)</span>
 <div id="ref-mccarricketal_2022" class="csl-entry">
 McCarrick, D. K., J. C. Dillon, B. High, and M. C. Quist. 2022. <a href="https://doi.org/10.3996/JFWM-21-074">Population dynamics of <span>Yellowstone Cutthroat Trout</span> in <span>Henrys Lake</span>, <span>Idaho</span></a>. Journal of Fish and Wildlife Management 13(1):169–181.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {McCarrick Et Al. (2022) {CPE} {Plot}},
   date = {2023-03-22},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-22_McCarricketal2022_Fig2},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-22_McCarricketal2022_Fig2/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
-H. Ogle, D. 2023, March 22. McCarrick et al. (2022) CPE Plot. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-22_McCarricketal2022_Fig2">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-22_McCarricketal2022_Fig2</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
+H. Ogle, D. 2023, March 22. McCarrick et al. (2022) CPE Plot. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-22_McCarricketal2022_Fig2/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-22_McCarricketal2022_Fig2/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>bar chart</category>
@@ -35724,9 +35674,6 @@ font-style: inherit;">"line"</span>)</span>
 </div>
 </div>
 <p>This largely reproduces Figure 4 in <span class="citation" data-cites="rooketal_2022">Rook et al. (2022)</span> with the exceptions that (a) the tick marks don’t cross the x-axes and (b) the x-axis tick marks are centered on the group of bars rather than between the group of bars. &nbsp;</p>
-<div class="cell" data-layout-align="center">
-
-</div>
 
 
 
@@ -35738,17 +35685,17 @@ font-style: inherit;">"line"</span>)</span>
 <div id="ref-rooketal_2022" class="csl-entry">
 Rook, B. J., M. J. Hansen, and C. R. Bronte. 2022. <a href="https://doi.org/10.3996/JFWM-21-025">How many <span>Ciscoes</span> are needed for stocking in the <span>Laurentian Great Lakes</span>?</a> Journal of Fish and Wildlife Management 13(1):28–49.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h. ogle2023,
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{h._ogle2023,
   author = {H. Ogle, Derek},
   title = {Rook Et Al. (2022) {Estimated} {Cisco} {Stocking}
     {Densities}},
   date = {2023-03-20},
-  url = {https://fishr-core-team.github.io/fishR//blog/posts/2023-3-20-Rooketal2022_Fig4},
+  url = {https://fishr-core-team.github.io/fishR/blog/posts/2023-3-20-Rooketal2022_Fig4/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h. ogle2023" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-h._ogle2023" class="csl-entry quarto-appendix-citeas">
 H. Ogle, D. 2023, March 20. Rook et al. (2022) Estimated Cisco Stocking
-Densities. <a href="https://fishr-core-team.github.io/fishR//blog/posts/2023-3-20-Rooketal2022_Fig4">https://fishr-core-team.github.io/fishR//blog/posts/2023-3-20-Rooketal2022_Fig4</a>.
+Densities. <a href="https://fishr-core-team.github.io/fishR/blog/posts/2023-3-20-Rooketal2022_Fig4/">https://fishr-core-team.github.io/fishR/blog/posts/2023-3-20-Rooketal2022_Fig4/</a>.
 </div></div></section></div> ]]></description>
   <category>ggplot2</category>
   <category>bar chart</category>
