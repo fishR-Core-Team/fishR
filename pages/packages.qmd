@@ -24,19 +24,19 @@ You may submit additions or corrections to the list of packages by using the lin
 * [fishdynr: Fisheries Science Related Population Dynamics Models](https://github.com/marchtaylor/fishdynr#readme)
 * [FLR: Fisheries Library in R](http://www.flr-project.org/index.html)
 * [MQMF](https://cran.r-project.org/web/packages/MQMF/index.html): *Complements the book "Using R for Modelling and Quantitative Methods in Fisheries"*
-* [TropFishR: Tropical Fisheries Analysis with R](https://cran.r-project.org/web/packages/TropFishR/index.html): *Collection of fisheries models based on the the FAO Manual "Introduction to tropical fish stock assessment" by P. Sparre and S.C. Venema. Focus is the analysis of length-frequency data and data poor fisheries.*
+* [TropFishR: Tropical Fisheries Analysis with R](https://cran.r-project.org/web/packages/TropFishR/index.html): *Collection of fisheries models based on the the FAO Manual "Introduction to tropical fish stock assessment" by P. Sparre and S.C. Venema. Focus is the analysis of length-frequency data and data poor fisheries*
 
 
 # More Focused
-* [actel](https://github.com/hugomflavio/actel): *Standardized analysis of acoustic telemetry data from fish moving through receiver arrays.*
+* [actel](https://github.com/hugomflavio/actel): *Standardized analysis of acoustic telemetry data from fish moving through receiver arrays*
 * [AnglerCreelSurveySimulation](https://cran.r-project.org/package=AnglerCreelSurveySimulation): *Simulate creel survey data*
-* [AquaticLifeHistory](https://github.com/jonathansmart/AquaticLifeHistory): *Fisheries life history analyses (e.g., length-at-age modelling using a multi-model approach, estimating age-at-maturity and length-at-maturity) using contemporary approaches as simple R functions.*
+* [AquaticLifeHistory](https://github.com/jonathansmart/AquaticLifeHistory): *Fisheries life history analyses (e.g., length-at-age modelling using a multi-model approach, estimating age-at-maturity and length-at-maturity) using contemporary approaches as simple R functions*
 * [BayesGrowth](https://github.com/jonathansmart/BayesGrowth): *Combines length-at-age modelling for fisheries with MCMC implemented using Stan*.
 * [Bioenergetics 4.0](https://bioenergetics4.shinyapps.io/bioenergetics4/): *A shiny app for bioenergetics modeling*
 * [CatDyn](https://cran.r-project.org/web/packages/CatDyn/index.html): *Population parameters from catch dynamics data*
 * [FESta](https://cran.r-project.org/web/packages/FESta/index.html): *Fishing effort standardization* 
 * [FSAWs](https://github.com/droglenc/FSAWs): *construct and validate standard weight (Ws) equations*
-* [FishFiz](https://james-thorson.shinyapps.io/FishViz/): *A Shiny app to visualize abundance and distribution shifts for fishes globally.*
+* [FishFiz](https://james-thorson.shinyapps.io/FishViz/): *A Shiny app to visualize abundance and distribution shifts for fishes globally*
 * [fishflux](https://nschiett.github.io/fishflux/index.html): *A tool to model fluxes of C (carbon), N (nitrogen) and P (phosphorus) in fishes*
 * [FishLife](https://james-thorson-noaa.github.io/FishLife/): *Contains predictions of life history parameters for all described fishes*
 * [fishMod](https://cran.r-project.org/web/packages/fishMod/index.html); *fits models to catch and effort data*
@@ -46,29 +46,29 @@ You may submit additions or corrections to the list of packages by using the lin
 * [gfplot](https://pbs-assess.github.io/gfplot/index.html): *Data extraction and plotting of British Columbia groundfish data*
 * [ggFishPlots](https://deepwaterimr.github.io/ggFishPlots/): *Visualize and calculate life history parameters for fisheries science using ggplot2*
 * [hafroAssmt](https://data.hafro.is/readme.html): *Fisheries stock assessment at Hafro, the Marine Research Institute in Iceland*
-* [LBSPR: Length-Based Spawning Potential Ratio](https://cran.r-project.org/web/packages/LBSPR/index.html): *Simulate expected equilibrium length composition, YPR, and SPR using the LBSPR model. Fit the LBSPR model to length data to estimate selectivity, relative fishing mortality, and spawning potential ratio for data-limited fisheries.*
-* [LeMaRns](https://cran.r-project.org/web/packages/LeMaRns/index.html): *Set-up, run, and explore the outputs of the Length-based Multi-species model (LeMans; [Hall et al. 2006](https://doi.org/10.1139/f06-039)), focused on the marine environment. [Introductory publication is here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0227767).*
+* [LBSPR: Length-Based Spawning Potential Ratio](https://cran.r-project.org/web/packages/LBSPR/index.html): *Simulate expected equilibrium length composition, YPR, and SPR using the LBSPR model. Fit the LBSPR model to length data to estimate selectivity, relative fishing mortality, and spawning potential ratio for data-limited fisheries*
+* [LeMaRns](https://cran.r-project.org/web/packages/LeMaRns/index.html): *Set-up, run, and explore the outputs of the Length-based Multi-species model (LeMans; [Hall et al. 2006](https://doi.org/10.1139/f06-039)), focused on the marine environment. [Introductory publication is here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0227767)*
 * [mapplots](https://cran.r-project.org/web/packages/mapplots/index.html): *Create simple maps; add sub-plots like pie plots to a map or any other plot; format, plot and export gridded data*
 * [MIST](https://github.com/James-Thorson/MIST): *Implements a Multispecies Interaction Spatio-Temporal (MIST) model*
 * [mixdist](http://ms.mcmaster.ca/peter/mix/mix.html): *Fit mixture distributions — e.g., possibly separating age-classes from a length frequency*
 * [mizer](https://cran.r-project.org/web/packages/mizer/index.html): *Multispecies, trait based and community size spectrum ecological models, focused on the marine environment*  See [Introduction to mizer](https://cran.r-project.org/web/packages/mizer/vignettes/mizer_vignette.pdf)
 * [MQMF](https://cran.r-project.org/web/packages/MQMF/index.html): *Companion for "Using R for Modelling and Quantitative Methods in Fisheries" book*
-* [nichetools](https://benjaminhlina.github.io/nichetools/): *complementary package to {nicheROVER} and {SIBER} allowing Bayesian posteriors to be extracted from objects created by {nicheROVER} or {SIBER}(e.g., niche size and similarities).*
-* [ObsCovgTools](https://github.com/kacurtis/ObsCovgTools): *Estimates minimum fisheries observer coverage required to achieve a specific objective. [Related Shiny app is here](https://kacurtis.shinyapps.io/obscov/).*
-* [optistock](https://cran.r-project.org/web/packages/optistock/index.html): *Functions that aid calculating the optimum time to stock hatchery-reared fish into a body of water given the growth, mortality, and cost of raising a particular number of individuals to a certain length.*
+* [nichetools](https://benjaminhlina.github.io/nichetools/): *Complementary package to {nicheROVER} and {SIBER} allowing Bayesian posteriors to be extracted from objects created by {nicheROVER} or {SIBER}(e.g., niche size and similarities)*
+* [ObsCovgTools](https://github.com/kacurtis/ObsCovgTools): *Estimates minimum fisheries observer coverage required to achieve a specific objective. [Related Shiny app is here](https://kacurtis.shinyapps.io/obscov/)*
+* [optistock](https://cran.r-project.org/web/packages/optistock/index.html): *Functions that aid calculating the optimum time to stock hatchery-reared fish into a body of water given the growth, mortality, and cost of raising a particular number of individuals to a certain length*
 * [PBSmapping](https://cran.r-project.org/web/packages/PBSmapping/): *Two-dimensional plotting features similar to those commonly available in a Geographic Information System*
 * [PBSmodelling](https://cran.r-project.org/web/packages/PBSmodelling/index.html): *Facilitates the design, testing, and operation of computer models; focused on tools that make it easy to construct and edit a customized graphical user interface*
 * [RchivalTag](https://cran.r-project.org/web/packages/RchivalTag/index.html): *Functions to generate, access and analyze standard data products from archival tagging data*
-* [rct3](https://cran.r-project.org/web/packages/rct3/index.html): *Predict fish year-class strength by calibration regression analysis of multiple recruitment index series.*
+* [rct3](https://cran.r-project.org/web/packages/rct3/index.html): *Predict fish year-class strength by calibration regression analysis of multiple recruitment index series*
 * [r4ss](https://github.com/r4ss/r4ss): *Analyze and plot the output from Stock Synthesis version 3, a fisheries stock assessment model written in ADMB*
 * [RFishBC](https://fishr-core-team.github.io/RFishBC/): *Helps fisheries scientists collect growth data from calcified structures and back-calculate estimated lengths at previous ages*
-* [rfishdraw](https://cran.r-project.org/web/packages/rfishdraw/index.html): *Automatic generation of fish drawings based on JavaScript library.*
-* [scape](https://cran.r-project.org/web/packages/scape/): *Import and plot results from statistical catch-at-age models; generally used to connect with ADMB.*
+* [rfishdraw](https://cran.r-project.org/web/packages/rfishdraw/index.html): *Automatic generation of fish drawings based on JavaScript library*
+* [scape](https://cran.r-project.org/web/packages/scape/): *Import and plot results from statistical catch-at-age models; generally used to connect with ADMB*
 * [select](https://www.stat.auckland.ac.nz/~millar/selectware/code.html): *A flexible and user-extendable framework for size-selectivity via the SELECT model*
 * [shapeR](https://github.com/lisalibungan/shapeR): *Study otolith shape variation among fish populations*
 * [simecol](http://simecol.r-forge.r-project.org/): *Implementation of dynamic simulation models*
 * [ss3sim](https://cran.r-project.org/web/packages/ss3sim/index.html): *Framework for fisheries stock assessment simulation testing with Stock Synthesis 3*
-* [SSplots](https://cran.r-project.org/package=SSplots): *Stock status plots as suggested by Pauly et al. (2008), Kleisner and Pauly (2011), and Kleisner et al. (2013).*
+* [SSplots](https://cran.r-project.org/package=SSplots): *Stock status plots as suggested by Pauly et al. (2008), Kleisner and Pauly (2011), and Kleisner et al. (2013)*
 * [stacomiR](https://cran.r-project.org/web/packages/stacomiR/index.html): *Graphical outputs and treatment for a database of fish pass monitoring*
 * [swfscDAS](https://cran.r-project.org/web/packages/swfscDAS/index.html): *Southwest Fisheries Science Center shipboard DAS data processing*
 * [swfscMisc](https://cran.r-project.org/web/packages/swfscMisc/index.html): *Collection of conversion, analytical, geodesic, mapping, and plotting functions used by the Southwest Fisheries Science Center*
@@ -152,7 +152,7 @@ You may submit additions or corrections to the list of packages by using the lin
 * [IRATER](https://cran.r-project.org/web/packages/IRATER/index.html)
 * [kobe](https://cran.r-project.org/web/packages/kobe/index.html): *methods for summarising results from stock assessments and Management Strategy Evaluations in the Kobe format*
 * [lllcrc](https://cran.r-project.org/web/packages/lllcrc/index.html)
-* [marindicators](https://cran.r-project.org/web/packages/marindicators/index.html): *Functions to calculate indicators for four marine ecosystem attributes (Biodiversity, Ecosystem Structure and Functioning, Ecosystem Stability and Resistance to Perturbations, Resource Potential) and one marine ecosystem pressure (Fishing Pressure) from fishery independent trawl survey data and commercial landings data.*
+* [marindicators](https://cran.r-project.org/web/packages/marindicators/index.html): *Functions to calculate indicators for four marine ecosystem attributes (Biodiversity, Ecosystem Structure and Functioning, Ecosystem Stability and Resistance to Perturbations, Resource Potential) and one marine ecosystem pressure (Fishing Pressure) from fishery independent trawl survey data and commercial landings data*
 * [s6model](https://github.com/alko989/s6model): Data-poor fish stock assessment using the single species, size structured, steady state model
 * [skewtools](http://cran.r-project.org/web/packages/skewtools/): *estimation of growth models parameters using the robust ECME method via heteroscedastic nonlinear regression growth model with scale mixture of skew-normal distributions*
 * [smartR](https://cran.r-project.org/web/packages/smartR/index.html): *Spatial management and assessment of demersal resources for trawl fisheries*
