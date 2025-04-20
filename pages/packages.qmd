@@ -25,6 +25,7 @@ You may submit additions or corrections to the list of packages by using the lin
 * [FLR: Fisheries Library in R](http://www.flr-project.org/index.html)
 * [MQMF](https://cran.r-project.org/web/packages/MQMF/index.html): *Complements the book "Using R for Modelling and Quantitative Methods in Fisheries"*
 * [TropFishR: Tropical Fisheries Analysis with R](https://cran.r-project.org/web/packages/TropFishR/index.html): *Collection of fisheries models based on the the FAO Manual "Introduction to tropical fish stock assessment" by P. Sparre and S.C. Venema. Focus is the analysis of length-frequency data and data poor fisheries*
+* [fishboot: Bootstrap-Based Methods for the Study of Fish Stocks and Aquatic Populations] (https://cran.r-project.org/web/packages/fishboot/index.html): *A suite of bootstrap-based models and tools for the study the body growth and mortality of fish and macroinvertebrates. Data sources are length-frequency distributions, tag-and-recapture, and readings of annual rings in hard structures (e.g., otoliths). See Schwamborn et al., 2019 <doi:10.1016/j.ecolmodel.2018.12.001> for an overview.* 
 
 
 # More Focused
