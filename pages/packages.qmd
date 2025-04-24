@@ -19,11 +19,12 @@ You may submit additions or corrections to the list of packages by using the lin
 
 # General
 * [FSA: Fisheries Stock Assessment](https://fishr-core-team.github.io/FSA/)
-* [DLMtool: Data-Limited Methods Toolkit](https://cran.r-project.org/web/packages/DLMtool/index.html): *Implementation of management procedures for data-limited fisheries*
 * [fishmethods: Fisheries Methods and Models in R](https://cran.r-project.org/web/packages/fishmethods/index.html)
 * [fishdynr: Fisheries Science Related Population Dynamics Models](https://github.com/marchtaylor/fishdynr#readme)
-* [FLR: Fisheries Library in R](http://www.flr-project.org/index.html)
+* [FLR: Fisheries Library in R](http://www.flr-project.org/index.html): *A collection of tools for quantitative fisheries science that facilitates the construction of bio-economic simulation models of fisheries systems*
 * [MQMF](https://cran.r-project.org/web/packages/MQMF/index.html): *Complements the book "Using R for Modelling and Quantitative Methods in Fisheries"*
+* [DLMtool: Data-Limited Methods Toolkit](https://cran.r-project.org/web/packages/DLMtool/index.html): *Implementation of management procedures for data-limited fisheries*
+* [fishboot](https://github.com/rschwamborn/fishboot): *A suite of bootstrap-based models and tools for the study of body growth and mortality of fish and macroinvertebrates using data from length-frequency distributions, tag-and-recapture, and readings of annual rings from hard structures*
 * [TropFishR: Tropical Fisheries Analysis with R](https://cran.r-project.org/web/packages/TropFishR/index.html): *Collection of fisheries models based on the the FAO Manual "Introduction to tropical fish stock assessment" by P. Sparre and S.C. Venema. Focus is the analysis of length-frequency data and data poor fisheries*
 
 
